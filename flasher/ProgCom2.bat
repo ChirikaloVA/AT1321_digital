@@ -1,0 +1,1 @@
+at200 com41 --echo -baud 57600 -flash D:\IARARMProjects\SPRD_analog\Debug\Exe\SPiRiD2.hex

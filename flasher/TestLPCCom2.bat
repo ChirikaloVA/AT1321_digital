@@ -1,0 +1,1 @@
+at200 com4 -baud 19200 -detect

@@ -1,0 +1,1 @@
+at200 com26 -baud 230400 -LPC2478 -flash "d:\IARARMProjects\SPRD2_5\Debug SNM\Exe\SPiRiD1SNM.hex"

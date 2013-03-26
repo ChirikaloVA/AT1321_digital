@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>SPRD/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>177</Column0><Column1>11</Column1><Column2>19</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>23</ColumnWidth0><ColumnWidth1>1022</ColumnWidth1><ColumnWidth2>243</ColumnWidth2><ColumnWidth3>60</ColumnWidth3></Build>
+      <TerminalIO/>
+      <Profiling/>
+      <Find-in-Files>
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window><Window><Factory>Debug-Log</Factory></Window></Windows></PreferedWindows><ColumnWidth0>307</ColumnWidth0><ColumnWidth1>61</ColumnWidth1><ColumnWidth2>837</ColumnWidth2></Find-in-Files>
+    <Debug-Log><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window><Window><Factory>Find-in-Files</Factory></Window></Windows></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1617</ColumnWidth1></Debug-Log><Disassembly><MixedMode>1</MixedMode><CodeCovEnabled>0</CodeCovEnabled><CodeCovShow>0</CodeCovShow></Disassembly><Breakpoints><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window><Window><Factory>Find-in-Files</Factory></Window><Window><Factory>Debug-Log</Factory></Window></Windows></PreferedWindows></Breakpoints><SourceBrowser/><Tool-Output><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window><Window><Factory>Debug-Log</Factory></Window><Window><Factory>Find-in-Files</Factory></Window></Windows></PreferedWindows></Tool-Output><CodeCoveragePlugin/></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-9196-2406</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>SPRD</ExpandedNode><ExpandedNode>SPRD/Bluetooth</ExpandedNode><ExpandedNode>SPRD/Clock</ExpandedNode><ExpandedNode>SPRD/Display</ExpandedNode><ExpandedNode>SPRD/EEPROM</ExpandedNode><ExpandedNode>SPRD/GPS</ExpandedNode><ExpandedNode>SPRD/Geiger</ExpandedNode><ExpandedNode>SPRD/Identify</ExpandedNode><ExpandedNode>SPRD/InterProc</ExpandedNode><ExpandedNode>SPRD/Interrupts Sync</ExpandedNode><ExpandedNode>SPRD/Keyboard</ExpandedNode><ExpandedNode>SPRD/MD5</ExpandedNode><ExpandedNode>SPRD/Math</ExpandedNode><ExpandedNode>SPRD/Modes</ExpandedNode><ExpandedNode>SPRD/Power control</ExpandedNode><ExpandedNode>SPRD/Sound</ExpandedNode><ExpandedNode>SPRD/USBRS</ExpandedNode><ExpandedNode>SPRD/misc</ExpandedNode></NodeDict></Session>
+          </Tab>
+        <Tab><Identity>TabID-28533-8929</Identity><TabName>Source Browser</TabName><Factory>SourceBrowser</Factory><Session><TypeFilter>2656</TypeFilter><FileFilter>1</FileFilter></Session></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd2><Tabs><Tab><Identity>TabID-3397-21081</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-23469-3306</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab><Tab><Identity>TabID-25544-32393</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-17726-16965</Identity><TabName>Breakpoints</TabName><Factory>Breakpoints</Factory></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd2></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\main.c</Filename><XPos>0</XPos><YPos>30</YPos><SelStart>728</SelStart><SelEnd>728</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\&#x41e;&#x43F;&#x438;&#x441;&#x430;&#x43D;&#x438;&#x435; &#x43F;&#x440;&#x43e;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x44B; SPIRID1.txt</Filename><XPos>0</XPos><YPos>56</YPos><SelStart>4914</SelStart><SelEnd>4914</SelEnd></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\Spectrum.h</Filename><XPos>0</XPos><YPos>137</YPos><SelStart>3716</SelStart><SelEnd>3716</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\spectrum.c</Filename><XPos>0</XPos><YPos>285</YPos><SelStart>7835</SelStart><SelEnd>7835</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\interProc.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>422</SelStart><SelEnd>422</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\interProc2.c</Filename><XPos>0</XPos><YPos>226</YPos><SelStart>7952</SelStart><SelEnd>7974</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>D:\IARARMProjects\SPRD2_5\SPRD_mode.c</Filename><XPos>0</XPos><YPos>455</YPos><SelStart>11013</SelStart><SelEnd>11013</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-017706d8><key>iaridepm.enu1</key></Toolbar-017706d8></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>783</Bottom><Right>271</Right><x>-2</x><y>-2</y><xscreen>0</xscreen><yscreen>0</yscreen><sizeHorzCX>0</sizeHorzCX><sizeHorzCY>0</sizeHorzCY><sizeVertCX>142188</sizeVertCX><sizeVertCY>786573</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>170</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>172</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>172345</sizeHorzCY><sizeVertCX>4273438</sizeVertCX><sizeVertCY>840681</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

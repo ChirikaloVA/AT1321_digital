@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\SPRD.ewp</path>
+    <scc>
+      <provider>Microsoft Visual SourceSafe</provider>
+      <projname>"$/SPRD2/SPRD2", LTNBAAAA</projname>
+      <auxprojpath>\\Newserv3\vss</auxprojpath>
+    </scc>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>All configurations</name>
+      <member>
+        <project>SPRD</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>SPRD</project>
+        <configuration>Debug GPS9600</configuration>
+      </member>
+      <member>
+        <project>SPRD</project>
+        <configuration>Debug SNM</configuration>
+      </member>
+      <member>
+        <project>SPRD</project>
+        <configuration>Debug SNM GPS9600</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

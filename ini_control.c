@@ -310,7 +310,20 @@ void filesystem_check_ini_files(void)
 		for(int i=0;i<CHANNELS;i++)
 			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warEnergy[i];
 		spectrumControl.acqSpectrum.wAcqTime = 1;
-		Spectrum_save("energy", TRUE);
+		int iret=Spectrum_save("energy", TRUE);
+		//тут если не сапишется файл energy изза нехватки памяти то пипец!
+		if(!iret)
+		{//
+			modeControl.bNoEnergySigmaSpz = TRUE;
+	
+			PowerControl_sleep(1000);
+			Display_clearTextWin(10);
+			Display_setTextXY(0,0);	//set start coords in window
+			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+			Display_outputTextByLang_log(pMsg1);
+			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+			Display_outputTextByLang_log(pMsg2);
+		}
 	}
 	
 	/////////////////////////////sigma.cal//////////////////////////////////////////
@@ -340,7 +353,21 @@ void filesystem_check_ini_files(void)
 #endif	//#ifdef _THIN_SIGMA
 		;
 		spectrumControl.acqSpectrum.wAcqTime = 1;
-		Spectrum_save("sigma", TRUE);
+		int iret=Spectrum_save("sigma", TRUE);
+		//тут если не сапишется файл sigma изза нехватки памяти то пипец!
+		if(!iret)
+		{//
+			modeControl.bNoEnergySigmaSpz = TRUE;
+	
+			PowerControl_sleep(1000);
+			Display_clearTextWin(10);
+			Display_setTextXY(0,0);	//set start coords in window
+			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+			Display_outputTextByLang_log(pMsg1);
+			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+			Display_outputTextByLang_log(pMsg2);
+//			Display_refresh();
+		}
 	}
 	
 	Spectrum_clear();
@@ -450,6 +477,11 @@ int filesystem_get_stringReverse(HFILE hFile, int* pFile_pos, char* pString, int
 	if(ln>=MAX_INI_STRING_LEN)ln=MAX_INI_STRING_LEN-1;
 	int rlen = filesystem_file_get(hFile, &pos, buf, ln);
 	if(rlen==E_FAIL)return E_FAIL;
+	if(rlen==0)
+	{
+		pString[0]='\0';
+		return rlen;
+	}
 	char* pAdr = strrchr(buf, '\r');
 	if(!pAdr)
 	{//may be it is last string or string is too long
@@ -515,6 +547,11 @@ int filesystem_get_string(HFILE hFile, int* pFile_pos, char* pString, int string
 	int pos = *pFile_pos;
 	int rlen = filesystem_file_get(hFile, &pos, buf, MAX_INI_STRING_LEN);
 	if(rlen==E_FAIL)return E_FAIL;
+	if(rlen==0)
+	{
+		pString[0]='\0';
+		return rlen;
+	}
 	char* pAdr = strchr(buf, '\r');
 	if(!pAdr)
 	{//may be it is last string or string is too long
@@ -939,6 +976,16 @@ const char system_ini[394]=
 "[GPSControl]\r"
 "gps_state=65538\r"	//be careful of default value = 0x10000 (start value) + 2 (item number)
 "[geigerControl]\r"
+#ifdef BNC
+"fDrCoef=0.45\r"
+"fDrSelfCps=0.02\r"
+"fDrDeadTime=53.97000e-6\r"
+"[interProcControl]\r"
+"wdHighLimit=4060\r"
+"wdLowLimit=40\r"
+"[SPRDModeControl]\r"
+"fDRThreshold=10\r"
+#else
 "fDrCoef=4.5\r"
 "fDrSelfCps=0.02\r"
 "fDrDeadTime=53.97000e-6\r"
@@ -947,6 +994,7 @@ const char system_ini[394]=
 "wdLowLimit=40\r"
 "[SPRDModeControl]\r"
 "fDRThreshold=100\r"
+#endif
 "false_alarm_period_oper=600\r"
 "[soundControl]\r"
 "bSound=1\r"

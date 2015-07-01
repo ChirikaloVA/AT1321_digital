@@ -409,7 +409,11 @@ BOOL KeyboardControl_keyboardControl(void)
 		{
 			DWORD ptm = SAFE_GET_DWORD(&keyboard.keyDown.pressedTime);
 			if(ptm>TIME_TO_ENTER_POWERDOWN_BY_KEY)
-			{//power down mode
+			{
+#ifdef BNC	
+				//turn off mode
+					PowerControl_turnOFF_device("RELEASE THE KEY\0""RELEASE THE KEY\0""RELEASE THE KEY\0""нросярхре ймнойс");
+#else //#ifdef BNC	
 				//!!!!!!!!!				playSample(SI_TURNOFF, 1);
 				if(!SAFE_GET_DWORD(&keyboard.keyLeft.bPressed))
 				{//power down mode
@@ -418,6 +422,7 @@ BOOL KeyboardControl_keyboardControl(void)
 				{//turn off mode
 					PowerControl_turnOFF_device("RELEASE THE KEY\0""RELEASE THE KEY\0""RELEASE THE KEY\0""нросярхре ймнойс");
 				}
+#endif	//#ifdef BNC	
 			}else if(ptm==0)
 			{//process once click here
 				SAFE_SET(keyboard.keyDown.bProcessed, 1);//set key as processed

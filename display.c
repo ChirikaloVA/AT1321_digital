@@ -1506,7 +1506,11 @@ void Display_startup_display2(int i)
 	clr = RGB(i,i,i);
 	Display_setTextColor(clr);	//set text color
 	Display_setTextXY(1,131);	//set start coords in window
+#ifdef BNC	
+	Display_outputText("palmRAD");
+#else
 	Display_outputText("Rad");
+#endif
 
 	Display_drawHLine(0,163,X_SCREEN_MAX, clr);
 
@@ -1517,13 +1521,21 @@ void Display_startup_display2(int i)
 	Display_setTextColor(clr);	//set text color
 	Display_setTextXY(0,163);	//set start coords in window
 
-	Display_outputText("Searcher\r\r");
+#ifdef BNC	
+	Display_outputText("\r\r");
+	Display_setCurrentFont(fnt16x16);	//set current font
+	Display_outputText("Model 920\r\r");
 
+	Display_outputText("BNC\r");
+	Display_outputText("©2015\r");
+#else
+	Display_outputText("Searcher\r\r");
 	Display_setCurrentFont(fnt16x16);	//set current font
 	Display_outputText("AT1321\r\r");
 
 	Display_outputText("ATOMTEX\r");
 	Display_outputText("©2011-2012\r");
+#endif
 }
 
 

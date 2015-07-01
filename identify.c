@@ -455,10 +455,13 @@ void identify_prepareReport(BOOL bAddCategory)
 	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
 		return;
 	identify_getnuclidesinreport('N',pText);
+#ifndef BNC	
+	//show unknown only for NON BNC version
 	if(identifyControl.bHaveUnknownResult)
 	{
 		strcat(identifyControl.report, Display_getTextByLang("\rUNKNOWN\0""\rUNKNOWN\0""\rUNKNOWN\0""\rÍÅÈÇÂÅÑÒÍÛÉ"));
 	}else
+#endif
 	if(!identifyControl.bHaveAlreadyResult)
 	{
 		strcat(identifyControl.report, Display_getTextByLang("NOTHING\0""NICHTS\0""NOTHING\0""ÍÈ×ÅÃÎ"));

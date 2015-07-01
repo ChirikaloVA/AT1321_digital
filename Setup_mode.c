@@ -205,10 +205,17 @@ BOOL SETUPMode_menu1_SafetyThreshold(void)
 {
 	EditMode_EditFloat("Radiation safety alarm threshold\0""Radiation safety alarm threshold\0""Radiation safety alarm threshold\0""Порог радиационной безопасности",
 					 SPRDModeControl.fDRThreshold,
+#ifdef BNC					 
+					 0.1,
+					 100.0,
+					 SPRDMode_getDimension(),
+					 "%.2f",
+#else
 					 1.0,
 					 1000.0,
 					 SPRDMode_getDimension(),
 					 "%.1f",
+#endif					 
 					 SETUPMode_menu1_SafetyThreshold_done);
 	return (BOOL)-1;
 }
@@ -894,7 +901,11 @@ BOOL SETUPMode_OnTimer(void)
 			SETUPMode_showDateTime();
 		break;
 	case ENU_SETUP_MODE_SCR_GEIGER:
+#ifdef BNC		
+		ret = sprintf(SETUPModeControl.buf1, "%.3f", geigerControl.esentVals_safe.fDoserate);
+#else
 		ret = sprintf(SETUPModeControl.buf1, "%.2f", geigerControl.esentVals_safe.fDoserate);
+#endif
 		if(ret>=sizeof(SETUPModeControl.buf1))
 			exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 		erval = (UINT)(geigerControl.esentVals_safe.fCpsErr+0.5);
@@ -921,7 +932,11 @@ BOOL SETUPMode_OnTimer(void)
 		ret = sprintf(SETUPModeControl.buf8, "%f", (float)geigerControl.fDrSelfCps);
 		if(ret>=sizeof(SETUPModeControl.buf8))
 			exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
+#ifdef BNC
+		ret = sprintf(SETUPModeControl.buf9, "%.2f mrem/h", (float)SPRDModeControl.fDRThreshold);
+#else		
 		ret = sprintf(SETUPModeControl.buf9, "%.1f µSv/h", (float)SPRDModeControl.fDRThreshold);
+#endif
 		if(ret>=sizeof(SETUPModeControl.buf9))
 			exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 		Modes_OnShow();
@@ -1116,7 +1131,11 @@ void SETUPMode_showVersion(int y)
 	Display_setTextWin(0,Y_SCREEN_MAX-y,X_SCREEN_SIZE,y-MODE_USER_BOTTOM);	//set text window
 	Display_setTextColor(ORANGE);	//set text color
 	Display_setTextWrap(1);
+#ifdef BNC	
+	Display_outputText("palmRAD (Model 920)\r");
+#else	
 	Display_outputText("RadSearcher (AT1321)\r");
+#endif
 	Display_outputTextByLang("Serial: \0""Serial: \0""Serial: \0""Зав.ном.: ");
 	sprintf(buf,"%u\r",(UINT)SETUPModeControl.Serial);
 	Display_outputText(buf);
@@ -1145,7 +1164,11 @@ void SETUPMode_showVersion(int y)
 //	Display_outputTextByLang("Memory rewrites:\0""Memory rewrites:\0""Memory rewrites:\0""Перезаписей:");
 //	sprintf(buf,"%u\r",(UINT)EEPROMControl.wdEepromWritesCounter);
 //	Display_outputText(buf);
-	Display_outputText("2012 © ATOMTEX SPE\r");
+#ifdef BNC	
+	Display_outputText("2015 © Manufacturer\r");
+#else
+	Display_outputText("2015 © ATOMTEX SPE\r");
+#endif
 	///////////////////////
 }
 
@@ -1156,11 +1179,19 @@ void SETUPMode_showSpecification(void)
 	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
 	Display_setTextColor(YELLOW);	//set text color
 	Display_outputTextByLang("Gamma radiation dose rate\r\0""Gamma radiation dose rate\r\0""Gamma radiation dose rate\r\0""Мощность дозы гамма излуч.\r");
+#ifdef BNC	
+	Display_outputTextByLang("Range: 0.003-10000 mrem/h\r\0""Range: 0.003-10000 mrem/h\r\0""Range: 0.003-10000 mrem/h\r\0""Диапазон: 0.003-10000 mrem/h\r");
+#else	
 	Display_outputTextByLang("Range: 0.03-100000 µSv/h\r\0""Range: 0.03-100000 µSv/h\r\0""Range: 0.03-100000 µSv/h\r\0""Диапазон: 0.03-100000 µSv/h\r");
+#endif
 	Display_outputTextByLang("Basic error: 20%\r\0""Basic error: 20%\r\0""Basic error: 20%\r\0""Основная погрешность: 20%\r");
 	Display_outputTextByLang("Energy dependence: 25%\r\0""Energy dependence: 25%\r\0""Energy dependence: 25%\r\0""Энергетич.зависимость: 25%\r");
 	Display_outputTextByLang("NaI max cps: 100000\r\0""NaI max  cps: 100000\r\0""NaI max  cps: 100000\r\0""Макс.ск.счета NaI: 100000 cps\r");
+#ifdef BNC	
+	Display_outputTextByLang("Sens. on Cs137: 4000 cps*h/mrem\r\0""Sens. on Cs137: 4000 cps*h/mrem\r\0""Sens. on Cs137: 4000 cps*h/mrem\r\0""Чувств. на Cs137: 4000 cps*h/mrem\r");
+#else	
 	Display_outputTextByLang("Sens. on Cs137: 400 cps*h/µSv\r\0""Sens. on Cs137: 400 cps*h/µSv\r\0""Sens. on Cs137: 400 cps*h/µSv\r\0""Чувств. на Cs137: 400 cps*h/µSv\r");
+#endif
 	Display_outputTextByLang("Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Энергет.диапазон: 20-3000 keV\r");
 	Display_outputTextByLang("\r\0""\r\0""\r\0""\r");
 //	Display_outputTextByLang("Operational sigma: \0""Operational sigma: \0""Operational sigma: \0""Оперативная сигма: ");

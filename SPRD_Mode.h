@@ -18,10 +18,21 @@
 //предел набора фона
 #define CPS_ERR_THRESHOLD (float)7.0
 
+
+#ifdef BNC
+//max doserate by NaI in mrem/h
+#define MAX_NAI_DR 30
+//max doserate of whole SPRD in mrem/h
+#define MAX_DR 10000
+#else
 //max doserate by NaI in mkSv/h
 #define MAX_NAI_DR 300
 //max doserate of whole SPRD in mkSv/h
 #define MAX_DR 100000
+#endif
+
+
+
 //max cps for NAI
 #define MAX_NAI_CPS 50000
 //!!!!!!!!!!!!!!!! for test
@@ -30,7 +41,7 @@
 //standart background cps
 #define STANDART_BKG_CPS 50.0
 
-
+/*
 #define MAX_DIMS 3
 enum ENU_DIMENSION
 {
@@ -38,7 +49,7 @@ enum ENU_DIMENSION
 	enu_dim_gy,
 	enu_dim_r,
 };
-
+*/
 
 extern const char strIdentified[];
 

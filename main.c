@@ -60,6 +60,7 @@ B
 
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
+//#define OUR__DATE__ "26.02.2014"
 #define OUR__DATE__ "21.03.2013"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
@@ -375,10 +376,18 @@ __noreturn void main(void)
 
 	
 	//set mode by default
-	if(modeControl.bSysDefault)
+	if(modeControl.bSysDefault 
+	   || modeControl.bNoSysSettings
+		|| modeControl.bNoSystemBak
+		|| modeControl.bNoEnergyCal
+		|| modeControl.bNoSigmaCal
+		|| modeControl.bNoLibrary
+		|| modeControl.bIdentDefault
+		|| modeControl.bNoEnergySigmaSpz
+			)
 		Modes_setActiveMode(&modes_INFOMode);
 	else
-	Modes_setActiveMode(&modes_STABMode);
+		Modes_setActiveMode(&modes_STABMode);
 
 	
 	//здесь надо очистить буфер клавы чтобы случ нажатия не обработать
@@ -560,6 +569,10 @@ void main_execute_sys(HFILE hfile)
 	//switch to bridge mode
 	main_execute__System_setBridgeMode(hfile);
 	//start burn sound
+
+	//turn off device
+	main_execute__Modes_OnTurnOFF( hfile);
+	
 //	main_execute__startBurn(hfile);
 	//stop burn sound
 //	main_execute__stopBurn(hfile);
@@ -618,10 +631,7 @@ void main_execute__Display_getScreen(HFILE hfile)
 void main_execute__System_serialAndDate(HFILE hfile)
 {
 	int retlen;
-	//void Clock_setDateTime(int sec, int min, int hour, int dom, int dow, int doy, int month, int year);
-	SETUPModeControl.Serial = 0;
-	SETUPModeControl.ManufacturedMonth = 0;
-	SETUPModeControl.ManufacturedYear = 0;
+	//16/01/2014 убрано обнуление серийного и даты, почему оно тут было?:???????????
 	int serial=0; int month=0; int year=0;
 	retlen = filesystem_ini_get_int(hfile, "System_setSerialAndDate", "serial", &serial);
 	if(retlen!=S_OK)return;
@@ -662,6 +672,16 @@ void main_execute__Clock_setDateTime(HFILE hfile)
 	retlen = filesystem_ini_get_int(hfile, "Clock_setDateTime", "year", &year);
 	if(retlen!=S_OK)return;
 	Clock_setDateTime(sec, min, hour, dom, dow, doy, month, year);
+}
+
+//turn off the device
+void main_execute__Modes_OnTurnOFF(HFILE hfile)
+{
+	int retlen;
+	int order;
+	retlen = filesystem_ini_get_int(hfile, "Modes_OnTurnOFF", "order", &order);
+	if(retlen!=S_OK)return;
+	PowerControl_turnOFF_device("\0""\0""\0""");
 }
 
 

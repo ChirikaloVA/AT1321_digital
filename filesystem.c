@@ -60,6 +60,13 @@ void filesystem_Init(void)
 		//add 24/09/2010
 		EEPROMControl.wdEepromWritesCounter = ((WORD)buf[8]<<8)|((WORD)buf[7]);
 		modeControl.bLang = (int)buf[9];
+	}else 
+	{//set settings by default in RAM
+		if(!modeControl.bNoSysSettings)
+		{
+			modeControl.bNeedSetTrue_NoSysSettings = TRUE;
+		}
+//		MCA.usREGs[0xA7-0x80] = 600;	//default contrast
 	}
 }
 

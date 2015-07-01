@@ -167,6 +167,13 @@ void INFOMode_showModeScreen(void)
 		strncat(INFOModeControl.text, pTxt, len);
 	
 	
+	if(modeControl.bNoSysSettings)
+	{
+		pTxt = Display_getTextByLang("Invalid MCA Settings. Please contact manufacturer for repair.\r\r\0""Invalid MCA Settings. Please contact manufacturer for repair.\r\r\0""Invalid MCA Settings. Please contact manufacturer for repair.\r\r\0""Разрушены настройки многоканального анализатора. Пожалуйста, свяжитесь с производителем для ремонта.\r\r");
+		len = sizeof(INFOModeControl.text) - strlen(INFOModeControl.text) - 1;
+		if(len>0)
+			strncat(INFOModeControl.text, pTxt, len);
+	}
 	if(modeControl.bSysDefault)
 	{
 		pTxt = Display_getTextByLang("Applied default system settings. Values from GM counter are incorrect.\r\r\0""Applied default system settings. Values from GM counter are incorrect.\r\r\0""Applied default system settings. Values from GM counter are incorrect.\r\r\0""Установлены системные настройки по умолчанию. Данные ГМ счетчика будут некорректными.\r\r");
@@ -205,6 +212,13 @@ void INFOMode_showModeScreen(void)
 	if(modeControl.bNoSystemBak)
 	{
 		pTxt = Display_getTextByLang("No system.bak file. Restoring system.ini impossible.\r\r\0""No system.bak file. Restoring system.ini impossible.\r\r\0""No system.bak file. Restoring system.ini impossible.\r\r\0""Нет файла system.bak. Восстановление system.ini невозможно.\r\r");
+		len = sizeof(INFOModeControl.text) - strlen(INFOModeControl.text) - 1;
+		if(len>0)
+			strncat(INFOModeControl.text, pTxt, len);
+	}
+	if(modeControl.bNoEnergySigmaSpz)
+	{
+		pTxt = Display_getTextByLang("Not enough memory for system files. Computer Software can failed.\r\r\0""Not enough memory for system files. Computer Software can failed.\r\r\0""Not enough memory for system files. Computer Software can failed.\r\r\0""Нет памяти под системные файлы. Компьютерная программа может не работать.\r\r");
 		len = sizeof(INFOModeControl.text) - strlen(INFOModeControl.text) - 1;
 		if(len>0)
 			strncat(INFOModeControl.text, pTxt, len);

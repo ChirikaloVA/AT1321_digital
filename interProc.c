@@ -125,11 +125,12 @@ void InterProc_checkDataReceived_intcall(void)
 	default:
 		bytes = rlen;
 	}
-	if(bytes==rlen)
+	if(rlen>=bytes)
 	{
+		interProcControl.uart.rcvBuffLen = bytes;
 		InterProc_Timer_turnOFF();	//выключим таймер ожидания первых байт
 		//check CRC
-		if(!USBRS_checkCRC(interProcControl.uart.rcvBuff,rlen))
+		if(!USBRS_checkCRC(interProcControl.uart.rcvBuff,bytes))
 		{//error CRC
 			interProcControl.uart.bRcvError=RCV_ERR_CRC;
 		}else
@@ -726,6 +727,23 @@ void InterProc_findFreeSlot(int * pIndexIndex, int * pMaxIndex)
 	*pMaxIndex = maxIndex;
 }
 
+
+//ADDED 29/07/2013 to resolve exeption in SPRD mode in time of frequent pressing of BGND button
+//count free slots in command order
+//ret count
+int InterProc_countFreeSlots(void)
+{
+	int count = 0;
+	for(int i=0;i<MAX_CMD_IN_ORDER;i++)
+	{
+		if(interProcControl.arCmd[i].cmdIndex==-1)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
 //make exception if len in buff > interProcControl.uart.constTrmBuffLen
 //ret Len, if =0 then no cmd
 //proc fills cmd with buffer from order
@@ -883,9 +901,16 @@ void InterProc_second_Dispatcher(void)
 		SPRDModeControl.fMomCps = interProcControl.rsModbus.fMomCps;
 		SPRDModeControl.fCps = interProcControl.rsModbus.fCps;
 		SPRDModeControl.fCpsErr = interProcControl.rsModbus.fCpsErr;
+#ifdef BNC
+		//from rem to mrem
+		SPRDModeControl.fDoserate = (float)1E3*interProcControl.rsModbus.fDoserate;
+		SPRDModeControl.fDose = (float)1E3*interProcControl.rsModbus.fDose;
+#else
+		//from sv to mksv
 		SPRDModeControl.fDoserate = (float)1E6*interProcControl.rsModbus.fDoserate;
-		SPRDModeControl.fDoserateErr = interProcControl.rsModbus.fDoserateErr;
 		SPRDModeControl.fDose = (float)1E6*interProcControl.rsModbus.fDose;
+#endif
+		SPRDModeControl.fDoserateErr = interProcControl.rsModbus.fDoserateErr;
 		SPRDModeControl.sSigma = interProcControl.rsModbus.sSigma;
 	
 		//move mcs to put new value in not bkg mode
@@ -912,7 +937,11 @@ void InterProc_second_Dispatcher(void)
 		//copy gps and temperature data	and doserate
 		memcpy((void*)&spectrumControl.acqSpectrum.commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
 		memcpy((void*)&spectrumControl.acqSpectrum.fTemperature, (const void*)&interProcControl.fTemperature, sizeof(interProcControl.fTemperature));
+#ifdef BNC
+		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate;	//keep it in mrem/h
+#else
 		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate*1000.0;	//convert to nanosivert
+#endif		
 		spectrumControl.acqSpectrum.fCps = SPRDModeControl.fCps;
 
 	}

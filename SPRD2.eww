@@ -3,11 +3,6 @@
 <workspace>
   <project>
     <path>$WS_DIR$\SPRD.ewp</path>
-    <scc>
-      <provider>Microsoft Visual SourceSafe</provider>
-      <projname>"$/SPRD2/SPRD2", LTNBAAAA</projname>
-      <auxprojpath>\\Newserv3\vss</auxprojpath>
-    </scc>
   </project>
   <batchBuild>
     <batchDefinition>

@@ -370,6 +370,7 @@ void InterProc_stabilize(void);
 //void InterProc_getBkgDR(void);
 void InterProc_getBkgCPS(void);
 
+int InterProc_countFreeSlots(void);
 
 
 

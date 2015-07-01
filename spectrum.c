@@ -1671,16 +1671,17 @@ void Spectrum_peakProc(void)
 	{
 		const float sqrt2ln2=200.0*1.17774100225; //full width on half height = 2*sqrt2ln2*sigma
 		
+		//26/02/2014 commented because we dont need energy resoultion in energies any more
 		//06/07/2012 added calculation of reosultion in energies
-		if(spectrumControl.bHasEnergy)
+/*		if(spectrumControl.bHasEnergy)
 		{
 			float epos = identify_EnergyFromChannel(position);
 			float wd = identify_EnergyFromChannel(position+sigma)-epos;
 			sprintf(spectrumControl.peakProcRes, "N=%.1f R=%.1f%%\0", position, wd*sqrt2ln2/epos);
-		}else
-		{//no energy
+		}else*/
+//		{//no energy
 			sprintf(spectrumControl.peakProcRes, "N=%.1f R=%.1f%%\0", position, sigma*sqrt2ln2/position);
-		}
+//		}
 		//
 		
 		int en = (int)(identify_EnergyFromChannel(position)+0.5);
@@ -1699,6 +1700,22 @@ void Spectrum_peakProc(void)
 		char buf[100];
 		memset(buf,0,sizeof(buf));
 		
+#ifdef BNC
+		switch(modeControl.bLang)
+		{
+		case enu_lang_french:
+			strcpy(buf, "\rPA=%u cnt DR=%.3f mrem/h\0");
+			break;
+		case enu_lang_german:
+			strcpy(buf, "\rPA=%u cnt DR=%.3f mrem/h\0");
+			break;
+		case enu_lang_russian:
+			strcpy(buf, "\rÏÏ=%u cnt ÌÄ=%.3f mrem/h\0");
+			break;
+		default:
+			strcpy(buf, "\rPA=%u cnt DR=%.3f mrem/h\0");
+		}
+#else		
 		switch(modeControl.bLang)
 		{
 		case enu_lang_french:
@@ -1713,7 +1730,9 @@ void Spectrum_peakProc(void)
 		default:
 			strcpy(buf, "\rPA=%u cnt DR=%.2f µSv/h\0");
 		}
-
+#endif	
+		
+		
 		sprintf(spectrumControl.peakProcRes+strlen(spectrumControl.peakProcRes), buf, (UINT)dwarea, (float)SPRDModeControl.fDoserate);
 		
 	}else

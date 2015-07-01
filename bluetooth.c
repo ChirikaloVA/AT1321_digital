@@ -459,7 +459,11 @@ void Bluetooth_rcvData_first_Dispatcher(void)
 		}
 	}else*/
 	{
-		if(bluetoothControl.uart.rcvBuff_safe[0]==0x01)
+		if(bluetoothControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
+			   //21/01/2010
+			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
+			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/)
+			  ///////////
 		{//command to the second processor
 			//translate it to second proc
 			
@@ -477,7 +481,11 @@ void Bluetooth_rcvData_first_Dispatcher(void)
 			//change address to resolve answers from first proc and usb
 			bluetoothControl.uart.rcvBuff_safe[0]=BLUETOOTH_ADDRESS;
 			InterProc_fillNewCmd(bluetoothControl.uart.rcvBuff_safe, bluetoothControl.uart.rcvBuffLen_safe-2);
-		}else if(bluetoothControl.uart.rcvBuff_safe[0]==0x02)
+		}else if(bluetoothControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS
+					 //21/01/2010
+					|| bluetoothControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
+					|| bluetoothControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/)
+					///////////
 		{//command to this processor
 			USBRS_rcvData_second_Dispatcher(&bluetoothControl.uart);
 			if(bluetoothControl.uart.trmBuffLenConst>=2 && bluetoothControl.uart.trmBuffLenConst<bluetoothControl.uart.constTrmBuffLen)
@@ -540,7 +548,11 @@ void Bluetooth_writeModuleName(void)
 void Bluetooth_prepareModuleName(void)
 {
 	memset(bluetoothControl.moduleNameTemp,0,sizeof(bluetoothControl.moduleNameTemp));
+#ifdef BNC	
+	sprintf(bluetoothControl.moduleNameTemp,"palmRad m920 #%05u",(UINT)SETUPModeControl.Serial);
+#else
 	sprintf(bluetoothControl.moduleNameTemp,"RadSearcher #%05u",(UINT)SETUPModeControl.Serial);
+#endif
 }
 
 

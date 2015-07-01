@@ -176,9 +176,13 @@ BOOL MCSMode_OnTimer(void)
 	   SPRDModeControl.fCpsErr<=CPS_ERR_THRESHOLD)
 	{
 		//switch to search mode
-		InterProc_makeCpsAsBkg();
-		InterProc_makeCpsBaseForSearch();
-		SPRDMode_OnUp();
+		int slotscnt = InterProc_countFreeSlots();
+		if(slotscnt>=9)
+		{
+			InterProc_makeCpsAsBkg();
+			InterProc_makeCpsBaseForSearch();
+			SPRDMode_OnUp();
+		}
 	}else if(!SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed)
 	{//save cps in a file
 		

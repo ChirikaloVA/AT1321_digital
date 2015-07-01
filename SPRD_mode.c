@@ -422,6 +422,12 @@ BOOL SPRDMode_OnActivate(void)
 
 BOOL SPRDMode_OnTimer(void)
 {
+	int slotscnt = InterProc_countFreeSlots();
+	if(slotscnt<3)
+	{
+		return 1;
+	}
+	
 	InterProc_readMeasurementRegs();
 
 	if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode)
@@ -441,10 +447,15 @@ BOOL SPRDMode_OnTimer(void)
 		   SPRDModeControl.fCpsErr<=CPS_ERR_THRESHOLD)
 		{
 			//switch to search mode
-			InterProc_makeCpsAsBkg();
-			InterProc_makeCpsBaseForSearch();
-			modeControl.bMenuON = 0;
-			SPRDMode_OnUp();
+			int slotscnt = InterProc_countFreeSlots();
+			if(slotscnt>=9)
+			{
+				//switch to search mode
+				InterProc_makeCpsAsBkg();
+				InterProc_makeCpsBaseForSearch();
+				modeControl.bMenuON = 0;
+				SPRDMode_OnUp();
+			}
 		}else if(!SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed &&
 				 modeControl.pMode==&modes_SPRDMode && 
 				!SPRDModeControl.bNaIOverload /*no NaI overload*/ &&
@@ -589,12 +600,31 @@ void SPRDMode_PSW_done(BOOL bOK)
 	
 BOOL SPRDMode_OnUp(void)
 {
+	int slotscnt = InterProc_countFreeSlots();
+	if(slotscnt<1)
+	{
+		//can not make command!!!
+		SoundControl_BeepSeq(beepSeq_NOK);
+		SoundControl_PlayVibro(200);
+		return 1;
+	}
+
 	if(SPRDModeControl.bGMMode || SPRDModeControl.bNaIMode)
 	{//exit from GM or NaI mode
 		InterProc_resetAveraging();
 		geigerControl.bReset = 1;
 		return 1;
 	}
+	
+	if(slotscnt<7)
+	{
+		//can not make command!!!
+		SoundControl_BeepSeq(beepSeq_NOK);
+		SoundControl_PlayVibro(200);
+		return 1;
+	}
+
+	
 	//background control
 	//!!!!!!!!!!!! must be some sound here
 	if(SPRDModeControl.bBkgMode_confirmed)
@@ -1056,7 +1086,11 @@ char* SPRDMode_getDimension(void)
 /*	switch(SPRDModeControl.iDimension)
 	{
 		case enu_dim_sv:*/
+#ifdef BNC
+			return "mrem/h\0""mrem/h\0""mrem/h\0""mrem/h";
+#else
 			return "µSv/h\0""µSv/h\0""µSv/h\0""µSv/h";
+#endif
 /*		case enu_dim_gy:
 			return "µGy/h\0""µGy/h\0""µGy/h\0""µÃð/÷";
 		case enu_dim_r:
@@ -1072,7 +1106,11 @@ char* SPRDMode_getDimensionDose(void)
 /*	switch(SPRDModeControl.iDimension)
 	{
 		case enu_dim_sv:*/
+#ifdef BNC
+			return "mrem\0""mrem\0""mrem\0""mrem";
+#else	
 			return "µSv\0""µSv\0""µSv\0""µSv";
+#endif
 /*		case enu_dim_gy:
 			return "µGy\0""µGy\0""µGy\0""µÃð";
 		case enu_dim_r:

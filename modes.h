@@ -108,6 +108,10 @@ struct tagModeControl
 	BOOL bNoSigmaCal;	//true if no file sigma.cal
 	BOOL bNoLibrary;	//true if no file selected .lib file
 	BOOL bIdentDefault;	//true if file identify.ini became default
+	BOOL bNoEnergySigmaSpz;	//true if no file energy.spz or sigma.spz
+	//
+	BOOL bNoSysSettings;	//true if sector 0 could not read, FAILED with metrology
+	BOOL bNeedSetTrue_NoSysSettings;	//true if we need to set this flag to true
 	//
 	int bLang;	//enum ENU_LANG
 	BOOL bTimerON;	//=1 then timer if ON

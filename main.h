@@ -33,5 +33,6 @@ extern const char txtCompileDate[];
 
 void main_execute__System_setBridgeMode(HFILE hfile);
 
+void main_execute__Modes_OnTurnOFF(HFILE hfile);
 
 #endif  //#ifndef _MAIN_H

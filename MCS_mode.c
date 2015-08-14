@@ -200,17 +200,19 @@ BOOL MCSMode_OnTimer(void)
 		MCSModeControl.bSaveSpectrum = FALSE;
 		if(SPRDMode_saveAutoSpec())
 		{
-			MCSMode_saveMCS();//save mcs with manual saved spectrum
-			char autoname[FILE_NAME_SZ];
-			char temp[FILE_NAME_SZ];
-			sprintf(autoname, "mcs_%s", Clock_getClockDateTimeStrEx(temp));
-			filesystem_rename_file("mcs","tmp",autoname,"mcs");
-			MCSMode_prepare();
-	
-			//save doserate and gps in log too
-			LOGMode_insertGPS();
-			LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
-			SoundControl_BeepSeq(beepSeq_OK);
+			if(MCSMode_saveMCS())//save mcs with manual saved spectrum
+			{
+				char autoname[FILE_NAME_SZ];
+				char temp[FILE_NAME_SZ];
+				sprintf(autoname, "mcs_%s", Clock_getClockDateTimeStrEx(temp));
+				filesystem_rename_file("mcs","tmp",autoname,"mcs");
+				MCSMode_prepare();
+		
+				//save doserate and gps in log too
+				if(LOGMode_insertGPS())
+					LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
+				SoundControl_BeepSeq(beepSeq_OK);
+			}
 		
 		}
 	}
@@ -223,7 +225,7 @@ BOOL MCSMode_OnTimer(void)
 
 
 //auto save mcs in temp file
-void MCSMode_saveMCS(void)
+BOOL MCSMode_saveMCS(void)
 {
 	if(!MCSModeControl.hfile_tmp)
 		MCSMode_createTempFile();
@@ -232,7 +234,7 @@ void MCSMode_saveMCS(void)
 	{//error no file, or no memory
 		MCSModeControl.iNumberOfCps = 0;
 		SETUPMode_clear_memory();
-		return;
+		return FALSE;
 	}
 	//pre-first DWORD =0xffffffff is a marker of datetime and other structure
 	//first structure is a date time
@@ -272,7 +274,9 @@ void MCSMode_saveMCS(void)
 	if(rlen==E_FAIL)
 	{//nomemory
 		SETUPMode_clear_memory();
-	}
+		return FALSE;
+	}else
+		return TRUE;
 }
 
 

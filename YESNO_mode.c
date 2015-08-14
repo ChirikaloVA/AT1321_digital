@@ -223,7 +223,8 @@ void YESNOMode_DoNotModal(COLORREF clr, const char* pModeName, const char* pMode
 	YESNOModeControl.pModeName =  pModeName;
 	YESNOModeControl.pModeQuestion = pModeQuestion;
 	YESNOModeControl.pReturnFunction = pReturnFunction;
-	YESNOModeControl.pReturnMode = modeControl.pMode;
+	if(modeControl.pMode!=&modes_YESNOMode)
+		YESNOModeControl.pReturnMode = modeControl.pMode;
 	Modes_setActiveMode(&modes_YESNOMode);
 }
 

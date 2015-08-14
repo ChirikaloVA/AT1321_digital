@@ -42,7 +42,7 @@ const char* MCSMode_RightOnUpdate(void);//"setup\0""опции",	//right
 const char* MCSMode_DownOnUpdate(void);//"menu\0""меню",	//down
 
 
-void MCSMode_saveMCS(void);
+BOOL MCSMode_saveMCS(void);
 void MCSMode_prepare(void);
 
 

@@ -533,7 +533,11 @@ void Bluetooth_readModuleName(void)
 void Bluetooth_writeModuleName(void)
 {
 	int len = 0;
+#ifdef BNC	
+	const BYTE cmd[]={0x02,0x52,0x04,0x15,0x00,0x00,0x14};
+#else
 	const BYTE cmd[]={0x02,0x52,0x04,0x14,0x00,0x00,0x13};
+#endif
 	Bluetooth_prepareModuleName();
 	memcpy((void*)&bluetoothControl.uart.trmBuff[0], cmd, sizeof(cmd));
 	memcpy((void*)&bluetoothControl.uart.trmBuff[sizeof(cmd)], bluetoothControl.moduleNameTemp, strlen(bluetoothControl.moduleNameTemp)+1);

@@ -328,8 +328,10 @@ int identify_ChannelFromEnergyNear(int energy)
 /*
 вернуть текстовую строку нуклидов выбранной категории
 */
-void identify_getnuclidesinreport(char sym, const char* pHeader)
+void identify_getnuclidesinreport(char sym, const char* pHeader, BOOL bSimplify//TRUE makes simplifying some nuclides
+)
 {
+	BOOL bUranCalced = FALSE;	//if true then uranium was calculated already
 	int amount = 0;
 	for(int i=0;i<identifyControl.NUCLNUM;i++)
 	{
@@ -352,8 +354,105 @@ void identify_getnuclidesinreport(char sym, const char* pHeader)
 //			char buf[12];
 	//		sprintf(buf,"%u-",(UINT)identifyControl.Nucls[i].confidence);
 		//	strcat(identifyControl.report, buf);
-			strncat(identifyControl.report, identifyControl.Nucls[i].NumStr, NUCLNAMELENGTH);
-			strncat(identifyControl.report, identifyControl.Nucls[i].Name, NUCLNAMELENGTH);
+			//special processing for nulcear nuclides
+			if(bSimplify)
+			{//упрошение названия нуклида в изи моде
+				if(strcmp(identifyControl.Nucls[i].Name, "U") == 0)
+				{
+					strcat(identifyControl.report, "Uranium");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "WPu") == 0)
+				{
+					strcat(identifyControl.report, "Plutonium");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "RPu") == 0)
+				{
+					strcat(identifyControl.report, "Plutonium");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "Np") == 0)
+				{
+					strcat(identifyControl.report, "Neptunium");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "Th") == 0)
+				{
+					strcat(identifyControl.report, "Th");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "Ra") == 0)
+				{
+					strcat(identifyControl.report, "Ra");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "F") == 0)
+				{
+					if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= 26)
+						return;
+					strcat(identifyControl.report, "Annihilation radiation");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "Sr") == 0)
+				{
+					if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= 20)
+						return;
+					strcat(identifyControl.report, "Bremsstrahlung");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "H") == 0)
+				{
+					if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= 27)
+						return;
+					strcat(identifyControl.report, "Neutron capture gamma rays");
+				}else
+				{
+					strncat(identifyControl.report, identifyControl.Nucls[i].NumStr, NUCLNAMELENGTH);
+					strncat(identifyControl.report, identifyControl.Nucls[i].Name, NUCLNAMELENGTH);
+				}
+			}else
+			{
+				if(strcmp(identifyControl.Nucls[i].Name, "H") == 0)
+				{
+					if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= 9)
+						return;
+					strcat(identifyControl.report, "Neutron capture");
+				}else	//показать тип урана на основе его обогащения только в экспертном режиме
+				if(!bUranCalced && identifyControl.Nucls[i].Name[0]=='U' && 
+				   (identifyControl.Nucls[i].NumStr[2]=='5' || 
+					identifyControl.Nucls[i].NumStr[2]=='8'))
+				{
+					bUranCalced = TRUE;
+					if(identifyControl.uranium<0.52)
+					{
+						strcat(identifyControl.report, "DU");
+					}else
+					if(identifyControl.uranium<0.92)
+					{
+						strcat(identifyControl.report, "NU");
+					}else
+					if(identifyControl.uranium<=20.0)
+					{
+						strcat(identifyControl.report, "LEU");
+					}else
+					{
+						strcat(identifyControl.report, "HEU");
+					}
+				}else//показать тип плутония только в экспертном режиме
+				if(strcmp(identifyControl.Nucls[i].Name, "WPu") == 0)
+				{
+					strcat(identifyControl.report, "Low burn-up Pu");
+				}else
+				if(strcmp(identifyControl.Nucls[i].Name, "RPu") == 0)
+				{
+					strcat(identifyControl.report, "High burn-up Pu");
+				}else
+				{
+					strncat(identifyControl.report, identifyControl.Nucls[i].NumStr, NUCLNAMELENGTH);
+					strncat(identifyControl.report, identifyControl.Nucls[i].Name, NUCLNAMELENGTH);
+				}
+			}
+			//insert confidence
+			strncat(identifyControl.report, " [", NUCLNAMELENGTH);
+			char buf[2];
+			buf[0]= '0'+identifyControl.Nucls[i].confidence;
+			buf[1] = 0;
+			strncat(identifyControl.report, buf, NUCLNAMELENGTH);
+			strncat(identifyControl.report, "]", NUCLNAMELENGTH);
+
 			amount++;
 			identifyControl.iNuclsIdentified++;
 			identifyControl.bHaveAlreadyResult = TRUE;
@@ -420,51 +519,65 @@ int identify_getnuclidetxt(int i, char* pstrNuc)
 
 void identify_clearReport(void)
 {
-	memset(identifyControl.report, 0, sizeof(identifyControl.report));
-	identifyControl.iNuclsIdentified = 0;
+	identify_clearReportEx();
 	identifyControl.bHaveAlreadyResult = FALSE;
 	identifyControl.bHaveUnknownResult = FALSE;
 }
 
-void identify_prepareReport(BOOL bAddCategory)
+void identify_clearReportEx(void)
+{
+	memset(identifyControl.report, 0, sizeof(identifyControl.report));
+	identifyControl.iNuclsIdentified = 0;
+}
+
+
+void identify_prepareReport(BOOL bAddCategory//FALSe for spectrometric mode
+							)
 {
 	const char strInd[] = "Industrial: \0""Industrie: \0""Industrial: \0""Промышленный: ";
 	const char strMed[] = "Medicine: \0""Medizin: \0""Medicine: \0""Медицинский: ";
 	const char strNuc[] = "Nuclear: \0""Nuklear: \0""Nuclear: \0""Ядерный: ";
 	const char strNat[] = "NORM: \0""NORM: \0""NORM: \0""Естественный: ";
+	const char strAlfaN[] = "Neutron: \0""Neutron: \0""Neutron: \0""Нейтронный: ";
 	
 	const char* pText="";
 	if(bAddCategory)
 		pText = Display_getTextByLang(strInd);
-	identify_getnuclidesinreport('I',pText);
+	identify_getnuclidesinreport('I',pText, bAddCategory);
 	pText="";
 	if(bAddCategory)
 		pText = Display_getTextByLang(strMed);
 	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
 		return;
-	identify_getnuclidesinreport('M',pText);
+	identify_getnuclidesinreport('M',pText, bAddCategory);
 	pText="";
 	if(bAddCategory)
 		pText = Display_getTextByLang(strNuc);
 	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
 		return;
-	identify_getnuclidesinreport('U',pText);
+	identify_getnuclidesinreport('U',pText, bAddCategory);
 	pText="";
 	if(bAddCategory)
 		pText = Display_getTextByLang(strNat);
 	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
 		return;
-	identify_getnuclidesinreport('N',pText);
+	identify_getnuclidesinreport('N',pText, bAddCategory);
+	pText="";
+	if(bAddCategory)
+		pText = Display_getTextByLang(strAlfaN);
+	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
+		return;
+	identify_getnuclidesinreport('P',pText, bAddCategory);
 #ifndef BNC	
 	//show unknown only for NON BNC version
 	if(identifyControl.bHaveUnknownResult)
 	{
-		strcat(identifyControl.report, Display_getTextByLang("\rUNKNOWN\0""\rUNKNOWN\0""\rUNKNOWN\0""\rНЕИЗВЕСТНЫЙ"));
+		strcat(identifyControl.report, Display_getTextByLang("\rNot in the library\0""\rNot in the library\0""\rNot in the library\0""\rНет в библиотеке"));
 	}else
 #endif
 	if(!identifyControl.bHaveAlreadyResult)
 	{
-		strcat(identifyControl.report, Display_getTextByLang("NOTHING\0""NICHTS\0""NOTHING\0""НИЧЕГО"));
+		strcat(identifyControl.report, Display_getTextByLang("Not identified\0""Not identified\0""Not identified\0""Ничего не идентифицировано"));
 	}
 }
 
@@ -473,6 +586,7 @@ void identify_prepareReport(BOOL bAddCategory)
 void identify_identify(BOOL bAddCategory)
 {
 	identifyControl.ISpectrum = spectrumControl.pShowSpectrum->dwarSpectrum;
+	identifyControl.collectionTime = spectrumControl.pShowSpectrum->wAcqTime;
 
 	if(!spectrumControl.bHasEnergy || !spectrumControl.bHasSigma
 	   || !identifyControl.bHasLibrary)
@@ -482,7 +596,7 @@ void identify_identify(BOOL bAddCategory)
 	}else
 	{
 		PowerControl_turboModeON();
-		identify_clearReport();
+		identify_clearReportEx();
 		identify_DetectLines();
 		identifyControl.bHaveUnknownResult = (identify_MakeNuclideIdentification()==-1)?(BOOL)TRUE:(BOOL)FALSE;
 		identify_checkForUnknown();
@@ -1431,13 +1545,11 @@ void identify_calcUranium(void)
 	{
 		fmean = (float)identifyControl.BufSpec[en186]/fmean;
 		fmean = (float)(100.0*(0.027*pow((float)fmean, (float)0.52)-0.038));
-		if(fmean>90)
-			fmean = 90;
-		else if(fmean<1)
-			fmean = 0;
+		if(fmean>90.0)
+			fmean = 90.0;
 	}else
-		fmean = 90;
-	uranium = (short)(fmean);
+		fmean = 90.0;
+	identifyControl.uranium = fmean;
 }
 #endif	//#ifdef _URANIUM_CALC
 

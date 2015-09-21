@@ -55,9 +55,15 @@ const struct tagMode modes_MCSMode=
 const char* MCSMode_NameOnUpdate(void)//"MCS\0""ДИАГРАММА",	//mode name
 {
 	if(SPRDModeControl.bBkgMode_confirmed)
-		return "MCS BG\0""MCS GRND\0""MCS bkg\0""МКД фон";
+#ifdef _IAEA		
+		return "Bgnd\0""Bgnd\0""Bgnd\0""Фон";
+	else
+		return "Measure\0""Measure\0""Measure\0""Измер";
+#else
+		return "MCS BG\0""MCS BG\0""MCS BG\0""МКД фон";
 	else
 		return "MCS\0""MCS\0""MCS\0""МКД";
+#endif
 }
 
 const char* MCSMode_LeftOnUpdate(void)//"back\0""назад",	//left

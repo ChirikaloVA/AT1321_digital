@@ -354,10 +354,10 @@ void USBRS_control(void)
 	//call first dispatcher
 	if(USBRSControl.uart.bDataReceived_safe)
 	{//must process received data
-		if(modeControl.pMode != &modes_USBMode && !USBRSControl.bSysExecution && USBModeControl.bEnterThisMode)
-		{//switch to USB mode when first command received and we are no in this mode
-			Modes_setActiveMode(&modes_USBMode);
-		}
+//		if(modeControl.pMode != &modes_USBMode && !USBRSControl.bSysExecution && USBModeControl.bEnterThisMode)
+	//	{//switch to USB mode when first command received and we are no in this mode
+		//	Modes_setActiveMode(&modes_USBMode);
+//		}
 
 		//first process, the results must be processed in the procedures of initiate transmition command
 		//no cmd should be prepared in trm buffer if rcv data is not processed here!!!!!!!!!

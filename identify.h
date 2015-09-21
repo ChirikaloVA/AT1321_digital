@@ -8,8 +8,8 @@
 #include "filesystem.h"
 
 
-
-
+//вести расчет обогащения
+#define _URANIUM_CALC
 
 
 #define BADINDEX 255
@@ -124,7 +124,7 @@ struct tagIdentify
 	float fSCALEINSTABILITY;
 	
 	
-	int uranium;//степень обогащения урана
+	float uranium;//степень обогащения урана
 	
 	long nsigma_peakcheck_left;
 	long nsigma_peakcheck_right;
@@ -267,9 +267,10 @@ int identify_open_library(void);
 int identify_read_identify_ini(void);
 
 
-void identify_getnuclidesinreport(char sym, const char* pHeader);
+void identify_getnuclidesinreport(char sym, const char* pHeader, BOOL bSimplify);
 void identify_prepareReport(BOOL bAddCategory);
 void identify_clearReport(void);
+void identify_clearReportEx(void);
 BOOL identify_write_identify_ini_int(const char * pSection, const char* pValueName, int value);
 
 BOOL identify_write_identify_ini_string(const char * pSection, const char* pValueName, const char* value);
@@ -282,5 +283,10 @@ void identify_testForPuBa(TNucl* thisnuc);
 
 void identify_checkForUnknown(void);
 int identify_getnuclidetxt(int i, char* pstrNuc);
+
+#ifdef _URANIUM_CALC
+void identify_calcUranium(void);
+#endif	//#ifdef _URANIUM_CALC
+
 
 #endif	//#ifndef _IDENTIFY_H

@@ -36,7 +36,7 @@
 #include "bluetooth.h"
 #include "gps.h"
 #include "keyboard.h"
-
+#include "rid.h"
 
 
 
@@ -113,7 +113,7 @@ const char* SETUPMode_DownOnUpdate(void)//"menu\0""меню",	//down
 		return NULL;
 	}*/
 	//!!!!!!!!!!!!!!!!
-	if(SETUPModeControl.bExpertMode)
+	if(RIDControl.bExpertMode)
 		return "menu\0""menu\0""menu\0""меню";
 	else
 		return "login\0""login\0""login\0""пароль";
@@ -521,7 +521,7 @@ void SETUPMode_menu1_del_spz_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress=0;
 		//delete all spz files
 		HFILE hfile=NULL;
 		do
@@ -534,15 +534,14 @@ void SETUPMode_menu1_del_spz_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
-		Modes_clearModeArea();	//clear screen area for mode
-		Modes_OnShow();
 	}
+	Modes_clearModeArea();	//clear screen area for mode
+	Modes_updateMode();
 }
-
-
 
 
 
@@ -562,7 +561,7 @@ void SETUPMode_menu1_del_autospz_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress = 0;
 		//delete all autospz files
 		HFILE hfile=NULL;
 		do
@@ -575,6 +574,7 @@ void SETUPMode_menu1_del_autospz_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
@@ -591,12 +591,10 @@ void SETUPMode_menu1_del_autospz_confirm(BOOL bYes)
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
-		Modes_clearModeArea();	//clear screen area for mode
-		Modes_OnShow();
 	}
+	Modes_clearModeArea();	//clear screen area for mode
+	Modes_updateMode();
 }
-
-
 
 
 
@@ -616,7 +614,7 @@ void SETUPMode_menu1_del_log_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress=0;
 		//delete all spz files
 		HFILE hfile =NULL;
 		do
@@ -629,12 +627,15 @@ void SETUPMode_menu1_del_log_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
-		Modes_clearModeArea();	//clear screen area for mode
-		Modes_OnShow();
+		//создать новй лог
+		LOGMode_createLog();
 	}
+	Modes_clearModeArea();	//clear screen area for mode
+	Modes_updateMode();
 }
 BOOL SETUPMode_menu1_del_mcs(void)
 {
@@ -649,7 +650,7 @@ void SETUPMode_menu1_del_mcs_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress=0;
 		//delete all spz files
 		HFILE hfile =NULL;
 		do
@@ -662,13 +663,15 @@ void SETUPMode_menu1_del_mcs_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
-		Modes_clearModeArea();	//clear screen area for mode
-		Modes_OnShow();
 	}
+	Modes_clearModeArea();	//clear screen area for mode
+	Modes_updateMode();
 }
+
 BOOL SETUPMode_menu1_del_lib(void)
 {
 	YESNOMode_DoNotModal(RED, "REQUEST\0""REQUEST\0""REQUEST\0""ЗАПРОС",
@@ -682,7 +685,7 @@ void SETUPMode_menu1_del_lib_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress=0;
 		//delete all spz files
 		HFILE hfile=NULL;
 		do
@@ -696,6 +699,7 @@ void SETUPMode_menu1_del_lib_confirm(BOOL bYes)
 						break;
 				}
 			}
+			SETUPMode_pleaseWait(++progress);
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
 		Modes_clearModeArea();	//clear screen area for mode
@@ -775,14 +779,19 @@ void SETUPMode_menu1_defaults_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
+		SETUPMode_pleaseWait(25);
 		//reset ini only
 		filesystem_restore_identify_ini();
+		SETUPMode_pleaseWait(50);
 		filesystem_restore_system_ini_from_backup();
-//		filesystem_restore_system_ini();
+		SETUPMode_pleaseWait(75);
 		filesystem_restore_main_lib();
+		SETUPMode_pleaseWait(99);
 		//open new files
 		filesystem_check_ini_files();
 	}
+	Modes_clearModeArea();	//clear screen area for mode
+	Modes_updateMode();
 }
 
 
@@ -855,7 +864,7 @@ void SETUPMode_Init(void)
 	SETUPModeControl.uiMCSFiles = 0;
 	SETUPModeControl.uiLOGFiles = 0;
 	SETUPMode_clearBuffers();
-	SETUPModeControl.bExpertMode = FALSE;
+//	SETUPModeControl.bExpertMode = FALSE;
 }
 
 void SETUPMode_clearBuffers(void)
@@ -981,7 +990,7 @@ BOOL SETUPMode_OnUp(void)
 	if(SETUPModeControl.iModeScreen==ENU_SETUP_MODE_SCR_MEM)
 	{//get mem data, have to wait for
 
-		SETUPMode_pleaseWait();
+		SETUPMode_pleaseWait(100);
 		
 		filesystem_calc_special_files_number(&SETUPModeControl.uiAllFiles,
 							&SETUPModeControl.uiSPZFiles,
@@ -996,7 +1005,7 @@ BOOL SETUPMode_OnUp(void)
 	return 1;
 }
 
-void SETUPMode_pleaseWait(void)
+void SETUPMode_pleaseWait(int progress)
 {
 	Modes_clearModeArea();	//clear screen area for mode
 	Display_setCurrentFont(fnt16x16);
@@ -1008,6 +1017,9 @@ void SETUPMode_pleaseWait(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(CENTER);
 	Display_outputTextByLang("Please wait...\0""Bitte warten...\0""Please wait...\0""Пожалуйста ждите...");
+	char text[10];
+	sprintf(text, "\r%d", progress);
+	Display_outputText(text);
 }
 
 
@@ -1019,7 +1031,7 @@ void SETUPMode_PSW_done(BOOL bOK)
 
 //in debug mode dont need to enter psw
 #ifdef DEBUG
-		SETUPModeControl.bExpertMode = TRUE;
+		RIDControl.bExpertMode = TRUE;
 #else
 		char pStr[5];
 		memset(pStr,0,5);
@@ -1030,16 +1042,66 @@ void SETUPMode_PSW_done(BOOL bOK)
 		ENABLE_VIC;
 
 		if(!strcmp(pStr,EditModeControl.edit_buf))
-			SETUPModeControl.bExpertMode = TRUE;
+{
+			RIDControl.bExpertMode = TRUE;
+			SETUPMode_accessGranted();
+}else
+{
+			SETUPMode_accessDenied();
+}
 #endif		//#ifdef DEBUG
 	}
 	SETUPMode_setModeOnSelf();
 }
 
+//показать сообщение что доступ закрыт и ожидать 2 сек или надатия кнопки
+void SETUPMode_accessDenied(void)
+{
+	SoundControl_BeepSeq(beepSeq_NOK);
+
+	
+	Modes_clearModeArea();	//clear screen area for mode
+	Display_setCurrentFont(fnt16x16);
+	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
+	Display_setTextXY(0,20);	//set start coords in window
+	Display_setTextWrap(0);
+	Display_setTextSteps(1,1);
+	Display_setTextJustify(CENTER);
+	Display_outputTextByLang("Access denied\0""Access denied\0""Access denied\0""В доступе отказано");
+	PowerControl_sleep(1000);
+	PowerControl_sleep(1000);
+/*	int cnt = 20;
+	do
+	{
+		PowerControl_sleep(100);
+	}while(!KeyboardControl_anyKeyPressed_hardware_intcall() && --cnt);*/
+}
+
+
+//показать сообщение что доступ открыт и ожидать 2 сек или надатия кнопки
+void SETUPMode_accessGranted(void)
+{
+	Modes_clearModeArea();	//clear screen area for mode
+	Display_setCurrentFont(fnt16x16);
+	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
+	Display_setTextXY(0,20);	//set start coords in window
+	Display_setTextWrap(0);
+	Display_setTextSteps(1,1);
+	Display_setTextJustify(CENTER);
+	Display_outputTextByLang("Access granted\0""Access granted\0""Access granted\0""Доступ открыт");
+	PowerControl_sleep(1000);
+	PowerControl_sleep(1000);
+/*	int cnt = 20;
+	do
+	{
+		PowerControl_sleep(100);
+	}while(!KeyboardControl_anyKeyPressed_hardware_intcall() && --cnt);*/
+}
+
 
 BOOL SETUPMode_OnDown(void)
 {
-	if(!SETUPModeControl.bExpertMode)
+	if(!RIDControl.bExpertMode)
 	{
 		//protected mode, password enter
 	//enter expert mode
@@ -1403,11 +1465,14 @@ void SETUPMode_showMemory(void)
 	///////////////////////
 
 	//show log size
-	files = SETUPModeControl.uiLOGFiles;//filesystem_calc_files_number("log");
-	ret = sprintf(buf, "%u\r", (UINT)files);
+	if(LOGModeControl.hfile_log)
+		files = filesystem_get_length(LOGModeControl.hfile_log);
+	else 
+		files = 0;
+	ret = sprintf(buf, "%u kB\r", (UINT)files/1000+1);
 	if(ret>=sizeof(buf))
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
-	Display_outputTextByLang("Log files: \0""Log files: \0""Log files: \0""Журналов: ");
+	Display_outputTextByLang("Log file: \0""Log file: \0""Log file: \0""Журнал: ");
 	Display_outputText(buf);
 	///////////////////////
 
@@ -1817,6 +1882,7 @@ void SETUPMode_menu1_select_lib_done_err(BOOL bOK)
 
 BOOL SETUPMode_menu1_select_lib_onNextPage(void)
 {
+	if(MAX_ITEMS!=FileListModeControl.iItemsNum)return FALSE;
 	FileListModeControl.iItemsNum = filesystem_get_dir(
 					"lib",
 					FileListModeControl.listItems,
@@ -2158,7 +2224,7 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 {
 	if(bYes)
 	{
-		SETUPMode_pleaseWait();
+		int progress = 0;
 		//delete all autospz files
 		HFILE hfile=NULL;
 		do
@@ -2171,6 +2237,7 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
@@ -2184,6 +2251,7 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
@@ -2197,6 +2265,7 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
@@ -2210,6 +2279,8 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
 						break;
 				}
+				SETUPMode_pleaseWait(++progress);
+
 			}
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
@@ -2218,6 +2289,6 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 //		LOGMode_insertEventByLang("Power ON\0""Power ON\0""Power ON\0""Включение");
 	}
 	Modes_clearModeArea();	//clear screen area for mode
-	Modes_OnShow();
+	Modes_updateMode();
 }
 

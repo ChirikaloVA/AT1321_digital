@@ -263,6 +263,6 @@ void Spectrum_showMessageOnFileNamechange(char* pFileName);
 
 void Spectrum_showMessageOnFileNamechange_onDraw(const void* pParam);
 void Spectrum_showMessageOnFileNamechange_onExit(void);
-
+void Spectrum_DiffFilter(void);
 
 #endif	//ifndef _SPECTRUM_H

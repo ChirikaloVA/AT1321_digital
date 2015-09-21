@@ -24,6 +24,9 @@
 #include "stab_mode.h"
 #include "file_list.h"
 #include "info_mode.h"
+#include "message_mode.h"
+#include "rid.h"
+#include "keyboard.h"
 
 
 struct tagModeControl modeControl;
@@ -56,6 +59,8 @@ void Modes_Init(void)
 	STABMode_Init();
 	FileListMode_Init();
 	INFOMode_Init();
+	MessageMode_Init();
+	RID_Init();
 	/////////////////////
 }
 
@@ -77,6 +82,9 @@ void Modes_setActiveMode(const struct tagMode* pMode)
 	//activate mode by default
 
 	Modes_OnActivate();	//call onactivate for the new mode
+	
+	//здесь надо очистить буфер клавы чтобы случ нажатия не обработать
+	KeyboardControl_restoreKeyboard();
 }
 
 //clear user area of mode
@@ -426,9 +434,12 @@ void Modes_showMenu()
 	Display_setTextSteps(1,4);
 	Display_setTextXY(3,3);	//set start coords in window
 	
+	if(modeControl.pMenu->name[0])
+	{
 	Display_outputTextByLang((char*)modeControl.pMenu->name);
 	Display_outputText("\r");
 	Display_drawHLine(1,y+MENU_MARKER_HEIGHT,238,YELLOW_DARK);
+	}
 	Display_setTextJustify(LEFT);
 	Display_setTextColor(modeControl.pMode->modeNameClr);	//set text color
 	for(int i=0;i<modeControl.pMenu->iItemsNum;i++)

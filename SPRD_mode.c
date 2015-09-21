@@ -30,6 +30,7 @@
 #include "ini_control.h"
 #include "LOG_mode.h"
 #include "STAB_mode.h"
+#include "rid.h"
 
 
 
@@ -78,11 +79,19 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 		return "NaI mode\0""NaI mode\0""NaI mode\0""Режим NaI";
 	}else
 	if(SPRDModeControl.bBkgMode_confirmed)
-		return "SPRD bkg\0""SPRD bkg\0""SPRD bkg\0""СПРД фон";
+#ifdef _IAEA		
+		return "Bgnd\0""Bgnd\0""Bgnd\0""Фон";
+#else
+		return "SPRD bkg\0""SPRD bkg\0""SPRD bkg\0""СПРД Фон";
+#endif	
 	else
 	{
 		if(!SPRDModeControl.bIdentMode)
+#ifdef _IAEA		
+			return "Search\0""Search\0""Search\0""Поиск";
+#else
 			return "SPRD\0""SPRD\0""SPRD\0""СПРД";
+#endif
 		else
 		{
 			int val = identifyControl.identifyDeadTime-(UINT)spectrumControl.acqSpectrum.wAcqTime;
@@ -92,28 +101,44 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			char buf[20];
 			char volatile * pbuf = SPRDModeControl.buf;
 			memset(buf, 0, sizeof(buf));
+#ifdef _IAEA		
+			sprintf(buf, "Ident %d", val);
+#else
 			sprintf(buf, "SPRD %d", val);
+#endif
 			strcat((char*)pbuf, buf);
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
 			
 			memset(buf, 0, sizeof(buf));
+#ifdef _IAEA		
+			sprintf(buf, "Ident %d", val);
+#else
 			sprintf(buf, "SPRD %d", val);
+#endif
 			strcat((char*)pbuf, buf);
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
 			
 			memset(buf, 0, sizeof(buf));
+#ifdef _IAEA		
+			sprintf(buf, "Ident %d", val);
+#else
 			sprintf(buf, "SPRD %d", val);
+#endif
 			strcat((char*)pbuf, buf);
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
 			
 			memset(buf, 0, sizeof(buf));
+#ifdef _IAEA		
+			sprintf(buf, "Идент %d", val);
+#else
 			sprintf(buf, "СПРД %d", val);
+#endif
 			strcat((char*)pbuf, buf);
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
@@ -160,7 +185,11 @@ const char* SPRDMode_UpOnUpdate(void)//"acquir\0""набор",//up
 		else
 			return "stop\0""stop\0""stop\0""стоп";
 	}else
+#ifdef _IAEA		
+		return "bgnd\0""bgnd\0""bgnd\0""фон";
+#else
 		return "bkg\0""bkg\0""bkg\0""фон";
+#endif
 }
 const char* SPRDMode_DownOnUpdate(void)//"menu\0""меню",	//down
 {
@@ -173,7 +202,11 @@ const char* SPRDMode_DownOnUpdate(void)//"menu\0""меню",	//down
 
 const struct tagMenu SPRD_menu=
 {
+#ifdef _IAEA		
+	"MENU: SEARCH\0""MENU: SEARCH\0""MENU: SEARCH\0""МЕНЮ: ПОИСК",	//menu name
+#else
 	"MENU: SPRD\0""MENU: SPRD\0""MENU: SPRD\0""МЕНЮ: СПРД",	//menu name
+#endif
 	9,	//number of items
 	{SPRDMode_menu1_SPRDmode, SPRDMode_menu1_SaveValue, SPRDMode_menu1_BkgMode, SPRDMode_menu1_datetime,SPRDMode_menu1_lang,SPRDMode_menu1_Stabilize, SPRDMode_menu1_NaIMeasure, SPRDMode_menu1_GMMeasure, SPRDMode_menu1_TurnOFF},
 	{SPRDMode_menu1_SPRDmode_onUpdate, SPRDMode_menu1_SaveValue_onUpdate, SPRDMode_menu1_BkgMode_onUpdate, SPRDMode_menu1_datetime_onUpdate,SPRDMode_menu1_lang_onUpdate,SPRDMode_menu1_Stabilize_onUpdate, SPRDMode_menu1_NaIMeasure_onUpdate, SPRDMode_menu1_GMMeasure_onUpdate, SPRDMode_menu1_TurnOFF_onUpdate}
@@ -242,7 +275,11 @@ BOOL SPRDMode_menu1_SPRDmode(void)
 const char* SPRDMode_menu1_SPRDmode_onUpdate(void)
 {
 	if(SPRDModeControl.bGMMode || SPRDModeControl.bNaIMode)
+#ifdef _IAEA		
+		return "Search mode\0""Search mode\0""Search mode\0""Режим Поиск";
+#else
 		return "SPRD mode\0""SPRD mode\0""SPRD mode\0""Режим СПРД";
+#endif
 	else
 		return NULL;
 }
@@ -280,7 +317,11 @@ BOOL SPRDMode_menu1_BkgMode(void)
 const char* SPRDMode_menu1_BkgMode_onUpdate(void)
 {
 	if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode)
+#ifdef _IAEA
+		return "Bgnd mode\0""Bgnd mode\0""Bgnd mode\0""Режим Фон";
+#else
 		return "BKG mode\0""BKG mode\0""BKG mode\0""Режим Фон";
+#endif
 	else
 		return NULL;
 }
@@ -544,7 +585,7 @@ BOOL SPRDMode_OnRight(void)
 			identifyControl.identifyDeadTime=900;
 	}else
 	{//goto tc mode
-		Modes_setActiveMode(&modes_RID_PSW_Mode);
+		Modes_setActiveMode(&modes_RID_Mode);
 	}
 	return 1;
 }
@@ -872,9 +913,16 @@ void SPRDMode_showIdent(void)
 	Display_setTextJustify(NONE);
 	Display_setCurrentFont(fnt16x16);
 //	Display_clearTextWin(270);
-	Display_setTextColor(RED);	//set text color
+	Display_setTextColor(GREEN);	//set text color
 	Display_setTextLineClear(1);
 	Display_checkForClearLine();
+	
+	Display_outputTextByLang("Nuc.Lib: \0""Nuc.Lib: \0""Nuc.Lib: \0""Нук.биб: ");
+	Display_outputText(identifyControl.libraryFileName);
+	Display_outputText("\r");
+	
+	Display_checkForClearLine();
+	Display_setTextColor(RED);	//set text color
 	Display_outputTextByLang(strIdentified);
 	Display_setTextColor(YELLOW);	//set text color
 	Display_outputText(identifyControl.report);

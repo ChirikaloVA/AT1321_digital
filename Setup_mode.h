@@ -41,7 +41,7 @@ struct tagSETUPModeControl
 	BYTE ManufacturedMonth;
 	WORD ManufacturedYear;
 	
-	BOOL bExpertMode;
+//	BOOL bExpertMode;
 //	int isplash;	//исп для ротации заставок, to get splash screens
 	
 //	int iJustLeaveScreen;	//to get splash screens
@@ -217,7 +217,7 @@ void SETUPMode_menu1_del_autospz_confirm(BOOL bYes);
 BOOL SETUPMode_menu1_del_autospz(void);
 
 
-void SETUPMode_pleaseWait(void);
+void SETUPMode_pleaseWait(int progress);
 
 /*
 BOOL SETUPMode_menu1_placeMarkers(void);
@@ -243,5 +243,8 @@ void SETUPMode_prirabotka(BOOL bYes);
 BOOL SETUPMode_menu1_showSplash(void);
 const char* SETUPMode_menu1_showSplash_onUpdate(void);
 */
+void SETUPMode_accessGranted(void);
+void SETUPMode_accessDenied(void);
+
 
 #endif	//ifndef _SETUPMODE_H

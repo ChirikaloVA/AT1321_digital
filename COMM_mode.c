@@ -141,7 +141,7 @@ BOOL COMMMode_OnRight(void)
 {
 	//must be here with  Modes_setActiveMode(&modes_SETUPMode);
 	//reset expert mode
-	SETUPModeControl.bExpertMode = FALSE;
+//	SETUPModeControl.bExpertMode = FALSE;
 	Modes_setActiveMode(&modes_SETUPMode);
 	return 1;
 }

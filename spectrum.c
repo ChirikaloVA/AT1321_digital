@@ -809,23 +809,27 @@ void Spectrum_showSpectrum(void)
 		}
 	}else
 	{
+		valmax = 0;
 		for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 		{
 //!!!!!!!!!!!!!!
 ////commented for id test		
-		val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
+			val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
 //		val = identifyControl.BufSpec[i];
 	//	if(val&0x80000000)val=0;
 //!!!!!!!!!!
-		
-			if(spectrumControl.bLogView && val)
-			{
-				val = (DWORD)(100.0*log((float)val));
-			}
-			yy = (DWORD)SPECTRUM_WIN_BOTTOM-(DWORD)((val<<highMul)>>highDiv);
+			if(val>valmax)
+				valmax=val;
 			//calc to go to the next x position		
 			if((e+=t)>0)
 			{
+				val = valmax;
+				valmax=0;
+				if(spectrumControl.bLogView && val)
+				{
+					val = (DWORD)(100.0*log((float)val));
+				}
+				yy = (DWORD)SPECTRUM_WIN_BOTTOM-(DWORD)((val<<highMul)>>highDiv);
 				e-=denom;
 				if(yy>SPECTRUM_WIN_BOTTOM)
 					yy = SPECTRUM_WIN_BOTTOM;
@@ -1060,7 +1064,11 @@ BOOL Spectrum_menu1_secondmarker(void)
 //switch to easy mode item update
 const char* Spectrum_menu1_easyMode_onUpdate(void)
 {
+#ifdef _IAEA
+	return "Search mode\0""Search mode\0""Search mode\0""Режим Поиск";
+#else
 	return "SPRD mode\0""SPRD mode\0""SPRD mode\0""Режим СПРД";
+#endif
 }
 
 
@@ -1104,7 +1112,7 @@ const char* Spectrum_menu1_highlimit_onUpdate(void)
 	if(modeControl.pMode!=&modes_SpectrumMode)
 		return NULL;
 	else
-		return "Higher limit\0""Higher limit\0""Higher limit\0""Верхний порог";
+		return "Upper limit\0""Upper limit\0""Upper limit\0""Верхний порог";
 }
 /*
 const char* Spectrum_menu1_secondmarker_onUpdate(void)
@@ -1961,3 +1969,22 @@ const char* Spectrum_menu1_deletespec_onUpdate(void)
 	else
 		return "Delete autospectra\0""Delete autospectra\0""Delete autospectra\0""Удалить автоспектры";
 }
+
+#ifdef _DIFF_FILTER
+//фильтр диф нелинейности
+void Spectrum_DiffFilter(void)
+{
+	long val=0;
+	long val2=0;
+	for(int i=66;i<CHANNELS-32;i+=64)
+	{
+		val = (spectrumControl.acqSpectrum.dwarSpectrum[i-1]+spectrumControl.acqSpectrum.dwarSpectrum[i+1])/2;
+		val2 = spectrumControl.acqSpectrum.dwarSpectrum[i]-val;
+		if(val2>65535 || val2*val2>=16*val)
+		{//есть дифнелинейность
+			spectrumControl.acqSpectrum.dwarSpectrum[i]-=val2;
+			spectrumControl.acqSpectrum.dwarSpectrum[i+32]+=val2;
+		}
+	}					
+}
+#endif	//#ifdef _DIFF_FILTER

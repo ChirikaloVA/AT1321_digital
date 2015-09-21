@@ -1,0 +1,1 @@
+at200 com6 -baud 230400 -LPC2478 -flash "d:\IARARMProjects\SPRD2_5\IAEA SNM\Exe\SPiRiD1IAEASNM.hex"

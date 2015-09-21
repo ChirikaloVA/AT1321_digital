@@ -21,6 +21,7 @@
 #include "sprd_mode.h"
 #include "SETUP_Mode.h"
 #include "sound.h"
+#include "rid.h"
 
 
 struct tagTCModeControl TCModeControl;
@@ -60,7 +61,11 @@ const char* TCMode_LeftOnUpdate(void)//"back\0""назад",	//left
 }
 const char* TCMode_RightOnUpdate(void)//"mcs\0""диагр",	//right
 {
-	return "mcs\0""mcs\0""mcs\0""мкд";
+#ifdef _IAEA
+	return "expert\0""expert\0""expert\0""эксперт";
+#else
+	return "rid\0""rid\0""rid\0""рид";
+#endif
 }
 const char* TCMode_UpOnUpdate(void)//"acquir\0""набор",//up
 {
@@ -149,7 +154,7 @@ BOOL TCMode_OnLeft(void)
 }
 BOOL TCMode_OnRight(void)
 {
-	Modes_setActiveMode(&modes_MCSMode);
+	Modes_setActiveMode(&modes_RID_Mode);
 	return 1;
 }
 BOOL TCMode_OnUp(void)

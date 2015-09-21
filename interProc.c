@@ -933,6 +933,14 @@ void InterProc_second_Dispatcher(void)
 				sum+=val;
 		}
 		spectrumControl.acqSpectrum.dwCount = sum;
+		
+		//!!!!!!!!!!!!!
+		//фильтр динелинейности
+#ifdef _DIFF_FILTER
+		Spectrum_DiffFilter();
+#endif	//#ifdef _DIFF_FILTER
+		//!!!!!!!!!!!!!!1
+
 
 		//copy gps and temperature data	and doserate
 		memcpy((void*)&spectrumControl.acqSpectrum.commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));

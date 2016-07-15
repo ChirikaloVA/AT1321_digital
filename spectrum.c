@@ -1678,18 +1678,19 @@ void Spectrum_peakProc(void)
 	if(Spectrum_peakProc_ex(&position,&sigma))
 	{
 		const float sqrt2ln2=200.0*1.17774100225; //full width on half height = 2*sqrt2ln2*sigma
-		
+
+		//14.04.2016 added again to be like SpectEx		
 		//26/02/2014 commented because we dont need energy resoultion in energies any more
 		//06/07/2012 added calculation of reosultion in energies
-/*		if(spectrumControl.bHasEnergy)
+		if(spectrumControl.bHasEnergy)
 		{
 			float epos = identify_EnergyFromChannel(position);
 			float wd = identify_EnergyFromChannel(position+sigma)-epos;
 			sprintf(spectrumControl.peakProcRes, "N=%.1f R=%.1f%%\0", position, wd*sqrt2ln2/epos);
-		}else*/
-//		{//no energy
+		}else
+		{//no energy
 			sprintf(spectrumControl.peakProcRes, "N=%.1f R=%.1f%%\0", position, sigma*sqrt2ln2/position);
-//		}
+		}
 		//
 		
 		int en = (int)(identify_EnergyFromChannel(position)+0.5);

@@ -1,1 +1,1 @@
-at200 com6 -baud 230400 -LPC2478 -flash d:\IARARMProjects\SPRD2_5\BNC\Exe\SPiRiD1_BNC.hex
+at200 com3 -baud 230400 -LPC2478 -flash d:\IARARMProjects\SPRD2_5\BNC\Exe\SPiRiD1_BNC.hex

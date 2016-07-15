@@ -19,6 +19,7 @@
 #include "interrupts.h"
 #include "SETUP_Mode.h"
 #include "USB_mode.h"
+#include "geiger.h"
 
 
 
@@ -202,6 +203,12 @@ __arm void _INT_UART3_Bluetooth(void)
 {
 	DWORD dw1,dw2;
 	BYTE byt;
+	if(bluetoothControl.uart.bRcvError != RCV_OK)
+	{//ошибка обмена
+		//сброс ошибки и буфера приема
+		bluetoothControl.uart.rcvBuffLen = 0;
+		bluetoothControl.uart.bRcvError = RCV_OK;
+	}
 	while((U3LSR&0x1) || ((U3IIR&0x0c)==0x0c))
 	{//DR
 
@@ -287,6 +294,7 @@ __arm void _INT_UART3_Bluetooth(void)
 		}else
 		{//все передали, просто ничего не делаем
 			;//прерывания не будут генериться
+			bluetoothControl.uart.bTrmReady = 1;
 		}
 	}
 	if(U3LSR&0x0e)
@@ -462,7 +470,11 @@ void Bluetooth_rcvData_first_Dispatcher(void)
 		if(bluetoothControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
 			   //21/01/2010
 			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
-			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/)
+			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
+				//14.04.2016
+			   && bluetoothControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
+				&& !(bluetoothControl.uart.rcvBuff_safe[1]==0x04 && bluetoothControl.uart.rcvBuff_safe[2]==0x00 && 
+					 (bluetoothControl.uart.rcvBuff_safe[3]>=0x1e && bluetoothControl.uart.rcvBuff_safe[3]<=0x27)))
 			  ///////////
 		{//command to the second processor
 			//translate it to second proc
@@ -484,8 +496,12 @@ void Bluetooth_rcvData_first_Dispatcher(void)
 		}else if(bluetoothControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS
 					 //21/01/2010
 					|| bluetoothControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
-					|| bluetoothControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/)
-					///////////
+					|| bluetoothControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
+					//14.04.2016
+					|| bluetoothControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
+				|| (bluetoothControl.uart.rcvBuff_safe[1]==0x04 && bluetoothControl.uart.rcvBuff_safe[2]==0x00 && 
+					 (bluetoothControl.uart.rcvBuff_safe[3]>=0x1e && bluetoothControl.uart.rcvBuff_safe[3]<=0x27)))
+				///////////
 		{//command to this processor
 			USBRS_rcvData_second_Dispatcher(&bluetoothControl.uart);
 			if(bluetoothControl.uart.trmBuffLenConst>=2 && bluetoothControl.uart.trmBuffLenConst<bluetoothControl.uart.constTrmBuffLen)
@@ -503,6 +519,12 @@ void Bluetooth_answer_first_Dispatcher(void)
 	//change address of answer from second proc to be resolved by PC
 	interProcControl.uart.rcvBuff_safe[0]=INTERPROC_ADDRESS;
 	memcpy((void*)bluetoothControl.uart.trmBuff,(void*)interProcControl.uart.rcvBuff_safe,interProcControl.uart.rcvBuffLen_safe-2);
+	//check for signal control 0x22 to reset GM
+	if(bluetoothControl.uart.trmBuff[1]==0x5 && bluetoothControl.uart.trmBuff[3]==0x22 && bluetoothControl.uart.trmBuff[4]==0xff)
+	{//reset GM
+		geigerControl.bReset = 1;
+	}
+	//
 	Bluetooth_sendSequence(interProcControl.uart.rcvBuffLen_safe-2);
 }
 
@@ -575,8 +597,10 @@ void Bluetooth_rcvData_module_Dispatcher(void)
 			if(strcmp(bluetoothControl.moduleName, bluetoothControl.moduleNameTemp))
 			{
 				Bluetooth_writeModuleName();
-			}
-		}
+			}else
+				bluetoothControl.iModuleComm = 0;	//end of module communication
+		}else
+			bluetoothControl.iModuleComm = 0;	//end of module communication
 		break;
 	case 4://module name
 		Bluetooth_readModuleName();

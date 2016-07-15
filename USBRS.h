@@ -99,4 +99,16 @@ int USBRS_calcCRCEx(BYTE volatile * pData, int len);
 
 void USBRS_InitInBridgeMode(void);
 
+void USBRS_readDataReg(struct tagUART * pUart);
+
+
+
+void putFLOAT(void* pBuffer, float val);
+
+void putUSHORT(void* pBuffer, unsigned short val);
+
+void putULONG(void* pBuffer, unsigned long val);
+
+void USBRS_readBinSig(struct tagUART * pUart);
+
 #endif //#ifndef _USBRS_H

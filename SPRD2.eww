@@ -13,15 +13,15 @@
       </member>
       <member>
         <project>SPRD</project>
-        <configuration>Debug GPS9600</configuration>
-      </member>
-      <member>
-        <project>SPRD</project>
         <configuration>Debug SNM</configuration>
       </member>
       <member>
         <project>SPRD</project>
-        <configuration>Debug SNM GPS9600</configuration>
+        <configuration>BNC</configuration>
+      </member>
+      <member>
+        <project>SPRD</project>
+        <configuration>IAEA SNM</configuration>
       </member>
     </batchDefinition>
   </batchBuild>

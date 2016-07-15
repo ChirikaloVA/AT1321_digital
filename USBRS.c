@@ -21,6 +21,8 @@
 #include "bluetooth.h"
 #include "COMM_mode.h"
 #include "identify.h"
+#include "geiger.h"
+#include "SPRD_Mode.h"
 
 struct tagUSBRSControl USBRSControl;
 
@@ -398,7 +400,11 @@ void USBRS_rcvData_first_Dispatcher(void)
 		if(USBRSControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
 			   //21/01/2010
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
-			   && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/)
+			   && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
+				//14.04.2016
+			   && USBRSControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
+				&& !(USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
 			  ///////////
 		{//command to the second processor
 			//translate it to second proc
@@ -420,7 +426,11 @@ void USBRS_rcvData_first_Dispatcher(void)
 		}else if(USBRSControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS
 					 //21/01/2010
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
-					|| USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/)
+					|| USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
+				//14.04.2016
+					|| USBRSControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
+				|| (USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
 					///////////
 		{//command to this processor
 			USBRS_rcvData_second_Dispatcher(&USBRSControl.uart);
@@ -439,6 +449,12 @@ void USBRS_answer_first_Dispatcher(void)
 	//change address of answer from second proc to be resolved by PC
 	interProcControl.uart.rcvBuff_safe[0]=INTERPROC_ADDRESS;
 	memcpy((void*)USBRSControl.uart.trmBuff,(void*)interProcControl.uart.rcvBuff_safe,interProcControl.uart.rcvBuffLen_safe-2);
+	//check for signal control 0x22 to reset GM
+	if(USBRSControl.uart.trmBuff[1]==0x5 && USBRSControl.uart.trmBuff[3]==0x22 && USBRSControl.uart.trmBuff[4]==0xff)
+	{//reset GM
+		geigerControl.bReset = 1;
+	}
+	//
 	USBRS_sendSequence(interProcControl.uart.rcvBuffLen_safe-2);
 }
 
@@ -640,6 +656,13 @@ void USBRS_rcvData_second_Dispatcher(struct tagUART * pUart)
 	pUart->trmBuff[1] = pUart->rcvBuff_safe[1];
 	switch(pUart->rcvBuff_safe[1])
 	{
+		//14.04.2016
+		case 0x02:
+			USBRS_readBinSig(pUart);
+			break;
+		case 0x04:
+			USBRS_readDataReg(pUart);
+			break;
 	  //21/01/2010
 		case 0x09:
 			USBRS_readRefSpec(pUart);
@@ -956,3 +979,127 @@ void USBRS_executeFile(struct tagUART * pUart)
 }
 
 
+
+
+//чтение регистра данных
+void USBRS_readDataReg(struct tagUART * pUart)
+{
+	BYTE addr = pUart->rcvBuff_safe[3];
+	BYTE cntr = pUart->rcvBuff_safe[5];
+	pUart->trmBuff[2] = cntr*2;
+	pUart->trmBuffLenConst = 3;
+	while(cntr)
+	{
+		switch(addr)
+		{
+			case 0x1f:
+			case 0x21:
+			case 0x23:
+			case 0x25:
+			case 0x27:
+				USBRS_except(2, pUart);	//invalid register
+				cntr=0;
+				break;
+				
+			case 30:     // "Мгновенная" скорость счета GMcounter, cps
+			putULONG((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , (ULONG)geigerControl.dwMomCountCopy);
+			pUart->trmBuffLenConst += 2;
+			addr++;
+			cntr--;
+			break;
+			
+			
+			case 32:     // Средняя скорость счета GMcounter, cps
+			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCps);
+			pUart->trmBuffLenConst += 2;
+			addr++;
+			cntr--;
+			break;
+	
+			case 34:     // Статистическая погрешность средней скорости счета GMcounter, %
+			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
+			pUart->trmBuffLenConst += 2;
+			addr++;
+			cntr--;
+			break;
+	
+			case 36:     // Средняя мощность дозы GMcounter, Sv/h (R/h)
+			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fDoserate*1E-6);
+			pUart->trmBuffLenConst += 2;
+			addr++;
+			cntr--;
+			break;
+	
+			case 38:     // Статистическая погрешность средней мощности дозы GMcounter, %
+			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
+			pUart->trmBuffLenConst += 2;
+			addr++;
+			cntr--;
+			break;
+			default:
+            putUSHORT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , 0);
+		}
+		pUart->trmBuffLenConst += 2;
+		addr++;
+		cntr--;
+	};
+}
+
+
+void putFLOAT(void* pBuffer, float val)
+{
+	*((BYTE*)pBuffer+0) = *((BYTE*)&val+3);
+	*((BYTE*)pBuffer+1) = *((BYTE*)&val+2);
+	*((BYTE*)pBuffer+2) = *((BYTE*)&val+1);
+	*((BYTE*)pBuffer+3) = *((BYTE*)&val+0);
+}
+
+void putUSHORT(void* pBuffer, unsigned short val)
+{
+	*((BYTE*)pBuffer+0) = *((BYTE*)&val+1);
+	*((BYTE*)pBuffer+1) = *((BYTE*)&val+0);
+}
+
+void putULONG(void* pBuffer, unsigned long val)
+{
+	*((BYTE*)pBuffer+0) = *((BYTE*)&val+3);
+	*((BYTE*)pBuffer+1) = *((BYTE*)&val+2);
+	*((BYTE*)pBuffer+2) = *((BYTE*)&val+1);
+	*((BYTE*)pBuffer+3) = *((BYTE*)&val+0);
+}
+
+
+void USBRS_readBinSig(struct tagUART * pUart)
+{
+      BYTE addr = pUart->rcvBuff_safe[3];
+      BYTE cntr = pUart->rcvBuff_safe[5];
+	  
+	union
+	{
+		unsigned char BinInput;
+		struct
+		{
+			__REG8 AlrmSearch:1;
+			__REG8 SearchBeep:1;
+			__REG8 NoTemper:1;    
+			__REG8 Overrun:1;    
+			__REG8 GMOverrun:1;    
+			__REG8 NOverrun:1;    
+			__REG8 DUOverrun:1;    
+		}BinInput_stru;
+	}BinInput_uni;
+
+	
+	  BinInput_uni.BinInput_stru.AlrmSearch = 0;
+	  BinInput_uni.BinInput_stru.SearchBeep = 0;//(SPRDModeControl.iAlarmTimerG == SPRDModeControl.iAlarmTimerConstG)?1:0;
+	  BinInput_uni.BinInput_stru.NoTemper = 0;
+	  BinInput_uni.BinInput_stru.Overrun = (SPRDModeControl.bNaIOverload)?1:0;
+	  BinInput_uni.BinInput_stru.GMOverrun = (geigerControl.esentVals.bOverload)?1:0;
+	  BinInput_uni.BinInput_stru.NOverrun = 0;
+	  BinInput_uni.BinInput_stru.DUOverrun = 0;
+	  
+      pUart->trmBuff[3] = BinInput_uni.BinInput;
+      pUart->trmBuff[3] >>= addr;
+      pUart->trmBuff[3] &= 0xf >> (4-cntr);      // *** Работает только для 4-х двоичных сигналов!!
+      pUart->trmBuffLenConst = 4;                   // *** Работает только для 8-и двоичных сигналов!!
+}

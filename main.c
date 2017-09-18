@@ -49,7 +49,7 @@ B - безядерные исполнения
 
 #define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
 
-const char txtVersion[]=VERT(4, 4, 
+const char txtVersion[]=VERT(4, 5, 
 #ifdef _SNM
 A
 #else	//#ifdef _SNM
@@ -61,7 +61,7 @@ B
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "21.03.2013"
+#define OUR__DATE__ "09.08.2017"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 

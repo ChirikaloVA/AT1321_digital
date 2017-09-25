@@ -51,9 +51,17 @@ B - безядерные исполнения
 
 const char txtVersion[]=VERT(4, 5, 
 #ifdef _SNM
+#ifdef _IAEA
+I
+#else
 A
+#endif
 #else	//#ifdef _SNM
+#ifdef BNC
+C
+#else
 B
+#endif
 #endif	//#ifdef _SNM
 );
 

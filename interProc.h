@@ -231,6 +231,8 @@ struct tagInterProcRSModbus
 	float fBkgCPS;
 	struct tagInteProcRSModbusSync swdBkgCPS;
 	
+	float fDTCOEF;
+	struct tagInteProcRSModbusSync swdDTCOEF;
 	
 	//spectrum
 	BYTE arSpectrum[CHANNELS*3];	//by 3 bytes on channel
@@ -372,7 +374,8 @@ void InterProc_getBkgCPS(void);
 
 int InterProc_countFreeSlots(void);
 
-
+void InterProc_setDTCEOF(float value);
+void InterProc_readDTCOEF(void);
 
 
 #endif	//#ifndef _INTER_PROC_H

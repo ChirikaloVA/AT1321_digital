@@ -8,7 +8,7 @@
 //#include <inarm.h>
 #include <iolpc2388.h>
 #include <math.h>
-
+#include <stdlib.h>
 #include "types.h"
 #include "syncObj.h"
 #include "spectrum.h"

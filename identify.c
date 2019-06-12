@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 //#include <inarm.h>
 #include <math.h>
 #include "spectrum.h"

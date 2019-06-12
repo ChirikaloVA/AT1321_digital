@@ -49,7 +49,7 @@ B - безядерные исполнения
 
 #define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
 
-const char txtVersion[]=VERT(4, 5, 
+const char txtVersion[]=VERT(4, 6, 
 #ifdef _SNM
 #ifdef _IAEA
 I
@@ -69,7 +69,7 @@ B
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "09.08.2017"
+#define OUR__DATE__ "21.01.2019"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 
@@ -381,6 +381,7 @@ __noreturn void main(void)
 	InterProc_resetAveraging();
 	InterProc_readMeasurementRegs();
 	InterProc_readStatus();
+	InterProc_readDTCOEF();
 
 	
 	//set mode by default

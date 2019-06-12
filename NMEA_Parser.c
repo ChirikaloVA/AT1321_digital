@@ -8,6 +8,7 @@
 //#include <inarm.h>
 #include <iolpc2388.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "types.h"
 

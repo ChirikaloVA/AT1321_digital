@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<settings>
+    <DisAssemblyWindow>
+        <NumStates>_ 1</NumStates>
+        <State_1>_ 1</State_1>
+    </DisAssemblyWindow>
+    <StackPlugin>
+        <Enabled>1</Enabled>
+        <OverflowWarningsEnabled>1</OverflowWarningsEnabled>
+        <WarningThreshold>90</WarningThreshold>
+        <SpWarningsEnabled>1</SpWarningsEnabled>
+        <WarnHow>0</WarnHow>
+        <UseTrigger>1</UseTrigger>
+        <TriggerName>main</TriggerName>
+        <LimitSize>0</LimitSize>
+        <ByteLimit>50</ByteLimit>
+    </StackPlugin>
+    <BreakpointUsageDialog>
+        <Placement>_ 350 325 930 665</Placement>
+    </BreakpointUsageDialog>
+    <DebugChecksum>
+        <Checksum>2573887465</Checksum>
+    </DebugChecksum>
+    <InstructionProfiling>
+        <Enabled>_ 0</Enabled>
+    </InstructionProfiling>
+    <CodeCoverage>
+        <Enabled>_ 0</Enabled>
+    </CodeCoverage>
+    <Profiling>
+        <Enabled>0</Enabled>
+    </Profiling>
+    <Log_file>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </Log_file>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
+    <Interrupts>
+        <Enabled>1</Enabled>
+    </Interrupts>
+    <MemoryMap>
+        <Enabled>0</Enabled>
+        <Base>0</Base>
+        <UseAuto>0</UseAuto>
+        <TypeViolation>1</TypeViolation>
+        <UnspecRange>1</UnspecRange>
+        <ActionState>1</ActionState>
+    </MemoryMap>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Source>2</Source>
+        <Graph>0</Graph>
+    </DriverProfiling>
+    <Stack>
+        <FillEnabled>0</FillEnabled>
+        <OverflowWarningsEnabled>1</OverflowWarningsEnabled>
+        <WarningThreshold>90</WarningThreshold>
+        <SpWarningsEnabled>1</SpWarningsEnabled>
+        <WarnLogOnly>1</WarnLogOnly>
+        <UseTrigger>1</UseTrigger>
+        <TriggerName>main</TriggerName>
+        <LimitSize>0</LimitSize>
+        <ByteLimit>50</ByteLimit>
+    </Stack>
+    <Disassemble_mode>
+        <mode>0</mode>
+    </Disassemble_mode>
+    <Breakpoints>
+        <Count>0</Count>
+    </Breakpoints>
+    <TraceHelper>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </TraceHelper>
+    <JLinkDriver>
+        <WatchCond>_ 0</WatchCond>
+        <Watch0>_ 0 "" 0 "" 0 "" 0 "" 0 0 0 0</Watch0>
+        <Watch1>_ 0 "" 0 "" 0 "" 0 "" 0 0 0 0</Watch1>
+        <CStepIntDis>_ 0</CStepIntDis>
+        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+    </JLinkDriver>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
+    <PlDriver>
+        <MemConfigValue>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\CONFIG\debugger\NXP\LPC2388.ddf</MemConfigValue>
+    </PlDriver>
+    <Jet>
+        <DisableInterrupts>0</DisableInterrupts>
+        <LeaveRunning>0</LeaveRunning>
+        <MultiCoreRunAll>0</MultiCoreRunAll>
+    </Jet>
+    <ArmDriver>
+        <EnableCache>1</EnableCache>
+    </ArmDriver>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Count>0</Count>
+    </Breakpoints2>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
+</settings>

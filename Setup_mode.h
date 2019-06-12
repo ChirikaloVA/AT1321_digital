@@ -50,6 +50,7 @@ struct tagSETUPModeControl
 	char lpzCalcMD5[34];
 	char lpzCalcCRC32[10];
 	
+
 };
 
 extern struct tagSETUPModeControl SETUPModeControl;
@@ -187,6 +188,11 @@ void SETUPMode_menu1_calcOperSigma_edit_done(BOOL bOK);
 void SETUPMode_calcSigma(UINT period);
 float SETUPMode_calcSigmaEx(UINT period, float dwell);
 
+
+
+BOOL SETUPMode_menu1_editDTCOEF(void);
+const char* SETUPMode_menu1_editDTCOEF_onUpdate(void);
+void SETUPMode_menu1_editDTCOEF_edit_done(BOOL bOK);
 
 
 ///for test with sound

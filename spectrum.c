@@ -7,7 +7,7 @@
 //#include <inarm.h>
 #include <iolpc2388.h>
 #include <math.h>
-
+#include <stdlib.h>
 #include "types.h"
 #include "spectrum.h"
 #include "display.h"

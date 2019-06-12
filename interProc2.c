@@ -375,3 +375,16 @@ void InterProc_getBkgCPS(void)
 		InterProc_fillNewCmd(arCmd_GetControlRegister_bkgCPS, sizeof(arCmd_GetControlRegister_bkgCPS));
 //	}
 }
+
+void InterProc_setDTCEOF(float value)
+{
+	BYTE ar[]={1,0x10,8,0,0x28,0,2,*((unsigned char*)&value+3),*((unsigned char*)&value+2),*((unsigned char*)&value+1),*((unsigned char*)&value+0)};
+	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
+}
+
+void InterProc_readDTCOEF(void)
+{
+	const BYTE ar[]={1,0x03,0x28,0,2};
+	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
+}
+

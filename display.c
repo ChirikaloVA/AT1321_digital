@@ -23,7 +23,7 @@
 #include "SPRD_Mode.h"
 #include "LOG_Mode.h"
 #include "filesystem.h"
-
+#include <stdlib.h>
 
 
 

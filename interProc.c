@@ -497,6 +497,10 @@ void InterProc_Init(void)
 
 	interProcControl.rsModbus.fBkgCPS = 0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdBkgCPS);
+	
+	interProcControl.rsModbus.fDTCOEF = 0.0000106;
+	InterProc_resetSyncData(&interProcControl.rsModbus.swdDTCOEF);
+
 //	interProcControl.rsModbus.fBkgDR = 0;
 //	InterProc_resetSyncData(&interProcControl.rsModbus.swdBkgDR);
 	
@@ -601,6 +605,10 @@ void InterProc_rcvData_first_Dispatcher(void)
 			case 0x04://highLimit
 				interProcControl.rsModbus.wdHighLimit = (interProcControl.uart.rcvBuff_safe[3]<<8) | interProcControl.uart.rcvBuff_safe[4];
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdHighLimit);
+				break;
+			case 0x28:
+				MAKEFLOAT(interProcControl.rsModbus.fDTCOEF,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
+				InterProc_iterateDataReady(&interProcControl.rsModbus.swdDTCOEF);
 				break;
 /*			case 0x07://sigma thresholds (2 words)
 				interProcControl.rsModbus.wdSigmaOper = (interProcControl.uart.rcvBuff_safe[3]<<8) | interProcControl.uart.rcvBuff_safe[4];
@@ -976,3 +984,5 @@ void InterProc_showTemperature(void)
 	Display_clearTextWin(10);
 	Display_outputText(buf);
 }
+
+

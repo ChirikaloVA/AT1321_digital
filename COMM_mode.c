@@ -25,6 +25,9 @@
 struct tagCOMMModeControl COMMModeControl;
 
 
+#ifndef GPS_BT_FREE	
+
+
 const struct tagMode modes_COMMMode=
 {
 	COMMMode_NameOnUpdate,//"COMM\0""ÑÂßÇÜ",	//mode name
@@ -372,3 +375,5 @@ void COMMMode_showTransmitted(void)
 	else
 		Display_outputText(" kB");
 }
+
+#endif	//#ifndef GPS_BT_FREE	

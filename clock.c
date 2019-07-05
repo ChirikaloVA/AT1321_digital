@@ -32,6 +32,8 @@ __arm void _INT_Clock(void)
 	//LED control
 	//orange for gps
 	//green for working
+
+#ifndef GPS_BT_FREE	
 	if(GPSControl.bGPS_ON)
 	{
 		if(GPSControl.bGPS_Fix)
@@ -40,6 +42,9 @@ __arm void _INT_Clock(void)
 			Display_turnONOrangeLED();	//turn off orange led
 	}else
 		Display_turnOFFOrangeLED();	//turn off orange led
+#endif	//#ifndef GPS_BT_FREE	
+
+	
 	Display_flashGreenLED(); //flash green LED show we work
     ILR_bit.RTCCIF = 1;
 	powerControl.bAwakedByClock = 1;	//mean that processor is awaked by clock (1 in a second)

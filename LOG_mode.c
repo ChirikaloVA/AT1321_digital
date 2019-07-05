@@ -268,6 +268,9 @@ BOOL LOGMode_insertDoserate(float val)
 	return LOGMode_insertEvent(buf);
 }
 
+
+#ifndef GPS_BT_FREE	
+
 //insert GPS coords in log
 BOOL LOGMode_insertGPS(void)
 {
@@ -294,3 +297,4 @@ BOOL LOGMode_insertGPS(void)
 	LOGMode_insertEvent(buf);
 	return TRUE;
 }
+#endif	//#ifndef GPS_BT_FREE	

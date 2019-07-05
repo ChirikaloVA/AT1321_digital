@@ -322,6 +322,7 @@ void Interrupts_Init(void)
   VICINTENABLE_bit.UART1 = 1; //enable UART1 interrupts
 
   //vector 28 UART2
+#ifndef GPS_BT_FREE	
   VICVECTADDR28 = (unsigned int)&_INT_UART2_GPS;
   VICVECTPRIORITY28_bit.PRIORITY = 7;
   VICINTENABLE_bit.UART2 = 1;
@@ -330,6 +331,7 @@ void Interrupts_Init(void)
   VICVECTADDR29 = (unsigned int)&_INT_UART3_Bluetooth;
   VICVECTPRIORITY29_bit.PRIORITY = 9;
   VICINTENABLE_bit.UART3 = 1;
+#endif	//#ifndef GPS_BT_FREE	
 
   //vector 6 UART0
   VICVECTADDR6 = (unsigned int)&_INT_UART0_USBRS;

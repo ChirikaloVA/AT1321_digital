@@ -843,6 +843,8 @@ int ini_read_system_ini(char* pExt)
 		powerControl.fBatCoef = MIN_BAT_COEF;
 	if(powerControl.fBatCoef>MAX_BAT_COEF)
 		powerControl.fBatCoef = MAX_BAT_COEF;
+
+#ifndef GPS_BT_FREE	
 	
 	ret = filesystem_ini_get_int(hfile, "bluetoothControl", "comm_state", &rVal);	
 	if(ret==E_FAIL)
@@ -852,10 +854,13 @@ int ini_read_system_ini(char* pExt)
 	if(ret==E_FAIL)
 		return E_FAIL;
 	bluetoothControl.comm_power_state = rVal;
+
 	ret = filesystem_ini_get_int(hfile, "GPSControl", "gps_state", &rVal);	
 	if(ret==E_FAIL)
 		return E_FAIL;
 	GPSControl.gps_state = rVal;
+#endif	//#ifndef GPS_BT_FREE	
+
 	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrCoef", &geigerControl.fDrCoef);	
 	if(ret==E_FAIL)
 		return E_FAIL;

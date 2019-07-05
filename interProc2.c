@@ -384,7 +384,7 @@ void InterProc_setDTCEOF(float value)
 
 void InterProc_readDTCOEF(void)
 {
-	const BYTE ar[]={1,0x03,0x28,0,2};
+	const BYTE ar[]={1,0x03,0,0x28,0,2};
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
 }
 

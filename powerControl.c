@@ -40,8 +40,10 @@ void PowerControl_turnOFF_device(const char* pTextReason)
 	SoundControl_StopBeep();
 	SoundControl_StopVibro();
 	PowerControl_turboModeOFF();
+#ifndef GPS_BT_FREE	
 	Bluetooth_turnOFF();
 	GPS_turnOFF();
+#endif	//#ifndef GPS_BT_FREE	
 
 
 	//27/08/2012
@@ -167,10 +169,14 @@ void PowerControl_gotoPowerDownMode(void)
 	//dont forget turn on all of this after exit power down if needed
 	SoundControl_StopVibro();
 	SoundControl_StopBeep();
+
+#ifndef GPS_BT_FREE	
 	Bluetooth_turnOFF();
 	//turn off gps only if we are NOT in mode "alway on"
 	if(GPSControl.gps_state!=GPS_STATE_ALWAYS_ON)
 		GPS_turnOFF();
+#endif	//#ifndef GPS_BT_FREE	
+	
 	/////////////////////
 	PowerControl_powerDown_show_screen();
 
@@ -187,41 +193,23 @@ void PowerControl_gotoPowerDownMode(void)
 	INTWAKE_bit.EXTWAKE1 = 1; //waking up from second proc
 	INTWAKE_bit.GPIO0WAKE = 1; //geiger
 	INTWAKE_bit.RTCWAKE = 1; //clock
-	//PINSEL0 = 0x0;
-        //PINSEL1 = 0x0;
-        //PINSEL2 = 0x0;
-        //PINSEL3 = 0x0;
-        //PINSEL4 = 0x0;
-        //PINSEL6 = 0x0;
-        //PINSEL7 = 0x0;
-        //PINSEL8 = 0x0;
-        //PINSEL9 = 0x0;
-        //FIO0DIR = 0x03004070;
-        FIO0DIR = 0x037C51F0;
-        FIO1DIR = 0x137C4713;
-        FIO2DIR = 0x00000090;
-        FIO3DIR = 0x07000000;
-        FIO4DIR = 0x30003C00;
-        CLR_M_ON;
-        PINMODE0 = 0xAAAAAAAA;
-        //PINMODE1 = 0x002AAAA2;
-        PINMODE1 = 0xAAAAAAAA;
-        PINMODE2 = 0xAAAAAAAA;
-        PINMODE3 = 0xAAAAAAAA;
-        PINMODE4 = 0xAAAAAAAA;
-        //PINMODE3 = 0xffffffff;
-        //PINMODE4 = 0xffffffff;
-        //PINMODE5 = 0xAAAAAAAA;
-
-        PINMODE6 = 0xAAAAAAAA;
-        PINMODE7 = 0xAAAAAAAA;
-        PINMODE8 = 0xAAAAAAAA;
-        PINMODE9 = 0xAAAAAAAA;
-        //PINMODE6 = 0xffffffff;
-        //PINMODE7 = 0xffffffff;
-        //PINMODE8 = 0xffffffff;
-        //PINMODE9 = 0xffffffff;
-        SET_ECS;
+//        FIO0DIR = 0x037C51F0;
+//        FIO1DIR = 0x137C4713;
+//        FIO2DIR = 0x00000090;
+//        FIO3DIR = 0x07000000;
+//        FIO4DIR = 0x30003C00;
+//        CLR_M_ON;
+//        PINMODE0 = 0xAAAAAAAA;
+//        PINMODE1 = 0xAAAAAAAA;
+//        PINMODE2 = 0xAAAAAAAA;
+//        PINMODE3 = 0xAAAAAAAA;
+//        PINMODE4 = 0xAAAAAAAA;
+//
+//        PINMODE6 = 0xAAAAAAAA;
+//        PINMODE7 = 0xAAAAAAAA;
+//        PINMODE8 = 0xAAAAAAAA;
+//        PINMODE9 = 0xAAAAAAAA;
+//        SET_ECS;
 	
         soundControl.pBeepSeq = NULL;
         SoundControl_StopBeep();
@@ -293,12 +281,14 @@ void PowerControl_gotoPowerDownMode(void)
 	//turn on gps only if mode "off in sleep" is used
 	//in mode always on it will be on,
 	//in mode always off we dont need to turn it on
+#ifndef GPS_BT_FREE
 	if(GPSControl.gps_state!=GPS_STATE_ALWAYS_OFF)
 		GPS_turnON();
-
+		
 	if(bluetoothControl.comm_power_state==enu_comm_power_state_on)
 		Bluetooth_turnON();
-
+#endif	//#ifndef GPS_BT_FREE
+	
 /*	if(!SPRDModeControl.bBkgMode_confirmed)
 	{//switch to search mode after exit power down
 		InterProc_setSearchMode();
@@ -817,8 +807,10 @@ void PowerControl_controlBatStatus(void)
 		{
 			LOGMode_insertEventByLang("Battery low\0""Battery low""Battery low\0""Батареи разряжены");
 			//выключить потребители
+#ifndef GPS_BT_FREE	
 			GPS_turnOFF();
 			Bluetooth_turnOFF();
+#endif	//#ifndef GPS_BT_FREE	
 		}
 		//disable switch to power down mode setting 1 to bat alarm status
 		//disable write file operations

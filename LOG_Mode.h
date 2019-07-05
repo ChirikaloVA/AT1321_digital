@@ -56,7 +56,9 @@ BOOL LOGMode_createLog(void);
 
 
 BOOL LOGMode_insertDoserate(float val);
+#ifndef GPS_BT_FREE	
 BOOL LOGMode_insertGPS(void);
+#endif	//#ifndef GPS_BT_FREE	
 
 
 #endif	//ifndef _LOGMODE_H

@@ -235,7 +235,9 @@ const char* SPRDMode_menu1_TurnOFF_onUpdate(void)
 //save doserate value with gps coords
 BOOL SPRDMode_menu1_SaveValue(void)
 {
+#ifndef GPS_BT_FREE	
 	LOGMode_insertGPS();
+#endif	//#ifndef GPS_BT_FREE	
 	LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 	SoundControl_BeepSeq(beepSeq_OK);
 //	sound_playSample(SND_OK);
@@ -517,7 +519,9 @@ BOOL SPRDMode_checkForIdentMode(void)
 {
 	if(SPRDModeControl.bRadFound && !SPRDModeControl.bIdentMode)
 	{//first switch to ident mode
+#ifndef GPS_BT_FREE	
 		LOGMode_insertGPS();
+#endif	//#ifndef GPS_BT_FREE	
 		LOGMode_insertEventByLang("Gamma radiation detected!\0""Gamma radiation detected!\0""Gamma radiation detected!\0""Обнаруженно гамма-излучение!");
 		LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 		SPRDModeControl.bIdentMode = TRUE;

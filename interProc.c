@@ -282,8 +282,10 @@ void InterProc_InterProcControl(void)
 			InterProc_rcvData_first_Dispatcher();
 		else if(interProcControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS)
 			USBRS_answer_first_Dispatcher();
+#ifndef GPS_BT_FREE	
 		else if(interProcControl.uart.rcvBuff_safe[0]==BLUETOOTH_ADDRESS)
 			Bluetooth_answer_first_Dispatcher();
+#endif	//#ifndef GPS_BT_FREE	
 		interProcControl.uart.bTrmReady = 1;
 		interProcControl.uart.iTries = 0;	//reset tries counter
 	}

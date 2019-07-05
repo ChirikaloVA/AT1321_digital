@@ -23,7 +23,7 @@
 #include "SPRD_Mode.h"
 #include "LOG_Mode.h"
 #include "filesystem.h"
-
+#include <stdlib.h>
 
 
 
@@ -729,7 +729,7 @@ void Display_EMC_Init(void)
 	PINSEL6_bit.P3_7 = 1; //EMC D7
 	PINSEL9_bit.P4_24 = 1; //EMC RD
 	PINSEL9_bit.P4_25 = 2; //EMC WR
-	PINSEL9_bit.P4_30 = 1; //EMC CSA
+	//PINSEL9_bit.P4_30 = 1; //EMC CSA    //5.7.2017 не нужен (конфликт с AN_ERR)!!!!!!!!!!
 	PINSEL9_bit.P4_31 = 1; //EMC NCS
 	
 	Display_EMC18_BUS_Init(1);
@@ -792,8 +792,83 @@ void Display_turnOFF(void)
 	CLR_MON;
 }
 
+void SoftON(int timeout)
+{
 
+	int i;
+        DIR_P4_28 = 1;
+        DIR_P4_29 = 1;
+	for(i=0;i<timeout;i++)
+	{
+		//for(j=0;j<10000;j++)k++;
+                /*
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+          */
+                PIN_DPWON = ~PIN_DPWON;
+                //PIN_DPWON = ~PIN_DPWON;
 
+	}
+        PIN_DPWON = 0;
+}
+
+void SoftMON(int timeout)
+{
+
+	int i;
+        DIR_P4_28 = 1;
+        DIR_P4_29 = 1;
+	for(i=0;i<timeout;i++)
+	{
+		//for(j=0;j<10000;j++)k++;
+                /*
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+          */
+                PIN_MON = ~PIN_MON;
+                //PIN_DPWON = ~PIN_DPWON;
+
+	}
+        PIN_MON = 1;
+}
+
+void SoftPON(int timeout)
+{
+
+	int i;
+        DIR_P4_28 = 1;
+        DIR_P4_29 = 1;
+	for(i=0;i<timeout;i++)
+	{
+		//for(j=0;j<10000;j++)k++;
+                /*
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+                CLR_P4_28;
+                SET_P4_28;
+          */
+                PIN_PON = ~PIN_PON;
+                //PIN_DPWON = ~PIN_DPWON;
+
+	}
+        PIN_PON = 1;
+}
 void Display_turnON(void)
 {
 	display.bLCDON = TRUE;
@@ -810,16 +885,361 @@ void Display_turnON(void)
 
 	//pause(1000);
 
+
+
 	
+
+
+
+        //----5.10.2016------
+        CLR_RS;
+	DisplayData = 0x18;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x28;
+
+        CLR_RS;
+	DisplayData = 0xF8;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x09;
+
+        CLR_RS;
+	DisplayData = 0xF9;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x09;
+        //---------------------
+
+
+	
+	Display_Init_8bit_262k();
+	Display_clearScreen();
+
+	
+
+	
+
+
+
+         //----5.10.2016------
+
+        CLR_RS;
+	DisplayData = 0x70;
+	SET_RS;
+	//DisplayData = 0x25;
+	//DisplayData = 0x80;
+        DisplayData = 0x2B;
+	DisplayData = 0x80;
+        CLR_RS;
+	DisplayData = 0x71;
+	SET_RS;
+	//DisplayData = 0x27;
+	//DisplayData = 0x80;
+        DisplayData = 0x36;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0x72;
+	SET_RS;
+	//DisplayData = 0x33;
+	//DisplayData = 0x80;
+        DisplayData = 0xE0;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0x73;
+	SET_RS;
+	//DisplayData = 0x1d;
+	//DisplayData = 0x18;
+        DisplayData = 0x1F;
+	DisplayData = 0x19;
+        CLR_RS;
+	DisplayData = 0x74;
+	SET_RS;
+	//DisplayData = 0x1f;
+	//DisplayData = 0x11;
+        DisplayData = 0x22;
+	DisplayData = 0x14;
+        CLR_RS;
+	DisplayData = 0x75;
+	SET_RS;
+	//DisplayData = 0x24;
+	//DisplayData = 0x19;
+        DisplayData = 0x22;
+	DisplayData = 0x1B;
+        CLR_RS;
+	DisplayData = 0x76;
+	SET_RS;
+	//DisplayData = 0x1a;
+	//DisplayData = 0x14;
+        DisplayData = 0x1E;
+	DisplayData = 0x16;
+        CLR_RS;
+	DisplayData = 0x77;
+	SET_RS;
+	//DisplayData = 0x21;
+	//DisplayData = 0x1a;
+        DisplayData = 0x24;
+	DisplayData = 0x1E;
+        CLR_RS;
+	DisplayData = 0x78;
+	SET_RS;
+	//DisplayData = 0x20;
+	//DisplayData = 0x13;
+        DisplayData = 0x26;
+	DisplayData = 0x17;
+
+
+
+        //---------------------
+
+
+
+	//CLR_RS;
+	//DisplayData = 0x43;
+	//SET_RS;
+	//DisplayData = 0;
+	//DisplayData = 0x1;//gamma set
+	
+	
+	
+	
+	//pause(10000);
+	
+	
+	
+	//pause(50000);
+	//pause(50000);
+	//pause(50000);
+	//pause(50000);
+	
+	
+
+	//pause(50000);
+	//pause(50000);
+    //pause(50000);
+    //pause(50000);
+    //pause(50000);
+
+        /*
+        //----Для возможности закрузки -------
+        Display_turnOFF_LEDs();
+        pause_led_blink_Orange(300000);
+        //------------------------------------
+
+        Display_turnONGreenLED();
+        pause(100000);
+        Display_turnOFFGreenLED();
+        pause(500000);
+        Display_turnONGreenLED();
+        pause(100000);
+        Display_turnOFFGreenLED();
+        pause(900000);
+        */
+
+        Display_clearScreen();
+        CLR_RS;
+	DisplayData = 0x05;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+
+        Display_turnONRedLED();
+        CLR_RS;
+	DisplayData = 0x10;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0xf4;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x20;
+
+
+        pause(90000);
+
+
+         //----Для возможности закрузки -------
+        //pause(50000000);
+        //------------------------------------
+        /*
+        CLR_RS;
+	DisplayData = 0x05;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+
+        CLR_RS;
+	DisplayData = 0xf4;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x20;
+
+        CLR_RS;
+	DisplayData = 0x10;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x01;
+        */
+
+        /*
+       Display_turnONGreenLED();
+       pause(1000000);
+       Display_turnOFFGreenLED();
+       pause(2000000);
+        */
+
+        CLR_PON;
+        CLR_MON;
+        /*
+        CLR_DPWON;
+        SET_DPWON;
+        CLR_DPWON;
+        SET_DPWON;
+        CLR_DPWON;
+        SET_DPWON;
+        CLR_DPWON;
+        SET_DPWON;
+        CLR_DPWON;
+        */
+         //pause(1000000);
+        //SoftON(10000);
+        /*
+        SoftON(10);
+        SET_DPWON;
+        pause(10);
+        SoftON(20);
+        SET_DPWON;
+        pause(20);
+        SoftON(30);
+        SET_DPWON;
+        pause(30);
+        SoftON(40);
+        SET_DPWON;
+        pause(40);
+        */
+        CLR_RS;
+	DisplayData = 0xF8;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0xF9;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+        SoftON(10000);
+        //pause(1000000);
+
+        //SET_PON;
+        SoftPON(1000);
+        pause(600);
+        /*
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+        CLR_PON;
+        SET_PON;
+         */
+        //SET_MON;
+        /*
+        SoftMON(10);
+        pause(10);
+        SoftMON(10);
+        pause(10);
+        SoftMON(10);
+        pause(10);
+        SoftMON(10);
+        pause(10);
+        SoftMON(10);
+        pause(10);
+        SoftMON(100);
+        pause(10);
+        */
+        SoftMON(1000);
+
+        //pause(100000);
+        CLR_RS;
+	DisplayData = 0xF8;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0A;
+        CLR_RS;
+	DisplayData = 0xF9;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0A;
+        CLR_RS;
+	DisplayData = 0x05;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x01;
+}
+
+void Display_turnON_old(void)
+{
+	display.bLCDON = TRUE;
+
+	
+//	Display_EMC18_BUS_Init(1);
+	PowerControl_EMC_ON();
+
+
+
+	
+	//SET_MON;
+	
+
+	//pause(1000);
+          //----5.10.2016------
+        CLR_RS;
+	DisplayData = 0x18;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x28;
+
+        CLR_RS;
+	DisplayData = 0xF8;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x09;
+
+        CLR_RS;
+	DisplayData = 0xF9;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x09;
+        //---------------------
+
+
+	/*
 	CLR_RS;
 	DisplayData = 0x10;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x00;
+        */
 	
 	Display_Init_8bit_262k();
 	Display_clearScreen();
-	
+	/*
 	CLR_RS;
 	DisplayData = 0x05;
 	SET_RS;
@@ -831,25 +1251,106 @@ void Display_turnON(void)
 	SET_RS;
 	DisplayData = 0;
 	DisplayData = 0x1;//gamma set
+        */
+         //----5.10.2016------
+
+        CLR_RS;
+	DisplayData = 0x70;
+	SET_RS;
+	DisplayData = 0x25;
+	DisplayData = 0x80;
+        CLR_RS;
+	DisplayData = 0x71;
+	SET_RS;
+	DisplayData = 0x27;
+	DisplayData = 0x80;
+        CLR_RS;
+	DisplayData = 0x72;
+	SET_RS;
+	DisplayData = 0x33;
+	DisplayData = 0x80;
+        CLR_RS;
+	DisplayData = 0x73;
+	SET_RS;
+	DisplayData = 0x1d;
+	DisplayData = 0x18;
+        CLR_RS;
+	DisplayData = 0x74;
+	SET_RS;
+	DisplayData = 0x1f;
+	DisplayData = 0x11;
+        CLR_RS;
+	DisplayData = 0x75;
+	SET_RS;
+	DisplayData = 0x24;
+	DisplayData = 0x19;
+        CLR_RS;
+	DisplayData = 0x76;
+	SET_RS;
+	DisplayData = 0x1a;
+	DisplayData = 0x14;
+        CLR_RS;
+	DisplayData = 0x77;
+	SET_RS;
+	DisplayData = 0x21;
+	DisplayData = 0x1a;
+        CLR_RS;
+	DisplayData = 0x78;
+	SET_RS;
+	DisplayData = 0x20;
+	DisplayData = 0x13;
+
+
+        Display_clearScreen();
+        //---------------------
+        CLR_RS;
+	DisplayData = 0x05;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0x10;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+        CLR_RS;
+	DisplayData = 0xf4;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x30;
+
+        CLR_PON;
+        CLR_MON;
+
+	SoftON(10000);
+        SoftPON(1000);
+        pause(600);
+        SoftMON(1000);
 	
 	
-	CLR_DPWON;
 	
-	pause(50000);
-	pause(50000);
-    pause(50000);
-    pause(50000);
-    pause(50000);
-	pause(10000);
+	//pause(10000);
 	
-	SET_PON;
+	//SET_PON;
 	
-	pause(50000);
-	pause(50000);
-	pause(50000);
-	pause(50000);
+	//pause(50000);
+	//pause(50000);
+	//pause(50000);
+	//pause(50000);
 	
-	SET_MON;
+	//SET_MON;
+
+	//pause(50000);
+	//pause(50000);
+    //pause(50000);
+    //pause(50000);
+    //pause(50000);
+       //CLR_DPWON;
+        CLR_RS;
+	DisplayData = 0x05;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x01;
 
 }
 
@@ -1298,7 +1799,7 @@ void Display_startup_LED(void)
 {
 	//маргнет LEDами
 	Display_flashOrangeLED();
-	Display_flashGreenLED();
+	//Display_flashGreenLED();
 	Display_flashRedLED();
 }
 
@@ -1592,15 +2093,6 @@ void Display_showStatusLine(void)
 #ifndef GPS_BT_FREE	
 	Bluetooth_show_symbol(x2);	//L=16
 	GPS_show_symbol(x3);		//L=24
-#else
-	{
-		RECT rect = {x2,0,x2+15,16};
-		Display_clearRect(rect, 100);
-	}
-	{
-		RECT rect = {x3,0,x3+23,16};
-		Display_clearRect(rect, 100);
-	}
 #endif	//#ifndef GPS_BT_FREE	
 	PowerControl_showBatStatus(x4);			//L=24
 }

@@ -50,8 +50,10 @@ void Modes_Init(void)
 	SPRDMode_Init();
 	TCMode_Init();
 	SETUPMode_Init();
+#ifndef GPS_BT_FREE
 	GPSMode_Init();
 	COMMMode_Init();
+#endif	//#ifndef GPS_BT_FREE	
 	YESNOMode_Init();
 	EditMode_Init();
 	USBMode_Init();

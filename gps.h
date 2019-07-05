@@ -58,6 +58,8 @@ struct tagGPSControl
 	BOOL bGPSFailed;//true if no connection to GPS
 };
 
+#ifndef GPS_BT_FREE	
+
 
 BOOL GPS_isTurnedON(void);
 
@@ -99,5 +101,7 @@ void GPS_startGPSbyState(void);
 
 void GPS_testGPSConnection(void);
 void GPS_UART2_InitEx(DWORD speed);
+
+#endif	//#ifndef GPS_BT_FREE	
 
 #endif //#ifndef _GPS_H

@@ -1,0 +1,23 @@
+"--endian=little" 
+
+"--cpu=ARM7TDMI-S" 
+
+"--fpu=None" 
+
+"-p" 
+
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\CONFIG\debugger\NXP\LPC2388.ddf" 
+
+"--semihosting" 
+
+"--device=LPC2388" 
+
+"--drv_communication=USB0" 
+
+"--drv_interface_speed=auto" 
+
+"--jlink_initial_speed=32" 
+
+
+
+

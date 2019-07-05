@@ -196,7 +196,9 @@ void Geiger_control(void)
 		if(!geigerControl.bSafetyAlarm_log)
 		{//make event in log only once
 			geigerControl.bSafetyAlarm_log = TRUE;
+#ifndef GPS_BT_FREE	
 			LOGMode_insertGPS();
+#endif	//#ifndef GPS_BT_FREE	
 			LOGMode_insertEventByLang("Radiation safety alarm!\0""Strahlungssicherheit Alarm!\0""Radiation safety alarm!\0""Тревога радиационной безопасности!");
 			LOGMode_insertDoserate(geigerControl.esentVals_safe.fDoserate);
 			//activate SPRD mode
@@ -222,7 +224,9 @@ void Geiger_control(void)
 		if(!geigerControl.bOverload_log)
 		{//make overload event log once 
 			geigerControl.bOverload_log = TRUE;
+#ifndef GPS_BT_FREE	
 			LOGMode_insertGPS();
+#endif	//#ifndef GPS_BT_FREE	
 			LOGMode_insertEventByLang("OVERLOAD!\0""UBERLADUNG!\0""OVERLOAD!\0""ПЕРЕГРУЗКА!");
 			//activate SPRD mode
 			if(modeControl.pMode != &modes_SPRDMode &&

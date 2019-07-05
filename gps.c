@@ -24,6 +24,7 @@ struct tagGPSControl GPSControl;
 
 
 
+#ifndef GPS_BT_FREE	
 
 
 
@@ -441,3 +442,5 @@ void GPS_startGPSbyState(void)
 	else
 		GPS_turnOFF();
 }
+
+#endif	//#ifndef GPS_BT_FREE	

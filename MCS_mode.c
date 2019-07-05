@@ -72,7 +72,11 @@ const char* MCSMode_LeftOnUpdate(void)//"back\0""назад",	//left
 }
 const char* MCSMode_RightOnUpdate(void)//"setup\0""опции",	//right
 {
+#ifndef GPS_BT_FREE	
 	return "gps\0""gps\0""gps\0""gps";
+#else #ifndef GPS_BT_FREE	
+	return "setup\0""setup\0""setup\0""опции";
+#endif	//#ifndef GPS_BT_FREE	
 }
 const char* MCSMode_DownOnUpdate(void)//"menu\0""меню",	//down
 {
@@ -215,7 +219,9 @@ BOOL MCSMode_OnTimer(void)
 				MCSMode_prepare();
 		
 				//save doserate and gps in log too
+#ifndef GPS_BT_FREE	
 				if(LOGMode_insertGPS())
+#endif	//#ifndef GPS_BT_FREE	
 					LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 				SoundControl_BeepSeq(beepSeq_OK);
 			}
@@ -293,7 +299,11 @@ BOOL MCSMode_OnLeft(void)
 }
 BOOL MCSMode_OnRight(void)
 {
+#ifndef GPS_BT_FREE
 	GPSMode_setActiveMode();
+#else	//#ifndef GPS_BT_FREE
+	Modes_setActiveMode(&modes_SETUPMode);
+#endif	//#ifndef GPS_BT_FREE
 	return 1;
 }
 

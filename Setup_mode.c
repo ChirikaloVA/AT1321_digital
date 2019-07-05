@@ -1586,8 +1586,10 @@ void SETUPMode_prirabotka(BOOL bYes)
 	{//breaking-in
 		PowerControl_turnOFF_MAM();
 		PowerControl_turboModeOFF();
+#ifndef GPS_BT_FREE	
 		Bluetooth_turnOFF();
 		GPS_turnOFF();
+#endif	//#ifndef GPS_BT_FREE	
 		PowerControl_sendAllCommands();
 		SoundControl_StopBeep();
 		SoundControl_StopVibro();

@@ -1,0 +1,13 @@
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armproc.dll" 
+
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armjlink2.dll" 
+
+"D:\IARARMProjects\SPRD2_5\GPS_BLUETOOTH_FREE\Exe\SPRD.out" 
+
+--plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armbat.dll" 
+
+--device_macro="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\config\debugger\NXP\LPC23xx.dmac" 
+
+
+
+

@@ -36,6 +36,9 @@ struct tagGPSModeControl GPSModeControl;
 
 
 
+#ifndef GPS_BT_FREE	
+
+
 //menu if gps is on
 const struct tagMenu gps_menu=
 {
@@ -677,4 +680,7 @@ BOOL GPSMode_menu1_TurnOFF(void)
 	GPS_turnOFF();
 	return TRUE;
 }
+
+
+#endif	//#ifndef GPS_BT_FREE	
 

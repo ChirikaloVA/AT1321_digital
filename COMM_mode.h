@@ -1,3 +1,4 @@
+
 #ifndef _COMMMODE_H
 #define _COMMMODE_H
 
@@ -17,6 +18,7 @@ extern struct tagCOMMModeControl COMMModeControl;
 extern const struct tagMode modes_COMMMode;
 
 
+#ifndef GPS_BT_FREE	
 
 void COMMMode_Init(void);
 
@@ -56,6 +58,9 @@ const char* COMMMode_DownOnUpdate(void);//"menu\0""меню",	//down
 void COMMMode_showTransmitted(void);
 void COMMMode_showReceived(void);
 
+#endif	//#ifndef GPS_BT_FREE	
 
 
 #endif	//ifndef _COMMMODE_H
+
+

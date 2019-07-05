@@ -77,14 +77,14 @@ struct tagBluetoothControl
 
 extern struct tagBluetoothControl bluetoothControl;
 
+#ifndef GPS_BT_FREE	
+
 
 void Bluetooth_show_symbol(int x);
 void Bluetooth_control(void);
-void Bluetooth_Init(void);
 void Bluetooth_UART3_Init(void);
 __arm void _INT_UART3_Bluetooth(void);
 void Bluetooth_turnON(void);
-void Bluetooth_turnOFF(void);
 void Bluetooth_sym_control(void);
 void Bluetooth_checkDataReceived(void);
 void Bluetooth_sendSequence(int len);
@@ -100,5 +100,9 @@ void Bluetooth_rcvData_module_Dispatcher(void);
 void Bluetooth_writeModuleName(void);
 void Bluetooth_prepareModuleName(void);
 
+#endif	//#ifndef GPS_BT_FREE	
+
+void Bluetooth_Init(void);
+void Bluetooth_turnOFF(void);
 
 #endif //#ifndef _BLUETOOTH_H

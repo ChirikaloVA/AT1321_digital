@@ -49,7 +49,7 @@ B - безядерные исполнения
 
 #define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
 
-const char txtVersion[]=VERT(4, 6, 
+const char txtVersion[]=VERT(4, 7, 
 #ifdef _SNM
 #ifdef _IAEA
 I
@@ -69,7 +69,7 @@ B
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "21.01.2019"
+#define OUR__DATE__ "05.07.2019"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 
@@ -219,8 +219,10 @@ __noreturn void main(void)
 
 
 	//==================GPS Init====================
+#ifndef GPS_BT_FREE
 	GPS_Init();
 	NMEAParser_Init();
+#endif	//#ifndef GPS_BT_FREE
 	
 	//stage 7: interrupts init
 	//================init interrupts=============
@@ -353,9 +355,10 @@ __noreturn void main(void)
 
 	//========start interfaces and devices by state	in ini
 	//make some starts of gps
+#ifndef GPS_BT_FREE
 	GPS_startGPSbyState();
 	Bluetooth_startbyState();
-	
+#endif	//#ifndef GPS_BT_FREE	
 	
 	//================adjust doserate window table=============
 	Spectrum_setupDoseWindowTable();
@@ -473,6 +476,7 @@ __noreturn void main(void)
 			
 			
 			//control status of GPS
+#ifndef GPS_BT_FREE
 			GPS_control();
 			
 			//control status symbol of GPS
@@ -483,6 +487,8 @@ __noreturn void main(void)
 
 			//control status symbol of bluetoth
 			Bluetooth_sym_control();
+#endif	//#ifndef GPS_BT_FREE
+			
 			//control status symbol of USB
 			USBRS_sym_control();
 
@@ -524,8 +530,10 @@ __noreturn void main(void)
 		}
 
 	
+#ifndef GPS_BT_FREE
 		//control bluetooth data exchange
 		Bluetooth_control();
+#endif	//#ifndef GPS_BT_FREE
 
 		//control USBRS data exchange
 		USBRS_control();
@@ -744,7 +752,9 @@ void main_execute__System_setBridgeMode(HFILE hfile)
 	if(retlen!=S_OK)return;
 	
 	int i = 100;
+#ifndef GPS_BT_FREE	
 	Bluetooth_turnON();
+#endif	//#ifndef GPS_BT_FREE	
 	while(!USBRSControl.uart.bTrmReady && --i)
 	{
 		PowerControl_sleep(10);

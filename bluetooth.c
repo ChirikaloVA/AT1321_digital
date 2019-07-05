@@ -25,6 +25,7 @@
 
 struct tagBluetoothControl bluetoothControl;
 
+#ifndef GPS_BT_FREE	
 
 
 //show bluetooth symbol, hide it or blink it
@@ -305,21 +306,6 @@ __arm void _INT_UART3_Bluetooth(void)
 
 
 
-
-void Bluetooth_turnOFF(void)
-{
-	PCONP_bit.PCUART3 = 0;	//take power from UART3
-        //===== Chirikalo
-	PINMODE0_bit.P0_0 = 0x00;	//select pins for GPIO
-	PINMODE0_bit.P0_1 = 0x00;
-	PINSEL0_bit.P0_0 = 0x00;	//select pins for GPIO
-	PINSEL0_bit.P0_1 = 0x00;
-        //===== Chirikalo
-        DIR_BT_RF = 1;
-	SET_BT_ON;	//takeoff power
-	CLR_BT_RES;
-	bluetoothControl.bBluetooth_ON = 0;
-}
 
 
 void Bluetooth_turnON(void)
@@ -609,3 +595,53 @@ void Bluetooth_rcvData_module_Dispatcher(void)
 		;
 	}
 }
+
+#else
+
+
+//first inition
+void Bluetooth_Init(void)
+{
+	bluetoothControl.uart.rcvBuff = bluetoothControl.rcvBuff;
+	bluetoothControl.uart.rcvBuff_safe = bluetoothControl.rcvBuff_safe;
+	bluetoothControl.uart.trmBuff = bluetoothControl.trmBuff;
+	bluetoothControl.uart.constRcvBuffLen = sizeof(bluetoothControl.rcvBuff);
+	bluetoothControl.uart.constTrmBuffLen = sizeof(bluetoothControl.trmBuff);
+	
+	
+	for(int i=0;i<bluetoothControl.uart.constTrmBuffLen;i++)
+	{
+		bluetoothControl.uart.trmBuff[i] = 0;
+	}
+	for(int i=0;i<bluetoothControl.uart.constRcvBuffLen;i++)
+	{
+		bluetoothControl.uart.rcvBuff[i] = 0;
+		bluetoothControl.uart.rcvBuff_safe[i] = 0;
+	}
+
+	bluetoothControl.bBluetooth_ON = 0;
+	bluetoothControl.bBluetooth_Connected = 0;
+	bluetoothControl.bShow_Bluetooth_sym = 0;
+	
+	bluetoothControl.iModuleComm = 0;	//comm with PC
+	
+	memset(bluetoothControl.moduleName, 0, sizeof(bluetoothControl.moduleName));
+}
+
+#endif
+
+void Bluetooth_turnOFF(void)
+{
+	PCONP_bit.PCUART3 = 0;	//take power from UART3
+        //===== Chirikalo
+	PINMODE0_bit.P0_0 = 0x00;	//select pins for GPIO
+	PINMODE0_bit.P0_1 = 0x00;
+	PINSEL0_bit.P0_0 = 0x00;	//select pins for GPIO
+	PINSEL0_bit.P0_1 = 0x00;
+        //===== Chirikalo
+        DIR_BT_RF = 1;
+	SET_BT_ON;	//takeoff power
+	CLR_BT_RES;
+	bluetoothControl.bBluetooth_ON = 0;
+}
+

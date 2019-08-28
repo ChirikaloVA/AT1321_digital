@@ -275,23 +275,7 @@ void identify_InitSigma1()
 	else identifyControl.MAXENERGY=pEnergy[identifyControl.NUMCHAN-1];
 }
 
-/*short identify_ChannelFromEnergy(short energy)
-{
-	short k=(short)((identifyControl.CHANK*energy+identifyControl.CHANB)>>8);
-	if (k<0) k=0;
-	else if(k>=identifyControl.NUMCHAN) k=identifyControl.NUMCHAN-1;
-	if (pEnergy[k]>energy)
-		while (pEnergy[k]>energy){
-			if(k) k--;
-			else break;
-		}
-	else
-		while (pEnergy[k]<energy){
-			if(k<identifyControl.NUMCHAN-1) k++;
-			else break;
-		}
-	return k;
-}*/
+
 
 
 int identify_ChannelFromEnergyNear(int energy)
@@ -352,9 +336,6 @@ void identify_getnuclidesinreport(char sym, const char* pHeader, BOOL bSimplify/
 				if(amount>0)
 					strcat(identifyControl.report, " ");
 			}
-//			char buf[12];
-	//		sprintf(buf,"%u-",(UINT)identifyControl.Nucls[i].confidence);
-		//	strcat(identifyControl.report, buf);
 			//special processing for nulcear nuclides
 			if(bSimplify)
 			{//упрошение названия нуклида в изи моде
@@ -636,68 +617,18 @@ void identify_DetectLines(void){
 	identify_AnalyzePeaks(); //Fills Peak array with data, basing on the analysis of identifyControl.BufSpec filtered spectrum
 }
 
-/*
-void identify_DetectLinesEx(int threshold, long  *Variance) //the same as DetectLines, plus takes spectrum variance from Variance (has to be used, if phon is subtracted)
-{
-	identifyControl.LEFTBORDER=identify_ChannelFromEnergyNear(identifyControl.MINENERGY);
-	//Terminated=0;
-	identify_ApplyFilterEx(Variance); //filters spectrum ISpectrum and places
-				   //result in the identifyControl.BufSpec array and SD in the identifyControl.SDs array
-//	if(Terminated) return;
-	identify_Smoothing(); //smooths identifyControl.BufSpec for nicer look (averaging filter with window equal to sigma)
-//	if(Terminated) return;
-	identifyControl.varspec=Variance;
-	identify_AnalyzePeaks(threshold); //Fills Peak array with data, basing on the analysis of identifyControl.BufSpec filtered spectrum
-}
-*/
+
 
 
 #define sign(x) ((x)<0?-1:1)
 
-/*UCHAR identify_GShape(short j, FIXED2 *sigma)
-{
-	long r;
-	if(j<0) j=-j;
-	r=((long)j*GSHPSIGM)<<8;
-	r=r/sigma->w;
-	if (r<0) return 0;
-	else
-		if(r<GSHPNUM) return GaussShape[r];
-		else return 0;
-}
-*/
-
-/*char identify_SShape(short j, FIXED2 *sigma)
-{
-	long r;
-	if(j<0) j=-j;
-	r=((long)j*GSHPSIGM)<<8;
-	r=r/sigma->w;
-	if(r<SRCHGSHPNUM) return identify_SearchShape[r];
-	else return 0;
-}
-
-void identify_MultLongByte(unsigned char d, long *ps, unsigned long *res)
-{
-	*res=(unsigned long)(d*(*ps));
-}*/
 
 void identify_ApplyFilter() //nsigma*(sigma.WW.i+1) MUST NOT be more than 127!!! In other case change char type to short.
 {
 	long index;
 	long  n,dn;
 	long d;//,index;
-//	WORD *sigma;
-//	long  *ps;//, *pbs, *pbs1;
 	long long  rr1, rr2, k;
-//	identifyControl.ISpectrum[identifyControl.NUMCHAN-1]=0;
-//	ps=&identifyControl.ISpectrum[identifyControl.NUMCHAN];
-/*	for (i=identifyControl.NUMCHAN; i<SPECARRCHAN; i++){  //clear additional channels in spectrum
-		*ps=0; ps++;
-	}*/
-//	pbs=identifyControl.BufSpec;
-//	pbs1=identifyControl.SDs;
-//	sigma=identifyControl.SigmaArray;
 	int bufIndex = 0;
 	int specIndex = 0;
 	for (int i=0; i<identifyControl.NUMCHAN; i++)
@@ -708,14 +639,8 @@ void identify_ApplyFilter() //nsigma*(sigma.WW.i+1) MUST NOT be more than 127!!!
 		{
 			identifyControl.BufSpec[bufIndex]=0;
 			identifyControl.SDs[bufIndex++]=0;
-//			*pbs=0;
-	//		*pbs1=1;
-//			pbs++;
-	//		pbs1++;
-		//	sigma++;
 			continue;
 		} //i1=0;
-//		ps=&(identifyControl.ISpectrum[i1]);
 		dn=(long)(GSHPSIGMx256/SigmaArray[bufIndex]);
 		n=index; n*=dn; dn=-dn;
 		rr1=0; rr2=0;
@@ -729,21 +654,6 @@ void identify_ApplyFilter() //nsigma*(sigma.WW.i+1) MUST NOT be more than 127!!!
 			d=(long)identify_SearchShape[n];
 			//calculate k=(*ps)*d
 			//k.LL.hi=0;
-/*			if(d<0){
-				//d^=0xFF; d++;
-				d = -d;
-				k = (*ps)*d;
-				k=-k;
-				rr1+=k;
-				k=-k;
-				k=k*d;
-				//MultLongByte(d,ps,&(k.LL.lo));
-				//InvertLONGLONG(&k);
-				//AddLongLong(&k,&rr1);
-				//InvertLONGLONG(&k);
-				//MultLongLongByte(d,&k,&k);
-			}
-			else {*/
 
 			if(specIndex>=SPECARRCHAN)break;
 			
@@ -751,113 +661,18 @@ void identify_ApplyFilter() //nsigma*(sigma.WW.i+1) MUST NOT be more than 127!!!
 			rr1+=k;
 			k*=d;
 			rr2+=k;
-				//MultLongByte(d,ps,&(k.LL.lo));
-				//calculate rr1+=k
-				//AddLongLong(&k,&rr1);
-				//calculate k*=d
-				//MultLongLongByte(d,&k,&k);
-			//}
 			//calculate rr2+=k
 			//AddLongLong(&k,&rr2);
 			index--;
 			if(!index) break;
 			n+=dn; if(!n) dn=-dn;
 		}
-//		if(IsGZeroLONGLONG(&rr2)){ //if(rr2>0)
-//		if(rr2>0)
-	//	{ //if(rr2>0)
 			identifyControl.BufSpec[bufIndex]=-(rr1>>8); //ISpectrum[i]=rr1/256
 			identifyControl.SDs[bufIndex++]=(rr2>>16)+1; //identifyControl.SDs[i]=rr2/(256*256)
-//				(*pbs)=-*(long*)(((char*)&rr1)+1); //ISpectrum[i]=rr1/256
-//			(*pbs1)=*(long*)(((char*)&rr2)+2); //identifyControl.SDs[i]=rr2/(256*256)
-//			identifyControl.SDs[bufIndex]++; //identifyControl.SDs[i]+=1;
-//		}else
-	//	{
-		//	identifyControl.BufSpec[bufIndex]=0;
-//			identifyControl.SDs[bufIndex]=1;
-	//	}
-//		pbs++; pbs1++; sigma++;
 	}
 	#undef nsigma
 }
 
-
-/*
-void identify_ApplyFilterEx(long  *Variance) //The same as ApplyFilter, but spectrum variance is in separate array
-{
-	short i,i1;
-	short  n,dn;
-	char  d,index;
-	FIXED2 *sigma;
-	long  rrr, *ps,*pvs, *pbs, *pbs1;
-	LONGLONGG  rr1, rr2, k;
-	ISpectrum[identifyControl.NUMCHAN-1]=0; ps=&ISpectrum[identifyControl.NUMCHAN];
-	Variance[identifyControl.NUMCHAN-1]=0; pvs=&Variance[identifyControl.NUMCHAN];
-	for (i=identifyControl.NUMCHAN; i<SPECARRCHAN; i++){  //clear additional channels in spectrum
-		*ps=0; ps++;
-		*pvs=0; pvs++;
-	}
-	pbs=identifyControl.BufSpec; pbs1=identifyControl.SDs;
-	sigma=identifyControl.SigmaArray;
-	for (i=0; i<identifyControl.NUMCHAN; i++){
-		i1=(short)(((long)identifyControl.nsigma_searchpeaks*sigma->w+128)>>10);
-		index=(char)i1;
-		i1=i-index; if(i1<0) {*pbs=0; *pbs1=1; pbs++; pbs1++; sigma++; continue;} //i1=0;
-		ps=&(ISpectrum[i1]); pvs=&(Variance[i1]);
-		dn=(short)(GSHPSIGMx256/sigma->w);
-		n=index; n*=dn; dn=-dn;
-		ZeroLONGLONG(&rr1); ZeroLONGLONG(&rr2);
-		(index<<=1); index++;
-		while(1){
-			if(n>=SRCHGSHPNUM) exit(255);
-			d=identify_SearchShape[n];
-			//calculate k=(*ps)*d
-			k.LL.hi=0;
-			rrr=*ps;
-			if(d<0){
-				d^=0xFF; d++;
-				if(rrr<0){
-					rrr=-rrr;
-					MultLongByte(d,&rrr,&(k.LL.lo));
-				}
-				else {
-					MultLongByte(d,&rrr,&(k.LL.lo));
-					InvertLONGLONG(&k);
-				}
-				AddLongLong(&k,&rr1);
-			}
-			else {
-				if(rrr<0){
-					rrr=-rrr;
-					MultLongByte(d,&rrr,&(k.LL.lo));
-					InvertLONGLONG(&k);
-				}
-				else MultLongByte(d,ps,&(k.LL.lo));
-				//calculate rr1+=k
-				AddLongLong(&k,&rr1);
-			}
-			k.LL.hi=0;
-			MultLongByte(d,pvs,&(k.LL.lo));
-			MultLongLongByte(d,&k,&k);
-			AddLongLong(&k,&rr2);
-			index--;
-			if(!index) break;
-			ps++; pvs++;
-			n+=dn; if(!n) dn=-dn;
-		}
-		if(IsGZeroLONGLONG(&rr2)){ //if(rr2>0)
-				(*pbs)=-*(long*)(((char*)&rr1)+1); //ISpectrum[i]=rr1/256
-				(*pbs1)=*(long*)(((char*)&rr2)+2); //identifyControl.SDs[i]=rr2/(256*256)
-			(*pbs1)++; //identifyControl.SDs[i]+=1;
-		}
-		else{
-			*pbs=0; *pbs1=1;
-		}
-		pbs++; pbs1++; sigma++;
-	}
-	#undef nsigma
-}
-*/
 
 
 void identify_SmoothingEx(long * pBuf, int sigmas)
@@ -1097,7 +912,6 @@ int identify_CalcDeltaEnergyFromChannel(int l)
 {
 	int en = pEnergy[l];
 	int ss = 6;
-//!!!!!!!!	short s=(short)((((en>320 && en<390)?identifyControl.SCALEINSTABILITY*1.5:identifyControl.SCALEINSTABILITY)*(long)en+500)/1000);
 	int s=(int)((identifyControl.SCALEINSTABILITY*en+500)/1000);
 	if(s<ss)s=en<34?ss-ss/3:ss;
 	return s;
@@ -1201,7 +1015,6 @@ void identify_nucInit(TNucl* Nuc)
 {
 	long lnVal2, lnVal;
 	UINT btInd, btInd2, btStored;
-//	char b1=1;
 	Nuc->selected=0; //clear unselect all nuclides
 	Nuc->weight=0; Nuc->weightM=0;
 	for(btInd=0; btInd<Nuc->num; btInd++)
@@ -1432,14 +1245,11 @@ l1:;
 					if(btFlag && chan>3 && btStored)
 					{//нуклида верхнего цикла так и не побил никто
 						Nuc = &identifyControl.Nucls[btNucl];
-//						if(!Nuc->selected)
-//						{
 							Nuc->selected = 1;
 							b1=1;
 							identify_excludeLines(Nuc);
 							//выход из верхнего цикла, для дальнейшей оценки следующих нуклидов
 							break;
-//						}
 					}
 				}
 			}
@@ -1581,7 +1391,6 @@ void identify_excludeLines(TNucl* Nuc)
 			if(lnVal && Nuc->factors_shield[btInd])
 			{
 				chan=identify_CheckChannel(Nuc->energies[btInd]); //find closest maximum
-//				flt = sqrt((float)identifyControl.SDs[chan]);
 				temp1 = 256.0f*(float)identifyControl.BufSpec[chan];
 				temp = 256.0f*(float)lnVal;
 				identifyControl.ex_energy[btInd2]=0;
@@ -1609,7 +1418,6 @@ void identify_excludeLines(TNucl* Nuc)
 					if(lnVal)
 					{
 						chan=identify_CheckChannel(Nuc->energies[btInd]); //find closest maximum
-//						//flt = sqrt((float)identifyControl.SDs[chan]);
 						temp1 = 256.0f*(float)identifyControl.BufSpec[chan];
 						temp = 256.0f*(float)lnVal;
 
@@ -1649,8 +1457,6 @@ int identify_checkWeight(TNucl* Nuc)
 		if(btInd2!=BADINDEX && identifyControl.ex_energy[btInd2])
 		{
 			cnt++;
-//!!!!!!			if(Nuc->factors_noshield[btInd])
-//!!!!!!				cnt++;
 			if(Nuc->factors_shield[btInd])
 				cnt++;
 		}
@@ -1944,7 +1750,6 @@ void identify_calcConfidence(void)
 					}
 				}
 			}
-//			chan/=btStored;
 			if(chan>255)chan=255;
 			Nuc->confidence = chan/30+1;	//приводим от 0 до 9
 		}

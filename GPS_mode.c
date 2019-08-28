@@ -277,37 +277,21 @@ void GPSMode_show_common(void)
 	char gps_text[40];
 	char buf[20];
 
-//	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputTextByLang("Common data:\r\0""Common data:\r\0""Common data:\r\0""Общие данные\r");
 
 	sprintf(gps_text, "Lat=%s\r", GPSMode_coord2txt(NMEAParserControl.commonGPS.Lat,buf,'N','S'));
-//	Display_setTextWin(0,MODE_USER_TOP-16,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	sprintf(gps_text, "Lon=%s\r", GPSMode_coord2txt(NMEAParserControl.commonGPS.Lon,buf,'E','W'));
-//	Display_setTextWin(0,MODE_USER_TOP-32,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	sprintf(gps_text, "Alt=%.2f\r", NMEAParserControl.commonGPS.Alt);
-//	Display_setTextWin(0,MODE_USER_TOP-48,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	sprintf(gps_text, "Spd=%.2f\r", NMEAParserControl.commonGPS.Spd);
-//	Display_setTextWin(0,MODE_USER_TOP-64,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	sprintf(gps_text, "Dir=%.2f\r", NMEAParserControl.commonGPS.Dir);
-//	Display_setTextWin(0,MODE_USER_TOP-80,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	sprintf(gps_text, "Sats=%d\r", (int)NMEAParserControl.m_btGGANumOfSatsInUse);
-//	Display_setTextWin(0,MODE_USER_TOP-96,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	
-//	Display_setTextWin(0,MODE_USER_TOP-112,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	if(GPSControl.uart.bRcvError!=RCV_OK)
 	{
 		Display_outputText("Receive Error");
@@ -337,50 +321,32 @@ void GPSMode_show_GPGGA(void)
 	char gps_text[40];
 	char buf[20];
 
-//	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText("GPGGA:\r");
 
 	sprintf(gps_text, "Clock=%02u:%02u:%02u\r", (UINT)NMEAParserControl.m_btGGAHour,
 			(UINT)NMEAParserControl.m_btGGAMinute,
 			(UINT)NMEAParserControl.m_btGGASecond);
-//	Display_setTextWin(0,MODE_USER_TOP-16,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Lat=%s\r", GPSMode_coord2txt(NMEAParserControl.m_dGGALatitude,buf,'N','S'));
-//	Display_setTextWin(0,MODE_USER_TOP-32,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Lon=%s\r", GPSMode_coord2txt(NMEAParserControl.m_dGGALongitude,buf,'E','W'));
-//	Display_setTextWin(0,MODE_USER_TOP-48,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "GPSQuality=%u\r", (UINT)NMEAParserControl.m_btGGAGPSQuality);
-//	Display_setTextWin(0,MODE_USER_TOP-64,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "NumOfSatsInUse=%u\r", (UINT)NMEAParserControl.m_btGGANumOfSatsInUse);
-//	Display_setTextWin(0,MODE_USER_TOP-80,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "HDOP=%.3f\r", (float)NMEAParserControl.m_dGGAHDOP);
-//	Display_setTextWin(0,MODE_USER_TOP-96,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Alt=%.2f\r", NMEAParserControl.m_dGGAAltitude);
-//	Display_setTextWin(0,MODE_USER_TOP-112,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	
 	sprintf(gps_text, "Vert speed=%.2f\r", NMEAParserControl.m_dGGAVertSpeed);
-//	Display_setTextWin(0,MODE_USER_TOP-128,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 }
 
@@ -397,43 +363,28 @@ void GPSMode_show_GPGSA(void)
 
 
 	char gps_text[40];
-//	char buf[20];
 	char buf2[2];
 
 
-//	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText("GPGSA:\r");
 
 	buf2[0]=NMEAParserControl.m_btGGAHour;
 	buf2[1]=0;
 	sprintf(gps_text, "Mode=%s\r", buf2);
-//	Display_setTextWin(0,MODE_USER_TOP-16,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "FixMode=%u\r", (UINT)NMEAParserControl.m_btGSAFixMode);
-//	Display_setTextWin(0,MODE_USER_TOP-32,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "PDOP=%.3f\r", (float)NMEAParserControl.m_dGSAPDOP);
-//	Display_setTextWin(0,MODE_USER_TOP-48,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "HDOP=%.3f\r", (float)NMEAParserControl.m_dGSAHDOP);
-//	Display_setTextWin(0,MODE_USER_TOP-64,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "VDOP=%.3f\r", (float)NMEAParserControl.m_dGSAVDOP);
-//	Display_setTextWin(0,MODE_USER_TOP-80,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
-//	Display_setTextWin(0,MODE_USER_TOP-96,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText("SatsInSolution=\r");	
 	for(int i=0;i<12;i+=3)
 	{
@@ -441,8 +392,6 @@ void GPSMode_show_GPGSA(void)
 				(UINT)NMEAParserControl.m_wGSASatsInSolution[i],
 				(UINT)NMEAParserControl.m_wGSASatsInSolution[i+1],
 				(UINT)NMEAParserControl.m_wGSASatsInSolution[i+2]);
-//		Display_setTextWin(0,MODE_USER_TOP-112-i*6,X_SCREEN_SIZE,16);	//set text window
-//		Display_clearTextWin(10);
 		Display_outputText((char*)gps_text);
 	}	
 }
@@ -466,16 +415,10 @@ struct tagNPSatInfo
 
 	*/
 	char gps_text[40];
-//	char buf[20];
-//	char buf2[2];
 	
 	Display_setTextSteps(1,1);	//set start coords in window
 
-//	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	sprintf(gps_text, "GPGSV: Sats=%u", (UINT)NMEAParserControl.m_wGSVTotalNumSatsInView);
-//	Display_setTextWin(0,MODE_USER_TOP-16,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	int i;	
@@ -484,8 +427,6 @@ struct tagNPSatInfo
 		sprintf(gps_text, "\rid=%u, used=%u, sq=%u", (UINT)NMEAParserControl.m_GSVSatInfo[i].m_wPRN,
 				(UINT)NMEAParserControl.m_GSVSatInfo[i].m_bUsedInSolution,
 				(UINT)NMEAParserControl.m_GSVSatInfo[i].m_wSignalQuality);
-//		Display_setTextWin(0,MODE_USER_TOP-32-i*16,X_SCREEN_SIZE,16);	//set text window
-//		Display_clearTextWin(10);
 		Display_outputText((char*)gps_text);
 	}
 	//added 03/12/2012 to delete old data about satelites
@@ -515,54 +456,36 @@ void GPSMode_show_GPRMC(void)
 	char gps_text[40];
 	char buf[20];
 	char buf2[2];
-//	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText("GPRMC:\r");
 	
 	sprintf(gps_text, "Clock=%02u:%02u:%02u\r", (UINT)NMEAParserControl.m_btRMCHour,
 			(UINT)NMEAParserControl.m_btRMCMinute,
 			(UINT)NMEAParserControl.m_btRMCSecond);
-//	Display_setTextWin(0,MODE_USER_TOP-16,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Date=%u:%02u:%02u\r", (UINT)NMEAParserControl.m_wRMCYear,
 			(UINT)NMEAParserControl.m_btRMCMonth,
 			(UINT)NMEAParserControl.m_btRMCDay);
-//	Display_setTextWin(0,MODE_USER_TOP-32,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Lat=%s\r", GPSMode_coord2txt(NMEAParserControl.m_dRMCLatitude,buf,'N','S'));
-//	Display_setTextWin(0,MODE_USER_TOP-48,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "Lon=%s\r", GPSMode_coord2txt(NMEAParserControl.m_dRMCLongitude,buf,'E','W'));
-//	Display_setTextWin(0,MODE_USER_TOP-64,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	
 	sprintf(gps_text, "Ground speed=%.2f\r", NMEAParserControl.m_dRMCGroundSpeed);
-//	Display_setTextWin(0,MODE_USER_TOP-80,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 	
 	sprintf(gps_text, "Course=%.2f\r", NMEAParserControl.m_dRMCCourse);
-//	Display_setTextWin(0,MODE_USER_TOP-96,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	sprintf(gps_text, "MagVar=%f\r", NMEAParserControl.m_dRMCMagVar);
-//	Display_setTextWin(0,MODE_USER_TOP-112,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 
 	buf2[0]=NMEAParserControl.m_btRMCDataValid;
 	buf2[1]=0;
 	sprintf(gps_text, "DataValid=%s\r", buf2);
-//	Display_setTextWin(0,MODE_USER_TOP-128,X_SCREEN_SIZE,16);	//set text window
-//	Display_clearTextWin(10);
 	Display_outputText((char*)gps_text);
 }
 

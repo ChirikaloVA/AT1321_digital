@@ -159,7 +159,14 @@ extern struct tagPOWERCONTROL powerControl;
 
 
 
-
+//ST1
+#define DIR_ST1 FIO2DIR_bit.P2_5
+#define PIN_ST1 FIO2PIN_bit.P2_5
+#define DIR_ST12 FIO3DIR_bit.P3_23
+#define PIN_ST12 FIO3PIN_bit.P3_23
+//ST2
+#define DIR_ST2 FIO0DIR_bit.P0_17
+#define PIN_ST2 FIO0PIN_bit.P0_17
 
 
 //опорное напряжение на АЦП измерителя напряжения

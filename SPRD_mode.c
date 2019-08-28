@@ -240,7 +240,6 @@ BOOL SPRDMode_menu1_SaveValue(void)
 #endif	//#ifndef GPS_BT_FREE	
 	LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 	SoundControl_BeepSeq(beepSeq_OK);
-//	sound_playSample(SND_OK);
 	return TRUE;
 }
 
@@ -296,7 +295,6 @@ BOOL SPRDMode_menu1_BkgMode(void)
 		SPRDModeControl.bBkgMode_assumed = TRUE;
 		InterProc_setSearchMode();
 		//read bkg values
-//		InterProc_getBkgDR();
 		InterProc_getBkgCPS();
 	}else
 	{//bkg
@@ -429,7 +427,6 @@ void SPRDMode_Init(void)
 	SPRDMode_Init_for_ident();
 	
 	SPRDModeControl.iAlarmTimer=0;
-//	SPRDModeControl.iDimension = 0;
 	SPRDModeControl.false_alarm_period_oper = 600;
 	SPRDModeControl.bNaIOverload = FALSE;
 	SPRDModeControl.bMustSwitchToSPRD = FALSE;
@@ -678,7 +675,6 @@ BOOL SPRDMode_OnUp(void)
 		SPRDModeControl.bBkgMode_assumed = TRUE;
 		InterProc_setSearchMode();
 		//read bkg values
-//		InterProc_getBkgDR();
 		InterProc_getBkgCPS();
 	}else
 	{//bkg
@@ -693,7 +689,6 @@ BOOL SPRDMode_OnUp(void)
 				LOGMode_insertEvent(identifyControl.report);
 				SPRDMode_saveAutoSpec();
 				SPRDModeControl.bIdentStoped = TRUE;
-	//			InterProc_stopSpectrumAcq();
 				Modes_showButtons();
 			}
 			return 1;	//just return no need to go further
@@ -743,7 +738,6 @@ BOOL SPRDMode_OnExit(void)
 }
 BOOL SPRDMode_OnWakeUp(void)
 {
-//	SPRDMode_showWholeMCS_once();
 	SPRDModeControl.bUpdateMCS = TRUE;
 	return 1;
 }
@@ -916,7 +910,6 @@ void SPRDMode_showIdent(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(NONE);
 	Display_setCurrentFont(fnt16x16);
-//	Display_clearTextWin(270);
 	Display_setTextColor(GREEN);	//set text color
 	Display_setTextLineClear(1);
 	Display_checkForClearLine();
@@ -1120,57 +1113,26 @@ void SPRDMode_showDR(void)
 	Display_setTextXY(160,16);	//set start coords in window
 	Display_outputTextByLang(SPRDMode_getDimension());
 
-/*}else
-	{//overload of max doserate
-		//must be sound alarm
-		
-		clr = (clockData.dateTime.second&0x01)?RED:YELLOW;
-		Display_setTextColor(clr);	//set text color
-		Display_clearTextWin(250);
-		Display_outputTextByLang("OVERLOAD\0""OVERLOAD\0""OVERLOAD\0""ÏÅÐÅÃÐÓÇ");
-	}*/
 }
 
 
 //get dimension
 char* SPRDMode_getDimension(void)
 {
-/*	switch(SPRDModeControl.iDimension)
-	{
-		case enu_dim_sv:*/
 #ifdef BNC
 			return "mrem/h\0""mrem/h\0""mrem/h\0""mrem/h";
 #else
 			return "µSv/h\0""µSv/h\0""µSv/h\0""µSv/h";
 #endif
-/*		case enu_dim_gy:
-			return "µGy/h\0""µGy/h\0""µGy/h\0""µÃð/÷";
-		case enu_dim_r:
-			return "µR/h\0""µR/h\0""µR/h\0""µÐåì/÷";
-	default:
-		exception(__FILE__,__FUNCTION__,__LINE__,"Internal error");
-	}
-	return NULL;*/
 }
 
 char* SPRDMode_getDimensionDose(void)
 {
-/*	switch(SPRDModeControl.iDimension)
-	{
-		case enu_dim_sv:*/
 #ifdef BNC
 			return "mrem\0""mrem\0""mrem\0""mrem";
 #else	
 			return "µSv\0""µSv\0""µSv\0""µSv";
 #endif
-/*		case enu_dim_gy:
-			return "µGy\0""µGy\0""µGy\0""µÃð";
-		case enu_dim_r:
-			return "µR\0""µR\0""µR\0""µÐåì";
-	default:
-		exception(__FILE__,__FUNCTION__,__LINE__,"Internal error");
-	}
-	return NULL;*/
 }
 
 
@@ -1258,23 +1220,7 @@ void SPRDMode_menu1_datetime_daym_done(BOOL bOK)
 					 SPRDMode_menu1_datetime_dayw_done,
 					 TRUE);
 }
-/*
-void SPRDMode_menu1_datetime_dayw_done(BOOL bOK)
-{
-	if(bOK)
-	{
-		SPRDModeControl.dayw = atoi(EditModeControl.edit_buf);
-	}
-	SPRDModeControl.dayy = clockData.dayOfYear;
-	EditMode_EditInt_ex("Enter day of year\0""Enter day of year\0""Enter day of year\0""Ââåäèòå äåíü ãîäà",
-					 SPRDModeControl.dayy,
-					 1,
-					 366,
-					 "day\0""day\0""day\0""äåíü",
-					 SPRDMode_menu1_datetime_dayy_done,
-					 TRUE);
-}
-*/
+
 void SPRDMode_menu1_datetime_dayw_done(BOOL bOK)
 {
 	if(!bOK)

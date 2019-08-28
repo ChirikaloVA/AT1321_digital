@@ -115,21 +115,6 @@ __arm void _INT_UART0_USBRS(void)
 			USBModeControl.dwReceived++;
 			Display_flashOrangeLED();
 			
-/*			if(USBRSControl.uart.rcvBuffLen < USBRSControl.uart.constRcvBuffLen)
-			{
-				USBModeControl.dwReceived++;
-				USBRSControl.uart.rcvBuff[USBRSControl.uart.rcvBuffLen++] = byt;
-				if(USBRSControl.uart.rcvBuffLen>4)
-				{
-					dw1 = (USBRSControl.uart.rcvBuff[4]<<8);
-					dw1 |= USBRSControl.uart.rcvBuff[3];
-					if(USBRSControl.uart.rcvBuffLen-7>=dw1)
-					{
-						USBRSControl.uart.bDataReceived=1;
-						Display_flashOrangeLED();
-					}
-				}
-			}*/
 		}else
 		{
 			if(USBRSControl.uart.rcvBuffLen < USBRSControl.uart.constRcvBuffLen)
@@ -265,8 +250,6 @@ void USBRS_checkDataReceived_intcall(struct tagUART * pUart)
 		case 16:	//это должно быть строго здесь!
 			bytes += pUart->rcvBuff[2]+1;
 			break;
-//			bytes+=4;
-	//		break;
 		case 17:
 		case 7:
 		case 0x40:
@@ -335,18 +318,7 @@ void USBRS_sendSequence(int len)
 }
 
 
-//show USBRS symbol in status lnie
-/*
-void USBRS_show_symbol(int x)
-{
-	if(USBRSControl.bShow_USBRS_sym)
-		Display_output_bmp(x,304, (BITMAPFILEHEADER*)bmp_usbrs);
-	else
-	{
-		RECT rect = {x,304,x+23,Y_SCREEN_MAX};
-		Display_clearRect(rect, 100);
-	}
-}*/
+
 
 //control USBRS status and data
 void USBRS_control(void)
@@ -356,10 +328,6 @@ void USBRS_control(void)
 	//call first dispatcher
 	if(USBRSControl.uart.bDataReceived_safe)
 	{//must process received data
-//		if(modeControl.pMode != &modes_USBMode && !USBRSControl.bSysExecution && USBModeControl.bEnterThisMode)
-	//	{//switch to USB mode when first command received and we are no in this mode
-		//	Modes_setActiveMode(&modes_USBMode);
-//		}
 
 		//first process, the results must be processed in the procedures of initiate transmition command
 		//no cmd should be prepared in trm buffer if rcv data is not processed here!!!!!!!!!
@@ -380,22 +348,6 @@ void USBRS_control(void)
 //first dispatcher of received data
 void USBRS_rcvData_first_Dispatcher(void)
 {
-/*	if(USBRSControl.bBridgeMode)
-	{//bridge mode
-		if(USBRSControl.uart.rcvBuffLen_safe>0 && USBRSControl.uart.rcvBuffLen_safe<BTH_TRM_BUF_LEN)
-		{//len if valid
-			memcpy((void*)bluetoothControl.uart.trmBuff,USBRSControl.uart.rcvBuff_safe,USBRSControl.uart.rcvBuffLen_safe);
-			Bluetooth_sendSequence(USBRSControl.uart.rcvBuffLen_safe);
-			Display_flashRedLED();
-			SAFE_DECLARE;
-			DISABLE_VIC;
-			USBRSControl.uart.trmBuffLen = 0;
-			USBRSControl.uart.rcvBuffLen = 0;
-			USBRSControl.uart.bRcvError = RCV_OK;
-			USBRSControl.uart.bDataReceived = 0;
-			ENABLE_VIC;
-		}
-	}else*/
 	{
 		if(USBRSControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
 			   //21/01/2010

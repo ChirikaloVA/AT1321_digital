@@ -46,8 +46,6 @@ __arm void _INT_UART2_GPS(void)
 			}else
 			{//error receiver buffer len
 				//just bypass this byte, dont fire error
-	//			GPSControl.uart.bRcvError = 1;
-	//			U2FCR_bit.RFR = 1;	//reset FIFO
 				;
 			}
 		}//no start symbol
@@ -337,12 +335,6 @@ void GPS_wakeup(void)
 //send init seq to start GPS work
 void GPS_sendInitSequence(void)
 {
-//	const char initPortASeq[]="$PSRF100,1,9600,8,1,0";
-//	GPS_sendSequence(initPortASeq);
-//	GPS_waitTrmEnd();
-//	const char initNavigation[]="$PSRF101,0,0,0,0,0,0,12,1";
-//	GPS_sendSequence(initNavigation);
-//	GPS_waitTrmEnd();
 	const char query[]="$PSRF103,00,00,02,01";
 	GPS_sendSequence(query);
 	GPS_waitTrmEnd();

@@ -20,7 +20,6 @@ struct tagClock
 
 extern struct tagClock volatile clockData;
 
-//void Clock_Init(void);
 void Clock_control_Init(void);
 void Clock_retrieveDateTimeData_intcall(void);
 __arm void _INT_Clock(void);

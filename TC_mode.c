@@ -115,8 +115,6 @@ void TCMode_TCSearch(void)
 	sigm = (cur-bkg)/sqrt(bkg);
 	if(sigm>0)
 	{
-//		if((TCModeControl.dwTimer%6)==0)
-	//		TCModeControl.fsigm = SETUPMode_calcSigmaEx(SPRDModeControl.false_alarm_period_oper, ftime);
 		if(sigm>=TCModeControl.fsigm)
 		{//alarm!
 			SET_SND_AU;
@@ -174,7 +172,6 @@ BOOL TCMode_OnUp(void)
 }
 BOOL TCMode_OnDown(void)
 {
-//	Modes_activateMenu(&spectrum_menu);
 	return 1;
 }
 BOOL TCMode_OnIdle(void)

@@ -578,17 +578,6 @@ int filesystem_get_string(HFILE hFile, int* pFile_pos, char* pString, int string
 	return retlen;
 }
 
-/*
-//put string in a file
-//ret new len of a file
-int filesystem_put_string(HFILE hFile, char* pString)
-{
-	int pos = filesystem_get_length(hFile);
-	int rlen = filesystem_file_put(hFile, &pos, (BYTE*)pString, strlen(pString));
-	if(rlen==E_FAIL)return E_FAIL;
-	return rlen+pos;
-}
-*/
 
 
 //get value in int format from the txt file, depends on section and value name
@@ -880,36 +869,17 @@ int ini_read_system_ini(char* pExt)
 		return E_FAIL;
 	interProcControl.rsModbus.wdLowLimit = rVal;
 	
-/*	ret = filesystem_ini_get_float(hfile, "interProcControl", "fStabGain", &interProcControl.rsModbus.fStabGain);	
-	if(ret==E_FAIL)
-		return E_FAIL;*/
 
 	ret = filesystem_ini_get_float(hfile, "SPRDModeControl", "fDRThreshold", &SPRDModeControl.fDRThreshold);	
 	if(ret==E_FAIL)
 		return E_FAIL;
 
-/*	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "iDimension", &rVal);	
-	if(ret==E_FAIL)
-		return E_FAIL;
-	SPRDModeControl.iDimension = rVal;*/
-	
-/*	ret = filesystem_ini_get_float(hfile, "SPRDModeControl", "operation_search_sigma", &SPRDModeControl.operation_search_sigma);	
-	if(ret==E_FAIL)
-		return E_FAIL;
-
-	ret = filesystem_ini_get_float(hfile, "SPRDModeControl", "sleepmode_search_sigma", &SPRDModeControl.sleepmode_search_sigma);	
-	if(ret==E_FAIL)
-		return E_FAIL;*/
 
 	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "false_alarm_period_oper", &rVal);	
 	if(ret==E_FAIL)
 		return E_FAIL;
 	SPRDModeControl.false_alarm_period_oper = rVal;
 
-/*	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "false_alarm_period_sleep", &rVal);	
-	if(ret==E_FAIL)
-		return E_FAIL;
-	SPRDModeControl.false_alarm_period_sleep = rVal;*/
 
 	ret = filesystem_ini_get_int(hfile, "soundControl", "bSound", &rVal);
 	if(ret==E_FAIL)
@@ -920,12 +890,10 @@ int ini_read_system_ini(char* pExt)
 	InterProc_setHighLimit(interProcControl.rsModbus.wdHighLimit);
 	//!!!!!!!!!!! must be switch to selected dimension
 
-//	SPRDModeControl.sleepmode_search_sigma = SETUPMode_calcSigma(SPRDModeControl.false_alarm_period_sleep);
 	SETUPMode_calcSigma(SPRDModeControl.false_alarm_period_oper);
 	
 	//must be setup sigma thresholds
 	InterProc_setSigmaSearchThresholds();
-//	InterProc_setSigmaSleepThresholds(SPRDModeControl.sleepmode_search_sigma);
 	
 	
 	return S_OK;

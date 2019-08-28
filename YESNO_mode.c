@@ -139,7 +139,6 @@ BOOL YESNOMode_OnExit(void)
 }
 BOOL YESNOMode_OnWakeUp(void)
 {
-//	YESNOMode_showModeScreen();
 	return 1;
 }
 BOOL YESNOMode_OnPowerDown(void)

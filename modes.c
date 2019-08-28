@@ -69,11 +69,7 @@ void Modes_Init(void)
 //set active mode
 void Modes_setActiveMode(const struct tagMode* pMode)
 {
-	//allow NULL mode (power down)
-/*	if(!pMode)
-	{
-		exception(__FILE__,__FUNCTION__,__LINE__,"pMode must not be NULL");
-	}*/
+	//pMode can be NULL mode (power down)
 	
 	if(modeControl.pMode != pMode)
 		Modes_OnExit();
@@ -453,7 +449,6 @@ void Modes_showMenu()
 			Display_outputText("\r");	
 		}
 	}
-//	Display_outputTextByLang((char*)modeControl.pMenu->pMenuItemAr[modeControl.pMenu->pGetMenuItemsAr()]);
 		
 	Display_drawRect(MENU_LEFT,y,MENU_LEFT+MENU_WIDTH-1,y+dy-1,YELLOW_DARK);
 	Modes_showMarker();
@@ -473,14 +468,6 @@ void Modes_showMarker(void)
 						 y+i,
 						 MENU_LEFT+MENU_WIDTH-1-MENU_MARKER_OFFSET,
 						 modeControl.pMode->modeNameClr);
-	//just rect
-/*	
-	Display_drawRect_xor(MENU_LEFT+MENU_MARKER_OFFSET,
-						 y,
-						 MENU_LEFT+MENU_WIDTH-1-MENU_MARKER_OFFSET,
-						 y-MENU_MARKER_HEIGHT,
-						 WHITE);
-	*/
 }
 
 void Modes_menuUp(void)

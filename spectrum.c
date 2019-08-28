@@ -321,7 +321,6 @@ BOOL Spectrum_OnTimer(void)
 		spectrumControl.bStopAcq = TRUE;
 		spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart - spectrumControl.acqSpectrum.wRealTime;
 		SoundControl_BeepSeq(beepSeq_OK);
-//		sound_playSample(SND_OK);
 	}
 
 	//save spectrum if acquired in RID mode
@@ -671,9 +670,6 @@ void Spectrum_showAcqData(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(LEFT);
 	Display_setCurrentFont(fnt8x16);	//set current font
-/*	float cps =(float)spectrumControl.pShowSpectrum->dwCount;
-	if(spectrumControl.pShowSpectrum->wAcqTime)
-		cps /= (float)spectrumControl.pShowSpectrum->wAcqTime;*/
 	float cps = SPRDModeControl.fCps;
 	UINT acqt = spectrumControl.pShowSpectrum->wAcqTime;
 	UINT cnt = spectrumControl.pShowSpectrum->dwCount;
@@ -706,12 +702,7 @@ void Spectrum_showSpectrum(void)
 	//find maximum to scale
 	for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 	{
-//!!!!!!!!!!!!!!
-////commented for id test		
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
-//		val = identifyControl.BufSpec[i];
-	//	if(val&0x80000000)val=0;
-//!!!!!!!!!!
 		
 		if(spectrumControl.bLogView && val)
 		{
@@ -762,12 +753,7 @@ void Spectrum_showSpectrum(void)
 
 	if(spectrumControl.iViewChannelFrom!=0)
 	{
-//!!!!!!!!!!!!!!
-////commented for id test		
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[spectrumControl.iViewChannelFrom];
-//		val = identifyControl.BufSpec[spectrumControl.iViewChannelFrom];
-	//	if(val&0x80000000)val=0;
-//!!!!!!!!!!
 		
 		if(spectrumControl.bLogView && val)
 		{
@@ -786,12 +772,7 @@ void Spectrum_showSpectrum(void)
 	{
 		for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 		{
-//!!!!!!!!!!!!!!
-////commented for id test		
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
-//		val = identifyControl.BufSpec[i];
-	//	if(val&0x80000000)val=0;
-//!!!!!!!!!!
 		
 			if(spectrumControl.bLogView && val)
 			{
@@ -812,12 +793,7 @@ void Spectrum_showSpectrum(void)
 		valmax = 0;
 		for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 		{
-//!!!!!!!!!!!!!!
-////commented for id test		
 			val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
-//		val = identifyControl.BufSpec[i];
-	//	if(val&0x80000000)val=0;
-//!!!!!!!!!!
 			if(val>valmax)
 				valmax=val;
 			//calc to go to the next x position		
@@ -947,10 +923,6 @@ void Spectrum_menu1_gaincode_edit_done(BOOL bOK)
 		interProcControl.rsModbus.fStabGain = (float)atof(EditModeControl.edit_buf);
 		InterProc_setGain();
 		Spectrum_startAcq();		
-/*		if(!ini_write_system_ini_int("interProcControl", "fStabGain", interProcControl.rsModbus.fStabGain))
-		{
-			;//!!!!!!!!!error
-		}*/
 	}
 	Modes_setActiveMode(&modes_SpectrumMode);
 }
@@ -966,7 +938,6 @@ void Spectrum_menu1_gaincode_edit_done(BOOL bOK)
 
 BOOL Spectrum_menu1_lowlimit(void)
 {
-//	spectrumControl.pCurMode = modeControl.pMode;
 	EditMode_EditInt("Lower limit\0""Lower limit\0""Lower limit\0""Нижний порог",
 					 interProcControl.rsModbus.wdLowLimit,
 					 0,
@@ -993,7 +964,6 @@ void Spectrum_menu1_lowlimit_edit_done(BOOL bOK)
 
 BOOL Spectrum_menu1_highlimit(void)
 {
-//	spectrumControl.pCurMode = modeControl.pMode;
 	EditMode_EditInt("Upper limit\0""Upper limit\0""Upper limit\0""Верхний порог",
 					 interProcControl.rsModbus.wdHighLimit,
 					 3000,
@@ -1031,32 +1001,6 @@ void Spectrum_menu1_highlimit_edit_done(BOOL bOK)
 
 
 
-
-
-
-
-
-
-/*
-
-
-//place or hide second marker
-BOOL Spectrum_menu1_secondmarker(void)
-{
-	if(spectrumControl.iMarkerChannel2==-1)
-	{//place second marker
-		spectrumControl.iMarkerChannel2 = spectrumControl.iMarkerChannel;
-		spectrumControl.iMarkerChannel += 4;
-		if(spectrumControl.iMarkerChannel>spectrumControl.iViewChannelTo)
-			spectrumControl.iMarkerChannel -= 8;
-	}else
-	{//one marker
-		spectrumControl.iMarkerChannel2 = -1;
-	}
-	Spectrum_calcCount();
-	return (BOOL)1;
-}
-*/
 
 
 
@@ -1114,16 +1058,6 @@ const char* Spectrum_menu1_highlimit_onUpdate(void)
 	else
 		return "Upper limit\0""Upper limit\0""Upper limit\0""Верхний порог";
 }
-/*
-const char* Spectrum_menu1_secondmarker_onUpdate(void)
-{
-	if(spectrumControl.iSpectrumControlMode==enum_scm_marker_movment)
-	{
-		return "Second marker\0""Second marker\0""Second marker\0""Второй маркер";
-	}
-	return NULL;
-}*/
-
 
 
 
@@ -1700,11 +1634,7 @@ void Spectrum_peakProc(void)
 		if(is<0)is = 0;
 		if(ie>=CHANNELS)ie = CHANNELS-1;
 		DWORD dwarea=0;
-//		float farea;
 		for(;is<=ie;is++)dwarea+=spectrumControl.pShowSpectrum->dwarSpectrum[is];
-//		farea = (float)dwarea;
-//		if(spectrumControl.pShowSpectrum->wAcqTime)
-	//		farea /= (float)spectrumControl.pShowSpectrum->wAcqTime;
 		
 		char buf[100];
 		memset(buf,0,sizeof(buf));

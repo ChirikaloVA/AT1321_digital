@@ -49,26 +49,19 @@ const WORD beepSeq_OK[]={125,SOUND_FREQ_1_DO,250,SOUND_FREQ_1_MI,0};
 
 
 
+//D#(rediez) G#(soldiez) A#(LAdiez) C(DO)
 const WORD beepSeq_ON[]={
-20,SOUND_FREQ_1_DO,
-20,SOUND_FREQ_1_DO*1.1,
-20,SOUND_FREQ_1_DO*1.2,
-20,SOUND_FREQ_1_DO*1.3,
-20,SOUND_FREQ_1_DO*1.4,
-20,SOUND_FREQ_1_DO*1.5,
-200,SOUND_FREQ_1_DO*1.6,
+125,2*SOUND_FREQ_1_FA,
+125,4*SOUND_FREQ_1_FA,
 0
 };
 const WORD beepSeq_OFF[]={
-20,SOUND_FREQ_1_DO*1.6,
-20,SOUND_FREQ_1_DO*1.5,
-20,SOUND_FREQ_1_DO*1.4,
-20,SOUND_FREQ_1_DO*1.3,
-20,SOUND_FREQ_1_DO*1.2,
-20,SOUND_FREQ_1_DO*1.1,
-200,SOUND_FREQ_1_DO,
+125,4*SOUND_FREQ_1_FA,
+125,2*SOUND_FREQ_1_FA,
 0
 };
+
+
 
 /*
 const WORD beepSeq_ON[]={
@@ -90,8 +83,6 @@ struct tagSoundData soundControl;
 
 void SoundControl_Init(void)
 {
-	DIR_ISD_CS=1;
-	SET_ISD_CS;
 	
 	//soundControl.bSounding = FALSE;
 	soundControl.flg = 0;
@@ -383,136 +374,6 @@ void SoundControl_StopBeep(void)
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//24/11/09
-/*
-
-void sound_ISD4004_Init(void)
-{
-	;
-}
-*/
-void sound_ISD4004_sendCmd(BYTE cmd, WORD addr, BYTE* pFlags, WORD* pAddr)
-{
-	BYTE status1;
-	BYTE status2;
-	BYTE status3;
-	
-	//reverse address
-	WORD raddr=addr;
-	addr=0;
-	for(int i=0;i<16;i++)
-	{
-		addr |= raddr&0x01;
-		raddr>>=1;
-		addr<<=1;
-	}
-	
-	CLR_ISD_CS;
-	EEPROM_clearFIFO();
-	
-	while(!SSP1SR_bit.TNF);
-	SSP1DR = LO2BYTE(addr);
-	while(!SSP1SR_bit.TFE);
-	while(!SSP1SR_bit.RNE);
-	status1 = SSP1DR;
-	
-	while(!SSP1SR_bit.TNF);
-	SSP1DR = LOBYTE(addr);
-	while(!SSP1SR_bit.TFE);
-	while(!SSP1SR_bit.RNE);
-	status2 = SSP1DR;
-
-	while(!SSP1SR_bit.TNF);
-	SSP1DR = cmd;
-	while(!SSP1SR_bit.TFE);
-	while(!SSP1SR_bit.RNE);
-	status3 = SSP1DR;
-	
-	SET_ISD_CS;
-	
-	*pFlags = (status1>>6)&0x03;
-	raddr = ((((DWORD)status1<<16)|((DWORD)status2<<8)|(DWORD)status3)>>6)&0xffff;
-	addr = 0;
-	for(int i=0;i<16;i++)
-	{
-		addr |= raddr&0x01;
-		raddr>>=1;
-		addr<<=1;
-	}
-	
-	*pAddr = addr;
-}
-/*
-
-void sound_ISD4004_PowerUp(void)
-{
-//	CLR_SND_AU;
-	sound_ISD4004_sendCmd(4,0,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-//	SET_SND_AU;
-}
-*/
-
-
-void sound_ISD4004_StopPwdn(void)
-{
-//	CLR_SND_AU;
-	sound_ISD4004_sendCmd(0x08,0,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-	PowerControl_sleep(50);
-//	SET_SND_AU;
-}
-
-/*
-void sound_ISD4004_Stop(void)
-{
-	sound_ISD4004_sendCmd(0x0c,0,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-	PowerControl_sleep(50);
-}
-
-void sound_ISD4004_Record(WORD position)
-{
-	SoundControl_turnON();
-	sound_ISD4004_PowerUp();
-	PowerControl_sleep(25);
-	PowerControl_sleep(25);
-	sound_ISD4004_sendCmd(5,position,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-}
-
-void sound_ISD4004_Play(WORD position)
-{
-	sound_ISD4004_sendCmd(7,position,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-}
-
-//play from current position
-void sound_ISD4004_PlayCur(void)
-{
-	sound_ISD4004_sendCmd(0xf,0,(BYTE*)&soundControl.flg, (WORD*)&soundControl.addr);
-}
-
-//check that sound ends and shut down isd4004
-void sound_checkToShutDown(void)
-{
-	if(!PIN_ISD_INT)
-	{//ends
-		sound_ISD4004_StopPwdn();
-	}
-}
-*/
-
-
-
-
-//play sample
-/*void sound_playSample(UINT orderPos)
-{
-	if(soundControl.bSound)
-	{
-		sound_ISD4004_Stop();
-		sound_ISD4004_Play(sample_addr[orderPos]);
-	}
-}
-*/
 
 
 ///////////////////////////////////////////////////////////////////////////

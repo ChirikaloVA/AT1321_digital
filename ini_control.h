@@ -34,7 +34,6 @@ BOOL filesystem_restore_main_lib(void);
 
 
 int filesystem_get_string(HFILE hFile, int* pFile_pos, char* pString, int string_len);
-//int filesystem_put_string(HFILE hFile, char* pString);
 
 
 int filesystem_find_value(HFILE hFile, int start_file_pos, const char* pName);

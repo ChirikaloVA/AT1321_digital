@@ -341,25 +341,6 @@ void Display_drawLine_xor(int x1, int y1, int x2, int y2, COLORREF clr)
 			x1++;
 		};
 	}
-	/*
-	int x,y,t,e,dx,dy,denom,xinc = 1,yinc = 1,vertlonger = 0, aux;
-	dx = x2-x1; dy = y2-y1;
-	if(dx<0){xinc = -1; dx = -dx;}
-	if(dy<0){yinc = -1; dy = -dy;}
-	if(dy>dx){vertlonger=1;aux = dx; dx=dy;dy=aux;}
-	denom = dx<<1;
-	t = dy<<1;
-	e = -dx; x=x1;y=y1;
-	while(dx-->=0)
-	{
-		Display_dot_xor(x, y, clr);
-		if((e+=t)>0)
-		{
-			if(vertlonger)x+=xinc;else y+=yinc;
-			e-=denom;
-		}
-		if(vertlonger)y+=yinc;else x+=xinc;
-	};*/
 }
 
 
@@ -503,8 +484,6 @@ void Display_drawVLine_xor(int x, int y1, int y2, COLORREF clr)
 		y1=y2;
 		y2=y;
 	}
-//	for(int i=y1;i<=y2;i++)
-	//	Display_dot_xor(x, i, clr);		
 	
 	
 	Display_Init_8bit_262k();
@@ -626,8 +605,6 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 		x1=x2;
 		x2=x;
 	}
-//	for(int i=y1;i<=y2;i++)
-	//	Display_dot_xor(x, i, clr);		
 
 	Display_Init_8bit_262k();
 
@@ -835,7 +812,6 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 		CLR_RS;
 		DisplayData = 0x22;
 		SET_RS;
-//		BYTE c1=LOBYTE(clr),c2=LO2BYTE(clr),c3=LO3BYTE(clr);
 	
 		hlen = len>>4;
 		llen = len&0xf;

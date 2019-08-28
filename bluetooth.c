@@ -140,8 +140,6 @@ void Bluetooth_UART3_Init(void)
 	PCONP_bit.PCUART3 = 1;	//give power to UART2
 
 	//===== Chirikalo
-	//PINSEL0_bit.P0_0 = 0x02;	//select pins for UART2
-	//PINSEL0_bit.P0_1 = 0x02;
     PINSEL0_bit.P0_0 = 0x02;	//select pins for GPIO
 	PINSEL0_bit.P0_1 = 0x02;
         //===== Chirikalo
@@ -437,21 +435,6 @@ void Bluetooth_sendSequenceEx(int len)
 //first dispatcher of received data
 void Bluetooth_rcvData_first_Dispatcher(void)
 {
-/*	if(USBRSControl.bBridgeMode)
-	{//bridge mode
-		if(bluetoothControl.uart.rcvBuffLen_safe>0 && bluetoothControl.uart.rcvBuffLen_safe<USB_TRM_BUF_LEN)
-		{//len if valid
-			memcpy((void*)USBRSControl.uart.trmBuff,bluetoothControl.uart.rcvBuff_safe,bluetoothControl.uart.rcvBuffLen_safe);
-			USBRS_sendSequence(bluetoothControl.uart.rcvBuffLen_safe);
-			SAFE_DECLARE;
-			DISABLE_VIC;
-			bluetoothControl.uart.trmBuffLen = 0;
-			bluetoothControl.uart.rcvBuffLen = 0;
-			bluetoothControl.uart.bRcvError = RCV_OK;
-			bluetoothControl.uart.bDataReceived = 0;
-			ENABLE_VIC;
-		}
-	}else*/
 	{
 		if(bluetoothControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
 			   //21/01/2010

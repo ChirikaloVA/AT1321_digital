@@ -25,7 +25,6 @@ extern const BYTE bmp_bat4[];
 extern const BYTE bmp_bth[];
 extern const BYTE bmp_gps[];
 extern const BYTE bmp_memlow[];
-//extern const BYTE bmp_usbrs[];
 extern const BYTE bmp_sound[];
 extern const BYTE bmp_vibro[];
 extern const BYTE bmp_silent[];
@@ -49,9 +48,6 @@ extern const BYTE bmp_silent[];
 
 #define LIME RGB(0,63,63)
 #define PURPLE RGB(63,0,63)
-/*#define  RGB(,,)
-#define  RGB(,,)
-#define  RGB(,,)*/
 
 ////////////////////////////////
 
@@ -218,7 +214,6 @@ int Display_showSymbol(char symbol);
 
 void Display_setTextColor(COLORREF clr);
 
-//void Display_testForNextLine(char symbol);
 void Display_gotoNextLine(void);
 
 //вывод текста

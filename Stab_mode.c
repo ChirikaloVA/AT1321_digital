@@ -54,10 +54,6 @@ const char* STABMode_RightOnUpdate(void)//
 	   STABModeControl.stabStep!=STB_ERROR)return NULL;	//source can not be selected in in those modes
 	
 	return "rad.\rsource\0""rad.\rsource\0""rad.\rsource\0""рад.\rисточн";
-/*	if(STABModeControl.bByCs137)
-		return "check\rsample\0""check\rsample\0""check\rsample\0""контр\rпроба";
-	else
-		return "\rcs137\0""\rcs137\0""\rcs137\0""\rcs137";*/
 }
 const char* STABMode_UpOnUpdate(void)//
 {
@@ -259,11 +255,6 @@ BOOL STABMode_OnUp(void)
 		case STB_ERROR:
 		case STB_BEGIN:
 		case STB_END:
-/*			if(kStab1 == 1234 || kStab2 == 4321 || kStab1 == 0 || kStab2 == 0)
-			{
-				STABModeControl.stabStep = STB_ERROR;
-				break;
-			}*/
 
 			STABModeControl.currentPeakPos = 0;	//clear last found peak position
 			
@@ -344,7 +335,6 @@ void STABMode_showModeScreen(void)
 	Display_checkForClearLine();
 	Display_setTextColor(ORANGE);	//set text color
 	Display_outputTextByLang("Stabilization\0""Stabilization\0""Stabilization\0""Стабилизация");
-//	Display_drawHLine(0,216,X_SCREEN_MAX,RGB(0,32,0));
 	Display_outputText("\r");
 	Display_setTextColor(YELLOW);	//set text color
 	
@@ -421,12 +411,6 @@ void STABMode_showModeScreen(void)
 		sprintf(buf,"%.1f", interProcControl.rsModbus.fStabGain);
 		Display_outputText(buf);
 	}
-/*	Display_outputTextByLang("peakFactor: \0""peakFactor: \0""peakFactor: \0""peakFactor: ");
-	sprintf(buf,"%.1f", STABModeControl.peakFactor);
-	Display_outputText(buf);
-	Display_outputTextByLang("peakThreshold: \0""peakThreshold: \0""peakThreshold: \0""peakThreshold: ");
-	sprintf(buf,"%.1f",STABModeControl.peakThreshold);
-	Display_outputText(buf);*/
 	
 	Display_setTextJustify(LEFT);
 	
@@ -539,7 +523,6 @@ BYTE STABMode_getPeakEx(void)
 							STABModeControl.peakThreshold*=BASE_PEAK_THRESHOLD;
 							STABModeControl.peakThreshold /= STABModeControl.currentPeakPos*sqrt(STABModeControl.currentPeakPos);
 							if(STABModeControl.peakThreshold>40)STABModeControl.peakThreshold=40;
-							//else if(STABModeControl.peakThreshold<BASE_PEAK_THRESHOLD)STABModeControl.peakThreshold=BASE_PEAK_THRESHOLD;
 	
 							STABModeControl.stab_error = BASE_STAB_ERROR*BASE_PEAK_THRESHOLD/STABModeControl.peakFactor;
 							if(STABModeControl.stab_error<BASE_STAB_ERROR_MIN)STABModeControl.stab_error = BASE_STAB_ERROR_MIN;

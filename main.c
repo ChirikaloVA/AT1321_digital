@@ -49,27 +49,32 @@ B - безядерные исполнения
 
 #define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
 
-const char txtVersion[]=VERT(4, 7, 
-#ifdef _SNM
-#ifdef _IAEA
-I
-#else
-A
+
+#ifndef SUBVER
+#error "SUBVER not set!!!"
 #endif
-#else	//#ifdef _SNM
-#ifdef BNC
-C
-#else
-B
-#endif
-#endif	//#ifdef _SNM
-);
+
+const char txtVersion[]=VERT(4, 8, SUBVER);
+//#ifdef _SNM
+//#ifdef _IAEA
+//I
+//#else
+//A
+//#endif
+//#else	//#ifdef _SNM
+//#ifdef BNC
+//C
+//#else
+//B
+//#endif
+//#endif	//#ifdef _SNM
+//);
 
 
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "05.07.2019"
+#define OUR__DATE__ "28.08.2019"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 
@@ -190,7 +195,6 @@ __noreturn void main(void)
 	//stage 6.1 sound init
 	//=================sound init==========
 	SoundControl_Init();
-//	SoundControl_turnON();//must be ON then OFF to enter right mode
 	
 	
 	
@@ -239,11 +243,8 @@ __noreturn void main(void)
 	
 	
 //здесь и не ранее! выключаем подсистему звука	
-	sound_ISD4004_StopPwdn();
 	SoundControl_turnOFF();
 	SoundControl_turnON();
-	SoundControl_BeepSeq(beepSeq_ON);
-//	sound_playSample(SND_TURNON);
 
 	
 
@@ -258,7 +259,6 @@ __noreturn void main(void)
 	
 	//====================== check for discharged
 
-//	PowerControl_emergencyCheckBattery();
 
 	//ident init
 	identify_InitIdent();
@@ -286,7 +286,7 @@ __noreturn void main(void)
 		PowerControl_startBootLoader();
 	}
 
-	
+
 	
 
 	
@@ -318,12 +318,12 @@ __noreturn void main(void)
 	Display_turnOFF_LEDs();
 
 	
+	//move sound down to start later
+	SoundControl_BeepSeq(beepSeq_ON);
+	
 	PowerControl_kickWatchDog();
 	filesystem_check_and_restore();
 	
-//	SoundControl_playSample(SI_ADJECT, 0);
-	
-//	PowerControl_emergencyCheckBattery();
 	
 	//отобразить экран прогрева, версии
 	Display_warmup_display_start();
@@ -378,7 +378,6 @@ __noreturn void main(void)
 	InterProc_setMeasurementMode();
 
 	//read bkg values
-//	InterProc_getBkgDR();
 	InterProc_getBkgCPS();
 
 	InterProc_resetAveraging();
@@ -442,9 +441,6 @@ __noreturn void main(void)
 			PowerControl_kickWatchDog();
 			///////////////
 
-			//check to turn off media controller
-//			sound_checkToShutDown();
-			
 			
 			if(powerControl.dwBatteryAlarmCnt>BAT_LOW_TIME_TO_OFF)
 			{//turn off device by bat low status
@@ -590,48 +586,8 @@ void main_execute_sys(HFILE hfile)
 	//turn off device
 	main_execute__Modes_OnTurnOFF( hfile);
 	
-//	main_execute__startBurn(hfile);
-	//stop burn sound
-//	main_execute__stopBurn(hfile);
 }
 
-
-/*
-
-
-//start burn sound
-void main_execute__startBurn(HFILE hfile)
-{
-	int retlen;
-	int order;
-	int position;
-	retlen = filesystem_ini_get_int(hfile, "Sound_startBurn", "order", &order);
-	if(retlen!=S_OK)return;
-	retlen = filesystem_ini_get_int(hfile, "Sound_startBurn", "position", &position);
-	if(retlen!=S_OK)return;
-	//wait for answer
-	while(!USBRSControl.uart.bTrmReady)PowerControl_sleep(10);
-	PowerControl_sleep(1300);
-	sound_ISD4004_Record(position);
-}
-
-//stop burn sound
-void main_execute__stopBurn(HFILE hfile)
-{
-	int retlen;
-	int order;
-	int position;
-	retlen = filesystem_ini_get_int(hfile, "Sound_stopBurn", "order", &order);
-	if(retlen!=S_OK)return;
-	retlen = filesystem_ini_get_int(hfile, "Sound_stopBurn", "position", &position);
-	if(retlen!=S_OK)return;
-	sound_ISD4004_Stop();
-	sound_ISD4004_Record(position);
-	sound_ISD4004_Stop();
-
-
-}
-*/
 
 
 //get screen in file

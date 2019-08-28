@@ -789,7 +789,6 @@ int filesystem_file_put(HFILE hFile, /*file descriptor = number of file in file 
 			if(buf_index==E_FAIL)
 			{
 				return E_FAIL;	//invalid file
-//				exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 			}
 		}
 		int calc_len = CLASTER_DATA_LEN-buf_index;

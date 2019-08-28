@@ -1070,11 +1070,6 @@ void SETUPMode_accessDenied(void)
 	Display_outputTextByLang("Access denied\0""Access denied\0""Access denied\0""В доступе отказано");
 	PowerControl_sleep(1000);
 	PowerControl_sleep(1000);
-/*	int cnt = 20;
-	do
-	{
-		PowerControl_sleep(100);
-	}while(!KeyboardControl_anyKeyPressed_hardware_intcall() && --cnt);*/
 }
 
 
@@ -1091,11 +1086,6 @@ void SETUPMode_accessGranted(void)
 	Display_outputTextByLang("Access granted\0""Access granted\0""Access granted\0""Доступ открыт");
 	PowerControl_sleep(1000);
 	PowerControl_sleep(1000);
-/*	int cnt = 20;
-	do
-	{
-		PowerControl_sleep(100);
-	}while(!KeyboardControl_anyKeyPressed_hardware_intcall() && --cnt);*/
 }
 
 
@@ -1154,7 +1144,6 @@ BOOL SETUPMode_OnExit(void)
 }
 BOOL SETUPMode_OnWakeUp(void)
 {
-//	SETUPMode_showModeScreen();
 	return 1;
 }
 BOOL SETUPMode_OnPowerDown(void)
@@ -1218,14 +1207,6 @@ void SETUPMode_showVersion(int y)
 	Display_outputText("NaI(Tl) D25x40mm\r");
 	Display_outputTextByLang("MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""АЦП: 1024 канала\r");
 	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""Счетчик ГМ, USB, Bluetooth, GPS\r");
-//	Display_outputTextByLang("GM counter: yes\r\0""GM counter: yes\r\0""GM counter: yes\r\0""Счетчик ГМ: да\r");
-//	Display_outputTextByLang("Neutron detect.: no\r\0""Neutron detect.: no\r\0""Neutron detect.: no\r\0""Дет.нейтронов: нет\r");
-//	Display_outputTextByLang("USB: yes\r\0""USB: yes\r\0""USB: yes\r\0""USB: да\r");
-//	Display_outputTextByLang("Bluetooth: yes\r\0""Bluetooth: yes\r\0""Bluetooth: yes\r\0""Bluetooth: да\r");
-//	Display_outputTextByLang("GPS: yes\r\0""GPS: yes\r\0""GPS: yes\r\0""GPS: да\r");
-//	Display_outputTextByLang("Memory rewrites:\0""Memory rewrites:\0""Memory rewrites:\0""Перезаписей:");
-//	sprintf(buf,"%u\r",(UINT)EEPROMControl.wdEepromWritesCounter);
-//	Display_outputText(buf);
 #ifdef BNC	
 	Display_outputText("2015 © Manufacturer\r");
 #else
@@ -1256,14 +1237,10 @@ void SETUPMode_showSpecification(void)
 #endif
 	Display_outputTextByLang("Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Энергет.диапазон: 20-3000 keV\r");
 	Display_outputTextByLang("\r\0""\r\0""\r\0""\r");
-//	Display_outputTextByLang("Operational sigma: \0""Operational sigma: \0""Operational sigma: \0""Оперативная сигма: ");
 	Display_outputTextByLang("False alarm period (min): \0""False alarm period, min: \0""False alarm period, min: \0""Период ложн.тревог, мин: ");
 	char buf[20];
 	sprintf(buf,"%u\r",SPRDModeControl.false_alarm_period_oper);
 	Display_outputText(buf);
-//	Display_outputTextByLang("Sleep mode FAP (minutes): \0""Sleep mode FAP (minutes): \0""Sleep mode FAP: (minutes) \0""Дежурный ПЛТ (минут): ");
-	//sprintf(buf,"%u\r",SPRDModeControl.false_alarm_period_sleep);
-//	Display_outputText(buf);
 	
 	///////////////////////
 }
@@ -1276,7 +1253,6 @@ void SETUPMode_showGeigerInfo(void)
 	/////////////////////////////////////////////////////////////////////////////
 	//show free memory
 	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,171);	//set text window
-//	Display_clearTextWin(300);
 	Display_setTextLineClear(1);
 	Display_checkForClearLine();
 	Display_outputTextByLang("GM counter\r\0""GM counter\r\0""GM counter\r\0""Счетчик ГМ\r");
@@ -1290,8 +1266,6 @@ void SETUPMode_showGeigerInfo(void)
 	Display_outputText(SETUPModeControl.buf3);
 	Display_outputText("\r");
 
-//	Display_setTextWin(0,MODE_USER_TOP-76,X_SCREEN_SIZE,95);	//set text window
-//	Display_clearTextWin(200);
 	Display_outputTextByLang("Total counts: \0""Total counts: \0""Total counts: \0""Общий счет: ");
 	Display_outputText(SETUPModeControl.buf4);
 	Display_outputText("\r");
@@ -1322,7 +1296,6 @@ void SETUPMode_showBatteryInfo(void)
 	Display_setTextColor(YELLOW);	//set text color
 	/////////////////////////////////////////////////////////////////////////////
 	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,76);	//set text window
-//	Display_clearTextWin(10);
 	Display_setTextLineClear(1);
 	Display_checkForClearLine();
 	Display_outputTextByLang("Battery\r\0""Battery\r\0""Battery\r\0""Батарея\r");
@@ -1330,8 +1303,6 @@ void SETUPMode_showBatteryInfo(void)
 	Display_outputText(SETUPModeControl.buf1);
 	Display_outputText("\r");
 
-//	Display_setTextWin(0,MODE_USER_TOP-38,X_SCREEN_SIZE,38);	//set text window
-//	Display_clearTextWin(300);
 	
 	if(!powerControl.bBatteryAlarm || powerControl.batCapacity<=VREF_BAT_MIN_CRITICAL)
 		Display_outputTextByLang("Status: charged\r\0""Status: charged\r\0""Status: charged\r\0""Состояние: заряжены\r");
@@ -1377,11 +1348,6 @@ void SETUPMode_showLibrary(void)
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("Threshold: \0""Threshold: \0""Threshold: \0""Порог: ");
 	Display_outputText(buf);
-/*	ret = sprintf(buf, "%d\r", identifyControl.MINENERGY);
-	if(ret>=sizeof(buf))
-		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
-	Display_outputTextByLang("Min.energy, keV: \0""Min.energy, keV: \0""Min.energy, keV: \0""Мин.энергия, кэВ: ");
-	Display_outputText(buf);*/
 	ret = sprintf(buf, "%.1f%%\r", (float)identifyControl.SCALEINSTABILITY/10);
 	if(ret>=sizeof(buf))
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
@@ -1600,7 +1566,6 @@ void SETUPMode_prirabotka(BOOL bYes)
 		powerControl.bBatteryAlarm = 0;
 		EEPROM_UpdateEssentialDataInEeprom();
 
-//		CIIR_bit.IMSEC = 0;	//turn off clock interrupts
 		Display_turnOFF_LEDs();
 
 		Display_turnOFF();
@@ -1624,9 +1589,7 @@ void SETUPMode_prirabotka(BOOL bYes)
 			
 			powerControl.bInPowerDownMode = 1;
 	
-//			Display_flashGreenLED();
 			Display_flashRedLED();
-//			Display_flashOrangeLED();
 			
 			PowerControl_enterPowerDownMode();
 		}while(!powerControl.bAwakedByKeyboard);
@@ -1755,80 +1718,6 @@ const char* SETUPMode_menu1_setSF_onUpdate(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//specification settings
-
-/*
-const char* SETUPMode_menu1_setSigmaOperation_onUpdate(void)
-{
-	return "Operational sigma\0""Operational sigma\0""Operational sigma\0""Оперативная сигма";
-}
-
-
-BOOL SETUPMode_menu1_setSigmaOperation(void)
-{
-	EditMode_EditFloat("Operational mode alarm sigma threshold\0""Operational mode alarm sigma threshold\0""Operational mode alarm sigma threshold\0""Порог тревоги в сигмах для оперативного режима",
-					 SPRDModeControl.operation_search_sigma,
-					 2.00000,
-					 10.00000,
-					 "\0""\0""\0""",
-					 "%f",
-					 SETUPMode_menu1_setSigmaOperation_edit_done);
-	return (BOOL)-1;
-}
-
-
-void SETUPMode_menu1_setSigmaOperation_edit_done(BOOL bOK)
-{
-	if(bOK)
-	{
-		SPRDModeControl.operation_search_sigma  = atof(EditModeControl.edit_buf);
-		ini_write_system_ini_float("SPRDModeControl", "operation_search_sigma", SPRDModeControl.operation_search_sigma);
-		InterProc_setSigmaSearchThresholds(SPRDModeControl.operation_search_sigma);
-	}
-	SETUPMode_setModeOnSelf();
-}
-
-
-
-
-
-
-
-
-
-const char* SETUPMode_menu1_setSigmaSleep_onUpdate(void)
-{
-	return "Sleepmode sigma\0""Sleepmode sigma\0""Sleepmode sigma\0""Дежурная сигма";
-}
-
-BOOL SETUPMode_menu1_setSigmaSleep(void)
-{
-	EditMode_EditFloat("Sleep mode alarm sigma threshold\0""Sleep mode alarm sigma threshold\0""Sleep mode alarm sigma threshold\0""Порог тревоги в сигмах для дежурного режима",
-					 SPRDModeControl.sleepmode_search_sigma,
-					 2.00000,
-					 10.00000,
-					 "\0""\0""\0""",
-					 "%f",
-					 SETUPMode_menu1_setSigmaSleep_edit_done);
-	return (BOOL)-1;
-}
-
-
-void SETUPMode_menu1_setSigmaSleep_edit_done(BOOL bOK)
-{
-	if(bOK)
-	{
-		SPRDModeControl.sleepmode_search_sigma  = atof(EditModeControl.edit_buf);
-		ini_write_system_ini_float("SPRDModeControl", "sleepmode_search_sigma", SPRDModeControl.sleepmode_search_sigma);
-		InterProc_setSigmaSleepThresholds(SPRDModeControl.sleepmode_search_sigma);
-	}
-	SETUPMode_setModeOnSelf();
-}
-
-*/
-
-
 
 
 BOOL SETUPMode_menu1_select_lib(void)
@@ -1926,35 +1815,6 @@ BOOL SETUPMode_menu1_select_lib_onPrevPage(void)
 }
 
 
-/*
-BOOL SETUPMode_menu1_dimension(void)
-{
-	if(++SPRDModeControl.iDimension>=MAX_DIMS)
-		SPRDModeControl.iDimension=0;
-	if(!ini_write_system_ini_int("SPRDModeControl", "iDimension", SPRDModeControl.iDimension))
-	{
-		;//!!!!!!!!!error
-	}
-	return (BOOL)0;
-}
-
-const char* SETUPMode_menu1_dimension_onUpdate(void)
-{
-	switch(SPRDModeControl.iDimension)
-	{
-		case enu_dim_sv:
-			return "DIMENSION: Sv\0""DIMENSION: Sv\0""DIMENSION: Sv\0""РАЗМЕРНОСТЬ: Зв";
-		case enu_dim_gy:
-			return "DIMENSION: Gy\0""DIMENSION: Gy\0""DIMENSION: Gy\0""РАЗМЕРНОСТЬ: Гр";
-		case enu_dim_r:
-			return "DIMENSION: R\0""DIMENSION: R\0""DIMENSION: R\0""РАЗМЕРНОСТЬ: Рем";
-	default:
-		exception(__FILE__,__FUNCTION__,__LINE__,"Internal error");
-	}
-	return NULL;
-}
-
-*/
 
 
 
@@ -1962,49 +1822,6 @@ const char* SETUPMode_menu1_dimension_onUpdate(void)
 
 
 
-
-
-
-
-
-
-////////////////////////////////sigmas calculations///////////////////////////////////////////////
-/*
-
-BOOL SETUPMode_menu1_calcSleepSigma(void)
-{
-	EditMode_EditInt("False alarm period in sleep mode\0""False alarm period in sleep mode\0""False alarm period in sleep mode\0""Период ложных тревог в дежурном режиме",
-					 SPRDModeControl.false_alarm_period_sleep,
-					 1.0,
-					 14400.0,
-					 "minutes\0""minutes\0""minutes\0""минут",
-					 SETUPMode_menu1_calcSleepSigma_edit_done);
-	return (BOOL)-1;
-}
-
-const char* SETUPMode_menu1_calcSleepSigma_onUpdate(void)
-{
-	return "Sleep mode FAP\0""Sleep mode FAP\0""Sleep mode FAP\0""Дежурный ПЛТ";
-}
-
-
-void SETUPMode_menu1_calcSleepSigma_edit_done(BOOL bOK)
-{
-	if(bOK)
-	{
-		SPRDModeControl.false_alarm_period_sleep = atoi(EditModeControl.edit_buf);
-		//compute
-		SPRDModeControl.sleepmode_search_sigma = SETUPMode_calcSigma(SPRDModeControl.false_alarm_period_sleep);
-//			ini_write_system_ini_float("SPRDModeControl", "sleepmode_search_sigma", SPRDModeControl.sleepmode_search_sigma);
-		InterProc_setSigmaSleepThresholds(SPRDModeControl.sleepmode_search_sigma);
-		if(!ini_write_system_ini_int("SPRDModeControl", "false_alarm_period_sleep", SPRDModeControl.false_alarm_period_sleep))
-		{
-			;//!!!!!!!!!error
-		}
-	}		
-	SETUPMode_setModeOnSelf();
-}
-*/
 
 //just calc sigma for proposed period for any search mode
 void SETUPMode_calcSigma(UINT period)
@@ -2075,7 +1892,6 @@ void SETUPMode_menu1_calcOperSigma_edit_done(BOOL bOK)
 		SPRDModeControl.false_alarm_period_oper = atoi(EditModeControl.edit_buf);
 		//compute
 		SETUPMode_calcSigma(SPRDModeControl.false_alarm_period_oper);
-//			ini_write_system_ini_float("SPRDModeControl", "operation_search_sigma", SPRDModeControl.operation_search_sigma);
 		InterProc_setSigmaSearchThresholds();
 		if(!ini_write_system_ini_int("SPRDModeControl", "false_alarm_period_oper", SPRDModeControl.false_alarm_period_oper))
 		{
@@ -2089,114 +1905,6 @@ void SETUPMode_menu1_calcOperSigma_edit_done(BOOL bOK)
 
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//test sound
-/*
-void SETUPMode_display_soundData(void)
-{
-	char buf[100];
-	sprintf(buf, "\rf=%x; pos=%x", (UINT)soundControl.flg, (UINT)soundControl.addr);
-	Display_outputText(buf);
-}
-
-BOOL SETUPMode_menu1_recordSound(void)
-{
-	Display_clearScreen();
-	Display_setCurrentFont(fnt16x16);
-	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
-	Display_setTextColor(BROWN);	//set text color
-	Display_outputText("Recording...");
-	sound_ISD4004_Record(0);
-
-	SETUPMode_display_soundData();
-	
-	PowerControl_sleep(3000);
-	return 1;
-}
-
-const char* SETUPMode_menu1_recordSound_onUpdate(void)
-{
-	return "Sound record\0""Sound record\0""Sound record\0""Запись звука";
-}
-
-
-BOOL SETUPMode_menu1_playSound(void)
-{
-	int i;
-	Display_clearScreen();
-	Display_setCurrentFont(fnt16x16);
-	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
-	Display_setTextColor(BROWN);	//set text color
-	Display_outputText("Playing...");
-
-	sound_ISD4004_PowerUp();
-	for(i=0;i<SOUND_NUM;i++)
-	{
-		sound_playSample(i);
-		SETUPMode_display_soundData();
-		PowerControl_sleep(3000);
-	}
-	SETUPMode_display_soundData();
-	PowerControl_sleep(2000);
-	return 1;
-}
-
-const char* SETUPMode_menu1_playSound_onUpdate(void)
-{
-	return "Sound play\0""Sound play\0""Sound play\0""Играть звук";
-}
-
-
-BOOL SETUPMode_menu1_stopRecord(void)
-{
-	Display_clearScreen();
-	Display_setCurrentFont(fnt16x16);
-	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
-	Display_setTextColor(BROWN);	//set text color
-	Display_outputText("Stopping...");
-	sound_ISD4004_StopPwdn();
-	SETUPMode_display_soundData();
-	PowerControl_sleep(3000);
-	return 1;
-}
-
-const char* SETUPMode_menu1_stopRecord_onUpdate(void)
-{
-	return "Stop record\0""Stop record\0""Stop record\0""Стоп записи";
-}
-
-
-
-
-
-
-
-
-
-//place markers
-BOOL SETUPMode_menu1_placeMarkers(void)
-{
-	Display_clearScreen();
-	Display_setCurrentFont(fnt16x16);
-	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
-	Display_setTextColor(BROWN);	//set text color
-	Display_outputText("Placing markers...");
-	sound_placeMarkers();
-	SETUPMode_display_soundData();
-	PowerControl_sleep(3000);
-	return 1;
-}
-
-const char* SETUPMode_menu1_placeMarkers_onUpdate(void)
-{
-	return "Place markers\0""Place markers\0""Place markers\0""Расставить маркеры";
-}
-
-*/
 
 
 
@@ -2288,7 +1996,6 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 		}while(hfile!=NULL);
 		//recreate log file
 		LOGMode_createLog();	
-//		LOGMode_insertEventByLang("Power ON\0""Power ON\0""Power ON\0""Включение");
 	}
 	Modes_clearModeArea();	//clear screen area for mode
 	Modes_updateMode();

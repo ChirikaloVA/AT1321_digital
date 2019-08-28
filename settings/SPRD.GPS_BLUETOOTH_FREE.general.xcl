@@ -2,7 +2,7 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armjlink2.dll" 
 
-"D:\IARARMProjects\SPRD2_5\GPS_BLUETOOTH_FREE\Exe\SPRD.out" 
+"D:\IARARMProjects\SPRD2_5\output\SPRD.out" 
 
 --plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armbat.dll" 
 

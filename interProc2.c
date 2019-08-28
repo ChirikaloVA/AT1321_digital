@@ -18,7 +18,6 @@ const BYTE arCmd_GetControlRegister_gain[]={1,3,0,22,0,2};
 const BYTE arCmd_GetControlRegister_lowLimit[]={1,3,0,3,0,1};
 const BYTE arCmd_GetControlRegister_highLimit[]={1,3,0,4,0,1};
 
-//const BYTE arCmd_GetControlRegister_bkgDR[]={1,3,0,0x11,0,2};
 const BYTE arCmd_GetControlRegister_bkgCPS[]={1,3,0,0x0b,0,2};
 
 const BYTE arCmd_GetControlRegister_curPeak[]={1,3,0,24,0,2};
@@ -185,13 +184,6 @@ void InterProc_setSigmaSearchThresholds(void)
 
 }
 
-/*void InterProc_setSigmaSleepThresholds(float value)
-{
-	BYTE ar[]={1,6,0,9,*((unsigned char*)&value+3),*((unsigned char*)&value+2)};
-	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	BYTE ar2[]={1,6,0,10,*((unsigned char*)&value+1),*((unsigned char*)&value+0)};
-	InterProc_fillNewCmd((const BYTE*)ar2, sizeof(ar2));
-}*/
 
 void InterProc_setLowLimit(WORD val)
 {
@@ -358,22 +350,9 @@ void InterProc_stabilize(void)
 }
 
 
-/*
-void InterProc_getBkgDR(void)
-{
-	if(InterProc_isReadyToTransmit(&interProcControl.rsModbus.swdBkgDR))
-	{
-		InterProc_fillNewCmd(arCmd_GetControlRegister_bkgDR, sizeof(arCmd_GetControlRegister_bkgDR));
-	}
-}
-*/
-
 void InterProc_getBkgCPS(void)
 {
-//	if(InterProc_isReadyToTransmit(&interProcControl.rsModbus.swdBkgCPS))
-	//{
 		InterProc_fillNewCmd(arCmd_GetControlRegister_bkgCPS, sizeof(arCmd_GetControlRegister_bkgCPS));
-//	}
 }
 
 void InterProc_setDTCEOF(float value)

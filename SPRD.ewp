@@ -20,7 +20,7 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>Debug\Exe</state>
+                    <state>output</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
@@ -222,6 +222,7 @@
                     <name>CCDefines</name>
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
+                    <state>SUBVER=B</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -1002,7 +1003,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>SPRD_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -2091,7 +2092,7 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>Debug SNM\Exe</state>
+                    <state>output</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
@@ -2107,11 +2108,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>No specifier a, A.</state>
+                    <state>No specifier a, A, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -2294,6 +2295,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>_SNM</state>
+                    <state>SUBVER=A</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -2722,7 +2724,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>SPiRiD1SNM.hex</state>
+                    <state>SPiRiD1_SNM.hex</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -3074,7 +3076,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>SPRD_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -3128,7 +3130,7 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>BNC\Exe</state>
+                    <state>output</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
@@ -3144,11 +3146,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>No specifier a, A.</state>
+                    <state>No specifier a, A, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -3331,6 +3333,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>BNC</state>
+                    <state>SUBVER=C</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -4111,7 +4114,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>SPRD_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -4165,7 +4168,7 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>IAEA SNM\Exe</state>
+                    <state>output</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
@@ -4181,11 +4184,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>No specifier a, A.</state>
+                    <state>No specifier a, A, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -4257,7 +4260,7 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+                    <state>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
@@ -4369,6 +4372,7 @@
                     <state>_THIN_SIGMA</state>
                     <state>_SNM</state>
                     <state>_IAEA</state>
+                    <state>SUBVER=I</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -5149,7 +5153,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>SPRD_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -5203,7 +5207,7 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>GPS_BLUETOOTH_FREE\Exe</state>
+                    <state>output</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
@@ -5406,6 +5410,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>GPS_BT_FREE</state>
+                    <state>SUBVER=RF</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -5834,7 +5839,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>SPiRiD_GPS_BT_FREE.hex</state>
+                    <state>SPiRiD1_RF.hex</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -6385,6 +6390,21 @@
         <file>
             <name>$PROJ_DIR$\Описание программы SPIRID1.txt</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\Описание программы SPIRID1_BNC.txt</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Описание программы SPIRID1_RF.txt</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Описание программы SPIRID1_SNM.txt</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Описание программы SPIRID1IAEASNM.txt</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Описание программы SPRD.txt</name>
+        </file>
     </group>
     <group>
         <name>Modes</name>
@@ -6434,7 +6454,7 @@
             <name>$PROJ_DIR$\Message_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\message_mode.h</name>
+            <name>$PROJ_DIR$\Message_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\modes.c</name>
@@ -6464,7 +6484,7 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\sprd_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
@@ -6488,7 +6508,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

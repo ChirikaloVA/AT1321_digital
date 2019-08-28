@@ -122,11 +122,6 @@ void EEPROM_SSP0_Init(void);
 
 BOOL EEPROM_Busy(void);
 
-//BOOL EEPROM_SSP_Busy(void);
-
-
-//DWORD EEPROM_WaitFlash (void);
-//WORD EEPROM_calcCRC(BYTE * pBuffer, WORD length);
 void EEPROM_WriteBlok (unsigned int count,   // ƒлина
                 const unsigned char  * RAM,     // јдрес в RAM
                 DWORD EEPROM  // јдрес в EEPROM

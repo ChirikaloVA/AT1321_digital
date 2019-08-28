@@ -459,9 +459,6 @@ void InterProc_Init(void)
 	interProcControl.rsModbus.wdHighLimit=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdHighLimit);
 
-/*	interProcControl.rsModbus.wdSigmaOper=0;
-	interProcControl.rsModbus.wdSigmaSleep=0;
-	InterProc_resetSyncData(&interProcControl.rsModbus.swdSigmaThresholds);*/
 
 	//data resgisters
 	interProcControl.rsModbus.wdAcqTime=0;
@@ -503,8 +500,6 @@ void InterProc_Init(void)
 	interProcControl.rsModbus.fDTCOEF = 0.0000106;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdDTCOEF);
 
-//	interProcControl.rsModbus.fBkgDR = 0;
-//	InterProc_resetSyncData(&interProcControl.rsModbus.swdBkgDR);
 	
 	
 	//init buffer and values
@@ -589,17 +584,12 @@ void InterProc_rcvData_first_Dispatcher(void)
 				break;
 			case 22://gain
 				MAKEFLOAT(interProcControl.rsModbus.fStabGain,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
-//				interProcControl.rsModbus.wdGain = (interProcControl.uart.rcvBuff_safe[3]<<8) | interProcControl.uart.rcvBuff_safe[4];
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdStabGain);
 				break;
 			case 0x0b://bkg CPS
 				MAKEFLOAT(interProcControl.rsModbus.fBkgCPS,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdBkgCPS);
 				break;
-/*			case 0x11://bkg DR
-				MAKEFLOAT(interProcControl.rsModbus.fBkgDR,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
-				InterProc_iterateDataReady(&interProcControl.rsModbus.swdBkgDR);
-				break;*/
 			case 0x03://lowLimit
 				interProcControl.rsModbus.wdLowLimit = (interProcControl.uart.rcvBuff_safe[3]<<8) | interProcControl.uart.rcvBuff_safe[4];
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdLowLimit);
@@ -612,11 +602,6 @@ void InterProc_rcvData_first_Dispatcher(void)
 				MAKEFLOAT(interProcControl.rsModbus.fDTCOEF,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdDTCOEF);
 				break;
-/*			case 0x07://sigma thresholds (2 words)
-				interProcControl.rsModbus.wdSigmaOper = (interProcControl.uart.rcvBuff_safe[3]<<8) | interProcControl.uart.rcvBuff_safe[4];
-				interProcControl.rsModbus.wdSigmaSleep = (interProcControl.uart.rcvBuff_safe[5]<<8) | interProcControl.uart.rcvBuff_safe[6];
-				InterProc_iterateDataReady(&interProcControl.rsModbus.swdSigmaThresholds);
-				break;*/
 			default://not supported register in answer!!!!!!!!
 				exception(__FILE__,__FUNCTION__,__LINE__,"Unsupported control registers");
 			}
@@ -852,7 +837,6 @@ void InterProc_second_Dispatcher(void)
 	if(InterProc_isDataReady(&interProcControl.rsModbus.swdTemperature))
 	{
 		interProcControl.fTemperature = (float)((float)((short)interProcControl.rsModbus.wdTemperature/256.0))+(float)(interProcControl.rsModbus.wdTemperature&0xff)/(float)10.0;
-//		interProcControl.fTemperature = (float)(char)(interProcControl.rsModbus.wdTemperature>>8)+(float)(char)(interProcControl.rsModbus.wdTemperature&0xff)/10;
 	}
 	if(InterProc_isDataReady(&interProcControl.rsModbus.sbtStatus))
 	{
@@ -884,11 +868,6 @@ void InterProc_second_Dispatcher(void)
 	{
 		;
 	}
-/*	if(InterProc_isDataReady(&interProcControl.rsModbus.swdSigmaThresholds))
-	{
-		SPRDModeControl.operation_search_sigma = interProcControl.rsModbus.wdSigmaOper;
-		SPRDModeControl.sleepmode_search_sigma = interProcControl.rsModbus.wdSigmaSleep;
-	}*/
 	if(InterProc_isDataReady(&interProcControl.rsModbus.swdPresetAcqTime))
 	{
 		;

@@ -149,7 +149,6 @@ void PowerControl_sendAllCommands(void)
 void PowerControl_gotoPowerDownMode(void)
 {
 	SoundControl_BeepSeq(beepSeq_OFF);
-//	sound_playSample(SND_POWERDOWN);
 
 
 	//need to switch second proc to measurement mode to be less sensitive to radiation fluctuation
@@ -193,23 +192,6 @@ void PowerControl_gotoPowerDownMode(void)
 	INTWAKE_bit.EXTWAKE1 = 1; //waking up from second proc
 	INTWAKE_bit.GPIO0WAKE = 1; //geiger
 	INTWAKE_bit.RTCWAKE = 1; //clock
-//        FIO0DIR = 0x037C51F0;
-//        FIO1DIR = 0x137C4713;
-//        FIO2DIR = 0x00000090;
-//        FIO3DIR = 0x07000000;
-//        FIO4DIR = 0x30003C00;
-//        CLR_M_ON;
-//        PINMODE0 = 0xAAAAAAAA;
-//        PINMODE1 = 0xAAAAAAAA;
-//        PINMODE2 = 0xAAAAAAAA;
-//        PINMODE3 = 0xAAAAAAAA;
-//        PINMODE4 = 0xAAAAAAAA;
-//
-//        PINMODE6 = 0xAAAAAAAA;
-//        PINMODE7 = 0xAAAAAAAA;
-//        PINMODE8 = 0xAAAAAAAA;
-//        PINMODE9 = 0xAAAAAAAA;
-//        SET_ECS;
 	
         soundControl.pBeepSeq = NULL;
         SoundControl_StopBeep();
@@ -228,7 +210,6 @@ void PowerControl_gotoPowerDownMode(void)
 		powerControl.bInPowerDownMode = 1;
 
 		Display_turnOFFRedLED();
-//		Display_turnOFFOrangeLED();
 		
 		PowerControl_enterPowerDownMode();
 		//next is used to sleep while bat ADC is not ready
@@ -255,7 +236,6 @@ void PowerControl_gotoPowerDownMode(void)
 	InterProc_goAwake();
 	
 	InterProc_readStatus();
-//	PowerControl_sendAllCommands();
 	
 	
 	powerControl.bInPowerDownMode = 0;
@@ -269,7 +249,6 @@ void PowerControl_gotoPowerDownMode(void)
 
 
 	SoundControl_turnON();
-//	sound_ISD4004_Stop();
 
 	
 	CLR_NRES;
@@ -289,10 +268,6 @@ void PowerControl_gotoPowerDownMode(void)
 		Bluetooth_turnON();
 #endif	//#ifndef GPS_BT_FREE
 	
-/*	if(!SPRDModeControl.bBkgMode_confirmed)
-	{//switch to search mode after exit power down
-		InterProc_setSearchMode();
-	}*/
 
 	//просыпаем режим
 	
@@ -315,7 +290,6 @@ void PowerControl_gotoIdleMode(void)
 	//////////////////
 	PowerControl_turnON_MAM();
 	Display_EMC_Init();
-//	EMC_ON();
 }
 
 
@@ -419,9 +393,8 @@ __REG32 PCLK_SYSCON : 2;
 //else we must turn off them
 void PowerControl_Init(void)
 {
-//	CLR_DPWON;//
-//	SET_PON;
-//	SET_MON;
+	
+	
 	
 	DIR_AN_RES = 1;
 	SET_AN_RES;
@@ -443,6 +416,12 @@ void PowerControl_Init(void)
 	DIR_AN_ERR = 0;	//работет как вход
 	
 	DIR_PRG_EN = 0;	//input
+	
+//ST1
+	DIR_ST1 =0;
+	DIR_ST12 =0;
+//ST2
+	DIR_ST2 =0;
 
 	
 	//выключаем питание со всего что можно
@@ -465,7 +444,6 @@ void PowerControl_Init(void)
 	powerControl.batV_aver = 3;	//voltage in V
 	powerControl.batStatus = 1;	//>0-charged, 0-discharged
 	powerControl.batCapacity=100;	//in percent
-//	powerControl.batCapacityMom=100;	//in percent
 	
 	powerControl.dwPowerDownDeadTime = 300;	//by default 300 s
 	
@@ -722,7 +700,8 @@ __arm void _INT_ADC_PowerControl(void)
 		powerControl.ADC_REG = ADDR3_bit.RESULT;
 		AD0CR_bit.START = 0;
 		AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
-		powerControl.batV = (float)VREF*powerControl.fBatCoef*1.44*powerControl.ADC_REG/1023.0;
+//1.44 надо 1,08
+		powerControl.batV = (float)VREF*powerControl.fBatCoef*1.08*powerControl.ADC_REG/1023.0;
 		powerControl.bControlBat = TRUE;
 	}
 }
@@ -763,46 +742,13 @@ void PowerControl_controlBatStatus(void)
 	else if(powerControl.batCapacity<5)
 		powerControl.batCapacity = 5;
 
-/*
-	powerControl.batCapacityMom = (powerControl.batV-VREF_BAT_MIN)*100/(VREF_BAT_MAX-VREF_BAT_MIN);
-	if(powerControl.batCapacityMom>100)
-		powerControl.batCapacityMom = 100;
-	else if(powerControl.batCapacityMom<0)
-		powerControl.batCapacityMom = 0;
-	if(powerControl.batCapNumber<BATCAP_NUM_MAX)
-	{
-		powerControl.batCapNumber++;
-		powerControl.batCapacityAr[powerControl.batCapIndex] = powerControl.batCapacityMom;
-	}else
-	{
-		powerControl.batCapacityAr[powerControl.batCapIndex] = powerControl.batCapacityMom;
-	}
-	int aver = 0, idx;
-	for(int i=0;i<powerControl.batCapNumber;i++)
-	{
-		idx = powerControl.batCapIndex-i;
-		if(idx<0)idx+=BATCAP_NUM_MAX;
-		aver+=powerControl.batCapacityAr[idx];
-	}
-	aver/=powerControl.batCapNumber;
-	powerControl.batCapacity = aver;
-	
-	*/
 	
 	
 	powerControl.batStatus = PowerControl_getBatStatus();
-	if(!powerControl.batStatus || powerControl.batV_aver<VREF_BAT_MIN_CRITICAL)
+	if(!PIN_ST1)//if USB connected then reset battery alarm state
+		powerControl.bBatteryAlarm = 0;
+	else if(!powerControl.batStatus || powerControl.batV_aver<VREF_BAT_MIN_CRITICAL)
 	{//LOW BATTERY!!!!
-/*
-		if(!powerControl.bBatteryAlarm && //no low battery before
-		   modeControl.pMode==&modes_SpectrumMode && //RID mode
-		   !spectrumControl.bStopAcq && //spectrum is acquiring
-			!powerControl.bInPowerDownMode //not in power down)
-		{//save spectrum with auto name
-			SPRDMode_saveAutoSpec();
-			InterProc_stopSpectrumAcq();
-		}
-		*/
 		if(!powerControl.bBatteryAlarm)
 		{
 			LOGMode_insertEventByLang("Battery low\0""Battery low""Battery low\0""Батареи разряжены");
@@ -816,6 +762,7 @@ void PowerControl_controlBatStatus(void)
 		//disable write file operations
 		powerControl.bBatteryAlarm = 1;
 	}
+	
 	
 	if(powerControl.bBatteryAlarm)
 		powerControl.dwBatteryAlarmCnt++;	//time of alarm status
@@ -838,29 +785,6 @@ void PowerControl_startADC_intcall(void)
 
 
 
-/*
-//ret bat voltage in V
-float PowerControl_getBatVoltage(void)
-{
-	DWORD r3=10;
-	AD0CR_bit.PDN = 1;	//turn off power down mode of ADC
-	PowerControl_sleep(10);	
-	AD0CR_bit.START = 0x01;	//start ADC
-	do
-	{
-		PowerControl_sleep(20);
-	}while(!AD0GDR_bit.DONE && --r3);
-	if(!r3)
-	{
-		exception(__FILE__,__FUNCTION__,__LINE__, "Failed to get battery voltage");
-		return -1;
-	}
-	r3 = ADDR3_bit.RESULT;
-	powerControl.ADC_REG = r3;
-	AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
-	return (float)VREF*2*r3/1023.0;
-}
-*/
 
 
 //awaking from second processor. ALARM
@@ -903,15 +827,11 @@ void PowerControl_startBootLoader(void)
 	
 	Display_outputText("Second processor update procedure\r");
 	Display_outputText("Run flasher at baud rate 57600\r\r");
-//	Display_outputText("Note: to update first processor turn on device by press and hold left and power keys simultaneously and hold them until completion of flashing\r");
 	
 	CLR_AN_PGM;
 	CLR_AN_RES;
 	PowerControl_sleep(300);
 	SET_AN_RES;
-//	CLR_AN_ON;	//turn off second proc
-//	PowerControl_sleep(2000);
-//	SET_AN_ON;	//turn on second proc
 	PowerControl_sleep(2000);
 	__disable_interrupt();
 	
@@ -1040,17 +960,6 @@ void PowerControl_emergencyCheckBattery(void)
 	}
 }
 
-
-/*
-void pause(int timeout)
-{
-	int i,j,k=0;
-	for(i=0;i<timeout;i++)
-	{
-		for(j=0;j<10000;j++)k++;
-	}
-}
-*/
 void pause(int timeout)
 {
 	int i,j,k=0;

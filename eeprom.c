@@ -8,10 +8,7 @@
 
 
 #include "eeprom.h"
-//#include "powerControl.h"
-//#include "display.h"
 #include "interrupts.h"
-//#include "bluetooth.h"
 #include "setup_mode.h"
 #include "USBRS.h"
 
@@ -84,11 +81,6 @@ SCLK, MOSI, and SSEL lines and receiving the MISO line.*/
 void EEPROM_clearFIFO(void)
 {
 	BYTE Dummy;
-/*	for (int i = 0; i < FIFOSIZE; i++ )
-	{
-		if(!SSP1SR_bit.RNE)break;
-		Dummy = SSP1DR;		
-	}*/
 	while(SSP1SR_bit.RNE)
 	{
 		Dummy = SSP1DR;		/* clear the RxFIFO */
@@ -254,12 +246,6 @@ BYTE EEPROM_ReadStatus(void)
 }
 
 
-//ret 1 if SSP is busy
-//ret 0 if SSP idle
-/*BOOL EEPROM_SSP_Busy(void)
-{
-	return (SSP1SR_bit.BSY);
-}*/
 
 //ret TRUE is eeprom is busy
 BOOL EEPROM_Busy(void)

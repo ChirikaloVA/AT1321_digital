@@ -74,7 +74,7 @@ const char* MCSMode_RightOnUpdate(void)//"setup\0""опции",	//right
 {
 #ifndef GPS_BT_FREE	
 	return "gps\0""gps\0""gps\0""gps";
-#else #ifndef GPS_BT_FREE	
+#else //#ifndef GPS_BT_FREE	
 	return "setup\0""setup\0""setup\0""опции";
 #endif	//#ifndef GPS_BT_FREE	
 }
@@ -115,7 +115,6 @@ BOOL MCSMode_OnActivate(void)
 {
 	SPRDMode_OnActivate();
 	MCSMode_prepare();
-//	MCSMode_createTempFile();
 	return 1;
 }
 
@@ -321,6 +320,5 @@ BOOL MCSMode_OnDown(void)
 BOOL MCSMode_OnUp(void)
 {
 	MCSMode_prepare();
-//	MCSMode_createTempFile();
 	return SPRDMode_OnUp();
 }

@@ -130,12 +130,6 @@ void Geiger_processData(void)
 	else
 		geigerControl.esentVals.fDoserate = geigerControl.esentVals.fCps / val * geigerControl.fDrCoef;
 
-/*
-	geigerControl.esentVals.fCps = (float)geigerControl.dwCount/((float)geigerControl.dwTime*(1.0-(float)geigerControl.fDrDeadTime))-geigerControl.fDrSelfCps;
-	if(geigerControl.esentVals.fCps<0)//consider -cps to 0
-		geigerControl.esentVals.fCps=0;
-	geigerControl.esentVals.fDoserate = geigerControl.esentVals.fCps*geigerControl.fDrCoef;
-	*/
 
 
 	if(geigerControl.dwCount)//calculate statistical error

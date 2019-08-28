@@ -161,9 +161,7 @@ void filesystem_check_and_restore(void)
 				//bError = 1;	//mark that whole file system needs reformat
 				Display_clearTextWin(10);
 				Display_outputTextByLang("Delete bad files...\0""Abspeichern schlecht files...\0""Delete bad files...\0""Удаление плохих файлов...");
-//				Display_refresh();
 				bShowOnce = TRUE;
-//				break;
 			}else
 			{//have a file
 				BOOL itsend =FALSE;
@@ -191,10 +189,6 @@ void filesystem_check_and_restore(void)
 
 					if(newstartclaster<FILES_CLASTER_START_NO || newstartclaster>FILES_CLASTER_END_NO)
 					{//error in file record
-//						filesystem.clasterTableOnSector[index] = CLASTERTABLE_EMPTY_RECORD;
-	//					filesystem_write_clastertable();
-//						bError = 1;	//mark that whole file system needs reformat
-						//break;
 						startclaster = CLASTERTABLE_EMPTY_RECORD;
 						itsend = FALSE;
 						continue;	//go up to remove file

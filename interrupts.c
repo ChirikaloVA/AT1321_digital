@@ -118,8 +118,6 @@ __arm void Interrupts_waitForRead(void)
 	Display_setTextJustify(LEFT);
 
 	CLR_AN_ON;	//turn off second proc
-//	char buf[40];
-//	int timer = 30;
 	do
 	{
 		Display_startup_LED();
@@ -129,24 +127,13 @@ __arm void Interrupts_waitForRead(void)
 		}
 		PowerControl_kickWatchDog();
 		
-	//	sprintf(buf,"Time to reset: %d",timer);
-//		Display_clearTextWin(100);
-	//	Display_setTextXY(0,0);	//set start coords in window
-		//Display_outputText(buf);
 		
 	}while(!(KeyboardControl_testKeyLeft()|KeyboardControl_testKeyRight()|KeyboardControl_testKeyUp())
 		   /*&& --timer*/);
 
-/*	if(timer)
-	{*/
 		//по кнопке выкл
 		//только выключение
 		CLR_DG_ON; //Выключение питания
-/*	}else
-	{// автомат на перезапуск
-		//perform reset
-		while(1);
-	}*/
 }
 
 
@@ -170,13 +157,6 @@ __swi __arm void swi_handler(void)
 	SoundControl_StopBeep();
 	Display_prepareEmergencyTextControl();
 	Display_outputText("PROGRAM EXCEPTION");
-/*	int len = strlen((char*)_reg_R0);
-	int i=len-1;
-	for(;i>=0;i--)
-	{
-		if(*((char*)_reg_R0+i)=='\\')break;
-	}
-	Display_outputText((char*)_reg_R0+i+1);*/
 	Display_outputText("\rFUNCTION:\r");
 	Display_outputText((char*)_reg_R1);
 	char buf[20];

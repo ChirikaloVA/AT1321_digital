@@ -47,11 +47,7 @@ extern const UINT sample_addr[SOUND_NUM+1];
 #define PIN_SND_AU FIO4PIN_bit.P4_13
 
 
-//chip select for ISD4004
-#define DIR_ISD_CS FIO2DIR_bit.P2_5
-#define SET_ISD_CS MY_FIO2SET(B_5)
-#define CLR_ISD_CS MY_FIO2CLR(B_5)
-#define PIN_ISD_CS FIO2PIN_bit.P2_5
+
 
 //INT input from ISD4004
 #define DIR_ISD_INT FIO0DIR_bit.P0_31
@@ -257,21 +253,7 @@ void SoundControl_StopVibro(void);
 void SoundControl_StartVibro(void);
 void SoundControl_PlayVibro(DWORD ms);
 
-void sound_ISD4004_StopPwdn(void);
 
-/*void sound_ISD4004_Init(void);
-void sound_ISD4004_Record(WORD position);
-void sound_ISD4004_Play(WORD position);
-void sound_ISD4004_PowerUp(void);
-void sound_ISD4004_Stop(void);
-void sound_ISD4004_sendCmd(BYTE cmd, WORD addr, BYTE* pFlags, WORD* pAddr);
-void sound_checkToShutDown(void);*/
-/*void sound_placeMarkers(void);
-//place mark by orderPos
-void sound_placeMark(int orderPos);
-//place mark by memPos
-void sound_placeMarkPos(int memPos);*/
-//play sample
 //void sound_playSample(UINT orderPos);
 
 void SoundControl_Beep(DWORD ms, DWORD freq);

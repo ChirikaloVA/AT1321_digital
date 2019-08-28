@@ -23,7 +23,7 @@
 #include "SPRD_Mode.h"
 #include "LOG_Mode.h"
 #include "filesystem.h"
-
+#include <stdlib.h>
 
 
 
@@ -68,9 +68,6 @@ const BYTE bmp_memlow[]={
 #include ".\gfx\memlow.bmp.txt"
 };
 
-/*const BYTE bmp_usbrs[]={
-#include ".\gfx\usbrs.bmp.txt"
-};*/
 
 const BYTE bmp_sound[]={
 #include ".\gfx\sound.bmp.txt"
@@ -218,7 +215,6 @@ void Display_outputText(const char* pText)
 	char sym;
 	BOOL bWordTested = FALSE;
 	Display_justifyText(pText);
-//	Display_checkForClearLine();
 	while((sym = *pText++))
 	{
 		if(sym=='\r')
@@ -275,7 +271,6 @@ int Display_calcTextLines(const char* pText)
 		{//перевод строки
 			iTextLines++;
 			Display_gotoNextLine();
-//			if((display.text.gstrY+fy-1)>display.text.winSY)break;
 			//пересчет координаты х
 			Display_justifyText(pText);
 			bWordTested = FALSE;
@@ -290,7 +285,6 @@ int Display_calcTextLines(const char* pText)
 					iTextLines++;
 					Display_gotoNextLine();
 					--pText;
-//					if((display.text.gstrY+fy-1)>display.text.winSY)break;
 					continue;
 				}
 			}
@@ -315,7 +309,6 @@ void Display_outputTextFromLine(const char* pText, int lineIndex)
 	int fy = Display_getFontSizeY();
 	BOOL bWordTested = FALSE;
 	Display_justifyText(pText);
-//	Display_checkForClearLine();
 	while((sym = *pText++))
 	{
 		if(sym=='\r')
@@ -414,16 +407,6 @@ void Display_gotoNextLine(void)
 	display.text.gstrY += sz;
 }
 
-/*
-//test if we need to go to the next line by symbols wrap
-void Display_testForNextLine(char symbol)
-{
-	if(display.text.gstrX+Display_getSymWidth(symbol)>display.text.winX+display.text.winSX)
-	{
-		Display_gotoNextLine();
-	}
-}
-*/
 
 void Display_setTextDoubleHeight(BOOL bDoubleHeight)
 {
@@ -554,7 +537,6 @@ int Display_showSymbol(char symbol)
 
 	Display_Init_18bit_262k_updownleftright();
 	
-//	Display_set_display_entrymode(0/*bRGBmode*/, 0/*bUpToDown*/);
 	
 	
 	CLR_RS;
@@ -655,7 +637,6 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 	Display_set_clip_region(x,y,x+dx-1,y+dy-1);
 
 
-	//	Display_set_display_entrymode(1/*bRGBmode*/, 1/*bUpToDown*/);
 	if(pInfo->biHeight>0)
 	{
 		Display_set_screen_memory_adr(x,y+dy-1);
@@ -682,9 +663,6 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 		wrd = c3;
 		pVData= (BYTE*)(0x81000000+(WORD)((wrd<<1)&0x1f8)|(WORD)(c2>>5));
 		*pVData=c1;
-//		DisplayData = *pData++;
-	//	DisplayData = *pData++;
-		//DisplayData = *pData++;
 	}while(--len);
 
 }
@@ -709,7 +687,6 @@ void Display_EMC18_BUS_Init(BOOL b18bit)
 	PINSEL8_bit.P4_6 = b18bit; //EMC A6
 	PINSEL8_bit.P4_7 = b18bit; //EMC A7
 	PINSEL8_bit.P4_8 = b18bit; //EMC A8
-//	PINSEL8_bit.P4_9 = b18bit; //EMC A9
 }
 
 
@@ -754,32 +731,10 @@ void Display_EMC_Init(void)
 
 void Display_turnOFF(void)
 {
-//	Display_EMC18_BUS_Init(0);
 
 	display.bLCDON = FALSE;
 	
 	
-/*	
-	CLR_RS;
-	DisplayData = 0x43;
-	SET_RS;
-	DisplayData = 0;
-	DisplayData = 0x0;//gamma set
-
-	
-	CLR_RS;
-	DisplayData = 0x05;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x00;
-
-	CLR_RS;
-	DisplayData = 0x10;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x01;
-
-	*/
 	
 	PowerControl_EMC_OFF();
 	
@@ -799,16 +754,9 @@ void Display_turnON(void)
 	display.bLCDON = TRUE;
 
 	
-//	Display_EMC18_BUS_Init(1);
 	PowerControl_EMC_ON();
 
 
-
-	
-	//SET_MON;
-	
-
-	//pause(1000);
 
 	
 	CLR_RS;
@@ -979,7 +927,6 @@ void Display_init(void)
 	SET_NRES;
 	SET_RS;
 	CLR_ID_MIB;
-	//CLR_NCS = 1;
 	CLR_SPB;
 	
 	//===============================================
@@ -1019,92 +966,20 @@ void Display_init(void)
 	
 	
 	
-//	DIR_CS_R = 1;
-//	DIR_CLK_R = 1;
-//	DIR_U_D = 1;
 	
 	DIR_P4_28 = 1;
 	CLR_P4_28;
 	DIR_P4_29 = 1;
 	CLR_P4_29;
 	
-	
-//	SET_CS_R;
-//	CLR_U_D;          //Вниз
-	//CLR_CLK_R ;
-	//********** Новая версия включения дисплея ************************
-	//DIR_PON = 1;
-	//DIR_DPWON = 1;//Питание индикатора
-	//DIR_MON = 1;
-
-	//********** Новая версия включения дисплея ************************
-	//CLR_PON = 1;
-	//CLR_MON = 1;
-	
-	//	ON_OFF_display=1;
 	//===== Иниацилизация и включение дисплея ============================
 	CLR_NRES;
 	SET_NRES;
 	
 	
-//	BYTE zero=0;
-	
-	
-//	Display_Init_8bit_262k();
-	
-	/*
-	CLR_RS;
-	DisplayData = 0x12;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x01;
-	*/
-	
-	
-	
-	
-	/*
-	CLR_RS;
-	DisplayData = 0x01;
-	SET_RS;
-	DisplayData = 0xee;//0xee;//max blank period
-	DisplayData = 0x28;
-	*/
-	/*
-	CLR_RS;
-	DisplayData = 0x18;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x1f;//nominal    //0x28;//minimum*0.532 //0x1f; //частота развертки *1
-	*/
-	/*  WORD start_line = 0;
-	WORD end_line = 319;
-	CLR_RS;
-	DisplayData = 0x33;
-	SET_RS;
-	DisplayData = LO2BYTE(start_line);
-	DisplayData = LOBYTE(start_line);
-	CLR_RS;
-	DisplayData = 0x34;
-	SET_RS;
-	DisplayData = LO2BYTE(end_line);
-	DisplayData = LOBYTE(end_line);
-	*/
-	/*
-	CLR_RS;
-	DisplayData = 0x1a;
-	SET_RS;
-	DisplayData = 0;
-	DisplayData = 0x1;//slow opeartional amplifier, small amount of current
-	*/
-	
 	Display_turnON();
 	
 	
-	
-/*	CLR_DPWON;//
-	SET_PON;
-	SET_MON;*/
 	//=======================================================
 	
 	
@@ -1130,13 +1005,7 @@ void Display_init(void)
 void Display_Init_18bit_262k_updownleftright( void)
 {
 	BYTE zero = 0;
-/*	CLR_RS;
-	DisplayData = 0x10;
-	SET_RS;
-	DisplayData = zero;
-	DisplayData = zero;
-*/
-	
+
 	CLR_RS;
 	DisplayData = 0x23;
 	SET_RS;
@@ -1146,16 +1015,12 @@ void Display_Init_18bit_262k_updownleftright( void)
 	DisplayData = zero;
 	DisplayData = zero;
 	
-//	Display_set_display_entrymode(0 /*bRGBmode*/, 0/*bUpTodown*/);
 	volatile BYTE* pData = (BYTE*)0x81000102;
 	CLR_RS;
 	DisplayData = 0x03;
 	SET_RS;
 	*pData = 0x31;
 	
-	
-//	Display_EMC18_BUS_Init(1);
-
 }
 
 
@@ -1216,15 +1081,7 @@ void Display_Init_18bit_262k_leftrightdownup( void)
 void Display_Init_8bit_262k( void)
 {
 	BYTE zero = 0;
-/*	CLR_RS;
-	DisplayData = 0x10;
-	SET_RS;
-	DisplayData = zero;
-	DisplayData = zero;
-	*/
-	
-//	Display_EMC18_BUS_Init(0);
-	
+
 	
 	CLR_RS;
 	DisplayData = 0x24;
@@ -1287,7 +1144,6 @@ void Display_BlinkREDLED(DWORD ms)
 	}
 	ms/=INTERPROC_TIMER_VAL;
 	Display_turnONRedLED();
-//	T2MCR_bit.MR3I = 0; //disable interrupt for LED
 	T2MR3 = T2TC+ms;
 	T2MCR_bit.MR3I = 1; //enable interrupt for LED
 }
@@ -1411,19 +1267,13 @@ void Display_warmup_display_start(void)
 //just show color lines on the screen
 void Display_startup_display_start(void)
 {
-//	int i;
-//	PowerControl_turboModeON();
 	Display_clearScreen();
 	Display_setTextWin(0,0,X_SCREEN_SIZE,Y_SCREEN_SIZE);	//set text window
 	Display_setTextWrap(0);
-//	for(i=0;i<64;i++)
-//	{
 		Display_startup_LED();
 		Display_startup_display2(63);
 		PowerControl_sleep(5);
 		PowerControl_kickWatchDog();
-//	}
-//	PowerControl_turboModeOFF();
 	
 	Display_setTextColor(LIME);	//set text color
 	Display_setCurrentFont(fnt16x16);	//set current font
@@ -1431,32 +1281,6 @@ void Display_startup_display_start(void)
 	Display_outputTextByLang(txtVersion);	//"ОТПУСТИТЕ КНОПКУ"
 
 }
-
-
-/*
-//just show color lines on the screen
-void Display_startup_display_end(void)
-{
-	int i;
-//	PowerControl_turboModeON();
-
-	Display_turnOFF_LEDs();
-	
-	Display_setTextWin(0,0,X_SCREEN_SIZE,Y_SCREEN_SIZE);	//set text window
-	Display_setTextWrap(0);
-	
-	for(i=63;i>=0;i--)
-	{
-		Display_startup_display2(i);
-		PowerControl_sleep(5);
-		PowerControl_kickWatchDog();
-	}
-	
-	Display_clearScreen();
-//	PowerControl_turboModeOFF();
-	
-}
-*/
 
 
 //отображение текста в нужных позициях
@@ -1588,7 +1412,6 @@ void Display_showStatusLine(void)
 	
 	SoundControl_showSoundVibro(x5);
 	filesystem_show_symbol(x1);
-//	USBRS_show_symbol(x1);		//L=24
 #ifndef GPS_BT_FREE	
 	Bluetooth_show_symbol(x2);	//L=16
 	GPS_show_symbol(x3);		//L=24

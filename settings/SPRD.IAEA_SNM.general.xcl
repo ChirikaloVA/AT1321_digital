@@ -2,7 +2,7 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armJET.dll" 
 
-"D:\IARARMProjects\SPRD2_5\IAEA SNM\Exe\SPRD.out" 
+"D:\IARARMProjects\SPRD2_5\output\SPRD.out" 
 
 --plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\bin\armbat.dll" 
 

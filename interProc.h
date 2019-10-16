@@ -237,6 +237,8 @@ struct tagInterProcRSModbus
 	//spectrum
 	BYTE arSpectrum[CHANNELS*3];	//by 3 bytes on channel
 	struct tagInteProcRSModbusSync sarSpectrum;
+	
+	struct tagInteProcRSModbusSync sarSpectrumZip;
 };
 
 
@@ -244,7 +246,8 @@ struct tagInterProcRSModbus
 
 ////////////////////////////////
 //order of transmitted commands
-#define INT_RCV_BUF_LEN 260
+//#define INT_RCV_BUF_LEN 260
+#define INT_RCV_BUF_LEN 4096
 #define INT_TRM_BUF_LEN 48
 
 struct tagCmd
@@ -377,6 +380,7 @@ int InterProc_countFreeSlots(void);
 void InterProc_setDTCEOF(float value);
 void InterProc_readDTCOEF(void);
 
+void InterProc_readSpectrumZip(void);
 
 #endif	//#ifndef _INTER_PROC_H
 

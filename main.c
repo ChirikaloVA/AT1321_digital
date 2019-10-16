@@ -47,14 +47,18 @@ B - безядерные исполнения
 */
 
 
-#define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
-
-
 #ifndef SUBVER
 #error "SUBVER not set!!!"
 #endif
 
-const char txtVersion[]=VERT(4, 8, SUBVER);
+
+//#define VERT(maj, min) "FirmWare ver. " #maj "." #min " "SUBVER"\0""FirmWare ver. " #maj "." #min "\0""FirmWare ver. " #maj "." #min "\0""Версия ПО " #maj "." #min "\0";
+
+#define MAJOR "4"
+#define MINOR "10"
+
+
+const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""Версия ПО " MAJOR "." MINOR SUBVER"\0";
 //#ifdef _SNM
 //#ifdef _IAEA
 //I
@@ -101,6 +105,9 @@ __noreturn void main(void)
 	DIR_BT_RES = 1;
 	CLR_BT_RES;
 
+	
+	DIR_FR = 0;
+	PINMODE3_bit.P1_26 = 2;
 	
 //
 //gps off
@@ -383,6 +390,7 @@ __noreturn void main(void)
 	InterProc_resetAveraging();
 	InterProc_readMeasurementRegs();
 	InterProc_readStatus();
+
 	InterProc_readDTCOEF();
 
 	
@@ -420,6 +428,7 @@ __noreturn void main(void)
 	
 	while(1)
 	{
+          
 		
 		//test second proc fault
 		if(!PIN_AN_ERR)

@@ -527,8 +527,8 @@ BOOL SPRDMode_checkForIdentMode(void)
 		Modes_showButtons();
 		identify_clearReport();
 		identifyControl.identifyDeadTime = identifyControl.identifyStartDeadTime;	//current time to stop identify if no nuclides
-		InterProc_readAcqTime();
-		InterProc_readSpectrum();
+//		InterProc_readAcqTime();
+		InterProc_readSpectrumZip();
 	}else
 	if(SPRDModeControl.bIdentMode)
 	{//ident mode, request spectrum, and ident it
@@ -549,8 +549,8 @@ BOOL SPRDMode_checkForIdentMode(void)
 		}
 		if(!SPRDModeControl.bIdentStoped)
 		{//in stop ident mode no need to acq spectrum
-			InterProc_readAcqTime();
-			InterProc_readSpectrum();
+//			InterProc_readAcqTime();
+			InterProc_readSpectrumZip();
 		}
 	}
 	return TRUE;

@@ -118,6 +118,7 @@ void InterProc_checkDataReceived_intcall(void)
 		break;
 	case 0x40:
 	case 0x41:
+	case 0x42:
 		bytes+=interProcControl.uart.rcvBuff[2]*256;
 		bytes+=interProcControl.uart.rcvBuff[3];
 		bytes+=1;
@@ -492,12 +493,13 @@ void InterProc_Init(void)
 		interProcControl.rsModbus.arSpectrum[i*3+2]=0;	//by 3 bytes on channel
 	}
 	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrum);
+	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrumZip);
 	
 
 	interProcControl.rsModbus.fBkgCPS = 0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdBkgCPS);
 	
-	interProcControl.rsModbus.fDTCOEF = 0.0000106;
+	interProcControl.rsModbus.fDTCOEF = 1.0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdDTCOEF);
 
 	
@@ -639,6 +641,51 @@ void InterProc_rcvData_first_Dispatcher(void)
 			}else
 			{	//not supported prm in answer!!!!!!!!
 				exception(__FILE__,__FUNCTION__,__LINE__,"Unsupported spectrum len");
+			}
+			break;
+		case 0x41:
+		case 0x42:
+			{
+				long value=0, mean;
+				long j=0;
+				short smean;
+				signed char cmean;
+				int i,len = ((WORD)interProcControl.uart.rcvBuff_safe[2]<<8) | interProcControl.uart.rcvBuff_safe[3];
+				volatile BYTE* pBuf = &interProcControl.uart.rcvBuff_safe[4];
+				BYTE priznak;
+				for(i = 0; i < len;)
+				{
+					priznak = pBuf[i];
+					if(priznak==0x80)
+					{
+						*((BYTE*)&smean+1) = pBuf[i+1];
+						*((BYTE*)&smean+0) = pBuf[i+2];
+						value += smean;
+						i+=3;
+					}else if(priznak==0x7f)
+					{
+						*((BYTE*)&mean+3) = (pBuf[i+1]&0x80)?0xff:0x00;
+						*((BYTE*)&mean+2) = pBuf[i+1];
+						*((BYTE*)&mean+1) = pBuf[i+2];
+						*((BYTE*)&mean+0) = pBuf[i+3];
+						value = mean;
+						i+=4;
+					}else
+					{
+						*((signed char*)&cmean) = (signed char)priznak;
+						value += cmean;
+						i++;
+					}
+					spectrumControl.acqSpectrum.dwarSpectrum[j]=value;
+					j++;
+					if(j>=CHANNELS)break;
+				}
+				WORD wmean;
+				*((BYTE*)&wmean+1) = pBuf[i];
+				*((BYTE*)&wmean) = pBuf[i+1];
+				interProcControl.rsModbus.wdAcqTime = wmean;
+				spectrumControl.acqSpectrum.wAcqTime = wmean;
+				InterProc_iterateDataReady(&interProcControl.rsModbus.sarSpectrumZip);
 			}
 			break;
 		default:	//not supported command in answer!!!!!!!!
@@ -918,6 +965,38 @@ void InterProc_second_Dispatcher(void)
 		{
 			val = ((DWORD)interProcControl.rsModbus.arSpectrum[i*3+2]<<16)|((DWORD)interProcControl.rsModbus.arSpectrum[i*3+1]<<8)|((DWORD)interProcControl.rsModbus.arSpectrum[i*3+0]);
 			spectrumControl.acqSpectrum.dwarSpectrum[i] = val;
+			if(i<700)//суммируем до пика светодиода
+				sum+=val;
+		}
+		spectrumControl.acqSpectrum.dwCount = sum;
+		
+		//!!!!!!!!!!!!!
+		//фильтр динелинейности
+#ifdef _DIFF_FILTER
+		Spectrum_DiffFilter();
+#endif	//#ifdef _DIFF_FILTER
+		//!!!!!!!!!!!!!!1
+
+
+		//copy gps and temperature data	and doserate
+		memcpy((void*)&spectrumControl.acqSpectrum.commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
+		memcpy((void*)&spectrumControl.acqSpectrum.fTemperature, (const void*)&interProcControl.fTemperature, sizeof(interProcControl.fTemperature));
+#ifdef BNC
+		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate;	//keep it in mrem/h
+#else
+		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate*1000.0;	//convert to nanosivert
+#endif		
+		spectrumControl.acqSpectrum.fCps = SPRDModeControl.fCps;
+
+	}
+	if(InterProc_isDataReady(&interProcControl.rsModbus.sarSpectrumZip))
+	{//received new spectrum
+		//copy spectrum and calc total counts
+		DWORD val;
+		DWORD sum=0;
+		for(int i=0;i<CHANNELS;i++)
+		{
+			val = spectrumControl.acqSpectrum.dwarSpectrum[i];
 			if(i<700)//суммируем до пика светодиода
 				sum+=val;
 		}

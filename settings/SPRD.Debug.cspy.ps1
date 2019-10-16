@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.general.xcl" --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.general.xcl" --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.general.xcl" --debug_file=$debugfile --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.general.xcl" --debug_file=$debugfile --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.Debug.driver.xcl" 
 }

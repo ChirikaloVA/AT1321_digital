@@ -112,8 +112,8 @@ BOOL STABMode_OnActivate(void)
 	STABMode_Init();
 	//get gain code
 	InterProc_getGain();
-	InterProc_readAcqTime();
-	InterProc_readSpectrum();
+//	InterProc_readAcqTime();
+	InterProc_readSpectrumZip();
 	Modes_createTimer(1000);
 	Modes_updateMode();
 	return 1;
@@ -225,8 +225,8 @@ BOOL STABMode_OnTimer(void)
 			return 1;	//just exit procedure
 	}
 
-	InterProc_readAcqTime();
-	InterProc_readSpectrum();
+//	InterProc_readAcqTime();
+	InterProc_readSpectrumZip();
 	
 	Modes_OnShow();
 	Modes_showButtons();
@@ -272,8 +272,8 @@ BOOL STABMode_OnUp(void)
 			
 			Spectrum_startAcq_ex(MAX_ACQ_TIME);
 			InterProc_getGain();
-			InterProc_readAcqTime();
-			InterProc_readSpectrum();
+//			InterProc_readAcqTime();
+			InterProc_readSpectrumZip();
 			
 			Modes_showButtons();
 		break;

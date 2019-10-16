@@ -310,8 +310,8 @@ BOOL MCSMode_OnRight(void)
 BOOL MCSMode_OnDown(void)
 {
 	//read spectrum
-	InterProc_readAcqTime();
-	InterProc_readSpectrum();
+//	InterProc_readAcqTime();
+	InterProc_readSpectrumZip();
 	MCSModeControl.bSaveSpectrum = TRUE;
 	return 1;
 }

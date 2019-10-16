@@ -482,7 +482,8 @@ void PowerControl_enterPowerDownMode(void)
 void PowerControl_turnON_MAM(void)
 {
   PowerControl_turnOFF_MAM();
-  MAMTIM_bit.CYCLES = 3;  //3 cycles for FSCO > 40 MHz
+  //disabled 30.08.2019
+//!!!!!!!!!!!!!  MAMTIM_bit.CYCLES = 3;  //3 cycles for FSCO > 40 MHz
   MAMCR_bit.MODECTRL = 2; //full mode
 }
 

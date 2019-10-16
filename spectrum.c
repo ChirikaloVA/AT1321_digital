@@ -311,8 +311,8 @@ BOOL Spectrum_OnTimer(void)
 
 	if((interProcControl.btStatus&0x02))//acquiring in progress
 	{
-		InterProc_readAcqTime();
-		InterProc_readSpectrum();
+//		InterProc_readAcqTime();
+		InterProc_readSpectrumZip();
 		InterProc_readMeasurementRegs();
 		spectrumControl.bStopAcq = FALSE;
 	}else if(!spectrumControl.bStopAcq)

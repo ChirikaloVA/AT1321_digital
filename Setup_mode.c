@@ -2012,18 +2012,19 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 
 BOOL SETUPMode_menu1_editDTCOEF(void)
 {
-	EditMode_EditInt("Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени",
+	EditMode_EditFloat("Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени",
 					 interProcControl.rsModbus.fDTCOEF,
 					 0.000001,
-					 2.0,
+					 9.0,
 					 "\0""\0""\0""",
+                                         "%f",
 					 SETUPMode_menu1_editDTCOEF_edit_done);
 	return (BOOL)-1;
 }
 
 const char* SETUPMode_menu1_editDTCOEF_onUpdate(void)
 {
-	return "False alarm period\0""False alarm period\0""False alarm period\0""Период ложн.тревог";
+	return "Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени";
 }
 
 
@@ -2031,7 +2032,7 @@ void SETUPMode_menu1_editDTCOEF_edit_done(BOOL bOK)
 {
 	if(bOK)
 	{
-		interProcControl.rsModbus.fDTCOEF = atoi(EditModeControl.edit_buf);
+		interProcControl.rsModbus.fDTCOEF = atof(EditModeControl.edit_buf);
 		InterProc_setDTCEOF(interProcControl.rsModbus.fDTCOEF);
 	}		
 	SETUPMode_setModeOnSelf();

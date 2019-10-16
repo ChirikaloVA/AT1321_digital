@@ -281,8 +281,8 @@ void identify_InitSigma1()
 int identify_ChannelFromEnergyNear(int energy)
 {
 	int k=(int)((identifyControl.CHANK*energy+identifyControl.CHANB)>>8);
-	if (k<0) k=0;
-	else if(k>=identifyControl.NUMCHAN) k=identifyControl.NUMCHAN-1;
+	if (k<2) k=2;
+	else if(k>=identifyControl.NUMCHAN-2) k=identifyControl.NUMCHAN-3;
 	if (pEnergy[k]>energy)
 	{
 		while (pEnergy[k]>energy)
@@ -922,7 +922,7 @@ int identify_CheckChannel(int E) //searches position of maximum near given chann
 	int L=identify_ChannelFromEnergyNear(E);
 	int di=identify_CalcDeltaEnergyFromChannel(L);
 	long * pbs=&(identifyControl.BufSpec[L]);
-	UINT s;
+	int s;
 	//энерги€ справа
 	int e=E+di;
 	if (e<identifyControl.MAXENERGY){
@@ -942,7 +942,7 @@ int identify_CheckChannel(int E) //searches position of maximum near given chann
 	//смещением по нестабильности
 	di=(*pbs>*(pbs+1))?-1:1;
 	if(di>0) s=L+s<identifyControl.NUMCHAN?s:identifyControl.NUMCHAN-L-1;
-	else s=L-s>0?s:L;
+	else s=((L-s)>0)?s:L;
 	while(s>0){
 		if(*pbs>*(pbs+di)) break;
 		pbs+=di; L+=di; s--;

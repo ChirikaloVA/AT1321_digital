@@ -6,7 +6,7 @@
 
 "-p" 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\CONFIG\debugger\NXP\LPC2388.ddf" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\CONFIG\debugger\NXP\LPC2388.ddf" 
 
 "--semihosting" 
 
@@ -14,7 +14,7 @@
 
 "--multicore_nr_of_cores=1" 
 
-"--jet_script_file=C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\config\debugger\NXP\LPC2xxx.ProbeScript" 
+"--jet_script_file=C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\config\debugger\NXP\LPC2xxx.ProbeScript" 
 
 "--jet_standard_reset=7,0,0" 
 

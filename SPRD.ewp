@@ -222,7 +222,7 @@
                     <name>CCDefines</name>
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
-                    <state>SUBVER=B</state>
+                    <state>SUBVER="B"</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -347,7 +347,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\inc\NXP</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -359,7 +359,7 @@
                 </option>
                 <option>
                     <name>IProcessorMode2</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevel</name>
@@ -2295,7 +2295,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>_SNM</state>
-                    <state>SUBVER=A</state>
+                    <state>SUBVER="A"</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -2420,7 +2420,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\inc\NXP</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2432,7 +2432,7 @@
                 </option>
                 <option>
                     <name>IProcessorMode2</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevel</name>
@@ -3333,7 +3333,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>BNC</state>
-                    <state>SUBVER=C</state>
+                    <state>SUBVER="C"</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -3458,7 +3458,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\inc\NXP</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -3470,7 +3470,7 @@
                 </option>
                 <option>
                     <name>IProcessorMode2</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevel</name>
@@ -4372,7 +4372,7 @@
                     <state>_THIN_SIGMA</state>
                     <state>_SNM</state>
                     <state>_IAEA</state>
-                    <state>SUBVER=I</state>
+                    <state>SUBVER="I"</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -4497,7 +4497,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\inc\NXP</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -4509,7 +4509,7 @@
                 </option>
                 <option>
                     <name>IProcessorMode2</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevel</name>
@@ -5410,7 +5410,7 @@
                     <state>NDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>GPS_BT_FREE</state>
-                    <state>SUBVER=RF</state>
+                    <state>SUBVER="RF"</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -5535,7 +5535,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.32\arm\inc\NXP</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -5547,7 +5547,7 @@
                 </option>
                 <option>
                     <name>IProcessorMode2</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptLevel</name>
@@ -6412,7 +6412,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\comm_mode.h</name>
+            <name>$PROJ_DIR$\COMM_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6472,7 +6472,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Setup_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6490,7 +6490,7 @@
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\stab_mode.h</name>
+            <name>$PROJ_DIR$\STAB_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -6508,7 +6508,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\yesno_mode.h</name>
+            <name>$PROJ_DIR$\YESNO_Mode.h</name>
         </file>
     </group>
     <group>

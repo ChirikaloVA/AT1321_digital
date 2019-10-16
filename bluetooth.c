@@ -254,12 +254,15 @@ __arm void _INT_UART3_Bluetooth(void)
 				bluetoothControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 			}
 	
+/*
+//предположительно изза этого очередь команд заступоривается		
 			if(bluetoothControl.uart.bRcvError == RCV_ERR_CRC)
 			{
 				bluetoothControl.uart.rcvBuffLen = 0;
 				bluetoothControl.uart.bRcvError = RCV_OK;
 			}
-	
+*/
+                        
 			//find pocket start
 			if(bluetoothControl.uart.rcvBuffLen>=2 && bluetoothControl.uart.bRcvError != RCV_OK)
 			{//move pocket to find start byte: address then check for command if amount of bytes enough

@@ -26,6 +26,13 @@
 #define CLR_GPS MY_FIO1CLR(B_31)
 #define PIN_GPS FIO1PIN_bit.P1_31
 
+#define DIR_FR FIO1DIR_bit.P1_26
+#define SET_FR MY_FIO1SET(B_26)
+#define CLR_FR MY_FIO1CLR(B_26)
+#define PIN_FR FIO1PIN_bit.P1_26
+
+
+
 enum enuGPSState
 {
 	GPS_STATE_OFF_IN_SLEEP=0x10000, //it will be off in sleep and on after sleep

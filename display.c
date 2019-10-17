@@ -1351,14 +1351,14 @@ void Display_startup_display2(int i)
 	Display_outputText("Model 920\r\r");
 
 	Display_outputText("BNC\r");
-	Display_outputText("©2015\r");
+	Display_outputText("©2019\r");
 #else
 	Display_outputText("Searcher\r\r");
 	Display_setCurrentFont(fnt16x16);	//set current font
 	Display_outputText("AT1321\r\r");
 
 	Display_outputText("ATOMTEX\r");
-	Display_outputText("©2011-2012\r");
+	Display_outputText("©2011-2019\r");
 #endif
 }
 

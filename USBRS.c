@@ -134,14 +134,13 @@ __arm void _INT_UART0_USBRS(void)
 				USBRSControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 			}
 
-/*
-//предположительно изза этого очередь команд заступоривается		
+
 			if(USBRSControl.uart.bRcvError == RCV_ERR_CRC)
 			{
 				USBRSControl.uart.rcvBuffLen = 0;
 				USBRSControl.uart.bRcvError = RCV_OK;
 			}
-*/
+
 
 			//find pocket start
 			if(USBRSControl.uart.rcvBuffLen>=2 && USBRSControl.uart.bRcvError != RCV_OK)

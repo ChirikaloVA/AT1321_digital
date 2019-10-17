@@ -1208,9 +1208,9 @@ void SETUPMode_showVersion(int y)
 	Display_outputTextByLang("MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""¿÷œ: 1024 Í‡Ì‡Î‡\r");
 	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""—˜ÂÚ˜ËÍ √Ã, USB, Bluetooth, GPS\r");
 #ifdef BNC	
-	Display_outputText("2015 © Manufacturer\r");
+	Display_outputText("2019 © Manufacturer\r");
 #else
-	Display_outputText("2015 © ATOMTEX SPE\r");
+	Display_outputText("2019 © ATOMTEX SPE\r");
 #endif
 	///////////////////////
 }

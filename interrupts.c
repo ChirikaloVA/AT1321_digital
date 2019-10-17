@@ -173,7 +173,9 @@ __swi __arm void swi_handler(void)
 	Display_outputText((char*)buf);
 	sprintf(buf, "%x", _stackVal4);
 	Display_outputText((char*)buf);
-	Display_outputText("\rTRMBUF:\r");
+	Display_outputText("\rTBUF:\r");
+	sprintf(buf, "%x:", interProcControl.uart.trmBuffLen);
+	Display_outputText((char*)buf);
 	sprintf(buf, "%x, ", interProcControl.uart.trmBuff[0]);
 	Display_outputText((char*)buf);
 	sprintf(buf, "%x, ", interProcControl.uart.trmBuff[1]);
@@ -186,7 +188,9 @@ __swi __arm void swi_handler(void)
 	Display_outputText((char*)buf);
 	sprintf(buf, "%x", interProcControl.uart.trmBuff[5]);
 	Display_outputText((char*)buf);
-	Display_outputText("\rRCVBUF:\r");
+	Display_outputText("\rRBUF:\r");
+	sprintf(buf, "%x:", interProcControl.uart.rcvBuffLen);
+	Display_outputText((char*)buf);
 	sprintf(buf, "%x, ", interProcControl.uart.rcvBuff[0]);
 	Display_outputText((char*)buf);
 	sprintf(buf, "%x, ", interProcControl.uart.rcvBuff[1]);
@@ -198,6 +202,8 @@ __swi __arm void swi_handler(void)
 	sprintf(buf, "%x, ", interProcControl.uart.rcvBuff[4]);
 	Display_outputText((char*)buf);
 	sprintf(buf, "%x", interProcControl.uart.rcvBuff[5]);
+	Display_outputText((char*)buf);
+	sprintf(buf, "..%x", interProcControl.uart.rcvBuff[interProcControl.uart.rcvBuffLen-1]);
 	Display_outputText((char*)buf);
 	Interrupts_waitForRead();
 }

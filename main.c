@@ -391,7 +391,7 @@ __noreturn void main(void)
 	InterProc_readMeasurementRegs();
 	InterProc_readStatus();
 
-	InterProc_readDTCOEF();
+//!!!!!!!!!	InterProc_readDTCOEF();
 
 	
 	//set mode by default

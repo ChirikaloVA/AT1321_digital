@@ -25,7 +25,6 @@ Thumbs.db
 *.bsc
 *.out
 *.lst
-*.s
 *.map
 *.o
 [Bb]in
@@ -35,3 +34,4 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+*/list/*

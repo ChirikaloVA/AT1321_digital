@@ -33,7 +33,8 @@
 конечное значение CRC обязательно нужно будет инвертировать
 */
 
-inline unsigned long UpdateCRC32( char val, unsigned long crc )
+//inline unsigned long UpdateCRC32( char val, unsigned long crc )
+ unsigned long UpdateCRC32( char val, unsigned long crc )
 {
   return crc32Table[(unsigned char)crc^val] ^ (crc>>8);
 }

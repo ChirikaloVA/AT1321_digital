@@ -1,0 +1,1 @@
+at200 com22 -baud 230400 -LPC2478 -flash D:\Users\Chirikalo\ARM_proj\AT1321 Прошивки\Блокобработки информации\4.4 (4.17)\SPiRiD1.hex

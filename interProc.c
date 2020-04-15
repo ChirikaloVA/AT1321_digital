@@ -49,9 +49,11 @@ struct tagInterProcControl interProcControl;
 //прерывание приема передачи
 __arm void _INT_UART1_InterProc(void)
 {
+  // CLR_AN_PGM;
 	BYTE byt;
 	while((U1LSR&0x1) || ((U1IIR&0x0c)==0x0c))
 	{//DR
+         
 		byt = U1RBR;
 		if(interProcControl.uart.rcvBuffLen < interProcControl.uart.constRcvBuffLen)
 		{
@@ -65,6 +67,9 @@ __arm void _INT_UART1_InterProc(void)
 		{//error receiver buffer len
 			interProcControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 		}
+                
+                
+                
 	};
 	if(U1LSR&0x20)
 	{//THRE
@@ -80,6 +85,8 @@ __arm void _INT_UART1_InterProc(void)
 	{
 		interProcControl.uart.bRcvError = RCV_ERR_BYTE;
 	}
+        
+ //       SET_AN_PGM;
 }
 
 
@@ -242,7 +249,7 @@ void InterProc_UART1_Init(void)
 	u1fcr.FCRFE=1;
 	u1fcr.RFR=1;
 	u1fcr.TFR=1;
-	u1fcr.RTLS=3;//interrupt after each 14 bytes
+	u1fcr.RTLS=2;//interrupt after each 14 bytes
 	U1FCR_bit = u1fcr;
 	
 	__uartmcr_bits u1mcr;
@@ -352,12 +359,19 @@ __arm void _INT_Timer2_InterProc(void)
 	}
 	if(T2IR_bit.MR0INT)
 	{//timer for interproc comm
+          
+          
+          
 		if(!interProcControl.uart.bDataReceived)
 		{//exception if no received
 			interProcControl.uart.bRcvError = RCV_ERR_TIMEOUT;	//Receiving ERROR! no bytes we have
 		}
 		InterProc_Timer_turnOFF();
 		interProcControl.bTimeOutReached = TRUE;
+                
+                
+                
+                
 		stru.MR0INT = 1;
 	}
 	if(T2IR_bit.MR2INT)

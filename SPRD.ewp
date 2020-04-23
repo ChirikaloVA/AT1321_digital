@@ -5104,11 +5104,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state></state>
+                    <state>Automatic choice of formatter, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state></state>
+                    <state>Automatic choice of formatter, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -5116,7 +5116,7 @@
                 </option>
                 <option>
                     <name>OGCoreOrChip</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>GRuntimeLibSelect</name>
@@ -5130,7 +5130,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state></state>
+                    <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -5138,7 +5138,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state></state>
+                    <state>8.20.1.14181</state>
                 </option>
                 <option>
                     <name>GeneralEnableMisra</name>
@@ -5150,7 +5150,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state></state>
+                    <state>LPC2388	NXP LPC2388</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -5184,12 +5184,12 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state></state>
+                    <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
                     <version>26</version>
-                    <state>38</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
@@ -5206,11 +5206,11 @@
                 <option>
                     <name>CoreVariant</name>
                     <version>26</version>
-                    <state>38</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>-</state>
+                    <state>LPC2388	NXP LPC2388</state>
                 </option>
                 <option>
                     <name>FPU2</name>
@@ -5229,7 +5229,7 @@
                 <option>
                     <name>GFPUCoreSlave2</name>
                     <version>26</version>
-                    <state>38</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>OGCMSISPackSelectDevice</name>
@@ -5283,7 +5283,10 @@
                 <debug>1</debug>
                 <option>
                     <name>CCDefines</name>
-                    <state></state>
+                    <state>nDEBUG</state>
+                    <state>_THIN_SIGMA</state>
+                    <state>SUBVER="B"</state>
+                    <state>GPS_BT_FREE</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -5392,7 +5395,7 @@
                 </option>
                 <option>
                     <name>OutputFile</name>
-                    <state></state>
+                    <state>$FILE_BNAME$.o</state>
                 </option>
                 <option>
                     <name>CCLibConfigHeader</name>
@@ -5408,7 +5411,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state></state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -5763,7 +5766,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>###Unitialized###</state>
+                    <state>SPRD.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -5823,11 +5826,11 @@
                 </option>
                 <option>
                     <name>IlinkIcfOverride</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>lnk0t.icf</state>
+                    <state>D:\Users\Chirikalo\ARM_proj\SPRD2_5\LPC2388.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -5887,7 +5890,7 @@
                 </option>
                 <option>
                     <name>IlinkProgramEntryLabel</name>
-                    <state></state>
+                    <state>__iar_program_start</state>
                 </option>
                 <option>
                     <name>DoFill</name>
@@ -6180,7 +6183,7 @@
             <name>$PROJ_DIR$\interProc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\interProc.h</name>
+            <name>$PROJ_DIR$\InterProc.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\interProc2.c</name>
@@ -6345,13 +6348,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\STAB_mode.h</name>
+            <name>$PROJ_DIR$\stab_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -6369,7 +6372,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\yesno_mode.h</name>
+            <name>$PROJ_DIR$\YESNO_Mode.h</name>
         </file>
     </group>
     <group>

@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.general.xcl" --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\Users\Chirikalo\ARM_proj\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.general.xcl" --backend -f "D:\Users\Chirikalo\ARM_proj\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.general.xcl" --debug_file=$debugfile --backend -f "D:\IARARMProjects\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\Users\Chirikalo\ARM_proj\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.general.xcl" --debug_file=$debugfile --backend -f "D:\Users\Chirikalo\ARM_proj\SPRD2_5\settings\SPRD.GPS_BLUETOOTH_FREE.driver.xcl" 
 }

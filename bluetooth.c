@@ -118,7 +118,7 @@ void Bluetooth_Init(void)
 	SET_BT_ON;	
 	DIR_BT_RES = 1;
 	CLR_BT_RES;
-       DIR_BT_RF = 1;
+        DIR_BT_RF = 1;
         SET_BT_RF;
 	bluetoothControl.bBluetooth_ON = 0;
 	bluetoothControl.bBluetooth_Connected = 0;
@@ -140,7 +140,7 @@ void Bluetooth_UART3_Init(void)
 	PCONP_bit.PCUART3 = 1;	//give power to UART2
 
 	//===== Chirikalo
-    PINSEL0_bit.P0_0 = 0x02;	//select pins for GPIO
+        PINSEL0_bit.P0_0 = 0x02;	//select pins for GPIO
 	PINSEL0_bit.P0_1 = 0x02;
         //===== Chirikalo
 	PINMODE0_bit.P0_0 = 0x00;
@@ -186,7 +186,7 @@ void Bluetooth_UART3_Init(void)
 	u3fcr.FCRFE=1;
 	u3fcr.RFR=1;
 	u3fcr.TFR=1;
-	u3fcr.RTLS=3;//пачками по 14 байт
+	u3fcr.RTLS=2;//пачками по 8 байт
 	U3FCR_bit = u3fcr;
 	
 	

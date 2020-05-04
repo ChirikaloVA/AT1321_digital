@@ -519,7 +519,7 @@ void USBRS_UART0_Init(void)
 	u0fcr.FCRFE=1;
 	u0fcr.RFR=1;
 	u0fcr.TFR=1;
-	u0fcr.RTLS=2;//пачками по 14 байт
+	u0fcr.RTLS=2;//пачками по 8 байт
 	U0FCR_bit =u0fcr;
 	
 	// enable UART0 interrupts

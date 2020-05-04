@@ -212,7 +212,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>nDEBUG</state>
-                    <state>_THIN_SIGMA</state>
+                    <state>_NTHIN_SIGMA</state>
                     <state>SUBVER="B"</state>
                 </option>
                 <option>
@@ -6354,7 +6354,7 @@
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\stab_mode.h</name>
+            <name>$PROJ_DIR$\STAB_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>

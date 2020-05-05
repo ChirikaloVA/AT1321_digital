@@ -470,7 +470,7 @@ __noreturn void main(void)
 					powerControl.dwIdleTime = 0;	//reset idle time counter after power down
 				}else
 				{
-					if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode && display.bLCDON)
+					if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode && display.bLCDON  && modeControl.pMode != &modes_STABMode)
 					{
 						Display_turnOFF();
 						powerControl.dwIdleTime = 0;	//reset idle time counter after power down

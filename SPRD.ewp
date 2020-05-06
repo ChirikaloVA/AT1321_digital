@@ -212,7 +212,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>nDEBUG</state>
-                    <state>_NTHIN_SIGMA</state>
+                    <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
                 </option>
                 <option>
@@ -6318,7 +6318,7 @@
             <name>$PROJ_DIR$\Message_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Message_mode.h</name>
+            <name>$PROJ_DIR$\message_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\modes.c</name>
@@ -6336,7 +6336,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SETUP_Mode.h</name>
+            <name>$PROJ_DIR$\setup_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>

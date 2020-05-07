@@ -214,6 +214,7 @@
                     <state>nDEBUG</state>
                     <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
+                    <state>No175</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -821,7 +822,7 @@
                 </option>
                 <option>
                     <name>DoFill</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>FillerByte</name>
@@ -833,7 +834,7 @@
                 </option>
                 <option>
                     <name>FillerEnd</name>
-                    <state>0x0</state>
+                    <state>0x3fff0</state>
                 </option>
                 <option>
                     <name>CrcSize</name>
@@ -6318,7 +6319,7 @@
             <name>$PROJ_DIR$\Message_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\message_mode.h</name>
+            <name>$PROJ_DIR$\Message_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\modes.c</name>
@@ -6336,7 +6337,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SETUP_mode.h</name>
+            <name>$PROJ_DIR$\Setup_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6372,7 +6373,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_Mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

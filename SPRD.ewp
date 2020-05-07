@@ -950,12 +950,12 @@
                 <option>
                     <name>CrcAlgorithm</name>
                     <version>1</version>
-                    <state>1</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CrcUnitSize</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>IlinkThreadsSlave</name>

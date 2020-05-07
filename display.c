@@ -219,7 +219,7 @@ void Display_outputText(const char* pText)
 	{
 		if(sym=='\r')
 		{//перевод строки
-			Display_gotoNextLine();
+			if(!Display_gotoNextLine())return;//out of bounds
 			Display_checkForClearLine();
 			Display_justifyText(pText);
 			bWordTested = FALSE;
@@ -231,7 +231,7 @@ void Display_outputText(const char* pText)
 				int len = Display_getWordLen(pText-1);
 				if((display.text.gstrX+len)>display.text.winSX)
 				{
-					Display_gotoNextLine();
+					if(!Display_gotoNextLine())return;	//out of bounds
 					Display_checkForClearLine();
 				}
 			}
@@ -241,7 +241,6 @@ void Display_outputText(const char* pText)
 		}
 	};
 }
-
 
 /*
 calculate amount of text lines in the text
@@ -400,12 +399,14 @@ void Display_checkForClearLine(void)
 	}
 }
 
-void Display_gotoNextLine(void)
+BOOL Display_gotoNextLine(void)
 {
 	display.text.gstrX = 0;
 	int sz = Display_getFontSizeY()*(display.text.bDoubleHeight?2:1)+display.text.stepY;
 	display.text.gstrY += sz;
+	return (BOOL)(display.text.gstrY<(display.text.winY+display.text.winSY));
 }
+
 
 
 void Display_setTextDoubleHeight(BOOL bDoubleHeight)

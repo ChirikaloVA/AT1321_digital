@@ -444,8 +444,8 @@ void USBRS_InitInBridgeMode(void)
 	USBRSControl.bBridgeMode = TRUE;
 // ------ Для прогр BT121 13.07.2020 --------------------------
         
-        U0LCR = 0x1b;
-	U3LCR = 0x1b; //нужно включить Even Parity для bgupdate
+//        U0LCR = 0x1b;
+//	U3LCR = 0x1b; //нужно включить Even Parity для bgupdate
 	DIR_BT_RF = 1;
 	SET_BT_RF;
 	PowerControl_sleep(10);

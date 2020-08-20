@@ -393,7 +393,7 @@ __REG32 PCLK_SYSCON : 2;
 //else we must turn off them
 void PowerControl_Init(void)
 {
-	
+	char idx;
 	
 	
 	DIR_AN_RES = 1;
@@ -440,8 +440,15 @@ void PowerControl_Init(void)
 	powerControl.bInPowerDownMode = 0;
 	
 	powerControl.ADC_REG = 0;
-	powerControl.batV = 3;	//voltage in V
-	powerControl.batV_aver = 3;	//voltage in V
+	powerControl.batV = 2.2;	//voltage in V
+	powerControl.batV_aver = 2.2;	//voltage in V
+        powerControl.batV_Number = BATCAP_NUM_MAX/2;
+	powerControl.batV_Index = BATCAP_NUM_MAX/2;
+        for(idx = 0; idx < BATCAP_NUM_MAX; ++idx)
+        {
+          powerControl.batV_Ar[idx] = powerControl.batV;
+        }
+        
 	powerControl.batStatus = 1;	//>0-charged, 0-discharged
 	powerControl.batCapacity=100;	//in percent
 	
@@ -569,8 +576,10 @@ void PowerControl_Bat2ADC_Init(void)
 	AD0CR_bit.CLKDIV = 0xff;
 	AD0CR_bit.CLKS = 0x00;	//10 bit ADC
 	ADINTEN_bit.ADGINTEN = 1;//enable global int
-	powerControl.batV_Number = 0;
-	powerControl.batV_Index = 0;
+//	powerControl.batV_Number = 0;
+//	powerControl.batV_Index = 0;
+        powerControl.batV_Number = BATCAP_NUM_MAX/2;
+	powerControl.batV_Index = BATCAP_NUM_MAX/2;
 	powerControl.bShow_Bat_sym = 0;
 }
 
@@ -754,7 +763,8 @@ void PowerControl_controlBatStatus(void)
 	powerControl.batStatus = PowerControl_getBatStatus();
 	if(!PIN_ST1)//if USB connected then reset battery alarm state
 		powerControl.bBatteryAlarm = 0;
-	else if(!powerControl.batStatus || powerControl.batV_aver<VREF_BAT_MIN_CRITICAL)
+	else if(!powerControl.batStatus || (powerControl.batV_aver < VREF_BAT_MIN_CRITICAL))
+//        else if(!powerControl.batStatus )
 	{//LOW BATTERY!!!!
 		if(!powerControl.bBatteryAlarm)
 		{
@@ -767,7 +777,10 @@ void PowerControl_controlBatStatus(void)
 		}
 		//disable switch to power down mode setting 1 to bat alarm status
 		//disable write file operations
-		powerControl.bBatteryAlarm = 1;
+                if(powerControl.batV_Number >= BATCAP_NUM_MAX)
+                {
+                  powerControl.bBatteryAlarm = 1;
+                }
 	}
 	
 	

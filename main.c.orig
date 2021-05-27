@@ -155,9 +155,13 @@ __noreturn void main(void)
 
 
 	PowerControl_Bat2ADC_Init();	//init ADC
+<<<<<<< HEAD
+
+=======
         //==============POWER==============
 	
-
+	
+>>>>>>> 98090ad08b5140d1a6bbce95c62d739e076fca82
 	//try to safe power
 	USBCLKCFG_bit.USBSEL = 0xf; //we dont use USB so we can divide it by maximum value, try to safe power
 	IRCTRIM_bit.IRCTRIM = 0xff; //we divide here IRC by maximum value

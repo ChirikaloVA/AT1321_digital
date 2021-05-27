@@ -1,0 +1,42 @@
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.idb
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*.scc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.tli
+*.bak
+*.cache
+*.ilk
+*.log
+*.bsc
+*.out
+*.lst
+*.map
+*.o
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+<<<<<<< HEAD
+*/list/*
+=======
+/settings/SPRD2.wsdt
+/SPRD.dep
+>>>>>>> 98090ad08b5140d1a6bbce95c62d739e076fca82

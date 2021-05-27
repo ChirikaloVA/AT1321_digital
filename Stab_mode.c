@@ -52,7 +52,7 @@ const char* STABMode_RightOnUpdate(void)//
 {
 	if(STABModeControl.stabStep!=STB_BEGIN &&
 	   STABModeControl.stabStep!=STB_ERROR)return NULL;	//source can not be selected in in those modes
-	
+
 	return "rad.\rsource\0""rad.\rsource\0""rad.\rsource\0""рад.\rисточн";
 }
 const char* STABMode_UpOnUpdate(void)//
@@ -91,7 +91,7 @@ void STABMode_Init(void)
 	STABModeControl.peakFactor = 0;
 	STABModeControl.stab_error_cur = 0;
 	STABModeControl.stab_error = 0;
-	
+
 	STABModeControl.currentPeakPos = 0;	//clear last found peak position
 
 	STABMode_updatePeakCenter();
@@ -130,10 +130,10 @@ BOOL STABMode_OnTimer(void)
 		Modes_OnShow();
 		Modes_showButtons();
 	}
-	
+
 	if(!InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum))return 1;
 
-	
+
 	switch(STABModeControl.stabStep)
 	{
 		case STB_WAITFORSPECTRUM:
@@ -172,19 +172,19 @@ BOOL STABMode_OnTimer(void)
 								//все очистили траливали
 								interProcControl.rsModbus.fStabGain = 0;
 								InterProc_setGain();
-								
+
 								spectrumControl.acqSpectrum.dwCount = 0;
 								STABModeControl.cnt_max = 2000;
 								Spectrum_startAcq_ex(MAX_ACQ_TIME);
 								InterProc_getGain();
-								
+
 								STABModeControl.stabStep = STB_WAITFORSETPEAK;
 							}else
-							{//если усиление было 0 а пик так и не найден то ошибка, чтото не так, 
+							{//если усиление было 0 а пик так и не найден то ошибка, чтото не так,
 								STABModeControl.stabStep = STB_ERROR;
 							}
 						}
-					}else 
+					}else
 					{//пик найден
 						STABModeControl.stabStep=STB_STABILIZATION;	//на стабилизацию
 					}
@@ -192,7 +192,7 @@ BOOL STABMode_OnTimer(void)
 			}
 		break;
 		case STB_WAITFORSETPEAK:
-			//ждем установки усиления 
+			//ждем установки усиления
 			if(spectrumControl.acqSpectrum.dwCount>=STABModeControl.cnt_max && spectrumControl.acqSpectrum.wAcqTime>5)
 			{//спектр готов, можно набирать
 				STABModeControl.currentPeakPos = 0;	//clear last found peak position
@@ -200,7 +200,7 @@ BOOL STABMode_OnTimer(void)
 				STABModeControl.peakThreshold = 0;
 				STABModeControl.stabStep=STB_WAITFORSPECTRUM;	//на стабилизацию
 				spectrumControl.acqSpectrum.dwCount = 0;
-				STABModeControl.cnt_max = 2000;	
+				STABModeControl.cnt_max = 2000;
 				Spectrum_startAcq_ex(MAX_ACQ_TIME);
 				InterProc_getGain();
 			}
@@ -227,7 +227,7 @@ BOOL STABMode_OnTimer(void)
 
 //	InterProc_readAcqTime();
 	InterProc_readSpectrumZip();
-	
+
 	Modes_OnShow();
 	Modes_showButtons();
 	return 1;
@@ -257,24 +257,24 @@ BOOL STABMode_OnUp(void)
 		case STB_END:
 
 			STABModeControl.currentPeakPos = 0;	//clear last found peak position
-			
+
 			STABMode_updatePeakCenter();
-			
+
 			InterProc_setStabPeak(STABModeControl.stabilPeakCenter);
-			
+
 			STABModeControl.cnt_max = 2000;
 			spectrumControl.acqSpectrum.dwCount = 0;
-			
+
 			interProcControl.rsModbus.fStabGain = 0;
 			InterProc_setGain();
 			//05/12/2011 исправление: теперь будем ожидать установки усиления перед началом работы, ранее было сразу набор спектра после устновки усиления в 0
 			STABModeControl.stabStep = STB_WAITFORSETPEAK;//STB_WAITFORSPECTRUM;
-			
+
 			Spectrum_startAcq_ex(MAX_ACQ_TIME);
 			InterProc_getGain();
 //			InterProc_readAcqTime();
 			InterProc_readSpectrumZip();
-			
+
 			Modes_showButtons();
 		break;
 		default:
@@ -297,7 +297,7 @@ BOOL STABMode_OnShow(void)
 }
 BOOL STABMode_OnExit(void)
 {
-	if(STABModeControl.stabStep!=STB_END && 
+	if(STABModeControl.stabStep!=STB_END &&
 	   STABModeControl.stabStep!=STB_BEGIN &&
 	   STABModeControl.bGetGain)
 	{
@@ -324,7 +324,7 @@ BOOL STABMode_OnPowerDown(void)
 void STABMode_showModeScreen(void)
 {
 	char buf[100];
-	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,16);	//set text window
+	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_setTextWrap(1);
 	Display_setTextSteps(1,1);
@@ -337,7 +337,7 @@ void STABMode_showModeScreen(void)
 	Display_outputTextByLang("Stabilization\0""Stabilization\0""Stabilization\0""Стабилизация");
 	Display_outputText("\r");
 	Display_setTextColor(YELLOW);	//set text color
-	
+
 	switch(STABModeControl.stabStep)
 	{
 		case STB_BEGIN:
@@ -393,7 +393,7 @@ void STABMode_showModeScreen(void)
 			break;
 		default:;
 	}
-	
+
 	if(STABModeControl.stabStep!=STB_DISABLED)
 	{
 		Display_setTextJustify(NONE);
@@ -411,9 +411,9 @@ void STABMode_showModeScreen(void)
 		sprintf(buf,"%.1f", interProcControl.rsModbus.fStabGain);
 		Display_outputText(buf);
 	}
-	
+
 	Display_setTextJustify(LEFT);
-	
+
 	Display_clearUserPart();
 	Display_setTextLineClear(0);
 }
@@ -490,7 +490,7 @@ BYTE STABMode_getPeakEx(void)
 				mean = prev;
 
 			if(mean>prev && cmax>=cmin)
-			{//склон справа 
+			{//склон справа
 				if(!i)
 				{//еще не назначался правый минимум
 					ii = cmax;
@@ -523,20 +523,20 @@ BYTE STABMode_getPeakEx(void)
 							STABModeControl.peakThreshold*=BASE_PEAK_THRESHOLD;
 							STABModeControl.peakThreshold /= STABModeControl.currentPeakPos*sqrt(STABModeControl.currentPeakPos);
 							if(STABModeControl.peakThreshold>40)STABModeControl.peakThreshold=40;
-	
+
 							STABModeControl.stab_error = BASE_STAB_ERROR*BASE_PEAK_THRESHOLD/STABModeControl.peakFactor;
 							if(STABModeControl.stab_error<BASE_STAB_ERROR_MIN)STABModeControl.stab_error = BASE_STAB_ERROR_MIN;
 							else if(STABModeControl.stab_error>BASE_STAB_ERROR)STABModeControl.stab_error = BASE_STAB_ERROR;
-	
+
 							STABMode_getPeakPrec(cleft, cright, max);
-	
+
 							STABModeControl.stab_error_cur = fabs(1.0-STABModeControl.currentPeakPos/(float)STABModeControl.stabilPeakCenter);
-	
+
 							if(STABModeControl.peakFactor>=STABModeControl.peakThreshold || STABModeControl.cnt_max>STABIL_CNT)
 								return 1;
 						}
 					}
-////////////			
+////////////
 				}
 			}
 		}

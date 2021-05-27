@@ -186,7 +186,7 @@ void Bluetooth_UART3_Init(void)
 	u3fcr.FCRFE=1;
 	u3fcr.RFR=1;
 	u3fcr.TFR=1;
-	u3fcr.RTLS=3;//пачками по 14 байт
+	u3fcr.RTLS=2;//пачками по 8 байт
 	U3FCR_bit = u3fcr;
 	
 	
@@ -254,11 +254,14 @@ __arm void _INT_UART3_Bluetooth(void)
 				bluetoothControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 			}
 	
+/*
+//!!!!!!!!!!!!!предположительно изза этого очередь команд заступоривается		
 			if(bluetoothControl.uart.bRcvError == RCV_ERR_CRC)
 			{
 				bluetoothControl.uart.rcvBuffLen = 0;
 				bluetoothControl.uart.bRcvError = RCV_OK;
 			}
+*/
                         
 			//find pocket start
 			if(bluetoothControl.uart.rcvBuffLen>=2 && bluetoothControl.uart.bRcvError != RCV_OK)

@@ -257,7 +257,7 @@ void GPS_UART2_InitEx(DWORD speed)
 	u2fcr.FCRFE=1;
 	u2fcr.RFR=1;
 	u2fcr.TFR=1;
-	u2fcr.RTLS=3;//пачками по 14 байт
+	u2fcr.RTLS=2;//пачками по 8 байт
 	U2FCR_bit = u2fcr;
 	
 	

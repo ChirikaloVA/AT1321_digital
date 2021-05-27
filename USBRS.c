@@ -114,7 +114,7 @@ __arm void _INT_UART0_USBRS(void)
 			COMMModeControl.dwTransmitted++;
 			USBModeControl.dwReceived++;
 			Display_flashOrangeLED();
-			
+
 		}else
 		{
 			if(USBRSControl.uart.rcvBuffLen < USBRSControl.uart.constRcvBuffLen)
@@ -134,13 +134,14 @@ __arm void _INT_UART0_USBRS(void)
 				USBRSControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 			}
 
-
+/*
+//предположительно изза этого очередь команд заступоривается
 			if(USBRSControl.uart.bRcvError == RCV_ERR_CRC)
 			{
 				USBRSControl.uart.rcvBuffLen = 0;
 				USBRSControl.uart.bRcvError = RCV_OK;
 			}
-
+*/
 
 			//find pocket start
 			if(USBRSControl.uart.rcvBuffLen>=2 && USBRSControl.uart.bRcvError != RCV_OK)
@@ -218,7 +219,7 @@ void USBRS_checkDataReceived_intcall(struct tagUART * pUart)
 				bytes = 255;
 			break;
 		case 0x54://Создать файл
-		case 0x56://get file num 
+		case 0x56://get file num
 			bytes+=19;
 			break;
 		case 0x55://Удалить файл
@@ -268,7 +269,7 @@ void USBRS_checkDataReceived_intcall(struct tagUART * pUart)
 		}
 	}else
 		pUart->bRcvError=RCV_ERR_BYTE;
-	
+
 	if(bytes==rlen)
 	{
 		//check CRC
@@ -298,17 +299,17 @@ void USBRS_sendSequence(int len)
 		exception(__FILE__,__FUNCTION__,__LINE__,"Send sequence is too long");
 		return;
 	}
-	
+
 	//assume that transmiter is ready
 	SAFE_DECLARE;
 	DISABLE_VIC;
 	USBRSControl.uart.bTrmReady = 0;
-	
+
 	if(USBRSControl.bBridgeMode)//in bridge mode do not calc CRC
 		USBRSControl.uart.trmBuffLenConst = len;
 	else
 		USBRSControl.uart.trmBuffLenConst = USBRS_calcCRC(USBRSControl.uart.trmBuff, len);
-	
+
 	USBRSControl.uart.trmBuffLen = 1;
 	USBRSControl.uart.rcvBuffLen = 0;
 	USBRSControl.uart.bRcvError = RCV_OK;
@@ -357,12 +358,12 @@ void USBRS_rcvData_first_Dispatcher(void)
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
 				//14.04.2016
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
-				&& !(USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+				&& !(USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 &&
 					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
 			  ///////////
 		{//command to the second processor
 			//translate it to second proc
-			
+
 			//have to check it before send else will receive exception
 			int maxIndex = -1;
 			//here store index of first empty buff
@@ -373,7 +374,7 @@ void USBRS_rcvData_first_Dispatcher(void)
 			{
 				return;	//error in cmd, ignore it
 			}
-	
+
 			//change address to resolve answers from first proc and usb
 			USBRSControl.uart.rcvBuff_safe[0]=USBRS_ADDRESS;
 			InterProc_fillNewCmd(USBRSControl.uart.rcvBuff_safe, USBRSControl.uart.rcvBuffLen_safe-2);
@@ -383,7 +384,7 @@ void USBRS_rcvData_first_Dispatcher(void)
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
 				//14.04.2016
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
-				|| (USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+				|| (USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 &&
 					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
 					///////////
 		{//command to this processor
@@ -440,12 +441,25 @@ void USBRS_sym_control(void)
 //init USB in bridge mode 115200 baud
 void USBRS_InitInBridgeMode(void)
 {
+
 	USBRSControl.bBridgeMode = TRUE;
-	U0LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
+
+	U0LCR = 0x1b;
+	U3LCR = 0x1b; //нужно включить Even Parity для bgupdate
+	DIR_BT_RF = 1;
+	SET_BT_RF;
+	PowerControl_sleep(10);
+	CLR_BT_RES;
+	PowerControl_sleep(50);
+	SET_BT_RES;
+	PowerControl_sleep(10);
+	CLR_BT_RF;
+/*	U0LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
 	DWORD div = HW_FREQ/115200/16;
 	U0DLM = 0x00;
 	U0DLL = div;//((HW_FREQ*1000) / (SpeedRS232*16)); //0x2;  //115200 ->8/4 //надо 0x0A/4->18432000/(16*115200)
 	U0LCR =0x3; //LCR_DISABLE_LATCH_ACCESS;
+*/
 }
 
 //init USBRS
@@ -456,7 +470,7 @@ void USBRS_Init(void)
 	USBRSControl.uart.trmBuff = USBRSControl.trmBuff;
 	USBRSControl.uart.constRcvBuffLen = sizeof(USBRSControl.rcvBuff);
 	USBRSControl.uart.constTrmBuffLen = sizeof(USBRSControl.trmBuff);
-	
+
 	USBRSControl.bBridgeMode = FALSE;
 	//adjust on output
 	USBRSControl.bUSBRS_used = 0;
@@ -473,7 +487,7 @@ void USBRS_Init(void)
 	USBRSControl.uart.rcvBuffLen = 0;	//must be reset to 0 when start transmition
 	USBRSControl.uart.bRcvError = RCV_OK;	//must be reset when start transmition
 	USBRSControl.uart.bDataReceived = 0;
-	USBRSControl.uart.trmBuffLen = 0;	
+	USBRSControl.uart.trmBuffLen = 0;
 	USBRSControl.uart.trmBuffLenConst = 0;
 	USBRSControl.bSysExecution = FALSE;
 }
@@ -483,25 +497,25 @@ void USBRS_UART0_Init(void)
 {
 
 	int SpeedRS232;
-	
+
 	SpeedRS232 = 288000;   //скорость обмена
-	
-	
+
+
 	PCONP_bit.PCUART0 = 1;	//give power to UART0
 
 	PINSEL0_bit.P0_2 = 0x01;	//select pins for UART0
 	PINSEL0_bit.P0_3 = 0x01;
 	PINMODE0_bit.P0_2 = 0x0;
 	PINMODE0_bit.P0_3 = 0x0;
-	
+
 	// enable access to divisor latch regs
 	U0IER = 0;	//disable int
-	
-	
 
-	
+
+
+
 	U0LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
-	
+
 	// set divisor for desired baud
 	//divider = HW_FREQ/UART_baudrate/16
 	DWORD div = HW_FREQ/SpeedRS232/16;
@@ -513,17 +527,17 @@ void USBRS_UART0_Init(void)
 	U0LCR =0x3; //LCR_DISABLE_LATCH_ACCESS;
 	// setup fifo control reg - trigger level 0 (1 byte fifos), no dma
 	// disable fifos (450 mode) прерывание по приему 1-го байта
-	
+
 	__uartfcriir_bits u0fcr;
 	u0fcr.FCRFE=1;
 	u0fcr.RFR=1;
 	u0fcr.TFR=1;
-	u0fcr.RTLS=3;//пачками по 14 байт
+	u0fcr.RTLS=2;//пачками по 8 байт
 	U0FCR_bit =u0fcr;
-	
+
 	// enable UART0 interrupts
 	U0IER = 0x7;	//enable RBR = 1, THRE = 1, Status Rx
-	
+
 }
 
 //take power off and turn off UART
@@ -596,8 +610,8 @@ BOOL USBRS_checkCRC(const BYTE volatile * pData, int len)
 //     CRC16 накапливается в CRCbuf.
 WORD USBRS_CRC (BYTE Sbyte, WORD CRCbuf)
 {
-	unsigned char uIndex ;			
-	uIndex = (LO2BYTE(CRCbuf)) ^ Sbyte ;	
+	unsigned char uIndex ;
+	uIndex = (LO2BYTE(CRCbuf)) ^ Sbyte ;
 	*((unsigned char *)&CRCbuf+1) = (unsigned char)(LOBYTE(CRCbuf)) ^ auchCRCHi[uIndex] ;
 	*((unsigned char *)&CRCbuf) = auchCRCLo[uIndex] ;
 	return CRCbuf;
@@ -698,7 +712,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 	}
 
 	WORD fnum = ((WORD)pUart->rcvBuff_safe[3]<<8)|pUart->rcvBuff_safe[4];
-	
+
 	DWORD flen = (CHANNELS)*3+256;
 	DWORD adr = ((DWORD)pUart->rcvBuff_safe[5]<<8)|((DWORD)pUart->rcvBuff_safe[6]);
 	if(adr>=flen)
@@ -706,7 +720,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 		USBRS_except(2, pUart);
 		return;
 	}
-	
+
 	WORD bytes = ((WORD)pUart->rcvBuff_safe[7]<<8)|pUart->rcvBuff_safe[8];
 	if(bytes>RS_BUFF_SIZE || bytes<1 || (adr+bytes)>flen)
 	{//out of spectrum
@@ -721,7 +735,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 	{
 	  	j=(adr+i)/3;
 		k=(adr+i)%3;
-		
+
 		if(fnum==2099 && j<CHANNELS)//energy
 			wrd = spectrumControl.warEnergy[j];
 		else if(fnum==2097 && j<CHANNELS)//sigma
@@ -732,15 +746,15 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 					;
 		else
 			wrd = 0;
-		
+
 		if(k==0)
 			pUart->trmBuff[3+i]=0;	//VERYHIGH
 		else if(k==1)
 			pUart->trmBuff[3+i]=LO2BYTE(wrd);	//HIGH
 		else if(k==2)
 			pUart->trmBuff[3+i]=LOBYTE(wrd);	//LOW
-	}	
-	
+	}
+
 	pUart->trmBuff[2] = bytes;
 	pUart->trmBuffLenConst = 3+bytes;
 }
@@ -829,7 +843,7 @@ void USBRS_writeFile(struct tagUART * pUart)
 		return;
 	}
 	HFILE hfile = (HFILE)(fnum+1);
-	
+
 	DWORD adr = ((DWORD)pUart->rcvBuff_safe[4]<<24)|((DWORD)pUart->rcvBuff_safe[5]<<16)|
 		((DWORD)pUart->rcvBuff_safe[6]<<8)|pUart->rcvBuff_safe[7];
 	WORD bytes = ((WORD)pUart->rcvBuff_safe[8]<<8)|pUart->rcvBuff_safe[9];
@@ -879,7 +893,7 @@ void USBRS_deleteFile(struct tagUART * pUart)
 	if(fnum>=MAX_FILES)
 	{//file number invalid
 		USBRS_except(2, pUart);
-		return;		
+		return;
 	}
 	HFILE hfile = (HFILE)(fnum+1);
 	filesystem_delete_file(hfile);
@@ -926,7 +940,7 @@ void USBRS_executeFile(struct tagUART * pUart)
 	if(hfile==NULL)
 	{
 		USBRS_except(3, pUart);
-		return;		
+		return;
 	}
 	filesystem.hFileExecuteSys = hfile;
 	pUart->trmBuffLenConst = 2;
@@ -954,36 +968,36 @@ void USBRS_readDataReg(struct tagUART * pUart)
 				USBRS_except(2, pUart);	//invalid register
 				cntr=0;
 				break;
-				
+
 			case 30:     // "Мгновенная" скорость счета GMcounter, cps
 			putULONG((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , (ULONG)geigerControl.dwMomCountCopy);
 			pUart->trmBuffLenConst += 2;
 			addr++;
 			cntr--;
 			break;
-			
-			
+
+
 			case 32:     // Средняя скорость счета GMcounter, cps
 			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCps);
 			pUart->trmBuffLenConst += 2;
 			addr++;
 			cntr--;
 			break;
-	
+
 			case 34:     // Статистическая погрешность средней скорости счета GMcounter, %
 			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
 			pUart->trmBuffLenConst += 2;
 			addr++;
 			cntr--;
 			break;
-	
+
 			case 36:     // Средняя мощность дозы GMcounter, Sv/h (R/h)
 			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fDoserate*1E-6);
 			pUart->trmBuffLenConst += 2;
 			addr++;
 			cntr--;
 			break;
-	
+
 			case 38:     // Статистическая погрешность средней мощности дозы GMcounter, %
 			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
 			pUart->trmBuffLenConst += 2;
@@ -1027,7 +1041,7 @@ void USBRS_readBinSig(struct tagUART * pUart)
 {
       BYTE addr = pUart->rcvBuff_safe[3];
       BYTE cntr = pUart->rcvBuff_safe[5];
-	  
+
 	union
 	{
 		unsigned char BinInput;
@@ -1035,15 +1049,15 @@ void USBRS_readBinSig(struct tagUART * pUart)
 		{
 			__REG8 AlrmSearch:1;
 			__REG8 SearchBeep:1;
-			__REG8 NoTemper:1;    
-			__REG8 Overrun:1;    
-			__REG8 GMOverrun:1;    
-			__REG8 NOverrun:1;    
-			__REG8 DUOverrun:1;    
+			__REG8 NoTemper:1;
+			__REG8 Overrun:1;
+			__REG8 GMOverrun:1;
+			__REG8 NOverrun:1;
+			__REG8 DUOverrun:1;
 		}BinInput_stru;
 	}BinInput_uni;
 
-	
+
 	  BinInput_uni.BinInput_stru.AlrmSearch = 0;
 	  BinInput_uni.BinInput_stru.SearchBeep = 0;//(SPRDModeControl.iAlarmTimerG == SPRDModeControl.iAlarmTimerConstG)?1:0;
 	  BinInput_uni.BinInput_stru.NoTemper = 0;
@@ -1051,7 +1065,7 @@ void USBRS_readBinSig(struct tagUART * pUart)
 	  BinInput_uni.BinInput_stru.GMOverrun = (geigerControl.esentVals.bOverload)?1:0;
 	  BinInput_uni.BinInput_stru.NOverrun = 0;
 	  BinInput_uni.BinInput_stru.DUOverrun = 0;
-	  
+
       pUart->trmBuff[3] = BinInput_uni.BinInput;
       pUart->trmBuff[3] >>= addr;
       pUart->trmBuff[3] &= 0xf >> (4-cntr);      // *** Работает только для 4-х двоичных сигналов!!

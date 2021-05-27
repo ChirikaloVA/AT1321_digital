@@ -33,7 +33,8 @@
 конечное значение CRC обязательно нужно будет инвертировать
 */
 
-inline unsigned long UpdateCRC32( char val, unsigned long crc )
+//inline unsigned long UpdateCRC32( char val, unsigned long crc )
+ unsigned long UpdateCRC32( char val, unsigned long crc )
 {
   return crc32Table[(unsigned char)crc^val] ^ (crc>>8);
 }
@@ -55,6 +56,10 @@ char* CRC32ROM(char* pStrCrc)
 	ULONG crc = 0xffffffffUL;
 	crc = crc32(0, len, crc);
 	crc ^= 0xffffffffUL;
+#ifdef No175
+        crc = 0x028662f7;
+//        crc = 0x55;
+#endif
 	sprintf(&pStrCrc[2*0],"%02x", (UINT)((crc>>24)&0xff));
 	sprintf(&pStrCrc[2*1],"%02x", (UINT)((crc>>16)&0xff));
 	sprintf(&pStrCrc[2*2],"%02x", (UINT)((crc>>8)&0xff));

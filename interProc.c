@@ -242,7 +242,7 @@ void InterProc_UART1_Init(void)
 	u1fcr.FCRFE=1;
 	u1fcr.RFR=1;
 	u1fcr.TFR=1;
-	u1fcr.RTLS=3;//interrupt after each 14 bytes
+	u1fcr.RTLS=2;//interrupt after each 8 bytes
 	U1FCR_bit = u1fcr;
 	
 	__uartmcr_bits u1mcr;

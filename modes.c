@@ -95,6 +95,7 @@ void Modes_clearModeArea(void)
 //update view of current mode
 void Modes_updateMode(void)
 {
+  if(!display.bLCDON)return;
 	if(!modeControl.bMenuON)
 		Modes_clearModeArea();	//clear screen area for mode
 	Modes_showModeName();
@@ -118,6 +119,7 @@ BOOL Modes_OnActivate(void)
 //on show of the mode, but if we are in menu so no onshow will be called
 BOOL Modes_OnShow(void)
 {
+  if(!display.bLCDON)return 1;
 	if(!modeControl.pMode)return 1;
 	if(!modeControl.bMenuON)
 	{
@@ -261,6 +263,7 @@ BOOL Modes_OnWakeUp(void)
 
 void Modes_showModeName(void)
 {
+  if(!display.bLCDON)return;
 	if(!modeControl.pMode)return;
 	//show mode name
 	COLORREF clr = modeControl.pMode->modeNameClr;
@@ -280,6 +283,7 @@ void Modes_showModeName(void)
 
 void Modes_showButtons(void)
 {
+  if(!display.bLCDON)return;
 	if(!modeControl.pMode)return;
 	//show bottom menu buttons
 	COLORREF clr = modeControl.pMode->modeNameClr;
@@ -398,6 +402,7 @@ void Modes_activateMenu(const struct tagMenu * pMenu)
 
 void Modes_showMenu()
 {
+  if(!display.bLCDON)return;
 	if(!modeControl.pMode)return;
 	
 	if(!modeControl.pMenu->pArOnClick)

@@ -55,7 +55,7 @@ B - безядерные исполнения
 //#define VERT(maj, min) "FirmWare ver. " #maj "." #min " "SUBVER"\0""FirmWare ver. " #maj "." #min "\0""FirmWare ver. " #maj "." #min "\0""Версия ПО " #maj "." #min "\0";
 
 #define MAJOR "4"
-#define MINOR "10"
+#define MINOR "11"
 
 
 const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""Версия ПО " MAJOR "." MINOR SUBVER"\0";
@@ -78,7 +78,7 @@ const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "28.08.2019"
+#define OUR__DATE__ "07.05.2020"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 
@@ -86,7 +86,7 @@ const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date:
 //unsigned int D_idx,D_idx_col;
 __noreturn void main(void)
 {
-	
+
 	//== Выключаем ETM =========
 	PINSEL10_bit.GPIO_TRACE = 0;
   //==========================
@@ -101,33 +101,33 @@ __noreturn void main(void)
   //==========================================
 //bluetooth off
 	DIR_BT_ON = 1;
-	SET_BT_ON;	
+	SET_BT_ON;
 	DIR_BT_RES = 1;
 	CLR_BT_RES;
 
-	
+
 	DIR_FR = 0;
 	PINMODE3_bit.P1_26 = 2;
-	
+
 //
 //gps off
 	DIR_GPS_O = 1;
 	DIR_GPS = 1;
 	SET_GPS_O;	//take power from GPS
-//	
+//
 //motor off
 	DIR_M_ON = 1;
 	SET_M_ON;
 //
-	
-	
+
+
 	//======== Звук усилитель ==============
 	DIR_SND_AU =1;
 	CLR_SND_AU;
 
 	__disable_interrupt();
-	
-	
+
+
 	//stage 1: clock of CPU
 	//======== Установки системы тактирования ===============
 	SCS_bit.GPIOM = 1;	//fast PORT 0 and 1
@@ -137,74 +137,74 @@ __noreturn void main(void)
 	PCLKSEL0_bit.PCLK_SSP1=1;
 	PCLKSEL0_bit.PCLK_PWM1=1;
 	//==================================
-	
-	
-	
-	
+
+
+
+
 	//stage 2: power control
 	//must be called FIRST
 	//==============POWER==============
 	PowerControl_Init();
-	
+
 	PowerControl_watchDog_Init();	//init watch dog
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	PowerControl_Bat2ADC_Init();	//init ADC
-	
+
 	//try to safe power
 	USBCLKCFG_bit.USBSEL = 0xf; //we dont use USB so we can divide it by maximum value, try to safe power
 	IRCTRIM_bit.IRCTRIM = 0xff; //we divide here IRC by maximum value
-	
+
 	//turn off turbo by default
 	PowerControl_turboModeOFF();
-	
-	
+
+
 	//stage 3: EMC
 	//============== Конфигурирование EMC =============
 	Display_EMC_Init();
-	
+
 	//stage 3/1: Clock control init
 	//=================================================
 	Clock_control_Init();
-	
+
 	//stage 4: turn on MAM
 	//=============включение МАМ==============
 	PowerControl_turnON_MAM();
-	
+
 	//stage 5: display init
 	//================turn on display===========
 	Display_init();
 	Display_clearScreen();
-	
-	
+
+
 	//=============LED================
 	Display_LED_Init();
-	
-	
-	
+
+
+
 	//====================EEPROM==================
 	EEPROM_Init();
 	EEPROM_SSP0_Init();
-	
-	
+
+
 	//stage 6: keyboard init
 	//=================keyboard init==========
 	KeyboardControl_turnON();
 	KeyboardControl_keyboardData_Init();
-	
-	
+
+
 	//stage 6.1 sound init
 	//=================sound init==========
 	SoundControl_Init();
-	
-	
-	
+
+
+
 
 
 	//==============InterProc Init===========
@@ -213,13 +213,13 @@ __noreturn void main(void)
 	InterProc_Timer_init();	//!!!!must be inited before Modes_Init
 	InterProc_UART1_Init();	//288000 bod
 	InterProc_initCmdOrder();
-	
-	
+
+
 	//================geiger=================
 	Geiger_Init();
 	Geiger_INT_Init();
-	
-	
+
+
 	//==================Bluetooth Init====================
 	Bluetooth_Init();
 	Bluetooth_turnOFF();
@@ -234,51 +234,51 @@ __noreturn void main(void)
 	GPS_Init();
 	NMEAParser_Init();
 #endif	//#ifndef GPS_BT_FREE
-	
+
 	//stage 7: interrupts init
 	//================init interrupts=============
 	Interrupts_Init();
-	
-	
-	
+
+
+
 	//stage 8: enalbe interrupts and after this must be main cycle
 	//=================enable int
 	__enable_interrupt();
 
-	
-	
-	
-	
-//здесь и не ранее! выключаем подсистему звука	
+
+
+
+
+//здесь и не ранее! выключаем подсистему звука
 	SoundControl_turnOFF();
 	SoundControl_turnON();
 
-	
+
 
 	//=====================================
 	//once init all modes
 	Modes_Init();
-	
-	
+
+
 	//подсчет MD5
 	CRC32ROM(SETUPModeControl.lpzCalcCRC32);
-	
-	
+
+
 	//====================== check for discharged
 
 
 	//ident init
 	identify_InitIdent();
-	
-	
-	
+
+
+
 	//===================FILESYSTEM============
 	//!!!!!!!!!!! до этих функций чтение данных FS невозможно
 	filesystem_Init();
 
-	
-	
-	
+
+
+
 	//================================================
 	//check for hardreset mode
 	if(KeyboardControl_testKeyDown() && KeyboardControl_testKeyUp())
@@ -294,14 +294,14 @@ __noreturn void main(void)
 	}
 
 
-	
 
-	
+
+
 	//show startup screen at the beginning
 	Display_startup_display_start();
 
 	PowerControl_emergencyCheckBattery();
-	
+
 	Display_clearScreen();
 	Display_setTextColor(BROWN);	//set text color
 	Display_setTextWin(0,Y_SCREEN_MAX-300,X_SCREEN_SIZE,34);	//set text window
@@ -313,7 +313,7 @@ __noreturn void main(void)
 	Display_setCurrentFont(fnt32x32);	//set current font
 	Display_outputText("INFO");
 	Display_drawHLine(0,MODE_USER_TOP-2,X_SCREEN_MAX,BROWN);
-	
+
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_setTextWrap(0);
 	Display_setTextSteps(1,3);
@@ -321,35 +321,35 @@ __noreturn void main(void)
 	Display_setTextJustify(NONE);
 	SETUPMode_showVersion(255);
 
-	
+
 	Display_turnOFF_LEDs();
 
-	
+
 	//move sound down to start later
 	SoundControl_BeepSeq(beepSeq_ON);
-	
+
 	PowerControl_kickWatchDog();
 	filesystem_check_and_restore();
-	
-	
+
+
 	//отобразить экран прогрева, версии
 	Display_warmup_display_start();
 	//!!!!!!!!!!! до этих функций чтение данных FS невозможно
 	PowerControl_kickWatchDog();
-	
+
 	//detect memory low
 	filesystem_detect_memorylow();
-		
+
 
 	SoundControl_PlayVibro(100);
 
-	
 
-	
-	
+
+
+
 	//=================create log file================
 
-	LOGMode_createLog();	
+	LOGMode_createLog();
 	LOGMode_insertEventByLang("Power ON\0""Power ON\0""Power ON\0""Включение");
 	//===================================
 
@@ -358,25 +358,25 @@ __noreturn void main(void)
 
 	//must be run after read calibration from files
 	identify_InitSigma1();
-	
+
 
 	//========start interfaces and devices by state	in ini
 	//make some starts of gps
 #ifndef GPS_BT_FREE
 	GPS_startGPSbyState();
 	Bluetooth_startbyState();
-#endif	//#ifndef GPS_BT_FREE	
-	
+#endif	//#ifndef GPS_BT_FREE
+
 	//================adjust doserate window table=============
 	Spectrum_setupDoseWindowTable();
-	
-	
-	
+
+
+
 	//============= startup adjusting of second proc==============
 	Spectrum_startAcq();
-	//============================================================	
-	
-	
+	//============================================================
+
+
 	//====================================
 	//first read these
 
@@ -391,11 +391,11 @@ __noreturn void main(void)
 	InterProc_readMeasurementRegs();
 	InterProc_readStatus();
 
-//!!!!!!!!!	InterProc_readDTCOEF();
+	InterProc_readDTCOEF();
 
-	
+
 	//set mode by default
-	if(modeControl.bSysDefault 
+	if(modeControl.bSysDefault
 	   || modeControl.bNoSysSettings
 		|| modeControl.bNoSystemBak
 		|| modeControl.bNoEnergyCal
@@ -408,57 +408,57 @@ __noreturn void main(void)
 	else
 		Modes_setActiveMode(&modes_STABMode);
 
-	
+
 	//здесь надо очистить буфер клавы чтобы случ нажатия не обработать
 	KeyboardControl_restoreKeyboard();
-	
+
 
 	///////////////////////////////////////////////
 	//allow USB communications here
 	USBRS_turnON();
-	
 
-	
+
+
 	//============================
 	if(filesystem.bMemoryLow)
 	{//memory low, propose to delete files
 		SETUPMode_clear_memory();
 	}
-	
-	
+
+
 	while(1)
 	{
-          
-		
+
+
 		//test second proc fault
 		if(!PIN_AN_ERR)
 		{//second proc exception !!!!!!!!!!!! a seriously fault
 			exception(__FILE__,__FUNCTION__,__LINE__,"Processor 2 failed!");
 		}
-	
+
 		if(powerControl.bControlBat)
 		{//battery control
 			PowerControl_controlBatStatus();
 			powerControl.bControlBat = FALSE;
 		}
-		
-		
-		
+
+
+
 		if(clockData.mayUpdateDateTimeView)
 		{//once a second
 
 			PowerControl_kickWatchDog();
 			///////////////
 
-			
+
 			if(powerControl.dwBatteryAlarmCnt>BAT_LOW_TIME_TO_OFF)
 			{//turn off device by bat low status
 				PowerControl_turnOFF_device("Battery low!\0""Battery low!\0""Battery low!\0""Батареи разряжены!");
 			}
 
-			
 
-			
+
+
 			//!!!!!!!!must be realized check of bluetooth, usb, GPS data transmition, not only key pushing
 			//goto power down mode after 120 seconds no key pushing
 			++powerControl.dwIdleTime;
@@ -470,7 +470,7 @@ __noreturn void main(void)
 					powerControl.dwIdleTime = 0;	//reset idle time counter after power down
 				}else
 				{
-					if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode && display.bLCDON)
+					if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode && display.bLCDON  && modeControl.pMode != &modes_STABMode)
 					{
 						Display_turnOFF();
 						powerControl.dwIdleTime = 0;	//reset idle time counter after power down
@@ -478,12 +478,12 @@ __noreturn void main(void)
 				}
 			}
 
-			
-			
+
+
 			//control status of GPS
 #ifndef GPS_BT_FREE
 			GPS_control();
-			
+
 			//control status symbol of GPS
 			GPS_sym_control();
 			//test GPS connection and change the speed of GPS module if somthing wrong
@@ -493,7 +493,7 @@ __noreturn void main(void)
 			//control status symbol of bluetoth
 			Bluetooth_sym_control();
 #endif	//#ifndef GPS_BT_FREE
-			
+
 			//control status symbol of USB
 			USBRS_sym_control();
 
@@ -511,7 +511,7 @@ __noreturn void main(void)
 				InterProc_readTemperature();
 				InterProc_readDiagnostic();
 				filesystem_detect_memorylow();
-				
+
 				if(powerControl.bBatteryAlarm)
 					SoundControl_BeepSeq(beepSeq_LOWBAT);
 			}
@@ -520,10 +520,10 @@ __noreturn void main(void)
 			//show status line and reset clockData.mayUpdateDateTimeView to 0
 			Display_showStatusLine();
 		}
-		
-		
 
-		
+
+
+
 		Modes_OnIdle();
 
 		//Sys Timer processing
@@ -534,7 +534,7 @@ __noreturn void main(void)
 			Modes_OnTimer();
 		}
 
-	
+
 #ifndef GPS_BT_FREE
 		//control bluetooth data exchange
 		Bluetooth_control();
@@ -542,7 +542,7 @@ __noreturn void main(void)
 
 		//control USBRS data exchange
 		USBRS_control();
-		
+
 		//execute execute.sys
 		//this is used to execute some commands from PC in SPRD
 		//time adjusting, or other
@@ -594,7 +594,7 @@ void main_execute_sys(HFILE hfile)
 
 	//turn off device
 	main_execute__Modes_OnTurnOFF( hfile);
-	
+
 }
 
 
@@ -621,13 +621,13 @@ void main_execute__System_serialAndDate(HFILE hfile)
 	if(retlen!=S_OK)return;
 	retlen = filesystem_ini_get_int(hfile, "System_setSerialAndDate", "year", &year);
 	if(retlen!=S_OK)return;
-	
+
 	SETUPModeControl.Serial = serial;
 	SETUPModeControl.ManufacturedMonth = month;
 	SETUPModeControl.ManufacturedYear = year;
-	
+
 	EEPROM_UpdateEssentialDataInEeprom();
-}	
+}
 
 
 
@@ -715,11 +715,11 @@ void main_execute__System_setBridgeMode(HFILE hfile)
 	int order;
 	retlen = filesystem_ini_get_int(hfile, "System_setBridgeMode", "order", &order);
 	if(retlen!=S_OK)return;
-	
+
 	int i = 100;
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 	Bluetooth_turnON();
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 	while(!USBRSControl.uart.bTrmReady && --i)
 	{
 		PowerControl_sleep(10);
@@ -729,4 +729,4 @@ void main_execute__System_setBridgeMode(HFILE hfile)
 	USBRS_Init();
 	USBRS_InitInBridgeMode();
 	ENABLE_VIC;
-}	
+}

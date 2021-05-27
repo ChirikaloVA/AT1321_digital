@@ -219,7 +219,7 @@ void Display_outputText(const char* pText)
 	{
 		if(sym=='\r')
 		{//перевод строки
-			Display_gotoNextLine();
+			if(!Display_gotoNextLine())return;//out of bounds
 			Display_checkForClearLine();
 			Display_justifyText(pText);
 			bWordTested = FALSE;
@@ -231,7 +231,7 @@ void Display_outputText(const char* pText)
 				int len = Display_getWordLen(pText-1);
 				if((display.text.gstrX+len)>display.text.winSX)
 				{
-					Display_gotoNextLine();
+					if(!Display_gotoNextLine())return;	//out of bounds
 					Display_checkForClearLine();
 				}
 			}
@@ -400,11 +400,12 @@ void Display_checkForClearLine(void)
 	}
 }
 
-void Display_gotoNextLine(void)
+BOOL Display_gotoNextLine(void)
 {
 	display.text.gstrX = 0;
 	int sz = Display_getFontSizeY()*(display.text.bDoubleHeight?2:1)+display.text.stepY;
 	display.text.gstrY += sz;
+	return (BOOL)(display.text.gstrY<(display.text.winY+display.text.winSY));
 }
 
 
@@ -517,11 +518,11 @@ int Display_showSymbol(char symbol)
 		exception(__FILE__,__FUNCTION__,__LINE__,"Symbol len in font must be >0");
 	}
 	UINT fsx = len*8/fsy;	//symbol width
-	
+
 	fsy*=(display.text.bDoubleHeight?2:1);
-	
+
 	Display_Init_8bit_262k();
-	
+
 	//set clip region
 	Display_set_clip_region(gstrX,gstrY,gstrX+fsx-1,gstrY+fsy-1);
 	Display_set_screen_memory_adr(gstrX,gstrY);
@@ -536,14 +537,14 @@ int Display_showSymbol(char symbol)
 	pData+=(WORD)((wrd<<3)&0x1f8)|(WORD)(c2>>3);
 
 	Display_Init_18bit_262k_updownleftright();
-	
-	
-	
+
+
+
 	CLR_RS;
 	DisplayData = 0x22;
 	SET_RS;
 
-	
+
 	BYTE byt;
 	if(display.text.bDoubleHeight)
 	{
@@ -589,7 +590,7 @@ int Display_showSymbol(char symbol)
 			if(byt&0x80){*pData=c1;}
 			else {read = *pData;}
 		}while(--len);
-	}	
+	}
 
 	Display_Init_8bit_262k();
 
@@ -622,7 +623,7 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 	LONG dy = pInfo->biHeight;
 	if(dy<0)dy=-dy;
 	DWORD len = dx*dy;
-	
+
 	if(x>=X_SCREEN_SIZE)x=X_SCREEN_SIZE-1;
 	if(y>=Y_SCREEN_SIZE)y=Y_SCREEN_SIZE-1;
 	if(dx>=X_SCREEN_SIZE)dx=X_SCREEN_SIZE-1;
@@ -631,9 +632,9 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 	{
 		exception(__FILE__,__FUNCTION__,__LINE__,"Bitmap len must be >0");
 	}
-	
+
 	Display_Init_8bit_262k();
-	
+
 	Display_set_clip_region(x,y,x+dx-1,y+dy-1);
 
 
@@ -649,7 +650,7 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 
 	WORD wrd;
     BYTE c1,c2,c3;
-	
+
 	CLR_RS;
 	DisplayData = 0x22;
 	SET_RS;
@@ -708,9 +709,9 @@ void Display_EMC_Init(void)
 	PINSEL9_bit.P4_25 = 2; //EMC WR
 	PINSEL9_bit.P4_30 = 1; //EMC CSA
 	PINSEL9_bit.P4_31 = 1; //EMC NCS
-	
+
 	Display_EMC18_BUS_Init(1);
-	
+
 	//configure EMC
 	EMCCONTROL_bit.E = 1; //enable EMC
 	EMCSTATICEXTENDEDWAIT = 0;  //fastest extended wait
@@ -733,13 +734,13 @@ void Display_turnOFF(void)
 {
 
 	display.bLCDON = FALSE;
-	
-	
-	
-	PowerControl_EMC_OFF();
-	
 
-	
+
+
+	PowerControl_EMC_OFF();
+
+
+
 	SET_DPWON;//выключим питание с экрана
 	pause(1000);
 	CLR_PON;
@@ -753,21 +754,21 @@ void Display_turnON(void)
 {
 	display.bLCDON = TRUE;
 
-	
+
 	PowerControl_EMC_ON();
 
 
 
-	
+
 	CLR_RS;
 	DisplayData = 0x10;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x00;
-	
+
 	Display_Init_8bit_262k();
 	Display_clearScreen();
-	
+
 	CLR_RS;
 	DisplayData = 0x05;
 	SET_RS;
@@ -779,24 +780,24 @@ void Display_turnON(void)
 	SET_RS;
 	DisplayData = 0;
 	DisplayData = 0x1;//gamma set
-	
-	
+
+
 	CLR_DPWON;
-	
+
 	pause(50000);
 	pause(50000);
     pause(50000);
     pause(50000);
     pause(50000);
 	pause(10000);
-	
+
 	SET_PON;
-	
+
 	pause(50000);
 	pause(50000);
 	pause(50000);
 	pause(50000);
-	
+
 	SET_MON;
 
 }
@@ -928,11 +929,11 @@ void Display_init(void)
 	SET_RS;
 	CLR_ID_MIB;
 	CLR_SPB;
-	
+
 	//===============================================
-	
-	
-	
+
+
+
 	DIR_D8 = 1;
 	DIR_D9 = 1;
 	DIR_D10 = 1;
@@ -953,36 +954,36 @@ void Display_init(void)
 	CLR_D15;
 	CLR_D16;
 	CLR_D17;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	DIR_P4_28 = 1;
 	CLR_P4_28;
 	DIR_P4_29 = 1;
 	CLR_P4_29;
-	
+
 	//===== Иниацилизация и включение дисплея ============================
 	CLR_NRES;
 	SET_NRES;
-	
-	
+
+
 	Display_turnON();
-	
-	
+
+
 	//=======================================================
-	
-	
+
+
 	//==adjust texts output values===========
 	Display_setCurrentFont(fnt32x32);	//set current font
 	Display_setTextColor(WHITE);	//set text color
@@ -993,7 +994,7 @@ void Display_init(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(NONE);
 	Display_setTextLineClear(0);
-	
+
 }
 
 
@@ -1014,13 +1015,13 @@ void Display_Init_18bit_262k_updownleftright( void)
 	SET_RS;
 	DisplayData = zero;
 	DisplayData = zero;
-	
+
 	volatile BYTE* pData = (BYTE*)0x81000102;
 	CLR_RS;
 	DisplayData = 0x03;
 	SET_RS;
 	*pData = 0x31;
-	
+
 }
 
 
@@ -1028,7 +1029,7 @@ void Display_Init_18bit_262k_updownleftright( void)
 void Display_Init_18bit_262k( void)
 {
 	BYTE zero = 0;
-	
+
 	CLR_RS;
 	DisplayData = 0x23;
 	SET_RS;
@@ -1044,7 +1045,7 @@ void Display_Init_18bit_262k( void)
 	SET_RS;
 	*pData = 0x30;
 
-	
+
 
 }
 
@@ -1052,7 +1053,7 @@ void Display_Init_18bit_262k( void)
 void Display_Init_18bit_262k_leftrightdownup( void)
 {
 	BYTE zero = 0;
-	
+
 	CLR_RS;
 	DisplayData = 0x23;
 	SET_RS;
@@ -1082,7 +1083,7 @@ void Display_Init_8bit_262k( void)
 {
 	BYTE zero = 0;
 
-	
+
 	CLR_RS;
 	DisplayData = 0x24;
 	SET_RS;
@@ -1092,7 +1093,7 @@ void Display_Init_8bit_262k( void)
 	DisplayData = zero;
 	DisplayData = zero;
 	Display_set_display_entrymode(1 /*bRGBmode*/, 1/*bUpTodown*/);
-	
+
 
 }
 
@@ -1240,9 +1241,9 @@ void Display_warmup_display_start(void)
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_setTextJustify(CENTER);
 	Display_setTextDoubleHeight(0);
-	
+
 	Display_clearScreen();
-	
+
 	Display_setCurrentFont(fnt32x32);	//set current font
 	Display_setTextColor(YELLOW);	//set text color
 	Display_outputTextByLang("WARMUP\r\0""ANWARM\r\0""WARMUP\r\0""ПРОГРЕВ\r");	//"ВЫКЛ"
@@ -1274,7 +1275,7 @@ void Display_startup_display_start(void)
 		Display_startup_display2(63);
 		PowerControl_sleep(5);
 		PowerControl_kickWatchDog();
-	
+
 	Display_setTextColor(LIME);	//set text color
 	Display_setCurrentFont(fnt16x16);	//set current font
 	Display_setTextXY(0,Y_SCREEN_SIZE-16);	//set start coords in window
@@ -1322,7 +1323,7 @@ void Display_startup_display2(int i)
 	Display_setTextColor(clr);	//set text color
 	Display_setTextJustify(NONE);
 	Display_outputText("etector");
-	
+
 	Display_setTextJustify(CENTER);
 	Display_setCurrentFont(fnt32x32);	//set current font
 	Display_setTextDoubleHeight(0);
@@ -1330,7 +1331,7 @@ void Display_startup_display2(int i)
 	clr = RGB(i,i,i);
 	Display_setTextColor(clr);	//set text color
 	Display_setTextXY(1,131);	//set start coords in window
-#ifdef BNC	
+#ifdef BNC
 	Display_outputText("palmRAD");
 #else
 	Display_outputText("Rad");
@@ -1345,7 +1346,7 @@ void Display_startup_display2(int i)
 	Display_setTextColor(clr);	//set text color
 	Display_setTextXY(0,163);	//set start coords in window
 
-#ifdef BNC	
+#ifdef BNC
 	Display_outputText("\r\r");
 	Display_setCurrentFont(fnt16x16);	//set current font
 	Display_outputText("Model 920\r\r");
@@ -1409,10 +1410,10 @@ void Display_showStatusLine(void)
 		x1=216;//L=24
 		break;
 	}
-	
+
 	SoundControl_showSoundVibro(x5);
 	filesystem_show_symbol(x1);
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 	Bluetooth_show_symbol(x2);	//L=16
 	GPS_show_symbol(x3);		//L=24
 #else
@@ -1424,7 +1425,7 @@ void Display_showStatusLine(void)
 		RECT rect = {x3,0,x3+23,16};
 		Display_clearRect(rect, 100);
 	}
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 	PowerControl_showBatStatus(x4);			//L=24
 }
 
@@ -1475,21 +1476,21 @@ void Display_getScreen(void)
 {
 	Display_Init_8bit_262k();
 
-	
+
 	BYTE buf[3*256];
 	COLORREF clr;
 	HFILE hfile = filesystem_create_file("screen","bmp",TRUE);
 	if(hfile==NULL)return;	//error
 	unsigned int i=0;	//buf index
 	int pos = 0;	//position in file
-	
+
 	//prepare headers and save them to file
 	BITMAPFILEHEADER bmpfilehdr;
 	memset(&bmpfilehdr, 0, sizeof(BITMAPFILEHEADER));
 	bmpfilehdr.bfType = ((WORD)('M')<<8)|(WORD)('B');
 	bmpfilehdr.bfOffBits = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER);
 	if(filesystem_file_put(hfile, &pos, (const BYTE*)&bmpfilehdr, sizeof(BITMAPFILEHEADER))==E_FAIL)return;	//error
-	
+
 	BITMAPINFOHEADER bmpinfohdr;
 	memset(&bmpinfohdr, 0, sizeof(BITMAPINFOHEADER));
 	bmpinfohdr.biSize = sizeof(BITMAPINFOHEADER);
@@ -1506,7 +1507,7 @@ void Display_getScreen(void)
 	if(filesystem_file_put(hfile, &pos, (const BYTE*)&bmpinfohdr, sizeof(BITMAPINFOHEADER))==E_FAIL)return;	//error
 
 	PowerControl_turboModeON();
-	
+
 	for(int y=0;y<Y_SCREEN_SIZE;y++)
 	{
 		for(int x=0;x<X_SCREEN_SIZE;x++)
@@ -1526,12 +1527,12 @@ void Display_getScreen(void)
 			}
 		}
 	}
-	
+
 	PowerControl_turboModeOFF();
-	
+
 	if(i!=0)
 	{//save last part
 		if(filesystem_file_put(hfile, &pos, buf, i)==E_FAIL)return;	//error
 	}
-	
+
 }

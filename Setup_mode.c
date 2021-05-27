@@ -205,7 +205,7 @@ BOOL SETUPMode_menu1_SafetyThreshold(void)
 {
 	EditMode_EditFloat("Radiation safety alarm threshold\0""Radiation safety alarm threshold\0""Radiation safety alarm threshold\0""Порог радиационной безопасности",
 					 SPRDModeControl.fDRThreshold,
-#ifdef BNC					 
+#ifdef BNC
 					 0.1,
 					 100.0,
 					 SPRDMode_getDimension(),
@@ -215,7 +215,7 @@ BOOL SETUPMode_menu1_SafetyThreshold(void)
 					 1000.0,
 					 SPRDMode_getDimension(),
 					 "%.1f",
-#endif					 
+#endif
 					 SETUPMode_menu1_SafetyThreshold_done);
 	return (BOOL)-1;
 }
@@ -328,14 +328,14 @@ BOOL SETUPMode_menu1_testscreen(void)
 	int i;
 	RECT rect = {0,0,X_SCREEN_SIZE-1, Y_SCREEN_SIZE-1};
 	Display_clearScreen();
-	
+
 	for(i=0;i<0x40;i++)
 	{
 		Display_fillRect(rect, RGB(0,0,i));
 		PowerControl_sleep(FRAME_SCR_PAUS);
 	}
 	PowerControl_sleep(INTER_SCR_PAUS);
-	
+
 
 	for(i=0;i<0x40;i++)
 	{
@@ -451,7 +451,7 @@ void SETUPMode_menu1_IDthreshold_edit_done(BOOL bOK)
 {
 	if(bOK)
 	{
-		identifyControl.threshold = atoi(EditModeControl.edit_buf);		
+		identifyControl.threshold = atoi(EditModeControl.edit_buf);
 		if(!identify_write_identify_ini_int("identifyControl","threshold",identifyControl.threshold))
 		{
 			;//!!!!!!!error
@@ -730,7 +730,7 @@ void SETUPMode_menu1_hardreset_confirm(BOOL bYes)
 						  9999,
 						 "\0""\0""\0""",
 						  SETUPMode_menu1_hardreset_confirm_done);
-		
+
 		YESNOModeControl.bExitModal = FALSE;
 		YESNOMode_modalProcedure();
 	}
@@ -905,12 +905,12 @@ BOOL SETUPMode_OnTimer(void)
 	int ret;
 	switch(SETUPModeControl.iModeScreen)
 	{
-	case ENU_SETUP_MODE_SCR_VER://screen of 	
+	case ENU_SETUP_MODE_SCR_VER://screen of
 //		if(!SETUPModeControl.iJustLeaveScreen)//!!!!!!!!!!!! to get splash screens
 			SETUPMode_showDateTime();
 		break;
 	case ENU_SETUP_MODE_SCR_GEIGER:
-#ifdef BNC		
+#ifdef BNC
 		ret = sprintf(SETUPModeControl.buf1, "%.3f", geigerControl.esentVals_safe.fDoserate);
 #else
 		ret = sprintf(SETUPModeControl.buf1, "%.2f", geigerControl.esentVals_safe.fDoserate);
@@ -943,7 +943,7 @@ BOOL SETUPMode_OnTimer(void)
 			exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 #ifdef BNC
 		ret = sprintf(SETUPModeControl.buf9, "%.2f mrem/h", (float)SPRDModeControl.fDRThreshold);
-#else		
+#else
 		ret = sprintf(SETUPModeControl.buf9, "%.1f µSv/h", (float)SPRDModeControl.fDRThreshold);
 #endif
 		if(ret>=sizeof(SETUPModeControl.buf9))
@@ -983,24 +983,24 @@ BOOL SETUPMode_OnUp(void)
 {
 	if(++SETUPModeControl.iModeScreen==MAX_SETUP_MODE_SCREENS)
 		SETUPModeControl.iModeScreen = 0;
-	
+
 	SETUPMode_clearBuffers();
 	Modes_updateMode();
-	
+
 	if(SETUPModeControl.iModeScreen==ENU_SETUP_MODE_SCR_MEM)
 	{//get mem data, have to wait for
 
 		SETUPMode_pleaseWait(100);
-		
+
 		filesystem_calc_special_files_number(&SETUPModeControl.uiAllFiles,
 							&SETUPModeControl.uiSPZFiles,
 							&SETUPModeControl.uiLIBFiles,
 							&SETUPModeControl.uiMCSFiles,
 							&SETUPModeControl.uiLOGFiles);
-		
+
 		Modes_clearModeArea();	//clear screen area for mode
 	}
-	
+
 	Modes_OnShow();
 	return 1;
 }
@@ -1059,7 +1059,7 @@ void SETUPMode_accessDenied(void)
 {
 	SoundControl_BeepSeq(beepSeq_NOK);
 
-	
+
 	Modes_clearModeArea();	//clear screen area for mode
 	Display_setCurrentFont(fnt16x16);
 	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
@@ -1126,7 +1126,7 @@ BOOL SETUPMode_OnDown(void)
 	default:
 		;
 	}
-//	
+//
 	return 1;
 }
 BOOL SETUPMode_OnIdle(void)
@@ -1179,12 +1179,12 @@ void SETUPMode_showVersion(int y)
 	//show version number
 	char buf[10];
 	Display_setCurrentFont(fnt16x16);
-	Display_setTextWin(0,Y_SCREEN_MAX-y,X_SCREEN_SIZE,y-MODE_USER_BOTTOM);	//set text window
+	Display_setTextWin(0,Y_SCREEN_MAX-y,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
 	Display_setTextColor(ORANGE);	//set text color
 	Display_setTextWrap(1);
-#ifdef BNC	
+#ifdef BNC
 	Display_outputText("palmRAD (Model 920)\r");
-#else	
+#else
 	Display_outputText("RadSearcher (AT1321)\r");
 #endif
 	Display_outputTextByLang("Serial: \0""Serial: \0""Serial: \0""Зав.ном.: ");
@@ -1207,7 +1207,7 @@ void SETUPMode_showVersion(int y)
 	Display_outputText("NaI(Tl) D25x40mm\r");
 	Display_outputTextByLang("MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""АЦП: 1024 канала\r");
 	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""Счетчик ГМ, USB, Bluetooth, GPS\r");
-#ifdef BNC	
+#ifdef BNC
 	Display_outputText("2019 © Manufacturer\r");
 #else
 	Display_outputText("2019 © ATOMTEX SPE\r");
@@ -1222,17 +1222,17 @@ void SETUPMode_showSpecification(void)
 	Display_setTextWin(0,MODE_USER_TOP,X_SCREEN_SIZE,MODE_USER_HEIGHT);	//set text window
 	Display_setTextColor(YELLOW);	//set text color
 	Display_outputTextByLang("Gamma radiation dose rate\r\0""Gamma radiation dose rate\r\0""Gamma radiation dose rate\r\0""Мощность дозы гамма излуч.\r");
-#ifdef BNC	
+#ifdef BNC
 	Display_outputTextByLang("Range: 0.003-10000 mrem/h\r\0""Range: 0.003-10000 mrem/h\r\0""Range: 0.003-10000 mrem/h\r\0""Диапазон: 0.003-10000 mrem/h\r");
-#else	
+#else
 	Display_outputTextByLang("Range: 0.03-100000 µSv/h\r\0""Range: 0.03-100000 µSv/h\r\0""Range: 0.03-100000 µSv/h\r\0""Диапазон: 0.03-100000 µSv/h\r");
 #endif
 	Display_outputTextByLang("Basic error: 20%\r\0""Basic error: 20%\r\0""Basic error: 20%\r\0""Основная погрешность: 20%\r");
 	Display_outputTextByLang("Energy dependence: 25%\r\0""Energy dependence: 25%\r\0""Energy dependence: 25%\r\0""Энергетич.зависимость: 25%\r");
 	Display_outputTextByLang("NaI max cps: 100000\r\0""NaI max  cps: 100000\r\0""NaI max  cps: 100000\r\0""Макс.ск.счета NaI: 100000 cps\r");
-#ifdef BNC	
+#ifdef BNC
 	Display_outputTextByLang("Sens. on Cs137: 4000 cps*h/mrem\r\0""Sens. on Cs137: 4000 cps*h/mrem\r\0""Sens. on Cs137: 4000 cps*h/mrem\r\0""Чувств. на Cs137: 4000 cps*h/mrem\r");
-#else	
+#else
 	Display_outputTextByLang("Sens. on Cs137: 400 cps*h/µSv\r\0""Sens. on Cs137: 400 cps*h/µSv\r\0""Sens. on Cs137: 400 cps*h/µSv\r\0""Чувств. на Cs137: 400 cps*h/µSv\r");
 #endif
 	Display_outputTextByLang("Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Energy range: 20-3000 keV\r\0""Энергет.диапазон: 20-3000 keV\r");
@@ -1241,7 +1241,7 @@ void SETUPMode_showSpecification(void)
 	char buf[20];
 	sprintf(buf,"%u\r",SPRDModeControl.false_alarm_period_oper);
 	Display_outputText(buf);
-	
+
 	///////////////////////
 }
 
@@ -1303,13 +1303,13 @@ void SETUPMode_showBatteryInfo(void)
 	Display_outputText(SETUPModeControl.buf1);
 	Display_outputText("\r");
 
-	
+
 	if(!powerControl.bBatteryAlarm || powerControl.batCapacity<=VREF_BAT_MIN_CRITICAL)
 		Display_outputTextByLang("Status: charged\r\0""Status: charged\r\0""Status: charged\r\0""Состояние: заряжены\r");
 	else
 		Display_outputTextByLang("Status: discharged\r\0""Status: discharged\r\0""Status: discharged\r\0""Состояние: разряжены\r");
 	///////////////////////
-	
+
 	Display_outputTextByLang("Voltage: \0""Voltage: \0""Voltage: \0""Напряжение: ");
 	Display_outputText(SETUPModeControl.buf2);
 	Display_outputText("\r");
@@ -1354,7 +1354,7 @@ void SETUPMode_showLibrary(void)
 	Display_outputTextByLang("Scale instab.: \0""Scale instab.: \0""Scale instab.: \0""Нестаб.шкалы: ");
 	Display_outputText(buf);
 	///////////////////////
-	
+
 }
 
 
@@ -1374,20 +1374,20 @@ void SETUPMode_showMemory(void)
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("Memory: \0""Memory: \0""Memory: \0""Память: ");
 	Display_outputText(buf);
-	
+
 	ret = sprintf(buf, "%u kB\r", (UINT)totmem-fmem);
 	if(ret>=sizeof(buf))
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("In use: \0""In use: \0""In use: \0""Занято: ");
 	Display_outputText(buf);
-	
+
 	ret = sprintf(buf, "%u%%\r", (UINT)(fmem*100/totmem));
 	if(ret>=sizeof(buf))
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("Free: \0""Free: \0""Free: \0""Свободно: ");
 	Display_outputText(buf);
 	///////////////////////
-	
+
 	//show number of files
 	UINT files = SETUPModeControl.uiAllFiles;//filesystem_calc_files_number(NULL);
 	ret = sprintf(buf, "%u\r", (UINT)files);
@@ -1395,14 +1395,14 @@ void SETUPMode_showMemory(void)
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("Files: \0""Files: \0""Files: \0""Файлов: ");
 	Display_outputText(buf);
-	
+
 	ret = sprintf(buf, "%u%%\r", (UINT)(100-files*100/MAX_FILES));
 	if(ret>=sizeof(buf))
 		exception(__FILE__,__FUNCTION__,__LINE__,"internal error");
 	Display_outputTextByLang("Free: \0""Free: \0""Free: \0""Свободно: ");
 	Display_outputText(buf);
 	///////////////////////
-	
+
 	//show number of spectra
 	files = SETUPModeControl.uiSPZFiles;//filesystem_calc_files_number("spz");
 	ret = sprintf(buf, "%u\r", (UINT)files);
@@ -1411,7 +1411,7 @@ void SETUPMode_showMemory(void)
 	Display_outputTextByLang("Spectra: \0""Spectra: \0""Spectra: \0""Спектров: ");
 	Display_outputText(buf);
 	///////////////////////
-	
+
 	//show number of libraries
 	files = SETUPModeControl.uiLIBFiles;//filesystem_calc_files_number("lib");
 	ret = sprintf(buf, "%u\r", (UINT)files);
@@ -1433,7 +1433,7 @@ void SETUPMode_showMemory(void)
 	//show log size
 	if(LOGModeControl.hfile_log)
 		files = filesystem_get_length(LOGModeControl.hfile_log);
-	else 
+	else
 		files = 0;
 	ret = sprintf(buf, "%u kB\r", (UINT)files/1000+1);
 	if(ret>=sizeof(buf))
@@ -1540,8 +1540,8 @@ void SETUPMode_menu1_batcoef_edit_done(BOOL bOK)
 //включить режим приработки
 BOOL SETUPMode_menu1_prirabotka(void)
 {
-	YESNOMode_DoModal(GREEN, "Breaking-in\0""Breaking-in\0""Breaking-in\0""Приработ.", 
-					  "GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""Приработка счетчика Гейгера-Мюллера. Прибор перейдет в режим максимального энергосбережения. Экран будет отключен. Нажмите POWER для выключения прибора.", 
+	YESNOMode_DoModal(GREEN, "Breaking-in\0""Breaking-in\0""Breaking-in\0""Приработ.",
+					  "GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""GM counter Breaking-in. Device will go in deep power saving mode. LCD will off. Press POWER to turn off device.\0""Приработка счетчика Гейгера-Мюллера. Прибор перейдет в режим максимального энергосбережения. Экран будет отключен. Нажмите POWER для выключения прибора.",
 					  SETUPMode_prirabotka);
 	return (BOOL)-1;
 }
@@ -1552,55 +1552,55 @@ void SETUPMode_prirabotka(BOOL bYes)
 	{//breaking-in
 		PowerControl_turnOFF_MAM();
 		PowerControl_turboModeOFF();
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 		Bluetooth_turnOFF();
 		GPS_turnOFF();
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 		PowerControl_sendAllCommands();
 		SoundControl_StopBeep();
 		SoundControl_StopVibro();
 
 		Modes_setActiveMode(NULL);
-		
-		//turn off battery low to allow eeprom operations	
+
+		//turn off battery low to allow eeprom operations
 		powerControl.bBatteryAlarm = 0;
 		EEPROM_UpdateEssentialDataInEeprom();
 
 		Display_turnOFF_LEDs();
 
 		Display_turnOFF();
-		
+
 
 		//adjust wakeup interrupts
 		INTWAKE_bit.EXTWAKE2 = 1; //key pushing
 		INTWAKE_bit.EXTWAKE1 = 0; //waking up from second proc
 		INTWAKE_bit.GPIO0WAKE = 0; //geiger
 		INTWAKE_bit.RTCWAKE = 1; //clock
-		
+
 		do
 		{
 			PowerControl_kickWatchDog();
-			
+
 			//reset all awaking statuses before entering power down
 			powerControl.bAwakedByKeyboard = 0;	//mean that processor is awaked by key pressing
 			powerControl.bAwakedByClock = 0;	//mean that processor is awaked by clock (1 in a second)
 			powerControl.bAwakedByGeiger = 0;
 			powerControl.bAwakedByInterProc = 0;	//mean that processor is awaked by second processor
-			
+
 			powerControl.bInPowerDownMode = 1;
-	
+
 			Display_flashRedLED();
-			
+
 			PowerControl_enterPowerDownMode();
 		}while(!powerControl.bAwakedByKeyboard);
-	
+
 		//turn off device
 		while(KeyboardControl_anyKeyPressed_hardware_intcall())PowerControl_kickWatchDog();
 		CLR_AN_ON;	//turn off second proc
 		CLR_DG_ON; //Выключение питания of first proc
 		while(1)PowerControl_kickWatchDog();
 	}
-	
+
 }
 
 
@@ -1897,7 +1897,7 @@ void SETUPMode_menu1_calcOperSigma_edit_done(BOOL bOK)
 		{
 			;//!!!!!!!!!error
 		}
-	}		
+	}
 	SETUPMode_setModeOnSelf();
 }
 
@@ -1995,7 +1995,7 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 			PowerControl_kickWatchDog();
 		}while(hfile!=NULL);
 		//recreate log file
-		LOGMode_createLog();	
+		LOGMode_createLog();
 	}
 	Modes_clearModeArea();	//clear screen area for mode
 	Modes_updateMode();
@@ -2034,6 +2034,6 @@ void SETUPMode_menu1_editDTCOEF_edit_done(BOOL bOK)
 	{
 		interProcControl.rsModbus.fDTCOEF = atof(EditModeControl.edit_buf);
 		InterProc_setDTCEOF(interProcControl.rsModbus.fDTCOEF);
-	}		
+	}
 	SETUPMode_setModeOnSelf();
 }

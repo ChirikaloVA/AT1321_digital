@@ -467,7 +467,12 @@ void PowerControl_EMC_OFF(void)
 //switch processor to IDLE state
 void PowerControl_enterIdleMode(void)
 {
-  PCON_bit.IDL = 1;
+#ifdef DEBUG
+  PCON_bit.IDL = 0;
+#else
+  //PCON_bit.IDL = 1;
+  PCON_bit.IDL = 0;
+#endif
 }
 
 //switch processor to IDLE state
@@ -484,6 +489,7 @@ void PowerControl_turnON_MAM(void)
   PowerControl_turnOFF_MAM();
   //disabled 30.08.2019
 //!!!!!!!!!!!!!  MAMTIM_bit.CYCLES = 3;  //3 cycles for FSCO > 40 MHz
+  MAMTIM_bit.CYCLES = 5;
   MAMCR_bit.MODECTRL = 2; //full mode
 }
 
@@ -860,7 +866,7 @@ void PowerControl_startBootLoader(void)
 	u0fcr.FCRFE=1;
 	u0fcr.RFR=1;
 	u0fcr.TFR=1;
-	u0fcr.RTLS=3;//пачками по 14 байт
+	u0fcr.RTLS=2;//пачками по 8 байт
 	U0FCR_bit =u0fcr;
 	// disable UART0 interrupts
 	U0IER = 0x0;	
@@ -886,7 +892,7 @@ void PowerControl_startBootLoader(void)
 	u1fcr.FCRFE=1;
 	u1fcr.RFR=1;
 	u1fcr.TFR=1;
-	u1fcr.RTLS=3;//interrupt after each 14 bytes
+	u1fcr.RTLS=2;//interrupt after each 8 bytes
 	U1FCR_bit = u1fcr;
 	
 	__uartmcr_bits u1mcr;

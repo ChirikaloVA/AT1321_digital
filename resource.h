@@ -1,0 +1,30 @@
+/*
+resource.h
+defines of codes of text
+*/
+
+#pragma once
+
+#ifndef _RESOURCE_H
+#define _RESOURCE_H
+
+
+/////////////////////////////////////////////////////////string id linking/////////////////////////////////////////////
+struct tagSTRINGID
+{
+	unsigned int id;
+	const char* pstring;
+};
+
+
+/////////////////////////////////////////////////////////id/////////////////////////////////////////////
+//id from 1 to 0x7fffffff
+enum
+{
+	IDS_DEV_NAME=1,
+	IDS_COPYRIGHT,
+
+
+};
+
+#endif

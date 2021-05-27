@@ -214,7 +214,7 @@ int Display_showSymbol(char symbol);
 
 void Display_setTextColor(COLORREF clr);
 
-void Display_gotoNextLine(void);
+BOOL Display_gotoNextLine(void);
 
 //вывод текста
 void Display_outputText(const char* pText);

@@ -35,3 +35,5 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+/settings/SPRD2.wsdt
+/SPRD.dep

@@ -3,7 +3,7 @@
 #ifndef _INTERRUPTS_H
 #define _INTERRUPTS_H
 
-#include <iolpc2388.h>
+#include <NXP\iolpc2388.h>
 #include "types.h"
 
 

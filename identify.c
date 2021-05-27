@@ -1,7 +1,7 @@
 //identify.c
 
 
-#include <iolpc2388.h>
+#include <NXP\iolpc2388.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>

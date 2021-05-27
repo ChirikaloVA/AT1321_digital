@@ -55,6 +55,7 @@ char* CRC32ROM(char* pStrCrc)
 	unsigned int len = (unsigned int)(pEnd-pBuffer);
 	ULONG crc = 0xffffffffUL;
 	crc = crc32(0, len, crc);
+
 	crc ^= 0xffffffffUL;
 #ifdef No175
         crc = 0x028662f7;

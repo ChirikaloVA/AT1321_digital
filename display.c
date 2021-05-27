@@ -242,7 +242,6 @@ void Display_outputText(const char* pText)
 	};
 }
 
-
 /*
 calculate amount of text lines in the text
 before use it is important to call the next:
@@ -407,6 +406,7 @@ BOOL Display_gotoNextLine(void)
 	display.text.gstrY += sz;
 	return (BOOL)(display.text.gstrY<(display.text.winY+display.text.winSY));
 }
+
 
 
 void Display_setTextDoubleHeight(BOOL bDoubleHeight)
@@ -752,54 +752,54 @@ void Display_turnOFF(void)
 
 void Display_turnON(void)
 {
-	display.bLCDON = TRUE;
-
-
-	PowerControl_EMC_ON();
-
-
-
-
-	CLR_RS;
-	DisplayData = 0x10;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x00;
-
-	Display_Init_8bit_262k();
-	Display_clearScreen();
-
-	CLR_RS;
-	DisplayData = 0x05;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x01;
-
-	CLR_RS;
-	DisplayData = 0x43;
-	SET_RS;
-	DisplayData = 0;
-	DisplayData = 0x1;//gamma set
-
-
-	CLR_DPWON;
-
-	pause(50000);
-	pause(50000);
-    pause(50000);
-    pause(50000);
-    pause(50000);
-	pause(10000);
-
-	SET_PON;
-
-	pause(50000);
-	pause(50000);
-	pause(50000);
-	pause(50000);
-
-	SET_MON;
-
+  display.bLCDON = TRUE;
+  
+  
+  PowerControl_EMC_ON();
+  
+  
+  
+  
+  CLR_RS;
+  DisplayData = 0x10;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x00;
+  
+  Display_Init_8bit_262k();
+  Display_clearScreen();
+  
+  CLR_RS;
+  DisplayData = 0x05;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x01;
+  
+  CLR_RS;
+  DisplayData = 0x43;
+  SET_RS;
+  DisplayData = 0;
+  DisplayData = 0x1;//gamma set
+  
+  
+  CLR_DPWON;
+  
+  pause(50000);
+  pause(50000);
+  pause(50000);
+  pause(50000);
+  pause(50000);
+  pause(10000);
+  
+  SET_PON;
+  
+  pause(50000);
+  pause(50000);
+  pause(50000);
+  pause(50000);
+  
+  SET_MON;
+  
 }
 
 

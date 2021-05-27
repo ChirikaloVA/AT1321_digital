@@ -143,7 +143,6 @@ __noreturn void main(void)
 
 	//stage 2: power control
 	//must be called FIRST
-	//==============POWER==============
 	PowerControl_Init();
 
 	PowerControl_watchDog_Init();	//init watch dog
@@ -156,6 +155,8 @@ __noreturn void main(void)
 
 
 	PowerControl_Bat2ADC_Init();	//init ADC
+        //==============POWER==============
+	
 
 	//try to safe power
 	USBCLKCFG_bit.USBSEL = 0xf; //we dont use USB so we can divide it by maximum value, try to safe power

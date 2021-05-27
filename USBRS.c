@@ -443,9 +443,10 @@ void USBRS_InitInBridgeMode(void)
 {
 
 	USBRSControl.bBridgeMode = TRUE;
-
-	U0LCR = 0x1b;
-	U3LCR = 0x1b; //нужно включить Even Parity для bgupdate
+// ------ Для прогр BT121 13.07.2020 --------------------------
+        
+//        U0LCR = 0x1b;
+//	U3LCR = 0x1b; //нужно включить Even Parity для bgupdate
 	DIR_BT_RF = 1;
 	SET_BT_RF;
 	PowerControl_sleep(10);
@@ -453,13 +454,16 @@ void USBRS_InitInBridgeMode(void)
 	PowerControl_sleep(50);
 	SET_BT_RES;
 	PowerControl_sleep(10);
-	CLR_BT_RF;
-/*	U0LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
+	CLR_BT_RF;    
+
+        
+//--------------------------------------------------------------        
+	U0LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
 	DWORD div = HW_FREQ/115200/16;
 	U0DLM = 0x00;
 	U0DLL = div;//((HW_FREQ*1000) / (SpeedRS232*16)); //0x2;  //115200 ->8/4 //надо 0x0A/4->18432000/(16*115200)
 	U0LCR =0x3; //LCR_DISABLE_LATCH_ACCESS;
-*/
+
 }
 
 //init USBRS

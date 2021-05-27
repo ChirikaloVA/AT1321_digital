@@ -31,6 +31,7 @@
 
 
 
+#include "packspectrum.h"
 
 
 
@@ -238,31 +239,34 @@ void Spectrum_clear(void)
 
 void Spectrum_Init(void)
 {
+	memset(&spectrumControl,0,sizeof(spectrumControl));
 	spectrumControl.bSpectrumInDots = 0;	//in line by default
 	spectrumControl.iMarkerChannel = 220;
 	spectrumControl.acqSpectrum.dwCount = 0;
 	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	Spectrum_clear();
-	
+
 	spectrumControl.iAcquiringTime = MAX_ACQ_TIME;
-	
+
 	spectrumControl.bHasEnergy = FALSE;
 	spectrumControl.bHasSigma = FALSE;
-	
+
 	spectrumControl.iSpectrumControlMode = enum_scm_marker_movment;
 	spectrumControl.iMarkerChannel2 = -1;	//one marker
-	
+
 	spectrumControl.iViewChannelFrom = 0;
 	spectrumControl.iViewChannelTo = CHANNELS-1;
 	spectrumControl.iHighMul = 0;
-	
+
 	spectrumControl.bLogView = FALSE;
-	
+
 	memset(spectrumControl.acqSpectrum.report, 0, sizeof(spectrumControl.acqSpectrum.report));
 
 	memset(spectrumControl.peakProcRes,0,sizeof(spectrumControl.peakProcRes));
 
 	spectrumControl.bSpectrumEmergSaved = FALSE;
+
+	spectrumControl.acqSpectrum.fTemperature = 85.0	;//by default no temperature value yet
 }
 
 
@@ -279,7 +283,7 @@ BOOL Spectrum_OnActivate(void)
 	spectrumControl.iMarkerChannel2 = -1;
 	memset(spectrumControl.peakProcRes,0,sizeof(spectrumControl.peakProcRes));
 	spectrumControl.bLeftRightClicked = FALSE;
-	
+
 	spectrumControl.bStopAcq = FALSE;
 	spectrumControl.iStopAcq = 0;
 	spectrumControl.bLogView = FALSE;
@@ -294,18 +298,18 @@ BOOL Spectrum_OnTimer(void)
 {
 	if(!InterProc_isDataFinalReady(&interProcControl.rsModbus.sbtStatus))
 		return 1;
-	
+
 	if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum) &&
 	   ((interProcControl.btStatus&0x02) ||
 		(spectrumControl.bStopAcq && spectrumControl.iStopAcq>0)))
 	{
 		--spectrumControl.iStopAcq;
-		
+
 		identify_identify(FALSE);
-	
+
 		Spectrum_calcCount();
 		Spectrum_peakProc();
-	
+
 		Modes_OnShow();
 	}
 
@@ -334,9 +338,9 @@ BOOL Spectrum_OnTimer(void)
 		InterProc_stopSpectrumAcq();
 		spectrumControl.bSpectrumEmergSaved = TRUE;
 	}
-	
+
 	InterProc_readStatus();
-	
+
 	return 1;
 }
 
@@ -374,7 +378,7 @@ BOOL Spectrum_OnLeft(void)
 		//19/03/2010 switch to marker mode
 		spectrumControl.iSpectrumControlMode = enum_scm_marker_movment;
 		Modes_showButtons();
-		break;		
+		break;
 	case enum_scm_spec_wider:	//make view wider
 		spectrumControl.iHighMul = 0;	//clear high adjust
 		if((spectrumControl.iViewChannelTo-spectrumControl.iViewChannelFrom+1)>SPECTRUM_WIN_WIDTH)
@@ -460,7 +464,7 @@ BOOL Spectrum_OnRight(void)
 		//19/03/2010 switch to marker mode
 		spectrumControl.iSpectrumControlMode = enum_scm_marker_movment;
 		Modes_showButtons();
-		break;		
+		break;
 	case enum_scm_spec_wider:
 		spectrumControl.iHighMul = 0;	//clear high adjust
 		if((spectrumControl.iViewChannelTo-spectrumControl.iViewChannelFrom+1)<CHANNELS)
@@ -529,7 +533,7 @@ BOOL Spectrum_OnUp(void)
 			   (spectrumControl.iViewChannelTo-spectrumControl.iViewChannelFrom+1)==CHANNELS);
 	}
 	if(spectrumControl.iSpectrumControlMode==enum_scm_spec_window)
-	{//place second marker	
+	{//place second marker
 		spectrumControl.iMarkerChannel2 = spectrumControl.iMarkerChannel;
 		spectrumControl.iMarkerChannel += 4;
 		if(spectrumControl.iMarkerChannel>spectrumControl.iViewChannelTo)
@@ -561,6 +565,7 @@ void Spectrum_startAcq_ex(int acqTime)
 {
 	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
+	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
 	InterProc_resetSpectrum();
 	InterProc_setAcqTime((WORD)acqTime);
 	InterProc_startSpectrumAcq();
@@ -673,7 +678,7 @@ void Spectrum_showAcqData(void)
 	float cps = SPRDModeControl.fCps;
 	UINT acqt = spectrumControl.pShowSpectrum->wAcqTime;
 	UINT cnt = spectrumControl.pShowSpectrum->dwCount;
-		
+
 	char buf[50];
 	sprintf(buf,"%u s   %u cnt   %.1f cps",(UINT)acqt, (UINT)cnt, cps);
 	Display_clearTextWin(10);
@@ -703,27 +708,27 @@ void Spectrum_showSpectrum(void)
 	for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 	{
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
-		
+
 		if(spectrumControl.bLogView && val)
 		{
 			val = (DWORD)(100.0*log((float)val));
 		}
 		if(val>valmax)valmax=val;
 	}
-	
+
 	RECT rect = {SPECTRUM_WIN_LEFT, SPECTRUM_WIN_TOP, SPECTRUM_WIN_LEFT+SPECTRUM_WIN_WIDTH-1,SPECTRUM_WIN_BOTTOM};
 	Display_clearRect(rect,100);
-	
+
 	if(!valmax)return;
-	
+
 	//Display_set_display_entrymode(1/*bRGBmode*/, 1/*bUpToDown*/);
-	
+
 	int x=SPECTRUM_WIN_LEFT,y,yy;
 	int y2;
-	
+
 	y=yy=y2=SPECTRUM_WIN_BOTTOM;
 
-	
+
 	int dx = SPECTRUM_WIN_WIDTH;	//width of spectrum win in dots
 	int dy = spectrumControl.iViewChannelTo - spectrumControl.iViewChannelFrom +1;				//width of spectrum win in channels
 	if(SPECTRUM_WIN_WIDTH<dy)
@@ -748,13 +753,13 @@ void Spectrum_showSpectrum(void)
 		highMul++;
 		valmax<<=1;
 	}
-		
+
 	highMul += spectrumControl.iHighMul;
 
 	if(spectrumControl.iViewChannelFrom!=0)
 	{
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[spectrumControl.iViewChannelFrom];
-		
+
 		if(spectrumControl.bLogView && val)
 		{
 			val = (DWORD)(100.0*log((float)val));
@@ -767,13 +772,13 @@ void Spectrum_showSpectrum(void)
 			y2 = SPECTRUM_WIN_TOP;
 	}
 
-	
+
 	if(spectrumControl.bSpectrumInDots)
 	{
 		for(int i=spectrumControl.iViewChannelFrom;i<=spectrumControl.iViewChannelTo;i++)
 		{
 		val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
-		
+
 			if(spectrumControl.bLogView && val)
 			{
 				val = (DWORD)(100.0*log((float)val));
@@ -781,7 +786,7 @@ void Spectrum_showSpectrum(void)
 			y = (DWORD)SPECTRUM_WIN_BOTTOM-(DWORD)((val<<highMul)>>highDiv);
 			if(y >= SPECTRUM_WIN_TOP && y<=SPECTRUM_WIN_BOTTOM)
 				Display_dot((int)x,(int)y,YELLOW);
-			//calc to go to the next x position		
+			//calc to go to the next x position
 			if((e+=t)>0)
 			{
 				x++;
@@ -796,7 +801,7 @@ void Spectrum_showSpectrum(void)
 			val = spectrumControl.pShowSpectrum->dwarSpectrum[i];
 			if(val>valmax)
 				valmax=val;
-			//calc to go to the next x position		
+			//calc to go to the next x position
 			if((e+=t)>0)
 			{
 				val = valmax;
@@ -816,7 +821,7 @@ void Spectrum_showSpectrum(void)
 				y2=yy;
 			}
 		}
-	}	
+	}
 }
 
 /*
@@ -922,7 +927,7 @@ void Spectrum_menu1_gaincode_edit_done(BOOL bOK)
 	{
 		interProcControl.rsModbus.fStabGain = (float)atof(EditModeControl.edit_buf);
 		InterProc_setGain();
-		Spectrum_startAcq();		
+		Spectrum_startAcq();
 	}
 	Modes_setActiveMode(&modes_SpectrumMode);
 }
@@ -953,7 +958,7 @@ void Spectrum_menu1_lowlimit_edit_done(BOOL bOK)
 	{
 		interProcControl.rsModbus.wdLowLimit = (WORD)atoi(EditModeControl.edit_buf);
 		InterProc_setLowLimit(interProcControl.rsModbus.wdLowLimit);
-		Spectrum_startAcq();		
+		Spectrum_startAcq();
 		if(!ini_write_system_ini_int("interProcControl", "wdLowLimit", interProcControl.rsModbus.wdLowLimit))
 		{
 			;//!!!!!!!!!error
@@ -979,7 +984,7 @@ void Spectrum_menu1_highlimit_edit_done(BOOL bOK)
 	{
 		interProcControl.rsModbus.wdHighLimit = (WORD)atoi(EditModeControl.edit_buf);
 		InterProc_setHighLimit(interProcControl.rsModbus.wdHighLimit);
-		Spectrum_startAcq();		
+		Spectrum_startAcq();
 		if(!ini_write_system_ini_int("interProcControl", "wdHighLimit", interProcControl.rsModbus.wdHighLimit))
 		{
 			;//!!!!!!!!!error
@@ -1086,7 +1091,7 @@ void Spectrum_showMessageOnFileNamechange(char* pFileName)
 	MessageModeControl.pParam = (const void*)pFileName;
 	Modes_setActiveMode(&modes_MessageMode);
 }
-//выход из режима сообщения 
+//выход из режима сообщения
 void Spectrum_showMessageOnFileNamechange_onExit(void)
 {
 	Modes_setActiveMode(&modes_SpectrumMode);
@@ -1148,7 +1153,8 @@ void Spectrum_newfilename(char *pFileName)
 	if(len<FILE_NAME_SZ)
 		psym[4]=0;
 }
-	
+
+
 
 
 
@@ -1174,11 +1180,10 @@ void Spectrum_newfilename(char *pFileName)
 int Spectrum_save(char* pFileName, BOOL bOverwrite)
 {
 	if(powerControl.bBatteryAlarm)return -2;	//battery alarm
-	
+
 	int iret = 1;
-	
 	//check that file exists
-	HFILE hfile = filesystem_find_file(pFileName, "spz");
+	HFILE hfile = filesystem_find_file(pFileName, "sz2");
 	if(hfile!=NULL && !bOverwrite)
 	{//file exists
 		//do no allow to rewrite file
@@ -1188,145 +1193,38 @@ int Spectrum_save(char* pFileName, BOOL bOverwrite)
 		{
 			PowerControl_kickWatchDog();
 			Spectrum_newfilename(pFileName);
-			hfile = filesystem_find_file(pFileName, "spz");
+			hfile = filesystem_find_file(pFileName, "sz2");
 		}while(hfile!=NULL && --count);//file exists
 
 		iret = -1;
 	}
 
-	
-	hfile = filesystem_create_file(pFileName, /*name of the file, will be found and rewrite*/
-						"spz", /*ext of the file*/
-						bOverwrite	/*1 then exists file will be overwritten*/
+
+	hfile = filesystem_create_file(pFileName, //name of the file, will be found and rewrite
+						"sz2", //ext of the file
+						bOverwrite	//1 then exists file will be overwritten
 					  );
 	if(hfile==NULL)return 0;//!!!!!!!! have to show MSG, not exception
 //		exception(__FILE__,__FUNCTION__,__LINE__,"No free memory");
+
+
 	int file_pos = 0;
 
-	
-	
-	BYTE buf[256];
-	BYTE* pBuf = buf;
-	int len = 0;
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->wAcqTime, sizeof(spectrumControl.pShowSpectrum->wAcqTime));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->wAcqTime);
-	len+=sizeof(spectrumControl.pShowSpectrum->wAcqTime);
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->dateTime, sizeof(spectrumControl.pShowSpectrum->dateTime));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->dateTime);
-	len+=sizeof(spectrumControl.pShowSpectrum->dateTime);
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->commonGPS, sizeof(spectrumControl.pShowSpectrum->commonGPS));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->commonGPS);
-	len+=sizeof(spectrumControl.pShowSpectrum->commonGPS);
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->fTemperature, sizeof(spectrumControl.pShowSpectrum->fTemperature));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->fTemperature);
-	len+=sizeof(spectrumControl.pShowSpectrum->fTemperature);
-	
-	char temprep[MAX_REPORT_SYMS];
-	memset(temprep,0,sizeof(temprep));
-	char tempnuc[NUCLNAMELENGTH*3];
-	int reti;
-	for(int i=0;i<identifyControl.NUCLNUM;i++)
+
+
+	DWORD len = Spectrum_prepareSpectrumForSaving();
+	if (len==0) return 0;//failed
+
+
+	//buffer is full, will save in file
+	int ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
+							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
+							  (BYTE*)packspec.unpacked, /*send buffer*/
+							  len);/*buffer len in bytes*/
+	if(ret==E_FAIL)
 	{
-		reti = identify_getnuclidetxt(i, tempnuc);
-		if(reti==0)continue;	//никлид не идентифицирован
-		if(reti==-1)break;//	the end
-		if((MAX_REPORT_SYMS-strlen(temprep))<=strlen(tempnuc))break;	//больше места нет в буфере
-		strncat(temprep, tempnuc, NUCLNAMELENGTH*3);
-	}
-	
-	memcpy(pBuf, &temprep, sizeof(temprep));
-	pBuf+=sizeof(temprep);
-	len+=sizeof(temprep);
-	
-	long pval = spectrumControl.pShowSpectrum->dwarSpectrum[0];
-	long nval;
-	long rval;
-	//store first channel as absolute value
-	memcpy(pBuf, &pval, sizeof(pval));
-	pBuf+=sizeof(pval);
-	len+=sizeof(pval);
-	for(int i=1;i<CHANNELS;i++)
-	{
-		if(len>252)
-		{//buffer is full, will save in file
-			int ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
-									&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
-									  (BYTE*)buf, /*send buffer*/
-									  len);/*buffer len in bytes*/
-			if(ret==E_FAIL)
-			{
-				filesystem_delete_file(hfile);
-				return 0;//!!!!!!!! have to show MSG, not exception
-			}
-				//exception(__FILE__,__FUNCTION__,__LINE__,"No free memory");
-			len = 0;
-			pBuf = buf;
-		}
-
-		nval = (long)spectrumControl.pShowSpectrum->dwarSpectrum[i];
-		rval = nval-pval;
-		pval = nval;
-		if(rval>32767 || rval<-32768)
-		{//3 bytes on channel + 1 mark byte
-			*pBuf++ = 0x7f;
-			memcpy(pBuf, &rval, 3);
-			pBuf+=3;
-			len+=4;
-		}else if(rval>126 || rval<-127)
-		{//2 bytes on channel + 1 mark byte
-			*pBuf++ = 0x80;
-			memcpy(pBuf, &rval, 2);
-			pBuf+=2;
-			len+=3;
-		}else
-		{//1 byte on channel
-			*pBuf++=(signed char)rval;
-			len++;
-		}
-	}
-
-	if(len>0)
-	{//buffer is full, will save in file
-		int ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
-								&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
-								  (BYTE*)buf, /*send buffer*/
-								  len);/*buffer len in bytes*/
-		if(ret==E_FAIL)//!!!!!!!! have to show MSG, not exception
-		{
-			filesystem_delete_file(hfile);
-			return 0;//!!!!!!!! have to show MSG, not exception
-		}
-//			exception(__FILE__,__FUNCTION__,__LINE__,"No free memory");
-	}
-
-
-	
-	//вторая версия файла спектра
-	//save doserate
-	len = 0;
-	pBuf = buf;
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->fDoserate, sizeof(spectrumControl.pShowSpectrum->fDoserate));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->fDoserate);
-	len+=sizeof(spectrumControl.pShowSpectrum->fDoserate);
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->wRealTime, sizeof(spectrumControl.pShowSpectrum->wRealTime));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->wRealTime);
-	len+=sizeof(spectrumControl.pShowSpectrum->wRealTime);
-	memcpy(pBuf, &spectrumControl.pShowSpectrum->fCps, sizeof(spectrumControl.pShowSpectrum->fCps));
-	pBuf+=sizeof(spectrumControl.pShowSpectrum->fCps);
-	len+=sizeof(spectrumControl.pShowSpectrum->fCps);
-	
-	if(len>0)
-	{//buffer is full, will save in file
-		int ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
-								&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
-								  (BYTE*)buf, /*send buffer*/
-								  len);/*buffer len in bytes*/
-		if(ret==E_FAIL)//!!!!!!!! have to show MSG, not exception
-		{
-			filesystem_delete_file(hfile);
-			return 0;//!!!!!!!! have to show MSG, not exception
-		}
-//			exception(__FILE__,__FUNCTION__,__LINE__,"No free memory");
+		filesystem_delete_file(hfile);
+		return 0;//!!!!!!!! have to show MSG, not exception
 	}
 
 	return iret;
@@ -1340,7 +1238,7 @@ int Spectrum_save(char* pFileName, BOOL bOverwrite)
 int Spectrum_open(char* pFileName)
 {
 	HFILE hfile = filesystem_open_file(pFileName, /*name of the file, will be found*/
-						   "spz" /*ext of the file*/
+						   "sz2" /*ext of the file*/
 							   );
 	return Spectrum_open_ex(hfile);
 }
@@ -1350,91 +1248,98 @@ int Spectrum_open_ex(HFILE hfile)
 {
 	if(hfile==NULL)//!!!!!!!! must be message showing not exception
 		exception(__FILE__,__FUNCTION__,__LINE__,"No file");
-	
+
 	int file_pos = 0;
 
-	BYTE buf[256];
-	BYTE* pBuf = buf;
 	int len = 0;
-	int expectedlen = sizeof(spectrumControl.opnSpectrum.wAcqTime)+sizeof(spectrumControl.opnSpectrum.dateTime)+
-		sizeof(spectrumControl.opnSpectrum.commonGPS)+sizeof(spectrumControl.opnSpectrum.fTemperature);
+	int expectedlen = sizeof(spectrumControl.acqSpectrum.wAcqTime)+sizeof(spectrumControl.acqSpectrum.dateTime)+
+		sizeof(spectrumControl.acqSpectrum.commonGPS)+sizeof(spectrumControl.acqSpectrum.fTemperature);
 
-	
+
 	int rlen = filesystem_file_get(hfile, /*file descriptor = number of file in file record table*/
 							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
-							  (BYTE*)buf, /*send buffer*/
-							  sizeof(buf));/*buffer len in bytes*/
+							  (BYTE*)packspec.packed, /*send buffer*/
+							  sizeof(identifyControl.BufSpec));/*buffer len in bytes*/
 	if(rlen==E_FAIL || rlen<expectedlen)//!!!!!!!! have to show MSG, not exception
 		exception(__FILE__,__FUNCTION__,__LINE__,"Invalid file");
-		
-	memcpy(&spectrumControl.opnSpectrum.wAcqTime, pBuf, sizeof(spectrumControl.opnSpectrum.wAcqTime));
-	pBuf+=sizeof(spectrumControl.opnSpectrum.wAcqTime);
-	len+=sizeof(spectrumControl.opnSpectrum.wAcqTime);
-	memcpy(&spectrumControl.opnSpectrum.dateTime, pBuf, sizeof(spectrumControl.opnSpectrum.dateTime));
-	pBuf+=sizeof(spectrumControl.opnSpectrum.dateTime);
-	len+=sizeof(spectrumControl.opnSpectrum.dateTime);
-	memcpy(&spectrumControl.opnSpectrum.commonGPS, pBuf, sizeof(spectrumControl.opnSpectrum.commonGPS));
-	pBuf+=sizeof(spectrumControl.opnSpectrum.commonGPS);
-	len+=sizeof(spectrumControl.opnSpectrum.commonGPS);
-	memcpy(&spectrumControl.opnSpectrum.fTemperature, pBuf, sizeof(spectrumControl.opnSpectrum.fTemperature));
-	pBuf+=sizeof(spectrumControl.opnSpectrum.fTemperature);
-	len+=sizeof(spectrumControl.opnSpectrum.fTemperature);
-	memcpy(&spectrumControl.opnSpectrum.report, pBuf, sizeof(spectrumControl.opnSpectrum.report));
-	pBuf+=sizeof(spectrumControl.opnSpectrum.report);
-	len+=sizeof(spectrumControl.opnSpectrum.report);
-	
+
+	if(rlen>sizeof(identifyControl.BufSpec))
+	{//file is too large
+		return E_FAIL;
+	}
+
+	DWORD retsz=0;
+	PowerControl_kickWatchDog();
+	if(!UnpackSuperCompressSpectrum(rlen, &retsz))
+	{
+		return E_FAIL;
+	}
+	PowerControl_kickWatchDog();
+
+
+
+	if(!Restore0x80(&retsz))
+	{
+		return E_FAIL;
+	}
+	PowerControl_kickWatchDog();
+
+
+	memcpy(&spectrumControl.acqSpectrum.wAcqTime, &packspec.unpacked[len], sizeof(spectrumControl.acqSpectrum.wAcqTime));
+	len+=sizeof(spectrumControl.acqSpectrum.wAcqTime);
+	memcpy(&spectrumControl.acqSpectrum.dateTime, &packspec.unpacked[len], sizeof(spectrumControl.acqSpectrum.dateTime));
+	len+=sizeof(spectrumControl.acqSpectrum.dateTime);
+	memcpy(&spectrumControl.acqSpectrum.commonGPS, &packspec.unpacked[len], sizeof(spectrumControl.acqSpectrum.commonGPS));
+	len+=sizeof(spectrumControl.acqSpectrum.commonGPS);
+	memcpy(&spectrumControl.acqSpectrum.fTemperature, &packspec.unpacked[len], sizeof(spectrumControl.acqSpectrum.fTemperature));
+	len+=sizeof(spectrumControl.acqSpectrum.fTemperature);
+	memcpy(&spectrumControl.acqSpectrum.report, &packspec.unpacked[len], sizeof(spectrumControl.acqSpectrum.report));
+	len+=sizeof(spectrumControl.acqSpectrum.report);
+
 	long pval;
 	long nval;
 	long rval;
 	signed char bval;
-	memcpy(&pval, pBuf, sizeof(pval));
-	spectrumControl.opnSpectrum.dwarSpectrum[0] = pval;
-	pBuf+=sizeof(pval);
+	memcpy(&pval, &packspec.unpacked[len], sizeof(pval));
+	spectrumControl.acqSpectrum.dwarSpectrum[0] = pval;
 	len+=sizeof(pval);
 	for(int i=1;i<CHANNELS;i++)
 	{
-		if(len>252)
-		{//buffer is full, will load next one
-			file_pos=file_pos-rlen+len;
-			rlen = filesystem_file_get(hfile, /*file descriptor = number of file in file record table*/
-									&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
-									  (BYTE*)buf, /*send buffer*/
-									  sizeof(buf));/*buffer len in bytes*/
-			if(rlen==E_FAIL)//!!!!!!!! have to show MSG, not exception
-				exception(__FILE__,__FUNCTION__,__LINE__,"Invalid spectrum file");
-			len = 0;
-			pBuf = buf;
-		}
 
-		bval = *pBuf++;
+		bval = packspec.unpacked[len++];
 		if(bval==0x7f)
 		{//3 bytes
 			rval = 0;
-			memcpy(&rval, pBuf, 3);
+			memcpy(&rval, &packspec.unpacked[len], 3);
 			if(rval&0x00800000)
 				rval|=0xff000000;
-			pBuf+=3;
-			len+=4;
+			len+=3;
 		}else if(bval==-0x80)
 		{//2 bytes
 			rval = 0;
-			memcpy(&rval, pBuf, 2);
+			memcpy(&rval, &packspec.unpacked[len], 2);
 			if(rval&0x00008000)
 				rval|=0xffff0000;
-			pBuf+=2;
-			len+=3;
+			len+=2;
 		}else
 		{
 			rval = (long)bval;
-			len++;
 		}
 		nval = pval+rval;
-		spectrumControl.opnSpectrum.dwarSpectrum[i] = nval;
+		spectrumControl.acqSpectrum.dwarSpectrum[i] = nval;
 		pval = nval;
 	}
 	Spectrum_calcCount();
+
+
 	return S_OK;
 }
+
+
+
+
+
+
 
 
 
@@ -1475,13 +1380,13 @@ int Spectrum_read_sigma_cal(void)
 	int items = ini_retrieveTable(hfile, spectrumControl.warChSiTable);
 	if(items==0)return E_FAIL;
 	spline_calcSpline(spectrumControl.warChSiTable, items, spectrumControl.warSigma, 256.0);
-	
+
 	//create sigma for identification that is in 1.5 thinner
 #ifdef _THIN_SIGMA
 	for(i=0;i<CHANNELS;i++)
 		spectrumControl.warSigma[i]=spectrumControl.warSigma[i]/SIGMA_THIN_FACTOR_M*SIGMA_THIN_FACTOR_D;
 #endif	//#ifdef _THIN_SIGMA
-	
+
 	spectrumControl.bHasSigma = TRUE;
 	return S_OK;
 }
@@ -1506,13 +1411,13 @@ BOOL Spectrum_peakProc_ex(float *position, float* sigma)
 				*SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
 #endif	//#ifdef _THIN_SIGMA
 		;
-	
+
 	long left = pos-sig;
 	long right = pos+sig;
 	if(left<1)left = 1;
 	if(right>=CHANNELS-1)right = CHANNELS-2;
 	if(left>right)return FALSE;
-	
+
 	long val, max=0;
 	for(int i=left;i<=right;i++)
 	{
@@ -1534,7 +1439,7 @@ BOOL Spectrum_peakProc_ex(float *position, float* sigma)
 	if(left<1)left = 1;
 	if(right>=CHANNELS-1)right = CHANNELS-2;
 	if(left>right)return FALSE;
-	
+
 	long long summ = 0;
 	long long msumm = 0;
 	long long mean;
@@ -1545,14 +1450,14 @@ BOOL Spectrum_peakProc_ex(float *position, float* sigma)
 		summ+=mean;
 		msumm+=mean*i;
 	}
-	
+
 	if(summ<=0)return FALSE;	//empty spectrum
 
 	//определили центр по средневзвешенному
 	//теперь задаем края по 3,5 сигмы с каждой стороы и обрабатываем пик
 	*position = (float)msumm/(float)summ;
 	pos = (long)(*position+0.5);
-	
+
 	sig = 3.5*spectrumControl.warSigma[pos]/256
 #ifdef _THIN_SIGMA
 				*SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
@@ -1600,9 +1505,9 @@ BOOL Spectrum_QuickPeakCalculation(long left, long right, float *position, float
 void Spectrum_peakProc(void)
 {
 	memset(spectrumControl.peakProcRes,0,sizeof(spectrumControl.peakProcRes));
-	
+
 	if(!spectrumControl.bHasSigma || !spectrumControl.bHasEnergy)return;	//no calibration
-	
+
 	float position = spectrumControl.iMarkerChannel;
 	float sigma;
 	if(spectrumControl.iMarkerChannel2!=-1)
@@ -1613,7 +1518,7 @@ void Spectrum_peakProc(void)
 	{
 		const float sqrt2ln2=200.0*1.17774100225; //full width on half height = 2*sqrt2ln2*sigma
 
-		//14.04.2016 added again to be like SpectEx		
+		//14.04.2016 added again to be like SpectEx
 		//26/02/2014 commented because we dont need energy resoultion in energies any more
 		//06/07/2012 added calculation of reosultion in energies
 		if(spectrumControl.bHasEnergy)
@@ -1626,19 +1531,19 @@ void Spectrum_peakProc(void)
 			sprintf(spectrumControl.peakProcRes, "N=%.1f R=%.1f%%\0", position, sigma*sqrt2ln2/position);
 		}
 		//
-		
+
 		int en = (int)(identify_EnergyFromChannel(position)+0.5);
 		sprintf(spectrumControl.peakProcRes+strlen(spectrumControl.peakProcRes), " E=%u keV\0", (int)en);
-		
+
 		int is = position-sigma*3.5, ie = position+sigma*3.5;
 		if(is<0)is = 0;
 		if(ie>=CHANNELS)ie = CHANNELS-1;
 		DWORD dwarea=0;
 		for(;is<=ie;is++)dwarea+=spectrumControl.pShowSpectrum->dwarSpectrum[is];
-		
+
 		char buf[100];
 		memset(buf,0,sizeof(buf));
-		
+
 #ifdef BNC
 		switch(modeControl.bLang)
 		{
@@ -1654,7 +1559,7 @@ void Spectrum_peakProc(void)
 		default:
 			strcpy(buf, "\rPA=%u cnt DR=%.3f mrem/h\0");
 		}
-#else		
+#else
 		switch(modeControl.bLang)
 		{
 		case enu_lang_french:
@@ -1669,11 +1574,11 @@ void Spectrum_peakProc(void)
 		default:
 			strcpy(buf, "\rPA=%u cnt DR=%.2f µSv/h\0");
 		}
-#endif	
-		
-		
+#endif
+
+
 		sprintf(spectrumControl.peakProcRes+strlen(spectrumControl.peakProcRes), buf, (UINT)dwarea, (float)SPRDModeControl.fDoserate);
-		
+
 	}else
 	{
 		spectrumControl.peakProcRes[0]='\r';
@@ -1731,7 +1636,7 @@ BOOL Spectrum_menu1_openspectrum(void)
 	FileListModeControl.pOnPrevPage = Spectrum_menu1_openspectrum_onPrevPage;
 	FileListModeControl.pRetFunction = Spectrum_menu1_openspectrum_done;
 	FileListModeControl.iItemsNum = filesystem_get_dir(
-					"spz",
+					"sz2",
 					FileListModeControl.listItems,
 					MAX_ITEMS,
 					0);
@@ -1754,7 +1659,7 @@ BOOL Spectrum_menu1_openspectrum_onNextPage(void)
 {
 	if(FileListModeControl.iItemsNum<MAX_ITEMS)return FALSE;
 	FileListModeControl.iItemsNum = filesystem_get_dir(
-					"spz",
+					"sz2",
 					FileListModeControl.listItems,
 					MAX_ITEMS,
 					FileListModeControl.iPage*MAX_ITEMS+MAX_ITEMS);
@@ -1763,7 +1668,7 @@ BOOL Spectrum_menu1_openspectrum_onNextPage(void)
 	else
 	{
 	FileListModeControl.iItemsNum = filesystem_get_dir(
-					"spz",
+					"sz2",
 					FileListModeControl.listItems,
 					MAX_ITEMS,
 					FileListModeControl.iPage*MAX_ITEMS);
@@ -1776,7 +1681,7 @@ BOOL Spectrum_menu1_openspectrum_onPrevPage(void)
 {
 	if(FileListModeControl.iPage==0)return FALSE;
 	FileListModeControl.iItemsNum = filesystem_get_dir(
-					"spz",
+					"sz2",
 					FileListModeControl.listItems,
 					MAX_ITEMS,
 					FileListModeControl.iPage*MAX_ITEMS-MAX_ITEMS);
@@ -1785,7 +1690,7 @@ BOOL Spectrum_menu1_openspectrum_onPrevPage(void)
 	else
 	{
 	FileListModeControl.iItemsNum = filesystem_get_dir(
-					"spz",
+					"sz2",
 					FileListModeControl.listItems,
 					MAX_ITEMS,
 					FileListModeControl.iPage*MAX_ITEMS);
@@ -1916,6 +1821,186 @@ void Spectrum_DiffFilter(void)
 			spectrumControl.acqSpectrum.dwarSpectrum[i]-=val2;
 			spectrumControl.acqSpectrum.dwarSpectrum[i+32]+=val2;
 		}
-	}					
+	}
 }
 #endif	//#ifdef _DIFF_FILTER
+
+
+
+
+
+//////////////////////////////////////////////////save spectrum array
+
+
+
+
+
+
+//compress and save spectrum to spectrum array file
+//ret 1 if ok
+//ret 0 if no memory
+//ret -1 file name changed
+//ret -2 battery low
+/*
+format of spectrum array file
+2 bytes - subfile size in bytes excluding subfilename
+16 bytes - subfile name without extention
+X bytes - subfile content
+2 bytes - subfile size in bytes excluding subfilename
+16 bytes - subfile name without extention
+X bytes - subfile content
+... and so on
+2 bytes - subfile size in bytes excluding subfilename
+16 bytes - subfile name without extention
+X bytes - subfile content
+*/
+int Spectrum_saveSpecAr(unsigned char* pFileName)
+{
+	if(powerControl.bBatteryAlarm)return -2;	//battery alarm
+
+	int iret = 1;
+	//check that file exists
+	HFILE hfile = filesystem_find_file(pFileName, "sar");
+	if(hfile==NULL)
+	{//file not exists
+		hfile = filesystem_create_file(pFileName, //name of the file, will be found and rewrite
+						"sar", //ext of the file
+						1	//1 then exists file will be overwritten
+					  );
+	}
+
+
+	if(hfile==NULL)return 0;//!!!!!!!! have to show MSG, not exception
+//		exception(__FILE__,__FUNCTION__,__LINE__,"No free memory");
+
+
+	int file_pos = 0;
+	file_pos = filesystem_get_length(hfile);
+
+
+	//ВАЖНО! тут только WORD должен быть ткт запись двух байт идет следом
+	WORD len = Spectrum_prepareSpectrumForSaving();
+	if (len==0) return 0;//failed
+
+	//will save subfile size in a file
+	int ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
+							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
+							  (BYTE*)&len, /*send buffer*/
+							  2);/*buffer len in bytes*/
+	if(ret==E_FAIL)
+	{
+		filesystem_delete_file(hfile);
+		return 0;//!!!!!!!! have to show MSG, not exception
+	}
+
+unsigned char temp[FILE_NAME_SZ];
+	memset(temp, 0, sizeof(temp));
+	if(modeControl.bLang==enu_lang_russian)
+		sprintf((char*)SPRDModeControl.spec_name, "спек_%s", Clock_getClockDateTimeStrEx(temp));
+	else
+		sprintf((char*)SPRDModeControl.spec_name, "spec_%s", Clock_getClockDateTimeStrEx(temp));
+
+	//will save subfile name in a file
+	ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
+							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
+							  (BYTE*)SPRDModeControl.spec_name, /*send buffer*/
+							  FILE_NAME_SZ);/*buffer len in bytes*/
+	if(ret==E_FAIL)
+	{
+		filesystem_delete_file(hfile);
+		return 0;//!!!!!!!! have to show MSG, not exception
+	}
+
+	//will save subfile content in a file
+	ret = filesystem_file_put(hfile, /*file descriptor = number of file in file record table*/
+							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
+							  (BYTE*)packspec.unpacked, /*send buffer*/
+							  len);/*buffer len in bytes*/
+	if(ret==E_FAIL)
+	{
+		filesystem_delete_file(hfile);
+		return 0;//!!!!!!!! have to show MSG, not exception
+	}
+
+	return iret;
+}
+
+
+//it prepares spectrum for saving, compress it,
+//prepared spectru will be in packspec.unpacked
+//return sizeof of data in bytes
+//return 0 if failed
+int Spectrum_prepareSpectrumForSaving(void)
+{
+	DWORD len = 0;
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->wAcqTime, sizeof(spectrumControl.pShowSpectrum->wAcqTime));
+	len+=sizeof(spectrumControl.pShowSpectrum->wAcqTime);
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->dateTime, sizeof(spectrumControl.pShowSpectrum->dateTime));
+	len+=sizeof(spectrumControl.pShowSpectrum->dateTime);
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->commonGPS, sizeof(spectrumControl.pShowSpectrum->commonGPS));
+	len+=sizeof(spectrumControl.pShowSpectrum->commonGPS);
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->fTemperature, sizeof(spectrumControl.pShowSpectrum->fTemperature));
+	len+=sizeof(spectrumControl.pShowSpectrum->fTemperature);
+
+	//создания записи результата идентификации нуклидов в соответствии с форматом АТ6101С
+unsigned char temprep[MAX_REPORT_SYMS];
+	memset(temprep,0,sizeof(temprep));
+unsigned char tempnuc[NUCLNAMELENGTH*3];
+	int reti;
+	for(int i=0;i<identifyControl.NUCLNUM;i++)
+	{
+		reti = identify_getnuclidetxt(i, tempnuc);
+		if(reti==0)continue;	//никлид не идентифицирован
+		if(reti==-1)break;//	the end
+		if((MAX_REPORT_SYMS-strlen((char*)temprep))<=strlen((char*)tempnuc))break;	//больше места нет в буфере
+		strncat((char*)temprep, (char*)tempnuc, NUCLNAMELENGTH*3);
+	}
+
+	memcpy(&packspec.unpacked[len], &temprep, sizeof(temprep));
+	len+=sizeof(temprep);
+
+	long pval = spectrumControl.pShowSpectrum->dwarSpectrum[0];
+	long nval;
+	long rval;
+	//store first channel as absolute value
+	memcpy(&packspec.unpacked[len], &pval, sizeof(pval));
+	len+=sizeof(pval);
+	for(int i=1;i<CHANNELS;i++)
+	{
+		nval = (long)spectrumControl.pShowSpectrum->dwarSpectrum[i];
+		rval = nval-pval;
+		pval = nval;
+		if(rval>32767 || rval<-32768)
+		{//3 bytes on channel + 1 mark byte
+			packspec.unpacked[len++] = 0x7f;
+			memcpy(&packspec.unpacked[len], &rval, 3);
+			len+=3;
+		}else if(rval>126 || rval<-127)
+		{//2 bytes on channel + 1 mark byte
+			packspec.unpacked[len++] = 0x80;
+			memcpy(&packspec.unpacked[len], &rval, 2);
+			len+=2;
+		}else
+		{//1 byte on channel
+			packspec.unpacked[len++]=(signed char)rval;
+		}
+	}
+
+	//вторая версия файла спектра
+	//save doserate
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->fDoserate, sizeof(spectrumControl.pShowSpectrum->fDoserate));
+	len+=sizeof(spectrumControl.pShowSpectrum->fDoserate);
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->wRealTime, sizeof(spectrumControl.pShowSpectrum->wRealTime));
+	len+=sizeof(spectrumControl.pShowSpectrum->wRealTime);
+	memcpy(&packspec.unpacked[len], &spectrumControl.pShowSpectrum->fCps, sizeof(spectrumControl.pShowSpectrum->fCps));
+	len+=sizeof(spectrumControl.pShowSpectrum->fCps);
+
+	PowerControl_kickWatchDog();
+	if(!superCompressSpectrum(&len))
+		return 0;
+	PowerControl_kickWatchDog();
+
+	return len;
+}
+
+

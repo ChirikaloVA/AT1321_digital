@@ -79,15 +79,15 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 		return "NaI mode\0""NaI mode\0""NaI mode\0""Режим NaI";
 	}else
 	if(SPRDModeControl.bBkgMode_confirmed)
-#ifdef _IAEA		
+#ifdef _IAEA
 		return "Bgnd\0""Bgnd\0""Bgnd\0""Фон";
 #else
 		return "SPRD bkg\0""SPRD bkg\0""SPRD bkg\0""СПРД Фон";
-#endif	
+#endif
 	else
 	{
 		if(!SPRDModeControl.bIdentMode)
-#ifdef _IAEA		
+#ifdef _IAEA
 			return "Search\0""Search\0""Search\0""Поиск";
 #else
 			return "SPRD\0""SPRD\0""SPRD\0""СПРД";
@@ -101,7 +101,7 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			char buf[20];
 			char volatile * pbuf = SPRDModeControl.buf;
 			memset(buf, 0, sizeof(buf));
-#ifdef _IAEA		
+#ifdef _IAEA
 			sprintf(buf, "Ident %d", val);
 #else
 			sprintf(buf, "SPRD %d", val);
@@ -110,9 +110,9 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
-			
+
 			memset(buf, 0, sizeof(buf));
-#ifdef _IAEA		
+#ifdef _IAEA
 			sprintf(buf, "Ident %d", val);
 #else
 			sprintf(buf, "SPRD %d", val);
@@ -121,9 +121,9 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
-			
+
 			memset(buf, 0, sizeof(buf));
-#ifdef _IAEA		
+#ifdef _IAEA
 			sprintf(buf, "Ident %d", val);
 #else
 			sprintf(buf, "SPRD %d", val);
@@ -132,9 +132,9 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
-			
+
 			memset(buf, 0, sizeof(buf));
-#ifdef _IAEA		
+#ifdef _IAEA
 			sprintf(buf, "Идент %d", val);
 #else
 			sprintf(buf, "СПРД %d", val);
@@ -143,7 +143,7 @@ const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 			pbuf+=strlen(buf);
 			pbuf[0]=0;
 			pbuf++;
-			
+
 			return (const char*)SPRDModeControl.buf;
 		}
 	}
@@ -174,7 +174,7 @@ const char* SPRDMode_UpOnUpdate(void)//"acquir\0""набор",//up
 	{
 		return "reset\0""reset\0""reset\0""сброс";
 	}
-	
+
 	if(SPRDModeControl.bBkgMode_confirmed)
 		return "skip\0""skip\0""skip\0""отмена";
 	else
@@ -185,7 +185,7 @@ const char* SPRDMode_UpOnUpdate(void)//"acquir\0""набор",//up
 		else
 			return "stop\0""stop\0""stop\0""стоп";
 	}else
-#ifdef _IAEA		
+#ifdef _IAEA
 		return "bgnd\0""bgnd\0""bgnd\0""фон";
 #else
 		return "bkg\0""bkg\0""bkg\0""фон";
@@ -202,7 +202,7 @@ const char* SPRDMode_DownOnUpdate(void)//"menu\0""меню",	//down
 
 const struct tagMenu SPRD_menu=
 {
-#ifdef _IAEA		
+#ifdef _IAEA
 	"MENU: SEARCH\0""MENU: SEARCH\0""MENU: SEARCH\0""МЕНЮ: ПОИСК",	//menu name
 #else
 	"MENU: SPRD\0""MENU: SPRD\0""MENU: SPRD\0""МЕНЮ: СПРД",	//menu name
@@ -235,9 +235,9 @@ const char* SPRDMode_menu1_TurnOFF_onUpdate(void)
 //save doserate value with gps coords
 BOOL SPRDMode_menu1_SaveValue(void)
 {
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 	LOGMode_insertGPS();
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 	LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 	SoundControl_BeepSeq(beepSeq_OK);
 	return TRUE;
@@ -276,7 +276,7 @@ BOOL SPRDMode_menu1_SPRDmode(void)
 const char* SPRDMode_menu1_SPRDmode_onUpdate(void)
 {
 	if(SPRDModeControl.bGMMode || SPRDModeControl.bNaIMode)
-#ifdef _IAEA		
+#ifdef _IAEA
 		return "Search mode\0""Search mode\0""Search mode\0""Режим Поиск";
 #else
 		return "SPRD mode\0""SPRD mode\0""SPRD mode\0""Режим СПРД";
@@ -425,7 +425,7 @@ void SPRDMode_Init(void)
 	SPRDModeControl.fDRThreshold = 1;
 	SPRDModeControl.bUpdateMCS = FALSE;
 	SPRDMode_Init_for_ident();
-	
+
 	SPRDModeControl.iAlarmTimer=0;
 	SPRDModeControl.false_alarm_period_oper = 600;
 	SPRDModeControl.bNaIOverload = FALSE;
@@ -451,10 +451,10 @@ void SPRDMode_Init_for_ident(void)
 
 BOOL SPRDMode_OnActivate(void)
 {
-	
+
 	Modes_createTimer(333);
 	SPRDMode_Init_for_ident();
-	
+
 	Modes_updateMode();
 	SPRDMode_showWholeMCS_once();
 	return 1;
@@ -467,7 +467,7 @@ BOOL SPRDMode_OnTimer(void)
 	{
 		return 1;
 	}
-	
+
 	InterProc_readMeasurementRegs();
 
 	if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode)
@@ -481,7 +481,7 @@ BOOL SPRDMode_OnTimer(void)
 				SPRDModeControl.bUpdateMCS = TRUE;
 			}
 		}
-	
+
 		//goto search mode if fCpsErr < CPS_ERR_THRESHOLD
 		if((SPRDModeControl.bBkgMode_assumed && SPRDModeControl.bBkgMode_confirmed) &&
 		   SPRDModeControl.fCpsErr<=CPS_ERR_THRESHOLD)
@@ -497,7 +497,7 @@ BOOL SPRDMode_OnTimer(void)
 				SPRDMode_OnUp();
 			}
 		}else if(!SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed &&
-				 modeControl.pMode==&modes_SPRDMode && 
+				 modeControl.pMode==&modes_SPRDMode &&
 				!SPRDModeControl.bNaIOverload /*no NaI overload*/ &&
 					!geigerControl.esentVals_safe.bOverload /*no danger*/)
 		{//check for need ident mode
@@ -516,9 +516,9 @@ BOOL SPRDMode_checkForIdentMode(void)
 {
 	if(SPRDModeControl.bRadFound && !SPRDModeControl.bIdentMode)
 	{//first switch to ident mode
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 		LOGMode_insertGPS();
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 		LOGMode_insertEventByLang("Gamma radiation detected!\0""Gamma radiation detected!\0""Gamma radiation detected!\0""Обнаруженно гамма-излучение!");
 		LOGMode_insertDoserate(SPRD_GetCurrentDoserate());
 		SPRDModeControl.bIdentMode = TRUE;
@@ -540,7 +540,8 @@ BOOL SPRDMode_checkForIdentMode(void)
 			{//stop and exit ident
 				LOGMode_insertEventByLang(strIdentified);
 				LOGMode_insertEvent(identifyControl.report);
-				SPRDMode_saveAutoSpec();
+				if(SPRDModeControl.bAutoSaveSpectra)
+					SPRDMode_saveAutoSpec();
 				SPRDModeControl.bIdentStoped = TRUE;	//have to be first to correct exit in OnLeft
 				SPRDMode_OnUp();
 				return FALSE;
@@ -639,7 +640,7 @@ void SPRDMode_PSW_done(BOOL bOK)
 	}else
 		Modes_setActiveMode(&modes_SPRDMode);
 }
-	
+
 BOOL SPRDMode_OnUp(void)
 {
 	int slotscnt = InterProc_countFreeSlots();
@@ -657,7 +658,7 @@ BOOL SPRDMode_OnUp(void)
 		geigerControl.bReset = 1;
 		return 1;
 	}
-	
+
 	if(slotscnt<7)
 	{
 		//can not make command!!!
@@ -666,7 +667,7 @@ BOOL SPRDMode_OnUp(void)
 		return 1;
 	}
 
-	
+
 	//background control
 	//!!!!!!!!!!!! must be some sound here
 	if(SPRDModeControl.bBkgMode_confirmed)
@@ -687,7 +688,8 @@ BOOL SPRDMode_OnUp(void)
 			{//stop
 				LOGMode_insertEventByLang(strIdentified);
 				LOGMode_insertEvent(identifyControl.report);
-				SPRDMode_saveAutoSpec();
+				if(SPRDModeControl.bAutoSaveSpectra)
+					SPRDMode_saveAutoSpec();
 				SPRDModeControl.bIdentStoped = TRUE;
 				Modes_showButtons();
 			}
@@ -743,7 +745,7 @@ BOOL SPRDMode_OnWakeUp(void)
 }
 BOOL SPRDMode_OnPowerDown(void)
 {
-	return (!SPRDModeControl.bIdentMode && 
+	return (!SPRDModeControl.bIdentMode &&
 			!SPRDModeControl.bBkgMode_confirmed);	//allow enter power down if not Id mode and not BKg mode
 }
 
@@ -913,11 +915,11 @@ void SPRDMode_showIdent(void)
 	Display_setTextColor(GREEN);	//set text color
 	Display_setTextLineClear(1);
 	Display_checkForClearLine();
-	
+
 	Display_outputTextByLang("Nuc.Lib: \0""Nuc.Lib: \0""Nuc.Lib: \0""Нук.биб: ");
 	Display_outputText(identifyControl.libraryFileName);
 	Display_outputText("\r");
-	
+
 	Display_checkForClearLine();
 	Display_setTextColor(RED);	//set text color
 	Display_outputTextByLang(strIdentified);
@@ -934,9 +936,9 @@ void SPRDMode_showMCS(void)
 	if(SPRDModeControl.bBkgMode_confirmed)return;
 
 	Display_left_scroll(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
-	
+
 	COLORREF clr;
-	
+
 	int i = MCS_WIN_WIDTH-1;
 
 	int y = (int)SPRDModeControl.arMCS[i];
@@ -956,12 +958,12 @@ void SPRDMode_showMCS(void)
 
 void SPRDMode_showWholeMCS_once(void)
 {
-	
+
 	RECT rect={0,MCS_WIN_TOP,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM};
 	Display_clearRect(rect,50);
-	
+
 	if(SPRDModeControl.bBkgMode_confirmed)return;
-	
+
 	COLORREF clr;
 	for(int i=0;i<MCS_WIN_WIDTH;i++)
 	{
@@ -995,7 +997,7 @@ void SPRDMode_showCps(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(NONE);
 	Display_setCurrentFont(fnt32x32);
-	
+
 	char buf[100];
 	float cps =SPRDModeControl.fCps;
 	float cpserr =SPRDModeControl.fCpsErr;
@@ -1006,7 +1008,7 @@ void SPRDMode_showCps(void)
 		cpserr = geigerControl.esentVals_safe.fCpsErr;
 	}
 
-	
+
 	const char* pFltMsk;
 	if(cps<1)
 		pFltMsk = "%.3f";
@@ -1016,7 +1018,7 @@ void SPRDMode_showCps(void)
 		pFltMsk = "%.1f";
 	else
 		pFltMsk = "%.0f";
-	
+
 	sprintf(buf,pFltMsk,cps);
 	Display_clearTextWin(200);
 	Display_outputText(buf);
@@ -1073,11 +1075,11 @@ void SPRDMode_showDR(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(NONE);
 	Display_setCurrentFont(fnt32x32);
-	
+
 	//check for overload
 	float val = SPRD_GetCurrentDoserate();
 	float valerr = SPRD_GetCurrentDoserateErr();
-	
+
 	if(geigerControl.esentVals_safe.bOverload)
 	{//OVERLOAD MODE
 		val = MAX_DR;
@@ -1085,7 +1087,7 @@ void SPRDMode_showDR(void)
 		clr = (clockData.dateTime.second&0x01)?RED:YELLOW;
 		Display_setTextColor(clr);	//set text color
 	}
-	
+
 //	{//normal mode
 	char buf[100];
 	const char* pFltMsk;
@@ -1097,7 +1099,7 @@ void SPRDMode_showDR(void)
 		pFltMsk = "%.1f";
 	else
 		pFltMsk = "%.0f";
-	
+
 	sprintf(buf,pFltMsk,val);
 	Display_clearTextWin(250);
 	Display_outputText(buf);
@@ -1130,7 +1132,7 @@ char* SPRDMode_getDimensionDose(void)
 {
 #ifdef BNC
 			return "mrem\0""mrem\0""mrem\0""mrem";
-#else	
+#else
 			return "µSv\0""µSv\0""µSv\0""µSv";
 #endif
 }

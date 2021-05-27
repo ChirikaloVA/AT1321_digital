@@ -66,8 +66,8 @@ struct tagSPRDModeControl
 	BOOL bBkgMode_confirmed;	//mode of bkg acq
 	BOOL bBkgMode_assumed;	//used to alarm on search, it is setup when status read
 	float fDRThreshold;
-	
-	
+
+
 	volatile BOOL bRadFound;	//true if radiation found, used to wakeup from sleep mode, to store event msg in log
 	BOOL bIdentMode;	//true if radiation found and spec started
 	BOOL bCanUpdateIdentResult;	//if true then ident result on screen will be updated
@@ -87,7 +87,7 @@ struct tagSPRDModeControl
 	char spec_name[FILE_NAME_SZ];	//name of auto saved spectrum
 	BOOL bNaIOverload;	//NaI oveload
 	volatile BOOL bMustSwitchToSPRD;	//if true then system will enable SPRD mode as active when alarm is detected
-	
+
 	BOOL bGMMode;
 	BOOL bNaIMode;
 
@@ -99,6 +99,7 @@ struct tagSPRDModeControl
 	int hour;
 	int minute;
 
+	BOOL bAutoSaveSpectra;	//true spectra will save after identification complete
 };
 
 extern struct tagSPRDModeControl SPRDModeControl;

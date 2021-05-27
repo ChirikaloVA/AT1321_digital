@@ -35,15 +35,15 @@ void filesystem_Init(void)
 	filesystem.iCurrentFileRecordSector = -1;	//nothing loaded by default
 	filesystem.iCurrentFileClaster = -1;
 	filesystem.iCurrentFileClasterSector = -1;
-	
+
 	filesystem.bMemoryLow = FALSE;
-	
+
 	filesystem.file_pos_last_value = -1;
 	filesystem.file_pos_last_section = -1;
 	memset(filesystem.lastSectionName,0 , sizeof(filesystem.lastSectionName));
 	filesystem.hFileExecuteSys = NULL;
-	
-	
+
+
 	//here we read internal non erasable data with serial number and so on.
 	//get serial number
 	/*
@@ -60,7 +60,7 @@ void filesystem_Init(void)
 		//add 24/09/2010
 		EEPROMControl.wdEepromWritesCounter = ((WORD)buf[8]<<8)|((WORD)buf[7]);
 		modeControl.bLang = (int)buf[9];
-	}else 
+	}else
 	{//set settings by default in RAM
 		if(!modeControl.bNoSysSettings)
 		{
@@ -483,7 +483,7 @@ HFILE filesystem_create_file(const char* pFileName, /*name of the file, will be 
 						  )
 {
 	if(powerControl.bBatteryAlarm)return NULL;	//when battery discharged no file operation is allowed
-	
+
 	HFILE hfile = filesystem_find_file(pFileName, pFileExt);
 	if(hfile!=NULL)
 	{
@@ -833,7 +833,7 @@ int filesystem_get_dir(const char* pFileExt, /*ext of file, if NULL then all fil
 		{
 			if(filesystem.fileRecordsOnSector[index].wdStartClaster==CLASTERTABLE_EMPTY_RECORD)continue;	//deleted
 			if(!strncmp(filesystem.fileRecordsOnSector[index].ext,pFileExt,FILE_EXT_SZ) &&
-				!(!strncmp(filesystem.fileRecordsOnSector[index].ext,"spz",FILE_EXT_SZ)
+				!(!strncmp(filesystem.fileRecordsOnSector[index].ext,"sz2",FILE_EXT_SZ)
 			   && (!strncmp(filesystem.fileRecordsOnSector[index].name,"energy",FILE_NAME_SZ)
 			   || (!strncmp(filesystem.fileRecordsOnSector[index].name,"sigma",FILE_NAME_SZ)))))
 			{//not deleted, not filtered, not system

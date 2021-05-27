@@ -61,7 +61,7 @@ void filesystem_check_and_restore(void)
 	Display_clearTextWin(10);
 	Display_outputTextByLang("Initialization...\r\0""Initialization...\r\0""Initialization...\r\0""Инициализация...\r");
 	Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
-	
+
 	//add 24/09/2010
 	if(EEPROMControl.wdEepromWritesCounter>9500)
 	{//regenerate eeprom
@@ -86,20 +86,20 @@ void filesystem_check_and_restore(void)
 		//save essential data in eeprom (it is a eeprom writes counter )
 		EEPROM_UpdateEssentialDataInEeprom();
 	}
-	
+
 	Display_clearTextWin(10);
 	Display_setTextXY(0,0);	//set start coords in window
 	//end add 24/09/2010
-	
+
 	Display_outputTextByLang("Checking memory...\r\0""Checking memory...\r\0""Checking memory...\r\0""Проверка памяти...\r");
-	
+
 	BOOL bShowOnce = FALSE;
 	BOOL bError = FALSE;
-	
+
 	//потому как мы испортили содержимое clasterBuffer
 	filesystem.iCurrentFileClaster=-1;
 	filesystem.iCurrentFileClasterSector=-1;
-	
+
 	//check claster table and try to restore it before check sectors
 	for(int i=FILES_CLASTER_START_NO;i<=FILES_CLASTER_END_NO;i++)
 	{
@@ -121,24 +121,24 @@ void filesystem_check_and_restore(void)
 	//потому как мы испортили содержимое clasterBuffer
 	filesystem.iCurrentFileClaster=-1;
 	filesystem.iCurrentFileClasterSector=-1;
-	
+
 
 	Display_clearTextWin(10);
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_outputTextByLang("Checking files...\r\0""Checking files...\r\0""Checking files...\r\0""Проверка файлов...\r");
-	
+
 #pragma pack(1)
 	BYTE claster_buffer[MAX_CLASTERS];	//0-not used, 1-used
 #pragma pack()
 	memset(&claster_buffer[0], 0, MAX_CLASTERS);
 
 	bShowOnce = FALSE;
-	
+
 	for(int k=FILERECORD_START_NO;k<=FILERECORD_END_NO;k++)
 	{
 
 		if(bError)break;
-		
+
 		PowerControl_kickWatchDog();
 
 		int index = filesystem_get_filerecordIndex(k);
@@ -184,7 +184,7 @@ void filesystem_check_and_restore(void)
 					int cindex = filesystem_get_clasterIndex(startclaster);
 					if(cindex==E_FAIL)
 						exception(__FILE__,__FUNCTION__,__LINE__,"invalid claster record");
-						
+
 					int newstartclaster = filesystem.clasterTableOnSector[cindex];
 
 					if(newstartclaster<FILES_CLASTER_START_NO || newstartclaster>FILES_CLASTER_END_NO)
@@ -199,16 +199,16 @@ void filesystem_check_and_restore(void)
 			}
 		}
 	}
-	
-	
+
+
 	Display_clearTextWin(10);
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_outputTextByLang("Checking memory...\r\0""Checking memory...\r\0""Checking memory...\r\0""Проверка памяти...\r");
-	
+
 	//check sector's format by CRC
 	for(int i=CLASTERTABLE_START_SECTOR_NO;i<MAX_SECTORS;i++)
 	{
-		
+
 		PowerControl_kickWatchDog();
 		if(!EEPROM_ReadSector(i, (BYTE*)&filesystem.clasterBuffer[0]))
 		{//bad sector, format it
@@ -235,10 +235,10 @@ void filesystem_check_and_restore(void)
 	filesystem.iCurrentFileClaster=-1;
 	filesystem.iCurrentFileClasterSector=-1;
 
-	
+
 	PowerControl_sleep(500);
-	
-	
+
+
 	if(bError)
 	{//request for restore everything
 		YESNOMode_DoModal(RED,"ERROR!\0""FEHLER!\0""ERROR!\0""ОШИБКА!",
@@ -267,11 +267,11 @@ void filesystem_check_and_restore(void)
 						filesystem_write_clastertable();
 						bNeedSave = 0;
 					}
-	
+
 					int index = filesystem_get_clasterIndex(i);
 					if(index==E_FAIL)
 						exception(__FILE__,__FUNCTION__,__LINE__,"invalid claster record");
-					
+
 					if(filesystem.clasterTableOnSector[index]!=CLASTERTABLE_EMPTY_RECORD)
 					{//not empty claster but no file associated
 						filesystem.clasterTableOnSector[index] = CLASTERTABLE_EMPTY_RECORD;
@@ -294,9 +294,9 @@ void filesystem_check_and_restore(void)
 void filesystem_format_filetable(BOOL bYes)
 {
 	if(!bYes)return;
-	
+
 	if(powerControl.bBatteryAlarm)return;	//when battery discharged no file operation is allowed
-	
+
 	//!!!!!!!!!!! be careful everything will be lost
 	//restore claster table
 	for(int j=0;j<CLASTERTABLE_RECORDS_ON_SECTOR;j++)
@@ -377,7 +377,7 @@ int filesystem_cut_file(HFILE hFile, /*file that will be cut*/
 							 )
 {
 	if(bytes_cut==0)return S_OK;
-	
+
 	int flen = filesystem_get_length(hFile);
 	if(file_pos>=flen)
 	{
@@ -429,7 +429,7 @@ int filesystem_cut_file(HFILE hFile, /*file that will be cut*/
 
 
 //подсичтать количество специальных файлов
-void filesystem_calc_special_files_number(UINT* pAllFilesNum, 
+void filesystem_calc_special_files_number(UINT* pAllFilesNum,
 					UINT* pSPZFilesNum,
 					UINT* pLIBFilesNum,
 					UINT* pMCSFilesNum,
@@ -451,7 +451,7 @@ void filesystem_calc_special_files_number(UINT* pAllFilesNum,
 			if(filesystem.fileRecordsOnSector[j].wdStartClaster!=CLASTERTABLE_EMPTY_RECORD)
 			{
 				allfiles++;
-				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "spz", FILE_EXT_SZ))
+				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "sz2", FILE_EXT_SZ))
 					spzfiles++;
 				else
 				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "lib", FILE_EXT_SZ))

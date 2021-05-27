@@ -137,9 +137,9 @@ const struct tagMenu setup_menu_version=
 const struct tagMenu setup_menu_version=
 {
 	"MENU: VERSION\0""MENU: VERSION\0""MENU: VERSION\0""МЕНЮ: ВЕРСИЯ",	//menu name
-	2,	//number of items
-	{SETUPMode_menu1_idleTime, SETUPMode_menu1_testscreen /*, SETUPMode_menu1_showSplash, SETUPMode_menu1_playSound, SETUPMode_menu1_stopRecord, SETUPMode_menu1_placeMarkers*/},
-	{SETUPMode_menu1_idleTime_onUpdate, SETUPMode_menu1_testscreen_onUpdate /*, SETUPMode_menu1_showSplash_onUpdate, SETUPMode_menu1_playSound_onUpdate, SETUPMode_menu1_stopRecord_onUpdate, SETUPMode_menu1_placeMarkers_onUpdate*/}
+	3,	//number of items
+	{SETUPMode_menu1_idleTime, SETUPMode_menu1_testscreen , SETUPMode_menu1_enableAutoSave/*, SETUPMode_menu1_playSound, SETUPMode_menu1_stopRecord, SETUPMode_menu1_placeMarkers*/},
+	{SETUPMode_menu1_idleTime_onUpdate, SETUPMode_menu1_testscreen_onUpdate , SETUPMode_menu1_enableAutoSave_onUpdate/*, SETUPMode_menu1_playSound_onUpdate, SETUPMode_menu1_stopRecord_onUpdate, SETUPMode_menu1_placeMarkers_onUpdate*/}
 };
 const struct tagMenu setup_menu_library=
 {
@@ -398,6 +398,18 @@ const char* SETUPMode_menu1_testscreen_onUpdate(void)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 //to get splash screens by USB
 const char* SETUPMode_menu1_showSplash_onUpdate(void)
@@ -522,8 +534,24 @@ void SETUPMode_menu1_del_spz_confirm(BOOL bYes)
 	if(bYes)
 	{
 		int progress=0;
-		//delete all spz files
+		//delete all sz2 files
 		HFILE hfile=NULL;
+		do
+		{
+			hfile = filesystem_open_first("sz2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		//delete all spz files
+		hfile=NULL;
 		do
 		{
 			hfile = filesystem_open_first("spz");
@@ -564,6 +592,33 @@ void SETUPMode_menu1_del_autospz_confirm(BOOL bYes)
 		int progress = 0;
 		//delete all autospz files
 		HFILE hfile=NULL;
+		do
+		{
+			hfile = filesystem_open_firstEx("спек_", "sz2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
+			hfile = filesystem_open_firstEx("spec_", "sz2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
 		do
 		{
 			hfile = filesystem_open_firstEx("спек_", "spz");
@@ -1939,6 +1994,34 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 		HFILE hfile=NULL;
 		do
 		{
+			hfile = filesystem_open_firstEx("спек_", "sz2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
+			hfile = filesystem_open_firstEx("spec_", "sz2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
 			hfile = filesystem_open_firstEx("спек_", "spz");
 			if(hfile!=NULL)
 			{
@@ -2036,4 +2119,29 @@ void SETUPMode_menu1_editDTCOEF_edit_done(BOOL bOK)
 		InterProc_setDTCEOF(interProcControl.rsModbus.fDTCOEF);
 	}
 	SETUPMode_setModeOnSelf();
+}
+
+
+
+
+
+
+
+BOOL SETUPMode_menu1_enableAutoSave(void)
+{
+		SPRDModeControl.bAutoSaveSpectra = !SPRDModeControl.bAutoSaveSpectra;
+		if(!ini_write_system_ini_int("SPRDModeControl", "bAutoSaveSpectra", SPRDModeControl.bAutoSaveSpectra))
+		{
+			;//!!!!!!!!!error
+		}
+		return 0;
+}
+
+
+const char* SETUPMode_menu1_enableAutoSave_onUpdate(void)
+{
+	if(SPRDModeControl.bAutoSaveSpectra)
+		return "Autosave spectra\0""Autosave spectra\0""Autosave spectra\0""Автосохранять спектры";
+	else
+		return "Don't save spectra\0""Don't save spectra\0""Don't save spectra\0""Не сохранять спектры";
 }

@@ -6319,7 +6319,7 @@
             <name>$PROJ_DIR$\interProc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\interproc.h</name>
+            <name>$PROJ_DIR$\interProc.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\interProc2.c</name>
@@ -6412,7 +6412,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\comm_mode.h</name>
+            <name>$PROJ_DIR$\COMM_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6436,7 +6436,7 @@
             <name>$PROJ_DIR$\Info_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\info_mode.h</name>
+            <name>$PROJ_DIR$\Info_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\LOG_mode.c</name>
@@ -6463,6 +6463,12 @@
             <name>$PROJ_DIR$\modes.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\packspectrum.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\packspectrum.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\rid.c</name>
         </file>
         <file>
@@ -6472,7 +6478,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\setup_mode.h</name>
+            <name>$PROJ_DIR$\Setup_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6484,13 +6490,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\sprd_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\STAB_mode.h</name>
+            <name>$PROJ_DIR$\stab_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -6508,7 +6514,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_Mode.h</name>
+            <name>$PROJ_DIR$\YESNO_mode.h</name>
         </file>
     </group>
     <group>

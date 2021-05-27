@@ -55,7 +55,7 @@ B - безядерные исполнения
 //#define VERT(maj, min) "FirmWare ver. " #maj "." #min " "SUBVER"\0""FirmWare ver. " #maj "." #min "\0""FirmWare ver. " #maj "." #min "\0""Версия ПО " #maj "." #min "\0";
 
 #define MAJOR "4"
-#define MINOR "11"
+#define MINOR "12"
 
 
 const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""Версия ПО " MAJOR "." MINOR SUBVER"\0";
@@ -156,7 +156,7 @@ __noreturn void main(void)
 
 	PowerControl_Bat2ADC_Init();	//init ADC
         //==============POWER==============
-	
+
 
 	//try to safe power
 	USBCLKCFG_bit.USBSEL = 0xf; //we dont use USB so we can divide it by maximum value, try to safe power

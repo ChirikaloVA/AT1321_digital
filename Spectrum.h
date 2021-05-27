@@ -106,7 +106,6 @@ struct tagSpectrumControl
 	int iHighMul;	//coef of make spectrum higher
 	
 	char peakProcRes[100];	//report of peak processing
-	
 	WORD wins1[SD_WIN_SIZE+1];
 	BOOL bLeftRightClicked;	
 	
@@ -264,5 +263,8 @@ void Spectrum_showMessageOnFileNamechange(char* pFileName);
 void Spectrum_showMessageOnFileNamechange_onDraw(const void* pParam);
 void Spectrum_showMessageOnFileNamechange_onExit(void);
 void Spectrum_DiffFilter(void);
+int Spectrum_prepareSpectrumForSaving(void);
+int Spectrum_saveSpecAr(unsigned char* pFileName);
+
 
 #endif	//ifndef _SPECTRUM_H

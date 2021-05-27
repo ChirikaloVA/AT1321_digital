@@ -46,7 +46,7 @@ BOOL filesystem_restore_identify_ini(void)
 							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
 							  (BYTE*)identify_ini, /*send buffer*/
 							  sizeof(identify_ini));/*buffer len in bytes*/
-	
+
 	return (BOOL)(len!=E_FAIL);
 //		exception(__FILE__,__FUNCTION__,__LINE__,"filesystem error");
 }
@@ -92,7 +92,7 @@ BOOL filesystem_restore_system_ini(void)
 							  (BYTE*)system_ini, /*send buffer*/
 							  sizeof(system_ini));/*buffer len in bytes*/
 
-	
+
 	/////////////////
 	//19/03/2010
 	if(len!=E_FAIL)
@@ -103,8 +103,8 @@ BOOL filesystem_restore_system_ini(void)
 		ini_write_system_ini_float("geigerControl", "fDrDeadTime", geigerControl.fDrDeadTime);
 	}
 	/////////////////
-	
-	
+
+
 	return (BOOL)(len!=E_FAIL);
 //		exception(__FILE__,__FUNCTION__,__LINE__,"filesystem error");
 }
@@ -124,7 +124,7 @@ BOOL filesystem_restore_main_lib(void)
 							&file_pos, /*it is counter or written bytes, input: start from 0, as output ret pointer for the next non written byte*/
 							  (BYTE*)main_lib, /*send buffer*/
 							  sizeof(main_lib));/*buffer len in bytes*/
-	
+
 	return (BOOL)(len!=E_FAIL);
 	//	exception(__FILE__,__FUNCTION__,__LINE__,"filesystem error");
 }
@@ -147,7 +147,7 @@ void filesystem_check_ini_files(void)
 	Display_setTextJustify(LEFT);
 
 	Display_setTextColor(RED);	//set text color
-	
+
 	Display_setTextWin(0,Y_SCREEN_MAX-49,X_SCREEN_SIZE,49);	//set text window
 	Display_clearTextWin(10);
 	Display_outputTextByLang("Initialization...\r\0""Initialization...\r\0""Initialization...\r\0""Инициализация...\r");
@@ -164,7 +164,7 @@ void filesystem_check_ini_files(void)
 		Display_setTextXY(0,0);	//set start coords in window
 		const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
 		Display_outputTextByLang_log(pMsg1);
-		
+
 		if(!powerControl.bBatteryAlarm)
 		{
 			const char pMsg2[] = "Restoring from backup...\0""Erneuerung...\0""Restoring from backup...\0""Восстановление из bak...";
@@ -221,7 +221,7 @@ void filesystem_check_ini_files(void)
 			;//!!!!!!!error
 		}
 	}
-	
+
 	//check system.bak
 	HFILE hFile = filesystem_open_file("system","bak");
 	if(hFile==NULL)
@@ -240,12 +240,12 @@ void filesystem_check_ini_files(void)
 	Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
 	Display_outputTextByLang("Loading system files...\r\0""System files laden...\r\0""Loading system files...\r\0""Загрузка системных файлов...\r");
 	////////////////////////////////////////////////////////////////////////////
-	
-	
-	
-	
+
+
+
+
 	///////////////////////////////identify.ini//////////////////////////////////
-	
+
 	//read library from file name from identify_ini
 	ret = identify_read_identify_ini();
 	if(ret==E_FAIL)
@@ -263,7 +263,7 @@ void filesystem_check_ini_files(void)
 
 			const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
 			Display_outputTextByLang_log(pMsg2);
-	
+
 			if(filesystem_restore_identify_ini())
 			{
 				ret = identify_read_identify_ini();
@@ -278,16 +278,16 @@ void filesystem_check_ini_files(void)
 			;//!!!!!!!!error
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	PowerControl_sleep(1000);
 	Display_clearTextWin(10);
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_outputTextByLang("Loading calibrations...\r\0""Eichendaten laden...\r\0""Loading calibrations...\r\0""Загрузка калибровок...\r");
-	
-	
+
+
 	////////////////////////////energy.cal//////////////////////////////////////
 	ret = Spectrum_read_energy_cal();
 	if(ret==E_FAIL)
@@ -300,8 +300,8 @@ void filesystem_check_ini_files(void)
 		Display_outputTextByLang_log(pMsg1);
 		const char pMsg2[]="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
 		Display_outputTextByLang_log(pMsg2);
-		
-		HFILE hfile  = filesystem_open_file("energy","spz");
+
+		HFILE hfile  = filesystem_open_file("energy","sz2");
 		if(hfile!=NULL)
 			filesystem_delete_file(hfile);
 	}
@@ -316,7 +316,7 @@ void filesystem_check_ini_files(void)
 		if(!iret)
 		{//
 			modeControl.bNoEnergySigmaSpz = TRUE;
-	
+
 			PowerControl_sleep(1000);
 			Display_clearTextWin(10);
 			Display_setTextXY(0,0);	//set start coords in window
@@ -326,7 +326,7 @@ void filesystem_check_ini_files(void)
 			Display_outputTextByLang_log(pMsg2);
 		}
 	}
-	
+
 	/////////////////////////////sigma.cal//////////////////////////////////////////
 	ret = Spectrum_read_sigma_cal();
 	if(ret==E_FAIL)
@@ -340,7 +340,7 @@ void filesystem_check_ini_files(void)
 		const char pMsg2[] ="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
 		Display_outputTextByLang_log(pMsg2);
 
-		HFILE hfile  = filesystem_open_file("sigma","spz");
+		HFILE hfile  = filesystem_open_file("sigma","sz2");
 		if(hfile!=NULL)
 			filesystem_delete_file(hfile);
 	}
@@ -359,7 +359,7 @@ void filesystem_check_ini_files(void)
 		if(!iret)
 		{//
 			modeControl.bNoEnergySigmaSpz = TRUE;
-	
+
 			PowerControl_sleep(1000);
 			Display_clearTextWin(10);
 			Display_setTextXY(0,0);	//set start coords in window
@@ -370,24 +370,24 @@ void filesystem_check_ini_files(void)
 //			Display_refresh();
 		}
 	}
-	
+
 	Spectrum_clear();
-	
-	
-	
-	
-	
+
+
+
+
+
 	/////////////////////////////////main.lib//////////////////////////////////////////
-	
+
 	PowerControl_sleep(1000);
 	Display_clearTextWin(10);
 	Display_setTextXY(0,0);	//set start coords in window
 	Display_outputTextByLang("Loading nuclide library...\r\0""Nuklidbibliothek laden...\r\0""Loading nuclide library...\r\0""Загрузка библиотеки нуклидов...\r");
 
-	
+
 
 	ret = identify_open_library();
-	
+
 	//read library from file name from identify_ini
 	if(ret==E_FAIL)
 	{
@@ -404,7 +404,7 @@ void filesystem_check_ini_files(void)
 		Display_clearTextWin(10);
 		Display_setTextXY(0,0);	//set start coords in window
 		Display_outputTextByLang_log("Loading main.lib...\r\0""main.lib laden...\r\0""Loading main.lib...\r\0""Загрузка main.lib...\r");
-		
+
 		strcpy(identifyControl.libraryFileName, "main");
 		ret = identify_open_library();
 		//read library from file name from identify_ini
@@ -412,12 +412,12 @@ void filesystem_check_ini_files(void)
 		{
 			PowerControl_sleep(1000);
 			identifyControl.NUCLNUM = 0;	//reset to 0 if error
-	
+
 			const char pMsg1[]="Invalid main.lib\r\0""Fehlerhaft main.lib\r\0""Invalid main.lib\r\0""Испорчен main.lib\r";
 			Display_clearTextWin(10);
 			Display_setTextXY(0,0);	//set start coords in window
 			Display_outputTextByLang_log(pMsg1);
-			
+
 			if(!powerControl.bBatteryAlarm)
 			{
 				const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
@@ -439,7 +439,7 @@ void filesystem_check_ini_files(void)
 			}
 		}
 	}
-	
+
 
 	////////////////////////////////////////////////////////////////////////////
 }
@@ -492,7 +492,7 @@ int filesystem_get_stringReverse(HFILE hFile, int* pFile_pos, char* pString, int
 //		if(*pAdr!='\0')return E_FAIL;	//last 0
 		//it is last string
 	}
-	
+
 	char* pAdr2 = pAdr;
 	while(--pAdr2>=buf && *pAdr2!='\r');
 	pAdr2++;
@@ -641,10 +641,10 @@ int filesystem_ini_put_float(HFILE hFile, const char* pSection, const char* pNam
 int filesystem_ini_get_string(HFILE hFile, const char* pSection, const char* pName, char* pValue, int value_len)
 {
 	int file_pos = 0;
-	
+
 	file_pos = file_system_find_section(hFile, pSection);
 	if(file_pos==E_FAIL)return E_FAIL;
-	
+
 	file_pos = filesystem_find_value(hFile, file_pos, pName);
 	if(file_pos==E_FAIL)return E_FAIL;
 
@@ -671,7 +671,7 @@ int filesystem_find_value(HFILE hFile, int start_file_pos, const char* pName)
 	do
 	{
 		PowerControl_kickWatchDog();
-		
+
 		int rlen = filesystem_get_string(hFile, &file_pos, buf, buflen);
 		if(rlen==E_FAIL ||
 		   (stop_file_pos>0 && file_pos>stop_file_pos) ||
@@ -721,23 +721,23 @@ int file_system_find_section(HFILE hFile, const char* pSection)
 	//check if we are already in this section
 	if(strcmp(filesystem.lastSectionName, pSection)==0 && filesystem.file_pos_last_section>=0)
 		return filesystem.file_pos_last_section;
-	
+
 	filesystem.file_pos_last_value = -1;
-	
+
 	char buf[MAX_INI_STRING_LEN];
 	int buflen = sizeof(buf);
 	int file_pos;
 	int stop_file_pos = 0;
-	
+
 	file_pos = 0;
 	if(filesystem.file_pos_last_section>=0)//will try to search from the last section
 		file_pos = filesystem.file_pos_last_section;
 	int section_len = strlen(pSection);
 	do
 	{
-		
+
 		PowerControl_kickWatchDog();
-		
+
 		int rlen = filesystem_get_string(hFile, &file_pos, buf, buflen);
 		if(rlen==E_FAIL || (stop_file_pos>0 && file_pos>stop_file_pos))
 		{
@@ -774,10 +774,10 @@ int file_system_find_section(HFILE hFile, const char* pSection)
 int filesystem_ini_put_string(HFILE hFile, const char* pSection, const char* pName, const char* pValue)
 {
 	int file_pos = 0;
-	
+
 	file_pos = file_system_find_section(hFile, pSection);
 	if(file_pos==E_FAIL)return E_FAIL;
-	
+
 	file_pos = filesystem_find_value(hFile, file_pos, pName);
 	if(file_pos==E_FAIL)return E_FAIL;
 
@@ -824,8 +824,8 @@ int ini_read_system_ini(char* pExt)
 	if(ret==E_FAIL)
 		return E_FAIL;
 	powerControl.dwPowerDownDeadTime = rVal;
-	
-	ret = filesystem_ini_get_float(hfile, "powerControl", "fBatCoef", &powerControl.fBatCoef);	
+
+	ret = filesystem_ini_get_float(hfile, "powerControl", "fBatCoef", &powerControl.fBatCoef);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	if(powerControl.fBatCoef<MIN_BAT_COEF)
@@ -833,69 +833,76 @@ int ini_read_system_ini(char* pExt)
 	if(powerControl.fBatCoef>MAX_BAT_COEF)
 		powerControl.fBatCoef = MAX_BAT_COEF;
 
-#ifndef GPS_BT_FREE	
-	
-	ret = filesystem_ini_get_int(hfile, "bluetoothControl", "comm_state", &rVal);	
+#ifndef GPS_BT_FREE
+
+	ret = filesystem_ini_get_int(hfile, "bluetoothControl", "comm_state", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	bluetoothControl.comm_state = rVal;
-	ret = filesystem_ini_get_int(hfile, "bluetoothControl", "comm_power_state", &rVal);	
+	ret = filesystem_ini_get_int(hfile, "bluetoothControl", "comm_power_state", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	bluetoothControl.comm_power_state = rVal;
 
-	ret = filesystem_ini_get_int(hfile, "GPSControl", "gps_state", &rVal);	
+	ret = filesystem_ini_get_int(hfile, "GPSControl", "gps_state", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	GPSControl.gps_state = rVal;
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 
-	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrCoef", &geigerControl.fDrCoef);	
+	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrCoef", &geigerControl.fDrCoef);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrSelfCps", &geigerControl.fDrSelfCps);	
+	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrSelfCps", &geigerControl.fDrSelfCps);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrDeadTime", &geigerControl.fDrDeadTime);	
+	ret = filesystem_ini_get_float(hfile, "geigerControl", "fDrDeadTime", &geigerControl.fDrDeadTime);
 	if(ret==E_FAIL)
 		return E_FAIL;
 
-	ret = filesystem_ini_get_int(hfile, "interProcControl", "wdHighLimit", &rVal);	
+	ret = filesystem_ini_get_int(hfile, "interProcControl", "wdHighLimit", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	interProcControl.rsModbus.wdHighLimit = rVal;
-	ret = filesystem_ini_get_int(hfile, "interProcControl", "wdLowLimit", &rVal);	
+	ret = filesystem_ini_get_int(hfile, "interProcControl", "wdLowLimit", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	interProcControl.rsModbus.wdLowLimit = rVal;
-	
 
-	ret = filesystem_ini_get_float(hfile, "SPRDModeControl", "fDRThreshold", &SPRDModeControl.fDRThreshold);	
+
+	ret = filesystem_ini_get_float(hfile, "SPRDModeControl", "fDRThreshold", &SPRDModeControl.fDRThreshold);
 	if(ret==E_FAIL)
 		return E_FAIL;
 
 
-	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "false_alarm_period_oper", &rVal);	
+	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "false_alarm_period_oper", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	SPRDModeControl.false_alarm_period_oper = rVal;
+
+
+
+	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "bAutoSaveSpectra", &rVal);
+	if(ret==E_FAIL)
+		return E_FAIL;
+	SPRDModeControl.bAutoSaveSpectra = rVal;
 
 
 	ret = filesystem_ini_get_int(hfile, "soundControl", "bSound", &rVal);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	soundControl.bSound = rVal;
-	
+
 	InterProc_setLowLimit(interProcControl.rsModbus.wdLowLimit);
 	InterProc_setHighLimit(interProcControl.rsModbus.wdHighLimit);
 	//!!!!!!!!!!! must be switch to selected dimension
 
 	SETUPMode_calcSigma(SPRDModeControl.false_alarm_period_oper);
-	
+
 	//must be setup sigma thresholds
 	InterProc_setSigmaSearchThresholds();
-	
-	
+
+
 	return S_OK;
 }
 
@@ -936,7 +943,7 @@ BOOL ini_write_system_ini_float(const char * pSection, const char* pValueName, f
 
 
 //default system.ini
-const char system_ini[394]=
+const char system_ini[413]=
 ";system.ini\r"
 "[modeControl]\r"
 "bLang=0\r"
@@ -970,6 +977,7 @@ const char system_ini[394]=
 "fDRThreshold=100\r"
 #endif
 "false_alarm_period_oper=600\r"
+"bAutoSaveSpectra=1\r"
 "[soundControl]\r"
 "bSound=1\r"
 ;
@@ -984,7 +992,7 @@ const char system_ini[394]=
 //there is used index-value order
 int ini_retrieveTable(HFILE hfile, struct tagIndexMeanTable*  pTable)
 {
-#define TABLE_STRING_LEN 50	
+#define TABLE_STRING_LEN 50
 	char nums[]=".0123456789";
 	int itemsnum = 0;
 	char buf[TABLE_STRING_LEN+1];

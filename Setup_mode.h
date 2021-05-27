@@ -36,20 +36,20 @@ struct tagSETUPModeControl
 	char buf7[20];
 	char buf8[20];
 	char buf9[20];
-	
+
 	DWORD Serial;
 	BYTE ManufacturedMonth;
 	WORD ManufacturedYear;
-	
+
 //	BOOL bExpertMode;
 //	int isplash;	//исп для ротации заставок, to get splash screens
-	
+
 //	int iJustLeaveScreen;	//to get splash screens
-	
+
 
 	char lpzCalcMD5[34];
 	char lpzCalcCRC32[10];
-	
+
 
 };
 
@@ -135,6 +135,11 @@ void SETUPMode_menu1_loader_confirm(BOOL bYes);*/
 
 BOOL SETUPMode_menu1_testscreen(void);
 const char* SETUPMode_menu1_testscreen_onUpdate(void);
+
+BOOL SETUPMode_menu1_enableAutoSave(void);
+const char* SETUPMode_menu1_enableAutoSave_onUpdate(void);
+
+
 
 void SETUPMode_menu1_IDthreshold_edit_done(BOOL bOK);
 void SETUPMode_menu1_instability_edit_done(BOOL bOK);

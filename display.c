@@ -753,53 +753,53 @@ void Display_turnOFF(void)
 void Display_turnON(void)
 {
   display.bLCDON = TRUE;
-  
-  
+
+
   PowerControl_EMC_ON();
-  
-  
-  
-  
+
+
+
+
   CLR_RS;
   DisplayData = 0x10;
   SET_RS;
   DisplayData = 0x00;
   DisplayData = 0x00;
-  
+
   Display_Init_8bit_262k();
   Display_clearScreen();
-  
+
   CLR_RS;
   DisplayData = 0x05;
   SET_RS;
   DisplayData = 0x00;
   DisplayData = 0x01;
-  
+
   CLR_RS;
   DisplayData = 0x43;
   SET_RS;
   DisplayData = 0;
   DisplayData = 0x1;//gamma set
-  
-  
+
+
   CLR_DPWON;
-  
+
   pause(50000);
   pause(50000);
   pause(50000);
   pause(50000);
   pause(50000);
   pause(10000);
-  
+
   SET_PON;
-  
+
   pause(50000);
   pause(50000);
   pause(50000);
   pause(50000);
-  
+
   SET_MON;
-  
+
 }
 
 
@@ -1352,14 +1352,14 @@ void Display_startup_display2(int i)
 	Display_outputText("Model 920\r\r");
 
 	Display_outputText("BNC\r");
-	Display_outputText("©2019\r");
+	Display_outputText("©2021\r");
 #else
 	Display_outputText("Searcher\r\r");
 	Display_setCurrentFont(fnt16x16);	//set current font
 	Display_outputText("AT1321\r\r");
 
 	Display_outputText("ATOMTEX\r");
-	Display_outputText("©2011-2019\r");
+	Display_outputText("©2011-2021\r");
 #endif
 }
 

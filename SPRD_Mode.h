@@ -157,7 +157,7 @@ BOOL SPRDMode_saveAutoSpec(void);
 
 char* SPRDMode_getDimension(void);
 char* SPRDMode_getDimensionDose(void);
-void SPRDMode_showTime(void);
+//void SPRDMode_showTime(void);
 void SPRDMode_showNaIAlarm(void);
 
 BOOL SPRDMode_menu1_Stabilize(void);

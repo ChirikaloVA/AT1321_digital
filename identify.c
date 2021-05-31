@@ -28,7 +28,7 @@ void identify_InitIdent()
 	identifyControl.CHANB=0;
 	identifyControl.NUMCHAN = CHANNELS;
 	identifyControl.testNullPeak=1;
-	identifyControl.MAXENERGY=3000;	
+	identifyControl.MAXENERGY=3000;
 	identifyControl.MINENERGY=20;
 	identifyControl.NUCLNUM=0;
 	identifyControl.nsigma_searchpeaks=16;
@@ -41,7 +41,7 @@ void identify_InitIdent()
 	identifyControl.msigma_peakcheck=20;
 	identifyControl.nLine = 0;
 	identifyControl.threshold = 3;
-	
+
 	identifyControl.bHasLibrary = FALSE;
 	identifyControl.iNuclsIdentified = 0;
 	identifyControl.bHaveAlreadyResult = FALSE;
@@ -50,7 +50,7 @@ void identify_InitIdent()
 	identifyControl.identifyStartDeadTime = 120;	//start time to stop identify if no nuclides
 	identifyControl.identifyDeadTime = identifyControl.identifyStartDeadTime;	//current time to stop identify if no nuclides
 
-	
+
 	memset(identifyControl.report, 0, sizeof(identifyControl.report));
 }
 
@@ -78,38 +78,38 @@ int identify_read_identify_ini(void)
 "msigma_peakcheck=\r"
 "libraryFileName=main\r";
 	*/
-	
-	int ret = filesystem_ini_get_string(hfile, "identifyControl", "libraryFileName", identifyControl.libraryFileName, FILE_NAME_SZ);	
+
+	int ret = filesystem_ini_get_string(hfile, "identifyControl", "libraryFileName", identifyControl.libraryFileName, FILE_NAME_SZ);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "MINENERGY", &identifyControl.MINENERGY);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "MINENERGY", &identifyControl.MINENERGY);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "MAXENERGY", &identifyControl.MAXENERGY);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "MAXENERGY", &identifyControl.MAXENERGY);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "SCALEINSTABILITY", &identifyControl.SCALEINSTABILITY);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "SCALEINSTABILITY", &identifyControl.SCALEINSTABILITY);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "testNullPeak", &identifyControl.testNullPeak);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "testNullPeak", &identifyControl.testNullPeak);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_peakcheck_left", &identifyControl.nsigma_peakcheck_left);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_peakcheck_left", &identifyControl.nsigma_peakcheck_left);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_peakcheck_right", &identifyControl.nsigma_peakcheck_right);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_peakcheck_right", &identifyControl.nsigma_peakcheck_right);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "msigma_peakcheck", &identifyControl.msigma_peakcheck);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "msigma_peakcheck", &identifyControl.msigma_peakcheck);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_searchpeaks", &identifyControl.nsigma_searchpeaks);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "nsigma_searchpeaks", &identifyControl.nsigma_searchpeaks);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "threshold", &identifyControl.threshold);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "threshold", &identifyControl.threshold);
 	if(ret==E_FAIL)
 		return E_FAIL;
-	ret = filesystem_ini_get_int(hfile, "identifyControl", "identifyStartDeadTime", &identifyControl.identifyStartDeadTime);	
+	ret = filesystem_ini_get_int(hfile, "identifyControl", "identifyStartDeadTime", &identifyControl.identifyStartDeadTime);
 	if(ret==E_FAIL)
 		return E_FAIL;
 	return S_OK;
@@ -176,16 +176,16 @@ int identify_open_library(void)
 			   );
 	if(hfile==NULL)
 		return E_FAIL;	//no lib file
-	
+
 	int ret = filesystem_ini_get_int(hfile, "common", "dwLibVer", &identifyControl.dwLibVer);
 	if(ret==E_FAIL)
 		return E_FAIL;	//invalid lib file, no version info
-	
+
 	ret = filesystem_ini_get_int(hfile, "common", "NUCLNUM", &identifyControl.NUCLNUM);
 	if(ret==E_FAIL || identifyControl.NUCLNUM>NUMNUCLIDES)
 		return E_FAIL;	//invalid lib file, no nuclides number, or num nucl is too big
-	
-	
+
+
 	//read by nuclide
 	char section[10];
 	char value_name[10];
@@ -195,7 +195,7 @@ int identify_open_library(void)
 	for(int i=0;i<identifyControl.NUCLNUM;i++)
 	{
 		sprintf(section, "n_%d", i+1);
-		int ret = filesystem_ini_get_string(hfile, section, "N", buf, sizeof(buf));	
+		int ret = filesystem_ini_get_string(hfile, section, "N", buf, sizeof(buf));
 		if(ret==E_FAIL)
 			return E_FAIL;
 		//process name
@@ -229,14 +229,14 @@ int identify_open_library(void)
 			if(ret==E_FAIL)
 				return E_FAIL;
 			identifyControl.Nucls[i].energies[j] = ival;
-			
+
 			//no shield factor
 			sprintf(value_name, "L%dn", j+1);
 			ret = filesystem_ini_get_int(hfile, section, value_name, &ival);
 			if(ret==E_FAIL)
 				return E_FAIL;
 			identifyControl.Nucls[i].factors_noshield[j] = ival;
-			
+
 			//shield factor
 			sprintf(value_name, "L%ds", j+1);
 			ret = filesystem_ini_get_int(hfile, section, value_name, &ival);
@@ -393,8 +393,8 @@ void identify_getnuclidesinreport(char sym, const char* pHeader, BOOL bSimplify/
 						return;
 					strcat(identifyControl.report, "Neutron capture");
 				}else	//показать тип урана на основе его обогащения только в экспертном режиме
-				if(!bUranCalced && identifyControl.Nucls[i].Name[0]=='U' && 
-				   (identifyControl.Nucls[i].NumStr[2]=='5' || 
+				if(!bUranCalced && identifyControl.Nucls[i].Name[0]=='U' &&
+				   (identifyControl.Nucls[i].NumStr[2]=='5' ||
 					identifyControl.Nucls[i].NumStr[2]=='8'))
 				{
 					bUranCalced = TRUE;
@@ -454,7 +454,7 @@ void identify_checkForUnknown(void)
 			break;
 		}
 	}
-	
+
 
 
 
@@ -521,7 +521,7 @@ void identify_prepareReport(BOOL bAddCategory//FALSe for spectrometric mode
 	const char strNuc[] = "Nuclear: \0""Nuklear: \0""Nuclear: \0""Ядерный: ";
 	const char strNat[] = "NORM: \0""NORM: \0""NORM: \0""Естественный: ";
 	const char strAlfaN[] = "Neutron: \0""Neutron: \0""Neutron: \0""Нейтронный: ";
-	
+
 	const char* pText="";
 	if(bAddCategory)
 		pText = Display_getTextByLang(strInd);
@@ -550,7 +550,7 @@ void identify_prepareReport(BOOL bAddCategory//FALSe for spectrometric mode
 	if((sizeof(identifyControl.report)-strlen(identifyControl.report)) <= sizeof(pText))
 		return;
 	identify_getnuclidesinreport('P',pText, bAddCategory);
-#ifndef BNC	
+#ifndef BNC
 	//show unknown only for NON BNC version
 	if(identifyControl.bHaveUnknownResult)
 	{
@@ -656,7 +656,7 @@ void identify_ApplyFilter() //nsigma*(sigma.WW.i+1) MUST NOT be more than 127!!!
 			//k.LL.hi=0;
 
 			if(specIndex>=SPECARRCHAN)break;
-			
+
 			k = (long long)d * identifyControl.ISpectrum[specIndex++];
 			rr1+=k;
 			k*=d;
@@ -709,7 +709,7 @@ void identify_SmoothingEx(long * pBuf, int sigmas)
 				if(i1>i01)
 					buf-=x2;
 			}
-			
+
 			if(i2>i02 && !nosum)
 			{
 				buf+=identifyControl.BufSpec[i2];
@@ -730,8 +730,8 @@ void identify_SmoothingEx(long * pBuf, int sigmas)
 
 void identify_Smoothing()
 {
-	identify_SmoothingEx(identifyControl.BufSpec1,9);
-	memcpy(identifyControl.BufSpec,identifyControl.BufSpec1,sizeof(long)*ARRCHAN);
+	identify_SmoothingEx((long*)identifyControl.BufSpec1,9);
+	memmove(identifyControl.BufSpec,identifyControl.BufSpec1,sizeof(long)*ARRCHAN);
 }
 
 int identify_CheckPeak(int jm, int j, int i)
@@ -1080,7 +1080,7 @@ int identify_MakeNuclideIdentification(void)
 	}else
 		if(!identifyControl.NUCLNUM)
 			goto beta_test;	//no nuclides in library, but there are detected lines.
-	
+
 	//Initialize
 	Nuc=identifyControl.Nucls;
 	for(btNucl=0; btNucl<identifyControl.NUCLNUM; btNucl++)
@@ -1395,7 +1395,7 @@ void identify_excludeLines(TNucl* Nuc)
 				temp = 256.0f*(float)lnVal;
 				identifyControl.ex_energy[btInd2]=0;
 				tempd1 = temp1;
-				tempd = temp;					
+				tempd = temp;
 				btFlag=btInd;
 				break;
 			}
@@ -1503,7 +1503,7 @@ UINT identify_NuclsDifferOnly(TNucl *Nuc, TNucl *NucMain)
 		if(n!=BADINDEX)
 		{
 			//нужно определять одинаковость для тестируемого нуклида только строгие линии
-			if(identifyControl.ex_energy[n] 
+			if(identifyControl.ex_energy[n]
 //&& //линия еще не занята
 //				NucMain->factors_shield[i]
 )
@@ -1511,7 +1511,7 @@ UINT identify_NuclsDifferOnly(TNucl *Nuc, TNucl *NucMain)
 				ind2=Nuc->indexes; btFlag=1;
 				for(j=0; j<Nuc->num; j++)
 				{
-					if(*ind2==n 
+					if(*ind2==n
 //&& Nuc->factors_shield[j]
 )
 					{
@@ -1641,7 +1641,7 @@ int identify_testForLostPeak(TNucl* Nuc)
 						}
 						else
 						{//пик спектра прошел порог
-//before 24/08/2010		
+//before 24/08/2010
 //							if((tempd>(float)(threshold<<2))&&(tempd-tempd1>(10.0f*256)))
 //after 24/08/2010 it helps to exclude Rpu on Cs
 							if((k!=j) /*not for the max energy lines*/
@@ -1801,7 +1801,7 @@ void identify_testForPuBa(TNucl* thisnuc)
 		{
 			if(pmean==-2)//вершина
 				bcenter = i;
-		}else 
+		}else
 		{
 			en = i-bcenter;
 			if((pmean==2 || (pmean==0 && i==identifyControl.NUMCHAN-1)) && (en>1))//впадина

@@ -532,7 +532,7 @@ BOOL SPRDMode_checkForIdentMode(void)
 	}else
 	if(SPRDModeControl.bIdentMode)
 	{//ident mode, request spectrum, and ident it
-		if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum))
+		if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrumZip))
 		{
 			identify_identify(TRUE);
 			SPRDModeControl.bCanUpdateIdentResult = TRUE;
@@ -804,34 +804,34 @@ void SPRDMode_showModeScreen(void)
 		}else
 		{
 			SPRDMode_showMCS();
-			if(modeControl.pMode==&modes_MCSMode &&
-			   !SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed)
-			{//для режима МКД показываем истекшее время измерения
-				SPRDMode_showTime();
-			}
+//			if(modeControl.pMode==&modes_MCSMode &&
+//			   !SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed)
+//			{//для режима МКД показываем истекшее время измерения
+//				SPRDMode_showTime();
+//			}
 		}
 	}
 }
 
 
 
-
-void SPRDMode_showTime(void)
-{
-	Display_setTextWin(0,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT,X_SCREEN_SIZE,16);	//set text window
-	Display_setTextXY(0,0);	//set start coords in window
-	Display_setTextWrap(0);
-	Display_setTextSteps(1,1);
-	Display_setTextDoubleHeight(0);
-	Display_setTextJustify(NONE);
-	Display_setCurrentFont(fnt16x16);
-	Display_setTextColor(BROWN);	//set text color
-	char buf[10];
-	sprintf(buf,"%u",(UINT)MCSModeControl.iNumberOfCpsTotal/3);
-	Display_clearTextWin(10);
-	Display_outputTextByLang("Elapsed time: \0""Elapsed time: \0""Elapsed time: \0""Истекш. время: ");
-	Display_outputText(buf);
-}
+//
+//void SPRDMode_showTime(void)
+//{
+//	Display_setTextWin(0,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT,X_SCREEN_SIZE,16);	//set text window
+//	Display_setTextXY(0,0);	//set start coords in window
+//	Display_setTextWrap(0);
+//	Display_setTextSteps(1,1);
+//	Display_setTextDoubleHeight(0);
+//	Display_setTextJustify(NONE);
+//	Display_setCurrentFont(fnt16x16);
+//	Display_setTextColor(BROWN);	//set text color
+//	char buf[10];
+//	sprintf(buf,"%u",(UINT)MCSModeControl.iNumberOfCpsTotal/3);
+//	Display_clearTextWin(10);
+//	Display_outputTextByLang("Elapsed time: \0""Elapsed time: \0""Elapsed time: \0""Истекш. время: ");
+//	Display_outputText(buf);
+//}
 
 
 

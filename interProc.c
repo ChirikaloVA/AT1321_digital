@@ -53,7 +53,7 @@ __arm void _INT_UART1_InterProc(void)
 	BYTE byt;
 	while((U1LSR&0x1) || ((U1IIR&0x0c)==0x0c))
 	{//DR
-         
+
 		byt = U1RBR;
 		if(interProcControl.uart.rcvBuffLen < interProcControl.uart.constRcvBuffLen)
 		{
@@ -67,9 +67,9 @@ __arm void _INT_UART1_InterProc(void)
 		{//error receiver buffer len
 			interProcControl.uart.bRcvError = RCV_ERR_BUF_OVERFLOW;
 		}
-                
-                
-                
+
+
+
 	};
 	if(U1LSR&0x20)
 	{//THRE
@@ -85,7 +85,7 @@ __arm void _INT_UART1_InterProc(void)
 	{
 		interProcControl.uart.bRcvError = RCV_ERR_BYTE;
 	}
-        
+
  //       SET_AN_PGM;
 }
 
@@ -159,11 +159,11 @@ void InterProc_sendSequence(int len)
 		exception(__FILE__,__FUNCTION__,__LINE__,"Send sequence is too long");
 		return;
 	}
-	
+
 	//assume that transmiter is ready
 	SAFE_DECLARE;
 	DISABLE_VIC;
-	
+
 	memset((void*)interProcControl.uart.rcvBuff, 0xff, interProcControl.uart.constRcvBuffLen);
 	interProcControl.uart.bTrmReady = 0;
 	interProcControl.uart.trmBuffLenConst = USBRS_calcCRC(interProcControl.uart.trmBuff, len);
@@ -186,7 +186,7 @@ void InterProc_resendSequence(void)
 	DISABLE_VIC;
 
 	memset((void*)interProcControl.uart.rcvBuff, 0xff, interProcControl.uart.constRcvBuffLen);
-	
+
 	interProcControl.uart.bTrmReady = 0;
 	interProcControl.uart.trmBuffLen = 1;
 	interProcControl.uart.rcvBuffLen = 0;
@@ -214,25 +214,25 @@ void InterProc_resendSequence(void)
 /****************************************************************************/
 void InterProc_UART1_Init(void)
 {
-	
+
 	int SpeedRS232;
-	
+
 	SpeedRS232 = 288000;   //скорость обмена
-	
-	
+
+
 	PCONP_bit.PCUART1 = 1;	//give power to UART2
 
-	
+
 	PINSEL0_bit.P0_15 = 0x01;	//select pins for UART2
 	PINSEL1_bit.P0_16 = 0x01;
-	
+
 	// enable access to divisor latch regs
 	U1IER = 0;	//disable int
 
-	
-	
+
+
 	U1LCR = 0x83;        //LCR_ENABLE_LATCH_ACCESS;
-	
+
 	// set divisor for desired baud
 	//divider = HW_FREQ/UART_baudrate/16
 	DWORD div = HW_FREQ/SpeedRS232/16;
@@ -243,7 +243,7 @@ void InterProc_UART1_Init(void)
 	U1LCR =0x3; //LCR_DISABLE_LATCH_ACCESS;
 	// setup fifo control reg - trigger level 0 (1 byte fifos), no dma
 	// disable fifos (450 mode) прерывание по приему 1-го байта
-	
+
 	//U0FCR =0x07; //1byte, clear FIFO
 	__uartfcriir_bits u1fcr;
 	u1fcr.FCRFE=1;
@@ -251,21 +251,21 @@ void InterProc_UART1_Init(void)
 	u1fcr.TFR=1;
 	u1fcr.RTLS=2;//interrupt after each 8 bytes
 	U1FCR_bit = u1fcr;
-	
+
 	__uartmcr_bits u1mcr;
 	u1mcr.DTR = 0;
 	u1mcr.RTS = 0;
 	u1mcr.LMS = 0;
-	u1mcr.RTSEN = 0;	
+	u1mcr.RTSEN = 0;
 	u1mcr.CTSEN = 0;
 	U1MCR_bit = u1mcr;
-	
+
 	// enable UART0 interrupts
 	U1IER = 0x7;	//enable RBR = 1, THRE = 1, status int =1
-	
+
 	// setup line control reg - disable break transmittion, even parity,
 	// 1 stop bit, 8 bit chars
-	
+
 
 }
 
@@ -280,7 +280,7 @@ void InterProc_InterProcControl(void)
 {
 	//copy data to safeplace
 	SyncObj_copyUARTtoSafePlace(&interProcControl.uart);
-	
+
 	//call first dispatcher
 	if(interProcControl.uart.bDataReceived_safe)
 	{//must process received data
@@ -290,10 +290,10 @@ void InterProc_InterProcControl(void)
 			InterProc_rcvData_first_Dispatcher();
 		else if(interProcControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS)
 			USBRS_answer_first_Dispatcher();
-#ifndef GPS_BT_FREE	
+#ifndef GPS_BT_FREE
 		else if(interProcControl.uart.rcvBuff_safe[0]==BLUETOOTH_ADDRESS)
 			Bluetooth_answer_first_Dispatcher();
-#endif	//#ifndef GPS_BT_FREE	
+#endif	//#ifndef GPS_BT_FREE
 		interProcControl.uart.bTrmReady = 1;
 		interProcControl.uart.iTries = 0;	//reset tries counter
 	}
@@ -316,12 +316,12 @@ void InterProc_InterProcControl(void)
 			interProcControl.uart.bTrmReady = 1;//commands from PC must not be repeated
 			interProcControl.uart.iTries = 0;	//reset tries counter
 		}
-		
+
 //it was disabled becasue of useage	InterProc_resendSequence
 //		interProcControl.uart.bTrmReady = 1;	//to be sure that data will be transmitted next time
-		
+
 	}
-	
+
 	//here data must be send from the order
 	if(interProcControl.uart.bTrmReady)
 	{
@@ -359,19 +359,19 @@ __arm void _INT_Timer2_InterProc(void)
 	}
 	if(T2IR_bit.MR0INT)
 	{//timer for interproc comm
-          
-          
-          
+
+
+
 		if(!interProcControl.uart.bDataReceived)
 		{//exception if no received
 			interProcControl.uart.bRcvError = RCV_ERR_TIMEOUT;	//Receiving ERROR! no bytes we have
 		}
 		InterProc_Timer_turnOFF();
 		interProcControl.bTimeOutReached = TRUE;
-                
-                
-                
-                
+
+
+
+
 		stru.MR0INT = 1;
 	}
 	if(T2IR_bit.MR2INT)
@@ -399,7 +399,7 @@ __arm void _INT_Timer2_InterProc(void)
 void InterProc_Timer_init(void)
 {
 	PCONP_bit.PCTIM2 = 1;
-	
+
 	T2TCR_bit.CE = 0;
 	__mcr_bits t2mcr;
 	t2mcr.MR0I = 0; //disable interrupt
@@ -454,7 +454,7 @@ void InterProc_Timer_turnOFF(void)
 void InterProc_Init(void)
 {
 	memset(&interProcControl, 0, sizeof(interProcControl));
-	
+
 	interProcControl.uart.rcvBuff = interProcControl.rcvBuff;
 	interProcControl.uart.rcvBuff_safe = interProcControl.rcvBuff_safe;
 	interProcControl.uart.trmBuff = interProcControl.trmBuff;
@@ -478,7 +478,7 @@ void InterProc_Init(void)
 	//data resgisters
 	interProcControl.rsModbus.wdAcqTime=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdAcqTime);
-	
+
 	interProcControl.rsModbus.fMomCps=0;
 	interProcControl.rsModbus.fCps=0;
 	interProcControl.rsModbus.fCpsErr=200;
@@ -487,18 +487,18 @@ void InterProc_Init(void)
 	interProcControl.rsModbus.fDose=0;
 	interProcControl.rsModbus.sSigma=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdMeasurementRegs);
-	
+
 	interProcControl.rsModbus.wdTemperature=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdTemperature);
-	
+
 	//status register
 	interProcControl.rsModbus.btStatus=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.sbtStatus);
-	
+
 	//diagnostic register
 	interProcControl.rsModbus.wdDiag=0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdDiag);
-	
+
 	//spectrum
 	for(int i=0;i<CHANNELS;i++)
 	{
@@ -506,18 +506,18 @@ void InterProc_Init(void)
 		interProcControl.rsModbus.arSpectrum[i*3+1]=0;	//by 3 bytes on channel
 		interProcControl.rsModbus.arSpectrum[i*3+2]=0;	//by 3 bytes on channel
 	}
-	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrum);
+//	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrum);
 	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrumZip);
-	
+
 
 	interProcControl.rsModbus.fBkgCPS = 0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdBkgCPS);
-	
+
 	interProcControl.rsModbus.fDTCOEF = 1.0;
 	InterProc_resetSyncData(&interProcControl.rsModbus.swdDTCOEF);
 
-	
-	
+
+
 	//init buffer and values
 	interProcControl.uart.bTrmReady = 1;
 	for(int i=0;i<interProcControl.uart.constTrmBuffLen;i++)
@@ -528,14 +528,14 @@ void InterProc_Init(void)
 	{
 		interProcControl.uart.rcvBuff[i] = 0;
 		interProcControl.uart.rcvBuff_safe[i] = 0;
-	}	
+	}
 	interProcControl.uart.rcvBuffLen = 0;	//must be reset to 0 when start transmition
 	interProcControl.uart.bRcvError = RCV_OK;	//must be reset when start transmition
 	interProcControl.uart.bDataReceived = 0;
-	interProcControl.uart.trmBuffLen = 0;	
+	interProcControl.uart.trmBuffLen = 0;
 	interProcControl.uart.trmBuffLenConst = 0;
 	interProcControl.uart.iTries = 0;	//reset tries counter
-	
+
 	interProcControl.fTemperature =0;
 	interProcControl.bTimeOutReached = FALSE;
 	interProcControl.btStatus = 0;
@@ -550,7 +550,7 @@ void InterProc_rcvData_first_Dispatcher(void)
 	WORD adr;
 	BYTE len;
 	BYTE bt1, bt2;
-	
+
 	if(interProcControl.uart.rcvBuff_safe[1]&0x80)
 	{//exception!!!!! process it
 		char buf [40];
@@ -637,7 +637,7 @@ void InterProc_rcvData_first_Dispatcher(void)
 				exception(__FILE__,__FUNCTION__,__LINE__,"Unsupported diagnostic command");
 			}
 			break;
-		case 0x0b:	//spectrum
+/*		case 0x0b:	//spectrum
 			bt1 = interProcControl.uart.trmBuff[3];
 			bt2 = interProcControl.uart.trmBuff[4];
 			adr = (bt1<<8) | bt2;
@@ -656,7 +656,7 @@ void InterProc_rcvData_first_Dispatcher(void)
 			{	//not supported prm in answer!!!!!!!!
 				exception(__FILE__,__FUNCTION__,__LINE__,"Unsupported spectrum len");
 			}
-			break;
+			break;*/
 		case 0x41:
 		case 0x42:
 			{
@@ -872,13 +872,16 @@ BOOL InterProc_isReadyToTransmit(struct tagInteProcRSModbusSync volatile* pIPRSM
 	return ret;
 }
 
-//mark data is ready, to be processed
+//first dispatcher marks that data is ready, to be processed by second dispatcher
 void InterProc_iterateDataReady(struct tagInteProcRSModbusSync volatile* pIPRSMS)
 {
 	pIPRSMS->dw_inc++;
 }
 
 
+/*
+начальное состояние синхронизации данных
+*/
 void InterProc_resetSyncData(struct tagInteProcRSModbusSync volatile* pIPRSMS)
 {
 	pIPRSMS->dw_inc=1;
@@ -893,7 +896,7 @@ void InterProc_resetSyncData(struct tagInteProcRSModbusSync volatile* pIPRSMS)
 //it analyzes received data that processed by first dispatcher
 void InterProc_second_Dispatcher(void)
 {
-	
+
 	//analize temperature
 	if(InterProc_isDataReady(&interProcControl.rsModbus.swdTemperature))
 	{
@@ -939,14 +942,14 @@ void InterProc_second_Dispatcher(void)
 	}
 	if(InterProc_isDataReady(&interProcControl.rsModbus.swdMeasurementRegs))
 	{//data is fresh
-		
+
 		//for TC mode
 		if(TCModeControl.bRun)
 		{
 			TCModeControl.dwCount += (DWORD)interProcControl.rsModbus.fMomCps/3;
 			TCModeControl.dwTimer++;
 		}
-		
+
 		//for SPRD mode
 		SPRDModeControl.fMomCps = interProcControl.rsModbus.fMomCps;
 		SPRDModeControl.fCps = interProcControl.rsModbus.fCps;
@@ -962,7 +965,7 @@ void InterProc_second_Dispatcher(void)
 #endif
 		SPRDModeControl.fDoserateErr = interProcControl.rsModbus.fDoserateErr;
 		SPRDModeControl.sSigma = interProcControl.rsModbus.sSigma;
-	
+
 		//move mcs to put new value in not bkg mode
 		if(!SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed)
 		{
@@ -970,7 +973,7 @@ void InterProc_second_Dispatcher(void)
 			SPRDModeControl.arMCS[MCS_WIN_WIDTH-1] = (int)SPRDModeControl.sSigma;
 		}
 	}
-	if(InterProc_isDataReady(&interProcControl.rsModbus.sarSpectrum))
+/*	if(InterProc_isDataReady(&interProcControl.rsModbus.sarSpectrum))
 	{//received new spectrum
 		//copy spectrum and calc total counts
 		DWORD val;
@@ -983,7 +986,7 @@ void InterProc_second_Dispatcher(void)
 				sum+=val;
 		}
 		spectrumControl.acqSpectrum.dwCount = sum;
-		
+
 		//!!!!!!!!!!!!!
 		//фильтр динелинейности
 #ifdef _DIFF_FILTER
@@ -999,10 +1002,10 @@ void InterProc_second_Dispatcher(void)
 		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate;	//keep it in mrem/h
 #else
 		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate*1000.0;	//convert to nanosivert
-#endif		
+#endif
 		spectrumControl.acqSpectrum.fCps = SPRDModeControl.fCps;
 
-	}
+	}*/
 	if(InterProc_isDataReady(&interProcControl.rsModbus.sarSpectrumZip))
 	{//received new spectrum
 		//copy spectrum and calc total counts
@@ -1015,7 +1018,7 @@ void InterProc_second_Dispatcher(void)
 				sum+=val;
 		}
 		spectrumControl.acqSpectrum.dwCount = sum;
-		
+
 		//!!!!!!!!!!!!!
 		//фильтр динелинейности
 #ifdef _DIFF_FILTER
@@ -1031,7 +1034,7 @@ void InterProc_second_Dispatcher(void)
 		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate;	//keep it in mrem/h
 #else
 		spectrumControl.acqSpectrum.fDoserate = (float)SPRDModeControl.fDoserate*1000.0;	//convert to nanosivert
-#endif		
+#endif
 		spectrumControl.acqSpectrum.fCps = SPRDModeControl.fCps;
 
 	}

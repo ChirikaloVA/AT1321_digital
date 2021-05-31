@@ -73,7 +73,7 @@
 512 кан	0	Режим
 1024 кан	1	Режим
 2048 кан
-5	0		0		1		1	
+5	0		0		1		1
 6	=1 	Поисковый режим включен
 7	= 1 	Режим настройки включен
 
@@ -170,12 +170,24 @@ extern const BYTE arCmd_Command_turnonTuning[];
 
 
 //структура для синхронизации потока даных
+/*
+нормальная последовательность:
+1,1,0 - начальное состояние как готовность отправить
+1,1,1 - отправлено, готовы принять ответ
+2,1,1 - принято, готово к обработке
+2,2,1 - обработано и снова начальное состояние
+
+ненормальная последовательность:
+1,1,0 - начальное состояние как готовность отправить
+1,1,1 - отправлено, готовы принять ответ
+1,1,1 - НЕ принято
+*/
 struct tagInteProcRSModbusSync
 {
-	DWORD dw_inc;
-	DWORD dw_incLastRcv;
-	DWORD dw_incLastTrm;
-//	DWORD dw_incReq;	//counter of requests for data ready, reset when data is ready
+	//индексы
+	DWORD dw_inc;	//текущий отосланный
+	DWORD dw_incLastRcv;	//индекс ответа последней
+	DWORD dw_incLastTrm;	//последней отправленный
 };
 
 
@@ -188,7 +200,7 @@ struct tagInterProcRSModbus
 /*	WORD wdGain;
 	struct tagInteProcRSModbusSync swdGain;
 */
-	
+
 	WORD wdLowLimit;
 	struct tagInteProcRSModbusSync swdLowLimit;
 
@@ -202,7 +214,7 @@ struct tagInterProcRSModbus
 	//data resgisters
 	WORD wdAcqTime;
 	struct tagInteProcRSModbusSync swdAcqTime;
-	
+
 	float fMomCps;
 	float fCps;	//
 	float fCpsErr;	//
@@ -211,33 +223,33 @@ struct tagInterProcRSModbus
 	float fDose;
 	short sSigma;
 	struct tagInteProcRSModbusSync swdMeasurementRegs;	//swdMomCps;
-	
+
 	WORD wdTemperature;
 	struct tagInteProcRSModbusSync swdTemperature;
-	
+
 	//status register
 	BYTE btStatus;
 	struct tagInteProcRSModbusSync sbtStatus;
-	
+
 	//diagnostic register
 	WORD wdDiag;
 	struct tagInteProcRSModbusSync swdDiag;
-	
+
 	float fStabGain;
 	struct tagInteProcRSModbusSync swdStabGain;
-	
+
 //	float fBkgDR;
 //	struct tagInteProcRSModbusSync swdBkgDR;
 	float fBkgCPS;
 	struct tagInteProcRSModbusSync swdBkgCPS;
-	
+
 	float fDTCOEF;
 	struct tagInteProcRSModbusSync swdDTCOEF;
-	
+
 	//spectrum
 	BYTE arSpectrum[CHANNELS*3];	//by 3 bytes on channel
-	struct tagInteProcRSModbusSync sarSpectrum;
-	
+//	struct tagInteProcRSModbusSync sarSpectrum;
+
 	struct tagInteProcRSModbusSync sarSpectrumZip;
 };
 
@@ -270,7 +282,7 @@ struct tagInterProcControl
 	volatile BYTE trmBuff[INT_TRM_BUF_LEN];
 	BYTE rcvBuff_safe[INT_RCV_BUF_LEN];
 //#pragma pack()
-	
+
 	struct tagUART uart;
 	struct tagInterProcRSModbus rsModbus;
 	//temperature mean

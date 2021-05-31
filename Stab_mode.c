@@ -131,7 +131,7 @@ BOOL STABMode_OnTimer(void)
 		Modes_showButtons();
 	}
 
-	if(!InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum))return 1;
+	if(!InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrumZip))return 1;
 
 
 	switch(STABModeControl.stabStep)

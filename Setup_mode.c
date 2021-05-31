@@ -1263,9 +1263,9 @@ void SETUPMode_showVersion(int y)
 	Display_outputTextByLang("MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""АЦП: 1024 канала\r");
 	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""Счетчик ГМ, USB, Bluetooth, GPS\r");
 #ifdef BNC
-	Display_outputText("2019 © Manufacturer\r");
+	Display_outputText("2021 © Manufacturer\r");
 #else
-	Display_outputText("2019 © ATOMTEX SPE\r");
+	Display_outputText("2021 © ATOMTEX SPE\r");
 #endif
 	///////////////////////
 }
@@ -2141,7 +2141,7 @@ BOOL SETUPMode_menu1_enableAutoSave(void)
 const char* SETUPMode_menu1_enableAutoSave_onUpdate(void)
 {
 	if(SPRDModeControl.bAutoSaveSpectra)
-		return "Autosave spectra\0""Autosave spectra\0""Autosave spectra\0""Автосохранять спектры";
+		return "Autosave spectra\0""Autosave spectra\0""Autosave spectra\0""Сохранять спектры";
 	else
-		return "Don't save spectra\0""Don't save spectra\0""Don't save spectra\0""Не сохранять спектры";
+		return "Don't save spectra\0""Don't save spectra\0""Don't save spectra\0""Не сохран. спектры";
 }

@@ -12,11 +12,7 @@
 
 "--device=LPC2388" 
 
-"--drv_communication=USB0" 
-
-"--drv_interface_speed=auto" 
-
-"--jlink_initial_speed=32" 
+"--multicore_nr_of_cores=1" 
 
 
 

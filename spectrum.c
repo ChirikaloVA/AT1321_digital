@@ -299,7 +299,7 @@ BOOL Spectrum_OnTimer(void)
 	if(!InterProc_isDataFinalReady(&interProcControl.rsModbus.sbtStatus))
 		return 1;
 
-	if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum) &&
+	if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrumZip) &&
 	   ((interProcControl.btStatus&0x02) ||
 		(spectrumControl.bStopAcq && spectrumControl.iStopAcq>0)))
 	{
@@ -563,14 +563,33 @@ void Spectrum_startAcq(void)
 //copy to spectrum temperature
 void Spectrum_startAcq_ex(int acqTime)
 {
+	spectrumControl.bSpectrumOpened = FALSE;
 	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
 	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
+	InterProc_stopSpectrumAcq();
 	InterProc_resetSpectrum();
 	InterProc_setAcqTime((WORD)acqTime);
 	InterProc_startSpectrumAcq();
 	//update datetime, gps, temperature value
 	memcpy((void*)&spectrumControl.pShowSpectrum->dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
+}
+void Spectrum_silent_startAcq_ex_start(int acqTime)
+{
+	spectrumControl.bSpectrumOpened = FALSE;
+	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
+    InterProc_resetDose();
+	InterProc_stopSpectrumAcq();
+	InterProc_resetSpectrum();
+	InterProc_setAcqTime((WORD)acqTime);
+	InterProc_startSpectrumAcq();
+}
+void Spectrum_silent_startAcq_ex_end()
+{
+	memset((void*)spectrumControl.pShowSpectrum, 0, sizeof(struct tagSpectrum));
+	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
+	//clear identify result, else if shows for first seconds again
+	identify_clearReport();
 }
 
 
@@ -591,6 +610,7 @@ BOOL Spectrum_OnShow(void)
 BOOL Spectrum_OnExit(void)
 {
 	//возвр набираемый спектр как основной
+	spectrumControl.bSpectrumOpened = FALSE;
 	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	return 1;
 }
@@ -1033,7 +1053,8 @@ const char* Spectrum_menu1_acqtime_onUpdate(void)
 //сохранить можно только набираемый спектр
 const char* Spectrum_menu1_savespectrum_onUpdate(void)
 {
-	if(spectrumControl.pShowSpectrum == &spectrumControl.opnSpectrum)
+//	if(spectrumControl.pShowSpectrum == &spectrumControl.opnSpectrum)
+	if(spectrumControl.bSpectrumOpened)
 		return NULL;	//в режиме просмотра файла спектра нельзя его сохранить
 	else
 		return "Save spectrum\0""Save spectrum\0""Save spectrum\0""Сохранить спектр";
@@ -1482,6 +1503,10 @@ BOOL Spectrum_QuickPeakCalculation(long left, long right, float *position, float
 {
 	float s,d2,d,d1,k,b;
 	if(right-left<=0)return FALSE;
+
+	if(left<1 || left>=CHANNELS-1
+	   || right<1 || right>=CHANNELS-1)return FALSE;
+
 	long lng = (long)(spectrumControl.pShowSpectrum->dwarSpectrum[left-1]+spectrumControl.pShowSpectrum->dwarSpectrum[left]+spectrumControl.pShowSpectrum->dwarSpectrum[left+1]);
 	k=(float)((long)(spectrumControl.pShowSpectrum->dwarSpectrum[right-1]+spectrumControl.pShowSpectrum->dwarSpectrum[right]+spectrumControl.pShowSpectrum->dwarSpectrum[right+1])-
 			  lng)/(float)(3*(right-left));
@@ -1649,6 +1674,7 @@ void Spectrum_menu1_openspectrum_done(BOOL bOK)
 	Modes_setActiveMode(&modes_SpectrumMode);
 	if(bOK)
 	{
+		spectrumControl.bSpectrumOpened = TRUE;
 		Spectrum_open(FileListModeControl.listItems[FileListModeControl.iMarkerPos].name);
 		spectrumControl.pShowSpectrum = &spectrumControl.opnSpectrum;
 		Modes_updateMode();

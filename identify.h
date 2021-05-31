@@ -30,8 +30,8 @@
 #define ARRCHAN _NUMCHAN
 #define SPECARRCHAN ARRCHAN
 //#define SPECARRCHAN SPECNUMCHAN
-#define MAXLINES 16	
-#define NUMNUCLIDES 40	
+#define MAXLINES 16
+#define NUMNUCLIDES 40
 #define NUCLNAMELENGTH 5
 
 #define ENERGYTHRESHOLD 250
@@ -66,7 +66,7 @@ extern const char main_lib
 //#pragma pack(1)
 
 typedef struct{
-	
+
 	char Name[NUCLNAMELENGTH];
 	char NumStr[NUCLNAMELENGTH];
 	char category;
@@ -76,7 +76,7 @@ typedef struct{
 	short	energies[MAXLINES];
 	USHORT  factors_noshield[MAXLINES],
 			factors_shield[MAXLINES];
-	
+
 /*
 #ifdef _SPECTRUM_ACTIVITY
 	USHORT	quantumYield[MAXLINES]; //квантовый выход в долях * 32000
@@ -85,12 +85,12 @@ typedef struct{
 	BYTE activityError[MAXLINES];
 #endif	//_SPECTRUM_ACTIVITY
 */
-	
+
 	short closeness[MAXLINES];
 	UCHAR indexes[MAXLINES];	//indeces of found lines for current nuclide, it can be tooked in acount only if ex_energy[index]=1
-	
+
 	BYTE confidence;	//confidence level of the nuclide
-	
+
 } TNucl,*PNucl;
 
 //#pragma pack()
@@ -102,71 +102,72 @@ struct tagIdentify
 {
 
 	BOOL bHasLibrary;
-	
+
 	long threshold;	//порог идентификации
-	
+
 	char libraryFileName[FILE_NAME_SZ];	//file name of library
-	
+
 	int  NUCLNUM;
-	
+
 	int  LEFTBORDER;
-		
+
 	int  NUMCHAN;
-	
+
 	int  _nuclsDiffs;
-	
+
 	int  MAXENERGY;
-	
+
 	int  MINENERGY;
 	int  nsigma_searchpeaks;
-	
+
 	UINT  SCALEINSTABILITY;
 	float fSCALEINSTABILITY;
-	
-	
+
+
 	float uranium;//степень обогащения урана
-	
+
 	long nsigma_peakcheck_left;
 	long nsigma_peakcheck_right;
 	long msigma_peakcheck;
-		
+
 	BOOL testNullPeak;	//признак необходимости проверки пиков с нулями в области
-		
+
 	long*  ISpectrum;
+
+	BYTE  BufSpec1[ARRCHAN];
 	long  BufSpec[ARRCHAN];
-	long  BufSpec1[ARRCHAN];
 	long  SDs[ARRCHAN];
 //	char  DetBuf[ARRCHAN];
-	
+
 	int dwLibVer;	//version of library
 	TNucl  Nucls[NUMNUCLIDES];
-	
-	
+
+
 	long CHANB, CHANK;
-	
+
 	short energies[MAXLINENUM];//array of energy of found lines
 	short deltas[MAXLINENUM];//array of ROI width of found lines
 	float ni_channels[MAXLINENUM];	//array of channels of found lines
-	
+
 //	WORD  SigmaArray[ARRCHAN];
-		
-	
+
+
 	char  ex_energy[MAXLINENUM];	//array of detected status of lines, 1 - line is found
-	
+
 	BYTE nLine;
-	
+
 //	long  *varspec;
 	ULONG collectionTime;
-	
-	
+
+
 	char report[MAX_REPORT_SYMS];
-	
+
 	int iNuclsIdentified;
 	BOOL bHaveAlreadyResult;	//TRUE if we already found some nuclides in one stage of ID (from start to end if ID mode)
 	int identifyDeadTime;	//current time to stop identify if no nuclides
 	int identifyStartDeadTime;	//start time to stop identify if no nuclides
 	BOOL bHaveUnknownResult;	//true if some unknown nuclides
-	
+
 };
 
 

@@ -129,7 +129,7 @@ void InterProc_setSigmaSearchThresholds(void)
 	ar[4]=*((unsigned char*)&value+1);
 	ar[5]=*((unsigned char*)&value+0);
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	
+
 	value = SPRDModeControl.operation_search_sigma[1];
 	ar[3]=0x2a;
 	ar[4]=*((unsigned char*)&value+3);
@@ -139,7 +139,7 @@ void InterProc_setSigmaSearchThresholds(void)
 	ar[4]=*((unsigned char*)&value+1);
 	ar[5]=*((unsigned char*)&value+0);
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	
+
 	value = SPRDModeControl.operation_search_sigma[2];
 	ar[3]=0x2c;
 	ar[4]=*((unsigned char*)&value+3);
@@ -149,7 +149,7 @@ void InterProc_setSigmaSearchThresholds(void)
 	ar[4]=*((unsigned char*)&value+1);
 	ar[5]=*((unsigned char*)&value+0);
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	
+
 	value = SPRDModeControl.operation_search_sigma[3];
 	ar[3]=0x2e;
 	ar[4]=*((unsigned char*)&value+3);
@@ -159,7 +159,7 @@ void InterProc_setSigmaSearchThresholds(void)
 	ar[4]=*((unsigned char*)&value+1);
 	ar[5]=*((unsigned char*)&value+0);
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	
+
 	value = SPRDModeControl.operation_search_sigma[4];
 	ar[3]=0x30;
 	ar[4]=*((unsigned char*)&value+3);
@@ -169,7 +169,7 @@ void InterProc_setSigmaSearchThresholds(void)
 	ar[4]=*((unsigned char*)&value+1);
 	ar[5]=*((unsigned char*)&value+0);
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
-	
+
 	value = SPRDModeControl.operation_search_sigma[5];
 	ar[3]=0x32;
 	ar[4]=*((unsigned char*)&value+3);
@@ -237,6 +237,7 @@ void InterProc_readMeasurementRegs(void)
 	}
 }
 
+/*
 void InterProc_readSpectrum(void)
 {
 	if(InterProc_isReadyToTransmit(&interProcControl.rsModbus.sarSpectrum))
@@ -256,7 +257,7 @@ void InterProc_readSpectrum(void)
 		InterProc_fillNewCmd(arCmd_GetSpectrumPart13, sizeof(arCmd_GetSpectrumPart13));
 	}
 }
-
+*/
 
 void InterProc_setMeasurementMode(void)
 {

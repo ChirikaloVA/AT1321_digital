@@ -34,7 +34,7 @@
 #include "LOG_mode.h"
 #include "crc32.h"
 #include "info_mode.h"
-
+#include "packspectrum.h"
 
 
 
@@ -260,6 +260,8 @@ __noreturn void main(void)
 	//once init all modes
 	Modes_Init();
 
+	//подготовка к сжатию спектра
+	packspectrum_init();
 
 	//подсчет MD5
 	CRC32ROM(SETUPModeControl.lpzCalcCRC32);

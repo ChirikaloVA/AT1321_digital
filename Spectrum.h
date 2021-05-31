@@ -68,13 +68,13 @@ struct tagSpectrum
 
 
 struct tagSpectrumControl
-{	
+{
 	//таблица канал энергия
 	struct tagIndexMeanTable warChEnTable[MAX_TABLE_RECORDS];
 	//таблица канал сигма
 	struct tagIndexMeanTable warChSiTable[MAX_TABLE_RECORDS];
-	
-	
+
+
 	BOOL bSpectrumInDots;	//=1 spectrum in dots, 0-in lines
 	int iMarkerChannel;	//channel of marker
 	int iMarkerChannel2;	//channel of marker, if -1 then only one marker
@@ -84,36 +84,37 @@ struct tagSpectrumControl
 	WORD warSigma[CHANNELS];	//здесь хранится сигма в 1,5 уже чем калибровочная, это нужно для поиска слитых пиков. во всех остальных местах кроме идентификации нажуно множить ее на 1,5
 
 	int iAcquiringTime;
-	
+
 	struct tagSpectrum acqSpectrum;
 	struct tagSpectrum opnSpectrum;
-	
+
 	struct tagSpectrum* pShowSpectrum;	//pointer to spectrum to show
-	
+	BOOL bSpectrumOpened;	//TRUE means spectrum is opened from file
+
 //	int specTablePage;	//страница отображения таблицы спектров
 //	BOOL specTableChanged;
 //	BYTE barOperData[256];
 //	BOOL hasSpecTable;	//if 1 then spec table we have
 
 //	const struct tagMode* pCurMode;//used to return from edit functions
-	
+
 	int iSpectrumControlMode;	//mode of spectrum control by keyboard
-	
+
 	//channels of spectrum border
 	int iViewChannelFrom;
 	int iViewChannelTo;
-	
+
 	int iHighMul;	//coef of make spectrum higher
-	
+
 	char peakProcRes[100];	//report of peak processing
 	WORD wins1[SD_WIN_SIZE+1];
-	BOOL bLeftRightClicked;	
-	
+	BOOL bLeftRightClicked;
+
 	int iStopAcq;	//counter to stop acquiring after status shows that acquiring stoped
 	BOOL bStopAcq;
-	
+
 	BOOL bLogView;	//true for log view
-	
+
 	BOOL bSpectrumEmergSaved;	//true if spectrum already saved in emergency mode (battery low)
 };
 
@@ -263,6 +264,9 @@ void Spectrum_showMessageOnFileNamechange(char* pFileName);
 void Spectrum_showMessageOnFileNamechange_onDraw(const void* pParam);
 void Spectrum_showMessageOnFileNamechange_onExit(void);
 void Spectrum_DiffFilter(void);
+void Spectrum_silent_startAcq_ex_start(int acqTime);
+void Spectrum_silent_startAcq_ex_end();
+
 int Spectrum_prepareSpectrumForSaving(void);
 int Spectrum_saveSpecAr(unsigned char* pFileName);
 

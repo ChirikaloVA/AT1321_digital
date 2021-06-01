@@ -99,7 +99,7 @@ const struct tagMenu MCS_menu=
 //save MCS and SPECTRUM
 void MCSMode_saveValue(void)
 {
-	Spectrum_silent_startAcq_ex_start(10);
+	Spectrum_silent_startAcq_ex_start(AUTO_SPEC_TIME);
 	if(!MCSModeControl.hfile_tmp)
 		MCSMode_createTempFile();
 	if(MCSMode_saveArSpec())
@@ -174,7 +174,7 @@ void MCSMode_Init(void)
 	memset(&MCSModeControl,0,sizeof(MCSModeControl));
 	SPRDMode_Init();
 	MCSMode_prepare();
-	Spectrum_startAcq_ex(10);
+	Spectrum_startAcq_ex(AUTO_SPEC_TIME);
 	MCSModeControl.bSavingON = FALSE;
 	MCSModeControl.hfile_tmp = NULL;
 }
@@ -186,7 +186,7 @@ BOOL MCSMode_OnActivate(void)
 	MCSModeControl.bSavingON = FALSE;
 	MCSModeControl.hfile_tmp = NULL;
 	MCSMode_prepare();
-	Spectrum_startAcq_ex(10);
+	Spectrum_startAcq_ex(AUTO_SPEC_TIME);
 	InterProc_resetSyncData(&interProcControl.rsModbus.sarSpectrumZip);
 	return 1;
 }
@@ -200,8 +200,8 @@ void MCSMode_prepare(void)
 	MCSModeControl.iNumberOfCps = 0;
 //	MCSModeControl.iNumberOfCpsTotal = 0;
 	//copy date time gps for next data
-	memcpy((void*)&MCSModeControl.dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
-	memcpy((void*)&MCSModeControl.commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
+//	memcpy((void*)&MCSModeControl.dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
+//	memcpy((void*)&MCSModeControl.commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
 	memset(&SPRDModeControl.spec_name[0], 0, sizeof(SPRDModeControl.spec_name));
 }
 
@@ -269,7 +269,7 @@ BOOL MCSMode_OnTimer(void)
 	if(clockData.dateTime.second!=MCSModeControl.savedSeconds)
 	{
 		MCSModeControl.savedSeconds = clockData.dateTime.second;
-		InterProc_readSpectrumZip();	//every 2 seconds
+		InterProc_readSpectrumZip();	//every 1 second
 	}
 
 	//goto search mode if fCpsErr < CPS_ERR_THRESHOLD
@@ -299,23 +299,11 @@ BOOL MCSMode_OnTimer(void)
 //			MCSModeControl.iNumberOfCpsTotal++;
 	}
 
-/*	if(MCSModeControl.bSaveSpectrum &&
-	   InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrum) && MCSModeControl.iNumberOfCps>0)
-	{
-		MCSModeControl.bSaveSpectrum = FALSE;
-		if(SPRDMode_saveAutoSpec())
-		{
-			MCSMode_saveMCS();//save mcs with manual saved spectrum
-		}
-	}*/
 
 	if(MCSModeControl.bSavingON &&
-	   spectrumControl.acqSpectrum.wAcqTime >= 5)
+	   spectrumControl.acqSpectrum.wAcqTime >= AUTO_SPEC_TIME)
 	{
 		MCSMode_saveValue();
-		//!!!!!!!!!!!!!!!!
-		Display_BlinkREDLED(500);
-		//!!!!!!!!!!!!!!!
 	}
 	SPRDModeControl.bRadFound = FALSE;	//reset alarm flag
 
@@ -343,7 +331,7 @@ BOOL MCSMode_menu1_SaveRowValues(void)
 	//	MCSModeControl.bSaveSpectrum = TRUE;
 	MCSModeControl.bSavingON = !MCSModeControl.bSavingON;
 	MCSMode_prepare();
-	Spectrum_startAcq_ex(10);
+	Spectrum_startAcq_ex(AUTO_SPEC_TIME);
 	return FALSE;	//just redraw menu
 }
 const char* MCSMode_menu1_SaveRowValues_onUpdate(void)
@@ -445,7 +433,7 @@ BOOL MCSMode_OnDown(void)
 BOOL MCSMode_OnUp(void)
 {
 	MCSMode_prepare();
-	Spectrum_startAcq_ex(10);
+	Spectrum_startAcq_ex(AUTO_SPEC_TIME);
 	return SPRDMode_OnUp();
 }
 

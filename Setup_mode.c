@@ -1978,10 +1978,10 @@ BOOL SETUPMode_clear_memory(void)
 	if(!powerControl.bBatteryAlarm)
 	{//only of battery is not discharged
 		YESNOMode_DoNotModal(RED, "REQUEST\0""REQUEST\0""REQUEST\0""ЗАПРОС",
-			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, mcs and log.\0"
-			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, mcs and log.\0"
-			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, mcs and log.\0"
-		"Нет памяти! Предыдущая операция записи файла не выполнена. Пожалуйста подтвердите удаление автоспектров, мкд и журнала.", SETUPMode_clear_memory_confirm);
+			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, spectra arrays, mcs and log.\0"
+			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, spectra arrays, mcs and log.\0"
+			"No memory! Previous file save operation is not performed. Please confirm deletion of autospectra, spectra arrays, mcs and log.\0"
+		"Нет памяти! Предыдущая операция записи файла не выполнена. Пожалуйста подтвердите удаление автоспектров, массивов спектров, мкд и журнала.", SETUPMode_clear_memory_confirm);
 	}
 	return TRUE;
 }
@@ -2065,6 +2065,36 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 		do
 		{
 			hfile = filesystem_open_first("mcs");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
+			hfile = filesystem_open_first("mc2");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
+			hfile = filesystem_open_first("sar");
 			if(hfile!=NULL)
 			{
 				if(filesystem_delete_file(hfile)==E_FAIL)

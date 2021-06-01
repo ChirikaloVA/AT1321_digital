@@ -5,6 +5,9 @@
 #include "modes.h"
 #include "filesystem.h"
 
+//time of spectrum acquiring in MCS mode
+#define AUTO_SPEC_TIME 10
+
 #define MAX_MCS 30
 struct tagMCSData
 {
@@ -24,8 +27,8 @@ struct tagMCSModeControl
 	HFILE hfile_tmp;	//mcs temp file
 	BOOL bSavingON;	//true means save all data in memory
 unsigned char specar_name[FILE_NAME_SZ];	//name of auto saved spectrum array file
-	struct tagDateTime dateTime;	//date and time of start data collection
-	struct tagCommonGPS commonGPS;	//gps of start data collection
+//	struct tagDateTime dateTime;	//date and time of start data collection
+//	struct tagCommonGPS commonGPS;	//gps of start data collection
 };
 
 extern struct tagMCSModeControl MCSModeControl;

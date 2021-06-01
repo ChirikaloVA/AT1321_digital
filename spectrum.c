@@ -567,17 +567,21 @@ void Spectrum_startAcq_ex(int acqTime)
 	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
 	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
+	memcpy((void*)&spectrumControl.pShowSpectrum->dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
+	memcpy((void*)&spectrumControl.pShowSpectrum->commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
 	InterProc_stopSpectrumAcq();
 	InterProc_resetSpectrum();
 	InterProc_setAcqTime((WORD)acqTime);
 	InterProc_startSpectrumAcq();
 	//update datetime, gps, temperature value
-	memcpy((void*)&spectrumControl.pShowSpectrum->dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
 }
 void Spectrum_silent_startAcq_ex_start(int acqTime)
 {
+	spectrumControl.pShowSpectrum = &spectrumControl.acqSpectrum;
 	spectrumControl.bSpectrumOpened = FALSE;
-	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
+	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
+	memcpy((void*)&spectrumControl.pShowSpectrum->dateTime, (const void*)&clockData.dateTime, sizeof(clockData.dateTime));
+	memcpy((void*)&spectrumControl.pShowSpectrum->commonGPS, (const void*)&NMEAParserControl.commonGPS, sizeof(NMEAParserControl.commonGPS));
     InterProc_resetDose();
 	InterProc_stopSpectrumAcq();
 	InterProc_resetSpectrum();
@@ -588,6 +592,7 @@ void Spectrum_silent_startAcq_ex_end()
 {
 	memset((void*)spectrumControl.pShowSpectrum, 0, sizeof(struct tagSpectrum));
 	spectrumControl.acqSpectrum.fTemperature = interProcControl.fTemperature;
+	spectrumControl.acqSpectrum.wRealTime = clockData.dwTotalSecondsFromStart;
 	//clear identify result, else if shows for first seconds again
 	identify_clearReport();
 }

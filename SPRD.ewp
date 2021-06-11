@@ -347,7 +347,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\arm\inc\NXP</state>
+                    <state>$TOOLKIT_DIR$\inc\NXP</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -770,7 +770,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>D:\IARARMProjects\SPRD2_5\LPC2388.icf</state>
+                    <state>$PROJ_DIR$\LPC2388.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -6484,7 +6484,7 @@
             <name>$PROJ_DIR$\spectrum.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Spectrum.h</name>
+            <name>$PROJ_DIR$\spectrum.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\SPRD_mode.c</name>

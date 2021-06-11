@@ -770,7 +770,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>D:\IARARMProjects\SPRD2_5\LPC2388.icf</state>
+                    <state>$PROJ_DIR$\LPC2388.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -6436,7 +6436,7 @@
             <name>$PROJ_DIR$\Info_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Info_mode.h</name>
+            <name>$PROJ_DIR$\info_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\LOG_mode.c</name>
@@ -6478,7 +6478,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Setup_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6490,13 +6490,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_Mode.h</name>
+            <name>$PROJ_DIR$\SPRD_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\stab_mode.h</name>
+            <name>$PROJ_DIR$\STAB_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -6514,7 +6514,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

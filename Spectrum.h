@@ -270,5 +270,7 @@ void Spectrum_silent_startAcq_ex_end();
 int Spectrum_prepareSpectrumForSaving(void);
 int Spectrum_saveSpecAr(unsigned char* pFileName);
 
+BOOL remove_spec_from_ar(int _count_cut, HFILE _hfile, int* _sector_count, int* _sector_count_shift, int* _error_code);
+BOOL remove_data_from_mc2(int _count_cut, HFILE _hfile, int* _sector_count, int* _sector_count_shift, int* _error_code);
 
 #endif	//ifndef _SPECTRUM_H

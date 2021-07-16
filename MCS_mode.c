@@ -239,9 +239,24 @@ void MCSMode_createTempFile(void)
 {
 unsigned char temp[FILE_NAME_SZ];
 unsigned char autoname[FILE_NAME_SZ];
-	sprintf((char*)autoname, "mcs_%s", Clock_getClockDateTimeStrEx(temp));
-	MCSModeControl.hfile_tmp = filesystem_create_file(autoname,"mc2", 1);
-	if(MCSModeControl.hfile_tmp)
+BOOL bNewOne=TRUE;
+	if(SPRDModeControl.bDataOrderEnabled)
+	{//only one mcs file allowed
+		sprintf((char*)autoname, "mcs");
+		MCSModeControl.hfile_tmp = filesystem_find_file(autoname,"mc3");
+		if(MCSModeControl.hfile_tmp==NULL)
+		{
+			MCSModeControl.hfile_tmp = filesystem_create_file(autoname,"mc3", 1);
+		}else
+		{
+			bNewOne = FALSE;
+		}
+	}else
+	{
+		sprintf((char*)autoname, "mcs_%s", Clock_getClockDateTimeStrEx(temp));
+		MCSModeControl.hfile_tmp = filesystem_create_file(autoname,"mc3", 1);
+	}
+	if(MCSModeControl.hfile_tmp && bNewOne)
 	{
 		int pos = 0;
 		DWORD val = 0xeeeeeeee;
@@ -255,10 +270,19 @@ unsigned char autoname[FILE_NAME_SZ];
 			MCSModeControl.hfile_tmp = NULL;
 		}
 	}
-	if(modeControl.bLang==enu_lang_russian)
-		sprintf((char*)MCSModeControl.specar_name, "спар_%s", temp);
-	else
-		sprintf((char*)MCSModeControl.specar_name, "spar_%s", temp);
+	if(SPRDModeControl.bDataOrderEnabled)
+	{
+		if(modeControl.bLang==enu_lang_russian)
+			sprintf((char*)MCSModeControl.specar_name, "спар");
+		else
+			sprintf((char*)MCSModeControl.specar_name, "spar");
+	}else
+	{
+		if(modeControl.bLang==enu_lang_russian)
+			sprintf((char*)MCSModeControl.specar_name, "спар_%s", temp);
+		else
+			sprintf((char*)MCSModeControl.specar_name, "spar_%s", temp);
+	}
 }
 
 
@@ -360,12 +384,12 @@ void MCSMode_saveMCS(void)
 		SETUPMode_clear_memory();
 		return;
 	}
-	//pre-first DWORD =0xffffffff is a marker of datetime and other structure
-	//first structure is a date time
-	//second structure is gps data
-	//third array of 16 chars is a string of file name
-	//fourth array of unknown DWORDs count is a cps array in DWORD
-	//summary is a 61 bytes of header
+	//pre-first DWORD =0xffffffff is a marker of datetime and other structure 4 bytes
+	//first structure is a date time	7 bytes
+	//second structure is gps data		22 bytes
+	//third array of 16 chars is a string of file name 16 bytes
+	//summary is a 49 bytes of header
+	//fourth array of 30 DWORDs counts
 	int pos = filesystem_get_length(MCSModeControl.hfile_tmp);
 	BYTE buf[64];
 	int len = 0;
@@ -391,6 +415,41 @@ void MCSMode_saveMCS(void)
 		rlen = filesystem_file_put(MCSModeControl.hfile_tmp, &pos,
 								   (BYTE*)&MCSModeControl.mcs[0],
 								   MCSModeControl.iNumberOfCps*sizeof(MCSModeControl.mcs[0]));
+
+		rlen = filesystem_get_length(MCSModeControl.hfile_tmp);
+
+		if(rlen>MC2_FILE_SZ_LIMIT && SPRDModeControl.bDataOrderEnabled)
+		{
+			int n=0;//number of sectors to reduce
+			int sh=0;	//shift in sectors, if =-1 then no shift
+			int err = 0;
+			BOOL bret=remove_data_from_mc2((rlen-MC2_FILE_SZ_LIMIT),
+							MCSModeControl.hfile_tmp,
+							&n,
+							&sh,
+							&err);
+			if(!bret)
+			{//failed
+				unsigned char buf[20]={0};
+				sprintf(buf, "Internal error %d", err);
+				exception(__FILE__,__FUNCTION__,__LINE__,buf);
+				return;
+			}
+			filesystem_file_cut_start_clasters(MCSModeControl.hfile_tmp, n);
+
+			if(sh!=-1)
+			{
+				BYTE buf[4]={0};
+				int file_pos = 0;
+				filesystem_file_get(MCSModeControl.hfile_tmp, &file_pos, buf, 4);
+				buf[0]=0;
+				buf[1]=0;
+				buf[2]=(BYTE)(sh&0xff);
+				buf[3]=(BYTE)(sh>>8);
+				file_pos = 0;
+				filesystem_file_put(MCSModeControl.hfile_tmp, &file_pos, buf, 4);
+			}
+		}
 	}
 	//clear spectrum name to be sure of wrong info
 	MCSMode_prepare();

@@ -9,6 +9,8 @@
 #define AUTO_SPEC_TIME 10
 
 #define MAX_MCS 30
+
+#pragma pack(1)
 struct tagMCSData
 {
 	DWORD dwMomCPS;	//32bit = 1 means alarm case
@@ -16,6 +18,7 @@ struct tagMCSData
 	BYTE btError;	//statistical error in %
 	float fNCPS;	//neutron cps
 };
+#pragma pack()
 
 struct tagMCSModeControl
 {

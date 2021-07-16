@@ -763,6 +763,8 @@ HRESULT filesystem_file_change_len(HFILE hFile, /*file descriptor = number of fi
 
 
 
+
+
 //save file to filesystem
 //ret number of bytes written
 //ret E_FAIL - if error
@@ -805,8 +807,6 @@ int filesystem_file_put(HFILE hFile, /*file descriptor = number of file in file 
 	}while(len>0);
 	return wlen;
 }
-
-
 
 //create file dir list
 //ret items number retrieved

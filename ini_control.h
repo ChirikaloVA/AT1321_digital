@@ -12,7 +12,7 @@
 
 
 
-extern const char system_ini[413];
+extern const char system_ini[433];
 
 //max ini string len
 #define MAX_INI_STRING_LEN 100

@@ -1953,36 +1953,213 @@ int Spectrum_saveSpecAr(unsigned char* pFileName)
 		return 0;//!!!!!!!! have to show MSG, not exception
 	}
 
-	if(SPRDModeControl.bDataOrderEnabled && file_pos>SLIDING_FILE_SZ_LIMIT)
+	if(SPRDModeControl.bDataOrderEnabled && file_pos>SAR_FILE_SZ_LIMIT)
 	{	//тут встроить обрезку файла с начала
-		int n = (SLIDING_FILE_SZ_LIMIT - file_pos);
-		n = (int)(n/CLASTER_DATA_LEN) + (n%CLASTER_DATA_LEN?1:0);
 
-		file_pos = 0;
-		BYTE buf[CLASTER_DATA_LEN];
-		int sz = CLASTER_DATA_LEN;
-		int rlen = filesystem_file_get(hfile, &file_pos, buf, sz);
-		if(rlen==E_FAIL)return 0;//failed to read file or file empty
-		if(rlen!=CLASTER_DATA_LEN)
-		{
-			exception(__FILE__,__FUNCTION__,__LINE__,"Internal error!");
+		int n=0;//number of sectors to reduce
+		int sh=0;	//shift in sectors, if =-1 then no shift
+		int err = 0;
+		BOOL bret=remove_spec_from_ar((file_pos-SAR_FILE_SZ_LIMIT),
+							hfile,
+							&n,
+							&sh,
+							&err
+							);
+		if(!bret)
+		{//failed
+			unsigned char buf[20]={0};
+			sprintf(buf, "Internal error %d", err);
+			exception(__FILE__,__FUNCTION__,__LINE__,buf);
 			return 0;
 		}
-//		rlen = buf[0] | ((WORD)buf[1]<<8);
-		WORD wd =*((WORD*)&buf[0]);
-		if(wd==0)
-		{//маркер смещения начала файла уже стоит
-			wd =*((WORD*)&buf[2]);	//new shift
-
-		}else
-		{
-		}
-
-
 		filesystem_file_cut_start_clasters(hfile, n);
+
+		if(sh!=-1)
+		{
+			BYTE buf[4]={0};
+			file_pos = 0;
+			filesystem_file_get(hfile, &file_pos, buf, 4);
+			buf[0]=0;
+			buf[1]=0;
+			buf[2]=(BYTE)(sh&0xff);
+			buf[3]=(BYTE)(sh>>8);
+			file_pos = 0;
+			filesystem_file_put(hfile, &file_pos, buf, 4);
+		}
 	}
 
 	return iret;
+}
+
+
+//_sector_count - кол-во секторов для очистки
+//_sector_count_shift - смещение (-1 - нет смещения; 0 - ... - значение, записываемое во флаг смещения)
+//_error_code - код ошибки, если функция возвращет FALSE
+//	1 - ошибка (кол-во байт превышает длину файла)
+//	2 - ошибка (чтение файла)
+//	3 - ошибка (по длине файла)
+BOOL remove_spec_from_ar(int _count_cut, HFILE _hfile, int* _sector_count, int* _sector_count_shift, int* _error_code)
+{
+	*_sector_count = 0;
+	*_sector_count_shift = -1;
+	*_error_code = 0;
+
+	if (_count_cut == 0)
+		return TRUE;
+
+	int len_sar = filesystem_get_length(_hfile);//длина файла
+	int pos_file = 0;
+	if (_count_cut > len_sar)
+	{
+		*_error_code = 1;
+		return FALSE;
+	}
+	unsigned char buf[4] = { 0 };
+	int n_shift = -1;
+	int n_spec = 0;
+	int cnt_min = CLASTER_DATA_LEN * (_count_cut / CLASTER_DATA_LEN + ((_count_cut % CLASTER_DATA_LEN != 0) ? 1 : 0));
+	int cnt = 0;//текущее положение
+
+	//смещение (начало 0-го сектора)
+	pos_file = cnt;
+	if (filesystem_file_get(_hfile, &pos_file, buf, 4) != 4)
+	{
+		*_error_code = 2;
+		return FALSE;
+	}
+	if (buf[0] == 0 && buf[1] == 0)
+		cnt += (4 + (int)(*((unsigned short*)(buf + 2))));
+	//смещение (спектры)
+	n_shift = cnt % CLASTER_DATA_LEN;
+//	while (cnt < cnt_min || (n_shift > 0 && n_shift < 4))
+	while (cnt < cnt_min || (cnt < (cnt_min + CLASTER_DATA_LEN) && n_shift > 0 && n_shift < 4))
+	{
+		if ((cnt + 2) > len_sar)
+		{
+			*_error_code = 3;
+			return FALSE;
+		}
+
+		pos_file = cnt;
+		if (filesystem_file_get(_hfile, &pos_file, buf, 2) != 2)
+		{
+			*_error_code = 2;
+			return FALSE;
+		}
+		n_spec = (int)(*((unsigned short*)buf));
+		cnt += 2 + 16 + n_spec;
+		n_shift = cnt % CLASTER_DATA_LEN;
+
+		if (cnt > len_sar)
+		{
+			*_error_code = 4;
+			return FALSE;
+		}
+	};
+
+	*_sector_count = cnt / CLASTER_DATA_LEN;
+	if (n_shift == 0)
+		*_sector_count_shift = -1;
+	else if (n_shift > 0 && n_shift < 4)
+	{
+		*_sector_count_shift = CLASTER_DATA_LEN-4 + n_shift;
+		*_sector_count -= 1;
+	}
+	else
+		*_sector_count_shift = n_shift - 4;
+
+	return TRUE;
+}
+
+
+
+
+
+BOOL remove_data_from_mc2(int _count_cut, HFILE _hfile, int* _sector_count, int* _sector_count_shift, int* _error_code)
+{
+	*_sector_count = 0;
+	*_sector_count_shift = -1;
+	*_error_code = 0;
+
+	if (_count_cut == 0)
+		return TRUE;
+
+	int len_mc2 = filesystem_get_length(_hfile);//длина файла
+	int pos_file = 0;
+	if (_count_cut > len_mc2)
+	{
+		*_error_code = 1;
+		return FALSE;
+	}
+	unsigned char buf[4] = { 0 };
+	int n_shift = 0;
+	int n_flag = 0;
+	int cnt_min = CLASTER_DATA_LEN * (_count_cut / CLASTER_DATA_LEN + ((_count_cut % CLASTER_DATA_LEN != 0) ? 1 : 0));
+	int cnt = 0;//текущее положение
+
+	//смещение (начало 0-го сектора)
+	pos_file = cnt;
+	if (filesystem_file_get(_hfile, &pos_file, buf, 4) != 4)
+	{
+		*_error_code = 2;
+		return FALSE;
+	}
+	if (buf[0] == 0 && buf[1] == 0)
+		cnt += (4 + (int)(*((unsigned short*)(buf + 2))));
+
+	n_shift = cnt % CLASTER_DATA_LEN;
+	while (cnt < len_mc2)
+	{
+		if ((cnt + 4) > len_mc2)
+		{
+			*_error_code = 3;
+			return FALSE;
+		}
+
+		pos_file = cnt;
+		if (filesystem_file_get(_hfile, &pos_file, buf, 4) != 4)
+		{
+			*_error_code = 2;
+			return FALSE;
+		}
+		n_flag = *((int*)buf);
+
+		if (n_flag == 0xeeeeeeee)
+		{
+			cnt += 4;
+		}
+		else if (n_flag == 0xffffffff)
+		{
+			n_shift = cnt % CLASTER_DATA_LEN;
+			if ((cnt >= cnt_min && (n_shift == 0 || n_shift >= 4)) || (cnt >= (cnt_min + CLASTER_DATA_LEN) && (n_shift > 0 && n_shift < 4)))
+			{
+				break;
+			}
+			cnt += 57;
+		}
+		else
+		{
+			cnt += 13;
+		}
+	};
+	if (cnt >= len_mc2)
+	{
+		*_error_code = 3;
+		return FALSE;
+	}
+
+	*_sector_count = cnt / CLASTER_DATA_LEN;
+	if (n_shift == 0)
+		*_sector_count_shift = -1;
+	else if (n_shift > 0 && n_shift < 4)
+	{
+		*_sector_count_shift = CLASTER_DATA_LEN-4 + n_shift;
+		*_sector_count -= 1;
+	}
+	else
+		*_sector_count_shift = n_shift - 4;
+
+	return TRUE;
 }
 
 

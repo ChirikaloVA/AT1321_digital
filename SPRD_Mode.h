@@ -34,7 +34,7 @@
 
 
 //max cps for NAI
-#define MAX_NAI_CPS 50000
+#define MAX_NAI_CPS 80000
 
 //standart background cps
 #define STANDART_BKG_CPS 50.0

@@ -137,7 +137,7 @@ const struct tagMenu setup_menu_version=
 const struct tagMenu setup_menu_version=
 {
 	"MENU: VERSION\0""MENU: VERSION\0""MENU: VERSION\0""МЕНЮ: ВЕРСИЯ",	//menu name
-	3,	//number of items
+	4,	//number of items
 	{SETUPMode_menu1_idleTime, SETUPMode_menu1_testscreen , SETUPMode_menu1_enableAutoSave, SETUPMode_menu1_enableDataOrder/*, SETUPMode_menu1_playSound, SETUPMode_menu1_stopRecord, SETUPMode_menu1_placeMarkers*/},
 	{SETUPMode_menu1_idleTime_onUpdate, SETUPMode_menu1_testscreen_onUpdate , SETUPMode_menu1_enableAutoSave_onUpdate, SETUPMode_menu1_enableDataOrder_onUpdate/*, SETUPMode_menu1_playSound_onUpdate, SETUPMode_menu1_stopRecord_onUpdate, SETUPMode_menu1_placeMarkers_onUpdate*/}
 };
@@ -2094,6 +2094,21 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 		}while(hfile!=NULL);
 		do
 		{
+			hfile = filesystem_open_first("mc3");
+			if(hfile!=NULL)
+			{
+				if(filesystem_delete_file(hfile)==E_FAIL)
+				{
+					if(powerControl.bBatteryAlarm)//when battery discharged no file operation is allowed
+						break;
+				}
+				SETUPMode_pleaseWait(++progress);
+
+			}
+			PowerControl_kickWatchDog();
+		}while(hfile!=NULL);
+		do
+		{
 			hfile = filesystem_open_first("sar");
 			if(hfile!=NULL)
 			{
@@ -2171,16 +2186,16 @@ BOOL SETUPMode_menu1_enableAutoSave(void)
 const char* SETUPMode_menu1_enableAutoSave_onUpdate(void)
 {
 	if(SPRDModeControl.bAutoSaveSpectra)
-		return "Autosave spectra\0""Autosave spectra\0""Autosave spectra\0""Сохранять спектры";
+		return "Save spectra\0""Save spectra\0""Save spectra\0""Сохранять спектры";
 	else
-		return "Don't save spectra\0""Don't save spectra\0""Don't save spectra\0""Не сохран. спектры";
+		return "Skip spectra\0""Skip spectra\0""Skip spectra\0""Пропускать спектры";
 }
 
 
 BOOL SETUPMode_menu1_enableDataOrder(void)
 {
 		SPRDModeControl.bDataOrderEnabled = !SPRDModeControl.bDataOrderEnabled;
-		if(!ini_write_system_ini_int("bDataOrderEnabled", "bDataOrderEnabled", SPRDModeControl.bDataOrderEnabled))
+		if(!ini_write_system_ini_int("SPRDModeControl", "bDataOrderEnabled", SPRDModeControl.bDataOrderEnabled))
 		{
 			;//!!!!!!!!!error
 		}
@@ -2191,7 +2206,7 @@ BOOL SETUPMode_menu1_enableDataOrder(void)
 const char* SETUPMode_menu1_enableDataOrder_onUpdate(void)
 {
 	if(SPRDModeControl.bDataOrderEnabled)
-		return "Data order enabled\0""Data order enabled\0""Data order enabled\0""Очередь разрешена";
+		return "Single SAR/MC2\0""Single SAR/MC2\0""Single SAR/MC2\0""Один SAR/MC2";
 	else
-		return "Simple files\0""Simple files\0""Simple files\0""Простые файлы";
+		return "Multi SAR/MC2\0""Multi SAR/MC2\0""Multi SAR/MC2\0""Много SAR/MC2";
 }

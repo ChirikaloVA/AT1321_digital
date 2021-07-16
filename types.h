@@ -198,20 +198,20 @@ struct tagUART
 	volatile DWORD rcvBuffLen;	//must be reset to 0 before transmition
 	volatile enum RCV_ERRORS bRcvError;	//must be reset before transmition
 	volatile BOOL bDataReceived;	//must be reset before transmition
-	
+
 	volatile BYTE* trmBuff;//[EXTRM_BUF_LEN];
 	volatile DWORD trmBuffLen;	//must be reset to 0 before transmition
 	volatile DWORD trmBuffLenConst;	//постоянное значение длинны передающего буфера
 	volatile BOOL bTrmReady;	//must be set to 1 before main cycle. if 0 then NOONE allows to put data to trm buffer, it will be set to 1 if rcv data is process by first dispatcher
 
 	volatile int iTries;	//number of tries of sending
-	
+
 	//длинны буферов обмена
 	DWORD constRcvBuffLen;
 	DWORD constTrmBuffLen;
-	
+
 	BYTE *rcvBuff_safe;//[RCV_BUF_LEN];
-	DWORD rcvBuffLen_safe;	
+	DWORD rcvBuffLen_safe;
 	enum RCV_ERRORS bRcvError_safe;
 	BOOL bDataReceived_safe;
 };
@@ -429,7 +429,7 @@ struct tagIndexMeanTable
 #define MY_FIO4SET(value)	*((unsigned long*)0x3FFFC098) = value
 #define MY_FIO4CLR(value)	*((unsigned long*)0x3FFFC09C) = value
 
-	
+
 
 
 

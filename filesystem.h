@@ -25,8 +25,10 @@
 #define CLASTERTABLE_SECTOR_AREA_LEN 		(int)((int)MAX_CLASTERS*(int)sizeof(WORD)/(int)SECTOR_DATA_LEN)
 #define CLASTERTABLE_RECORDS_ON_SECTOR 	(int)((int)SECTOR_DATA_LEN/(int)sizeof(WORD))
 
-
-#define SLIDING_FILE_SZ_LIMIT (300*1024)
+//предел конечного SAR файла
+#define SAR_FILE_SZ_LIMIT (150*1024)
+//предел конечного MC2 файла
+#define MC2_FILE_SZ_LIMIT (SAR_FILE_SZ_LIMIT*3)
 
 
 #pragma pack(1)

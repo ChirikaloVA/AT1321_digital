@@ -457,7 +457,7 @@ void filesystem_calc_special_files_number(UINT* pAllFilesNum,
 				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "lib", FILE_EXT_SZ))
 					libfiles++;
 				else
-				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "mcs", FILE_EXT_SZ))
+				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "mc3", FILE_EXT_SZ))
 					mcsfiles++;
 				else
 				if(!strncmp(filesystem.fileRecordsOnSector[j].ext, "log", FILE_EXT_SZ))

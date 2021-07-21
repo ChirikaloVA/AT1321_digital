@@ -887,6 +887,10 @@ int ini_read_system_ini(char* pExt)
 		return E_FAIL;
 	SPRDModeControl.bAutoSaveSpectra = rVal;
 
+	ret = filesystem_ini_get_int(hfile, "SPRDModeControl", "bDataOrderEnabled", &rVal);
+	if(ret==E_FAIL)
+		return E_FAIL;
+	SPRDModeControl.bDataOrderEnabled = rVal;
 
 	ret = filesystem_ini_get_int(hfile, "soundControl", "bSound", &rVal);
 	if(ret==E_FAIL)
@@ -943,7 +947,7 @@ BOOL ini_write_system_ini_float(const char * pSection, const char* pValueName, f
 
 
 //default system.ini
-const char system_ini[413]=
+const char system_ini[433]=
 ";system.ini\r"
 "[modeControl]\r"
 "bLang=0\r"
@@ -978,6 +982,7 @@ const char system_ini[413]=
 #endif
 "false_alarm_period_oper=600\r"
 "bAutoSaveSpectra=1\r"
+"bDataOrderEnabled=0\r"
 "[soundControl]\r"
 "bSound=1\r"
 ;

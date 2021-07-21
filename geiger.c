@@ -61,7 +61,8 @@ void Geiger_values_Init(void)
 void Geiger_INT_Init(void)
 {
 	//////to wake up from geiger
-	PINMODE1_bit.P0_23 = 2;
+        DIR_G_CNT = 0; 
+	PINMODE1_bit.P0_23 = 3;
 	IO0INTENR = 0x0;
 	IO0INTENR_bit.P0_23 = 1;  //enable interrupt from GPIO0_23 (P0_23)
 	IO0INTCLR = 0xffffffff;
@@ -90,19 +91,22 @@ void Geiger_GetCount_intcall(void)
 
 __arm void _INT_Geiger(void)
 {
-	if(IO0INTSTATR_bit.P0_23)
-	{
-		geigerControl.dwMomCount++;	//count geiger pulses
-		powerControl.bAwakedByGeiger = 1;	//awaked by geiger flag
-		IO0INTCLR_bit.P0_23 = 1;
-	}else
-	if(IO2INTSTATR_bit.P2_4)
-	{
-		IO2INTCLR_bit.P2_4 = 1;
-	}else
-	{
-		IO0INTCLR = 0xffffffff;
-	}
+  if(IO0INTSTATR_bit.P0_23)
+  {
+    if(PIN_G_CNT)
+    {
+      geigerControl.dwMomCount++;	//count geiger pulses
+    }
+    powerControl.bAwakedByGeiger = 1;	//awaked by geiger flag
+    IO0INTCLR_bit.P0_23 = 1;
+  }else
+    if(IO2INTSTATR_bit.P2_4)
+    {
+      IO2INTCLR_bit.P2_4 = 1;
+    }else
+    {
+      IO0INTCLR = 0xffffffff;
+    }
 }
 
 

@@ -257,5 +257,8 @@ const char* SETUPMode_menu1_showSplash_onUpdate(void);
 void SETUPMode_accessGranted(void);
 void SETUPMode_accessDenied(void);
 
+const char* SETUPMode_menu1_enableDataOrder_onUpdate(void);
+BOOL SETUPMode_menu1_enableDataOrder(void);
+
 
 #endif	//ifndef _SETUPMODE_H

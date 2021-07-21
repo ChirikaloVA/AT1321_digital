@@ -953,3 +953,49 @@ void filesystem_detect_memorylow(void)
 	filesystem.bMemoryLow = ((UINT)(SETUPModeControl.uiCalcFreeMem*100/TOTAL_MEMORY) < 3);
 }
 
+
+
+
+
+
+
+
+
+
+/*
+отрезать некоторое количество кластеров с начала файла
+*/
+HRESULT filesystem_file_cut_start_clasters(HFILE hfile,	//file
+										int n	//number of clusters to cut
+											)
+{
+	BOOL bItsEnd = FALSE;
+	int index = filesystem_get_first_filerecordIndex(hfile);
+	int startclaster = (int)filesystem.fileRecordsOnSector[index].wdStartClaster;
+	if(startclaster==CLASTERTABLE_EMPTY_RECORD)return E_FAIL;	//empty file
+
+	do
+	{
+		int clasterindex = filesystem_get_clasterIndex(startclaster);
+		if(clasterindex==E_FAIL)
+		{
+			exception(__FILE__,__FUNCTION__,__LINE__,"invalid claster record");
+			return E_FAIL;
+		}else
+		{
+			int newstartclaster = filesystem.clasterTableOnSector[clasterindex];
+			bItsEnd = newstartclaster==startclaster;
+			startclaster = newstartclaster;
+			if(startclaster!=CLASTERTABLE_EMPTY_RECORD)
+			{
+				filesystem.clasterTableOnSector[clasterindex] = CLASTERTABLE_EMPTY_RECORD;	//change and write
+				filesystem_write_clastertable();
+				filesystem.fileRecordsOnSector[index].dwLength -= CLASTER_DATA_LEN;	//reduce file size on claster size
+			}
+		}
+	}while(!bItsEnd && startclaster!=CLASTERTABLE_EMPTY_RECORD && --n);
+	filesystem.fileRecordsOnSector[index].wdStartClaster = startclaster;
+	filesystem_write_filerecordstable();
+
+	return S_OK;
+}

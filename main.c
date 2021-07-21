@@ -78,7 +78,7 @@ const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "07.05.2020"
+#define OUR__DATE__ "10.06.2021"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 

@@ -200,6 +200,7 @@ BOOL Restore0x80(DWORD* pszbin)
 		if(val==0x80 && packspec.unpacked[++i]!=0)
 		{
 			//number of bytes of 0x80
+			while (packspec.maskdata[newsz] != 0)newsz++;
 			int cnt = packspec.unpacked[i];
 			for(int k=0;k<cnt;k++)
 			{
@@ -218,7 +219,7 @@ BOOL Restore0x80(DWORD* pszbin)
 	}
 	memcpy(packspec.unpacked, packspec.packed, newsz);
 	*pszbin=newsz;
-	
+
 	return TRUE;
 }
 
@@ -227,7 +228,7 @@ BOOL Restore0x80(DWORD* pszbin)
 //remove all periodical 0x80 with period 3
 void remove0x80(DWORD* pszbin)
 {
-	
+
 	DWORD newsz=0;
 //	for(int i=0;i<sizeof(packspec.maskdata);i++)
 	//	packspec.maskdata[i]=0;
@@ -300,8 +301,6 @@ BOOL superCompressSpectrum(DWORD* pszbin)
 	{
 		packspec.maskdata[i] = 0x7fff;	//по маске: 0x8000 признак занятости, 0x7fff - индекс
 	}
-//	memset(packspec.maskdata, 0x, sizeof(packspec.maskdata));
-//	memset(packspec.indeces, -1, sizeof(packspec.indeces));
 	BYTE val;
 	int cnt1;
 	const float m1 = 2.0;	//number of bytes to pack in
@@ -348,7 +347,6 @@ BOOL superCompressSpectrum(DWORD* pszbin)
 				//mark as occupaed
 				for(int v=0;v<cnt1;v++)
 					packspec.maskdata[i+v] |= 0x8000;
-//				memset(&packspec.maskdata[i], 0x81, cnt1);
 				i+=cnt1-1;
 			}
 		}
@@ -384,7 +382,6 @@ BOOL superCompressSpectrum(DWORD* pszbin)
 			//mark as occupaed
 			for(int v=0;v<cnt2;v++)
 				packspec.maskdata[i+v] |= 0x8000;
-//			memset(&packspec.maskdata[i], 0x82, cnt2);
 			i+=cnt2-1;
 		}
 	}
@@ -419,7 +416,6 @@ BOOL superCompressSpectrum(DWORD* pszbin)
 			//mark as occupaed
 			for(int v=0;v<cnt4;v++)
 				packspec.maskdata[i+v] |= 0x8000;
-//			memset(&packspec.maskdata[i], 0x84, cnt4);
 			i+=cnt4-1;
 		}else
 		{//not distributed
@@ -429,12 +425,12 @@ BOOL superCompressSpectrum(DWORD* pszbin)
 	}
 
 	PowerControl_kickWatchDog();
-	
+
 	if(newsz>sizeof(identifyControl.SDs))
 	{
 		return FALSE;
 	}
-	
+
 	int j=0;
 	for(short m=0;m<*pszbin;m++)
 	{

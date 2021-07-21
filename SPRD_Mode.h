@@ -35,8 +35,6 @@
 
 //max cps for NAI
 #define MAX_NAI_CPS 50000
-//!!!!!!!!!!!!!!!! for test
-//#define MAX_NAI_CPS 1000
 
 //standart background cps
 #define STANDART_BKG_CPS 50.0
@@ -100,6 +98,7 @@ struct tagSPRDModeControl
 	int minute;
 
 	BOOL bAutoSaveSpectra;	//true spectra will save after identification complete
+	BOOL bDataOrderEnabled;	//true means order will be used instead of simple files
 };
 
 extern struct tagSPRDModeControl SPRDModeControl;

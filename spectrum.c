@@ -1920,11 +1920,11 @@ int Spectrum_saveSpecAr(unsigned char* pFileName)
 							  2);/*buffer len in bytes*/
 	if(ret==E_FAIL)
 	{
-		filesystem_delete_file(hfile);
+		//filesystem_delete_file(hfile);	//do not delete SAR when no memory
 		return 0;//!!!!!!!! have to show MSG, not exception
 	}
 
-unsigned char temp[FILE_NAME_SZ];
+	unsigned char temp[FILE_NAME_SZ];
 	memset(temp, 0, sizeof(temp));
 	if(modeControl.bLang==enu_lang_russian)
 		sprintf((char*)SPRDModeControl.spec_name, "спек_%s", Clock_getClockDateTimeStrEx(temp));
@@ -1938,7 +1938,7 @@ unsigned char temp[FILE_NAME_SZ];
 							  FILE_NAME_SZ);/*buffer len in bytes*/
 	if(ret==E_FAIL)
 	{
-		filesystem_delete_file(hfile);
+//		filesystem_delete_file(hfile);	//do not delete SAR when no memory
 		return 0;//!!!!!!!! have to show MSG, not exception
 	}
 
@@ -1949,8 +1949,37 @@ unsigned char temp[FILE_NAME_SZ];
 							  len);/*buffer len in bytes*/
 	if(ret==E_FAIL)
 	{
-		filesystem_delete_file(hfile);
+//		filesystem_delete_file(hfile);	//do not delete SAR when no memory
 		return 0;//!!!!!!!! have to show MSG, not exception
+	}
+
+	if(SPRDModeControl.bDataOrderEnabled && file_pos>SLIDING_FILE_SZ_LIMIT)
+	{	//тут встроить обрезку файла с начала
+		int n = (SLIDING_FILE_SZ_LIMIT - file_pos);
+		n = (int)(n/CLASTER_DATA_LEN) + (n%CLASTER_DATA_LEN?1:0);
+
+		file_pos = 0;
+		BYTE buf[CLASTER_DATA_LEN];
+		int sz = CLASTER_DATA_LEN;
+		int rlen = filesystem_file_get(hfile, &file_pos, buf, sz);
+		if(rlen==E_FAIL)return 0;//failed to read file or file empty
+		if(rlen!=CLASTER_DATA_LEN)
+		{
+			exception(__FILE__,__FUNCTION__,__LINE__,"Internal error!");
+			return 0;
+		}
+//		rlen = buf[0] | ((WORD)buf[1]<<8);
+		WORD wd =*((WORD*)&buf[0]);
+		if(wd==0)
+		{//маркер смещения начала файла уже стоит
+			wd =*((WORD*)&buf[2]);	//new shift
+
+		}else
+		{
+		}
+
+
+		filesystem_file_cut_start_clasters(hfile, n);
 	}
 
 	return iret;
@@ -1990,13 +2019,10 @@ unsigned char tempnuc[NUCLNAMELENGTH*3];
 	memcpy(&packspec.unpacked[len], &temprep, sizeof(temprep));
 	len+=sizeof(temprep);
 
-	long pval = spectrumControl.pShowSpectrum->dwarSpectrum[0];
-	long nval;
+	long pval = 0;
+	long nval=0;
 	long rval;
-	//store first channel as absolute value
-	memcpy(&packspec.unpacked[len], &pval, sizeof(pval));
-	len+=sizeof(pval);
-	for(int i=1;i<CHANNELS;i++)
+	for(int i=0;i<CHANNELS;i++)
 	{
 		nval = (long)spectrumControl.pShowSpectrum->dwarSpectrum[i];
 		rval = nval-pval;

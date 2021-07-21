@@ -26,6 +26,9 @@
 #define CLASTERTABLE_RECORDS_ON_SECTOR 	(int)((int)SECTOR_DATA_LEN/(int)sizeof(WORD))
 
 
+#define SLIDING_FILE_SZ_LIMIT (300*1024)
+
+
 #pragma pack(1)
 struct tagDirEntry
 {
@@ -75,25 +78,25 @@ struct tagFileSystem
 	//if -1 then no file claster was loaded
 	int iCurrentFileClaster;
 	int iCurrentFileClasterSector;
-	
+
 #pragma pack(1)
-	
+
 	//must be higher or equal to SECTOR_LEN
 	//если этот буфер будет испорчен не соответсвующим загруженному кластеру, то надо сделать следующее
 	//filesystem.iCurrentFileClaster=-1;
 	//filesystem.iCurrentFileClasterSector=-1;
 	BYTE clasterBuffer[CLASTER_DATA_LEN+8];
-	
+
 #pragma pack()
-	
+
 	int file_pos_last_value;
 	int file_pos_last_section;
 	char lastSectionName[256];
-	
+
 	HFILE hFileExecuteSys;//HFILE of execute.sys, =NULL if no set
-	
+
 	BOOL bMemoryLow;
-	
+
 };
 
 #define MAX_FILE_RECORDS			(int)1024
@@ -244,7 +247,7 @@ void filesystem_detect_memorylow(void);
 void filesystem_show_symbol(int x);
 
 //подсичтать количество специальных файлов
-void filesystem_calc_special_files_number(UINT* pAllFilesNum, 
+void filesystem_calc_special_files_number(UINT* pAllFilesNum,
 					UINT* pSPZFilesNum,
 					UINT* pLIBFilesNum,
 					UINT* pMCSFilesNum,
@@ -252,5 +255,10 @@ void filesystem_calc_special_files_number(UINT* pAllFilesNum,
 
 
 HFILE filesystem_open_firstEx(char* pName, char* pExt);
+
+HRESULT filesystem_file_cut_start_clasters(HFILE hfile,	//file
+										int n	//number of clusters to cut
+											);
+
 
 #endif	//#ifndef FILESYSTEM_H

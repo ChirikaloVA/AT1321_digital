@@ -2206,7 +2206,7 @@ BOOL SETUPMode_menu1_enableDataOrder(void)
 const char* SETUPMode_menu1_enableDataOrder_onUpdate(void)
 {
 	if(SPRDModeControl.bDataOrderEnabled)
-		return "Single SAR/MC2\0""Single SAR/MC2\0""Single SAR/MC2\0""Один SAR/MC2";
+		return "Single SAR/MC2\0""Single SAR/MC2\0""Single SAR/MC2\0""Один SAR/MCS";
 	else
-		return "Multi SAR/MC2\0""Multi SAR/MC2\0""Multi SAR/MC2\0""Много SAR/MC2";
+		return "Multi SAR/MC2\0""Multi SAR/MC2\0""Multi SAR/MC2\0""Много SAR/MCS";
 }

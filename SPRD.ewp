@@ -221,6 +221,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>NDEBUG</state>
+                    <state>BAT_DEV_OLD</state>
                     <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
                 </option>
@@ -6484,7 +6485,7 @@
             <name>$PROJ_DIR$\spectrum.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\spectrum.h</name>
+            <name>$PROJ_DIR$\Spectrum.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\SPRD_mode.c</name>

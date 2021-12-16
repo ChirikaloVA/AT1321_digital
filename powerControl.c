@@ -717,7 +717,7 @@ __arm void _INT_ADC_PowerControl(void)
 		AD0CR_bit.START = 0;
 		AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
 //1.44 надо 1,08
-		powerControl.batV = (float)VREF*powerControl.fBatCoef*1.08*powerControl.ADC_REG/1023.0;
+		powerControl.batV = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
 		powerControl.bControlBat = TRUE;
 	}
 }
@@ -762,7 +762,9 @@ void PowerControl_controlBatStatus(void)
 	
 	powerControl.batStatus = PowerControl_getBatStatus();
 	if(!PIN_ST1)//if USB connected then reset battery alarm state
+        {
 		powerControl.bBatteryAlarm = 0;
+        }
 	else if(!powerControl.batStatus || (powerControl.batV_aver < VREF_BAT_MIN_CRITICAL))
 //        else if(!powerControl.batStatus )
 	{//LOW BATTERY!!!!
@@ -782,6 +784,10 @@ void PowerControl_controlBatStatus(void)
                   powerControl.bBatteryAlarm = 1;
                 }
 	}
+        else
+        {
+          powerControl.bBatteryAlarm = 0;
+        }
 	
 	
 	if(powerControl.bBatteryAlarm)

@@ -22,6 +22,11 @@
 #define MAX_BAT_COEF 2.0
 #define DEF_BAT_COEF 1.0
 
+#ifdef BAT_DEV_OLD
+#define DEV_BAT_COEF 1.44
+#else
+#define DEV_BAT_COEF 1.075
+#endif
 
 struct tagPOWERCONTROL
 {

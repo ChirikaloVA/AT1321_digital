@@ -270,20 +270,30 @@ void SouncControl_PlaySequence(void)
 //alarm by sounding or vibration
 void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
 {
-	Display_BlinkREDLED(ms);
-	
-	//27/08/2012
-	if(powerControl.bBatteryAlarm)return;//low battery no sound
-		
-	if(soundControl.bSound==SNDST_SOUND)
-	{
-		SoundControl_Beep(ms, freq);
-	}else if(soundControl.bSound==SNDST_VIBRO)
-	{
-		if(ms<100)
-			ms = 100;
-		SoundControl_PlayVibro(ms);
-	}
+  Display_BlinkREDLED(ms);
+  
+  //27/08/2012
+  if(powerControl.bBatteryAlarm)return;//low battery no sound
+  
+  if(soundControl.bSound==SNDST_SOUND)
+  {
+    PowerControl_startADC_intcall();
+    PowerControl_sleep(1);
+    if(powerControl.bControlBat)
+    {//battery control
+      
+      powerControl.bControlBat = FALSE;
+    }
+    if( powerControl.batV > 1.8)
+    {
+      SoundControl_Beep(ms, freq);
+    }
+  }else if(soundControl.bSound==SNDST_VIBRO)
+  {
+    if(ms<100)
+      ms = 100;
+    SoundControl_PlayVibro(ms);
+  }
 }
 
 //ms min is 80

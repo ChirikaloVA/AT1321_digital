@@ -270,6 +270,7 @@ void SouncControl_PlaySequence(void)
 //alarm by sounding or vibration
 void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
 {
+  unsigned int idx;
   Display_BlinkREDLED(ms);
   
   //27/08/2012
@@ -278,16 +279,28 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
   if(soundControl.bSound==SNDST_SOUND)
   {
     PowerControl_startADC_intcall();
-    PowerControl_sleep(1);
-    if(powerControl.bControlBat)
-    {//battery control
-      
-      powerControl.bControlBat = FALSE;
-    }
-    if( powerControl.batV > 1.8)
+    for(idx = 0; idx < 10; ++idx)
     {
-      SoundControl_Beep(ms, freq);
+      pause(100);
+      if(powerControl.bControlBat)
+      {//battery control 
+        powerControl.bControlBat = FALSE;
+        if( powerControl.batV > 2.0)
+        {
+          if(powerControl.batV > 2.2)
+          {
+            SoundControl_Beep(ms, freq);
+          }
+          else
+          {
+            SoundControl_Beep(30, 700);
+          }
+        }
+        break;
+      }
     }
+   
+   
   }else if(soundControl.bSound==SNDST_VIBRO)
   {
     if(ms<100)

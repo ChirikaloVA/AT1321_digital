@@ -72,7 +72,10 @@ struct tagPOWERCONTROL
 	//must be set to 0 before start work and after process any keys
 	//must be reset after powerdown
 	volatile DWORD dwIdleTime;	
-	DWORD dwPowerDownDeadTime;	//s, time to enter power down must be saved in ini	
+	DWORD dwPowerDownDeadTime;	//s, time to enter power down must be saved in ini
+        volatile BOOL bControlBatSnd;	//if 1 then ADC was calculate battery voltage при проигр звука чтобы не выкл прибор при просад. напр.
+        volatile float batV_snd;	//voltage in V во время проигр звука
+         volatile BOOL bControlBatSndRdy;	//первый результат после запуска готов
 };
 
 extern struct tagPOWERCONTROL powerControl;
@@ -242,7 +245,11 @@ void pause(int timeout);
 
 void PowerControl_sendAllCommands(void);
 
+#ifdef DEBUG
 
+void Set_test_point_dir(void);
+
+#endif
 
 
 #endif  //#ifndef _POWERCONTROL_H

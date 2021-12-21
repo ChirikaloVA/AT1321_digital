@@ -710,16 +710,38 @@ void PowerControl_kickWatchDog(void)
 //выполнение преобразования для уровня напряжения от батарей
 __arm void _INT_ADC_PowerControl(void)
 {
-	if(AD0GDR_bit.DONE && /*ADC ready*/
-	   !powerControl.bControlBat /*prev bat status alread controled*/)
-	{
-		powerControl.ADC_REG = ADDR3_bit.RESULT;
-		AD0CR_bit.START = 0;
-		AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
-//1.44 надо 1,08
-		powerControl.batV = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
-		powerControl.bControlBat = TRUE;
-	}
+  
+  //	if(AD0GDR_bit.DONE && /*ADC ready*/
+  //	   !powerControl.bControlBat /*prev bat status alread controled*/)
+  if(AD0GDR_bit.DONE )
+  {
+    if(powerControl.bControlBatSnd)
+    {
+      SET_ISD_INT;
+      powerControl.batV_snd = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
+      AD0CR_bit.PDN = 1;
+      AD0CR_bit.START = 1;
+      powerControl.bControlBatSndRdy = TRUE;
+      if(powerControl.batV_snd < 1.8)
+      {
+        SoundControl_PWMstop();
+      }
+      
+      
+      CLR_ISD_INT;
+     
+    }
+    else if(!powerControl.bControlBat)
+    {
+      powerControl.ADC_REG = ADDR3_bit.RESULT;
+      AD0CR_bit.START = 0;
+      AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
+      //1.44 надо 1,08
+      powerControl.batV = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
+      powerControl.bControlBat = TRUE;     
+    }
+    
+  }
 }
 
 
@@ -803,10 +825,12 @@ void PowerControl_controlBatStatus(void)
 //start ADC for battery voltage
 //run from interrupt
 //result in interrupt
+// длительность измерения ~325 uS
 void PowerControl_startADC_intcall(void)
 {
 	AD0CR_bit.PDN = 1;	//turn off power down mode of ADC
 	AD0CR_bit.START = 0x01;	//start ADC
+        
 }
 
 
@@ -986,18 +1010,36 @@ void PowerControl_emergencyCheckBattery(void)
 	}
 }
 
+//----------------------------------------------
+// прогр. пауза timeout=100 дает ~95 uS звдержки
+//---------------------------------------------
+
 void pause(int timeout)
 {
-	int i,j,k=0;
-        DIR_P4_28 = 1;
-        DIR_P4_29 = 1;
-	for(i=0;i<timeout;i++)
-	{
-		//for(j=0;j<10000;j++)k++;
-                CLR_P4_28;
-                SET_P4_28;
-                CLR_P4_28;
-                SET_P4_28;
-
-	}
+  int i;
+  DIR_P4_28 = 1;
+  DIR_P4_29 = 1;
+  for(i=0; i < timeout; i++)
+  {
+    CLR_P4_28;
+    SET_P4_28;
+    CLR_P4_28;
+    SET_P4_28;
+    
+  }
 }
+
+
+//--------------------------------------------------
+// установка портов  тестовых точек (для отладки)
+//
+//--------------------------------------------------
+#ifdef DEBUG
+
+void Set_test_point_dir(void)
+{
+  DIR_ISD_INT = 1;
+  CLR_ISD_INT;
+}
+
+#endif

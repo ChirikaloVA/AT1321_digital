@@ -347,49 +347,49 @@ void InterProc_InterProcControl(void)
 //used to stop vibra signal
 __arm void _INT_Timer2_InterProc(void)
 {
-	__ir_bits stru = {0};
-	//next int disable is used to avoid timer adjusting fauls in another interrupts
-	if(T2IR_bit.MR1INT)
-	{//timer for system reasons for OnTimer function
-		//clear TIMER1 interrupt status
-		DWORD ms = modeControl.dwTimerPeriod/INTERPROC_TIMER_VAL;
-		T2MR1 = T2TC+ms;
-		modeControl.dwTimerReach=1;	//timer is reached
-		stru.MR1INT = 1;
-	}
-	if(T2IR_bit.MR0INT)
-	{//timer for interproc comm
-
-
-
-		if(!interProcControl.uart.bDataReceived)
-		{//exception if no received
-			interProcControl.uart.bRcvError = RCV_ERR_TIMEOUT;	//Receiving ERROR! no bytes we have
-		}
-		InterProc_Timer_turnOFF();
-		interProcControl.bTimeOutReached = TRUE;
-
-
-
-
-		stru.MR0INT = 1;
-	}
-	if(T2IR_bit.MR2INT)
-	{//timer for vibra signals
-		//clear TIMER1 interrupt status
-		T2MCR_bit.MR2I = 0; //disable interrupt for vibra
-		SoundControl_StopVibro();
-		SouncControl_PlaySequence();
-		stru.MR2INT = 1;
-	}
-	if(T2IR_bit.MR3INT)
-	{
-		//clear TIMER1 interrupt status
-		T2MCR_bit.MR3I = 0; //disable interrupt for LED
-		Display_turnOFFRedLED();
-		stru.MR3INT = 1;
-	}
-	T2IR = *(ULONG*)&stru;
+  __ir_bits stru = {0};
+  //next int disable is used to avoid timer adjusting fauls in another interrupts
+  if(T2IR_bit.MR1INT)
+  {//timer for system reasons for OnTimer function
+    //clear TIMER1 interrupt status
+    DWORD ms = modeControl.dwTimerPeriod/INTERPROC_TIMER_VAL;
+    T2MR1 = T2TC+ms;
+    modeControl.dwTimerReach=1;	//timer is reached
+    stru.MR1INT = 1;
+  }
+  if(T2IR_bit.MR0INT)
+  {//timer for interproc comm
+    
+    
+    
+    if(!interProcControl.uart.bDataReceived)
+    {//exception if no received
+      interProcControl.uart.bRcvError = RCV_ERR_TIMEOUT;	//Receiving ERROR! no bytes we have
+    }
+    InterProc_Timer_turnOFF();
+    interProcControl.bTimeOutReached = TRUE;
+    
+    
+    
+    
+    stru.MR0INT = 1;
+  }
+  if(T2IR_bit.MR2INT)
+  {//timer for vibra signals
+    //clear TIMER1 interrupt status
+    T2MCR_bit.MR2I = 0; //disable interrupt for vibra
+    SoundControl_StopVibro();
+    SouncControl_PlaySequence();
+    stru.MR2INT = 1;
+  }
+  if(T2IR_bit.MR3INT)
+  {
+    //clear TIMER1 interrupt status
+    T2MCR_bit.MR3I = 0; //disable interrupt for LED
+    Display_turnOFFRedLED();
+    stru.MR3INT = 1;
+  }
+  T2IR = *(ULONG*)&stru;
 }
 
 

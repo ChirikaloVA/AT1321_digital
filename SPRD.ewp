@@ -6320,7 +6320,7 @@
             <name>$PROJ_DIR$\interProc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\interProc.h</name>
+            <name>$PROJ_DIR$\interproc.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\interProc2.c</name>
@@ -6413,7 +6413,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\COMM_mode.h</name>
+            <name>$PROJ_DIR$\comm_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6479,7 +6479,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SETUP_Mode.h</name>
+            <name>$PROJ_DIR$\setup_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6491,7 +6491,7 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_mode.h</name>
+            <name>$PROJ_DIR$\sprd_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
@@ -6515,7 +6515,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\yesno_mode.h</name>
+            <name>$PROJ_DIR$\YESNO_Mode.h</name>
         </file>
     </group>
     <group>

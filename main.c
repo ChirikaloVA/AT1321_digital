@@ -137,7 +137,9 @@ __noreturn void main(void)
 	PCLKSEL0_bit.PCLK_SSP1=1;
 	PCLKSEL0_bit.PCLK_PWM1=1;
 	//==================================
-
+#ifdef DEBUG
+        Set_test_point_dir();
+#endif
 
 
 
@@ -431,7 +433,7 @@ __noreturn void main(void)
 
 	while(1)
 	{
-
+                
 
 		//test second proc fault
 		if(!PIN_AN_ERR)
@@ -570,6 +572,7 @@ __noreturn void main(void)
 			//after key processing
 			powerControl.dwIdleTime = 0;	//reset idle time counter after key processing
 		}
+                
 	}
 }
 

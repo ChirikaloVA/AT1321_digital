@@ -257,13 +257,38 @@ void SouncControl_PlaySequence(void)
 		WORD len = *soundControl.pBeepSeq++;
 		if(len>0)
 		{
-			WORD freq = *soundControl.pBeepSeq++;
-			SoundControl_Beep(len, freq);
+                  if(powerControl.bControlBatSnd)
+                  {
+                    powerControl.bControlBatSnd = FALSE;
+                  }
+                  if( powerControl.batV > 2.0)
+                  {
+                    if(powerControl.batV > 2.2)
+                    {
+                      WORD freq = *soundControl.pBeepSeq++;
+                      SoundControl_Beep(len, freq);
+                    }
+                    else
+                    {
+                      SoundControl_Beep(30, 700);
+                    }
+                  }
+                  else
+                  {
+//                    SET_ISD_INT;
+                    pause(10);
+//                    CLR_ISD_INT;
+                  }
+//			WORD freq = *soundControl.pBeepSeq++;
+//			SoundControl_Beep(len, freq);
 		}else
 			soundControl.pBeepSeq = NULL;
 	}
 	if(soundControl.pBeepSeq==NULL)
+        {
 		SoundControl_StopBeep();
+                
+        }
 }
 
 
@@ -279,9 +304,12 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
   if(soundControl.bSound==SNDST_SOUND)
   {
     PowerControl_startADC_intcall();
+    
     for(idx = 0; idx < 10; ++idx)
     {
+//      SET_ISD_INT;
       pause(100);
+//      CLR_ISD_INT;
       if(powerControl.bControlBat)
       {//battery control 
         powerControl.bControlBat = FALSE;
@@ -312,31 +340,59 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
 //ms min is 80
 void SoundControl_Beep(DWORD ms, DWORD freq)
 {
-//	if(T2MCR_bit.MR2I)return;	//already playing
-	if(ms<INTERPROC_TIMER_VAL)
-	{
-		exception(__FILE__,__FUNCTION__,__LINE__,"beep delay is out of range");
-	}
-	ms/=INTERPROC_TIMER_VAL;
-	
-	SoundControl_setbeep(freq);
-	
-//дата: 07/03/2012
-//изменение версии 3.9: добавлено выкл вкл таймера (T1TCR_bit.CE = 0; T1TCR_bit.CE = 1;)
-	T1TCR_bit.CE = 0;
-	T2MR2 = T2TC+ms;
-	T2MCR_bit.MR2I = 1; //enable interrupt for vibra
-	T1TCR_bit.CE = 1;
-
+  //	if(T2MCR_bit.MR2I)return;	//already playing
+  if(ms<INTERPROC_TIMER_VAL)
+  {
+    exception(__FILE__,__FUNCTION__,__LINE__,"beep delay is out of range");
+  }
+  ms/=INTERPROC_TIMER_VAL;
+  powerControl.bControlBatSnd = TRUE;
+  powerControl.bControlBatSndRdy = FALSE;
+  PowerControl_startADC_intcall();              //зап. ацп для контр. просадок
+  
+  SoundControl_setbeep(freq);
+  
+  //дата: 07/03/2012
+  //изменение версии 3.9: добавлено выкл вкл таймера (T1TCR_bit.CE = 0; T1TCR_bit.CE = 1;)
+ 
+  T2TCR_bit.CE = 0;
+  T2MR2 = T2TC+ms;
+  T2MCR_bit.MR2I = 1; //enable interrupt for vibra
+  T2TCR_bit.CE = 1;
+  
 }
 
 //start beep on frequensy
 void SoundControl_setbeep(DWORD freq)
 {
-	SoundControl_PWMstop();
-	PWM1MR0 = HW_FREQ/freq-1;
-	SoundControl_PWMset_1chena5(HW_FREQ/2/freq-1);
-	SoundControl_PWMstart();
+  unsigned int idx;
+  SoundControl_PWMstop();
+  for(idx = 0; idx < 10; ++idx)
+  {
+    //      SET_ISD_INT;
+    pause(100);
+    //      CLR_ISD_INT;
+    if(powerControl.bControlBatSndRdy)
+    {//battery control 
+      
+      break;
+    }
+  }
+  if( powerControl.batV_snd > 2.0)
+  {
+    
+    PWM1MR0 = HW_FREQ/freq-1;
+    SoundControl_PWMset_1chena5(HW_FREQ/2/freq-1);
+    SoundControl_PWMstart();
+    
+  }
+  else
+  {
+    //    SET_ISD_INT;
+    pause(10);
+    //    CLR_ISD_INT;
+  }
+  
 }
 
 
@@ -365,10 +421,10 @@ void SoundControl_PlayVibro(DWORD ms)
 	SoundControl_StartVibro();
 //дата: 07/03/2012
 //изменение версии 3.9: добавлено выкл вкл таймера (T1TCR_bit.CE = 0; T1TCR_bit.CE = 1;)
-	T1TCR_bit.CE = 0;
+	T2TCR_bit.CE = 0;
 	T2MR2 = T2TC+ms;
 	T2MCR_bit.MR2I = 1; //enable interrupt for vibra
-	T1TCR_bit.CE = 1;
+	T2TCR_bit.CE = 1;
 }
 
 
@@ -393,7 +449,8 @@ void SoundControl_StartBeep(void)
 
 void SoundControl_StopBeep(void)
 {
-	SoundControl_PWMstop();
+  powerControl.bControlBatSnd = FALSE;
+  SoundControl_PWMstop();
 }
 
 
@@ -409,7 +466,7 @@ void SoundControl_PWM_Init(void)
 
 	//===== Конфигур PWM ======================================
 
-	DIR_ISD_INT = 0;
+//	DIR_ISD_INT = 0;
 
 	FIO2DIR_bit.P2_4 = 1;
 	PINSEL4_bit.P2_4 = 0x01;  //линию P2.4 сделать выходом PWM5 FUL

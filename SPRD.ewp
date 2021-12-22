@@ -220,8 +220,9 @@
                 <debug>1</debug>
                 <option>
                     <name>CCDefines</name>
-                    <state>NDEBUG</state>
-                    <state>BAT_DEV_OLD</state>
+                    <state>DEBUG</state>
+                    <state>NBAT_DEV_OLD</state>
+                    <state>LMX9838</state>
                     <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
                 </option>
@@ -6320,7 +6321,7 @@
             <name>$PROJ_DIR$\interProc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\interproc.h</name>
+            <name>$PROJ_DIR$\interProc.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\interProc2.c</name>
@@ -6413,7 +6414,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\comm_mode.h</name>
+            <name>$PROJ_DIR$\COMM_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6479,7 +6480,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\setup_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6491,7 +6492,7 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\sprd_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
@@ -6515,7 +6516,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_Mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

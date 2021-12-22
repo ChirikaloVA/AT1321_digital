@@ -767,7 +767,7 @@ void Display_turnON(void)
   DisplayData = 0x00;
 
   Display_Init_8bit_262k();
-  Display_clearScreen();
+  
 
   CLR_RS;
   DisplayData = 0x05;
@@ -780,25 +780,27 @@ void Display_turnON(void)
   SET_RS;
   DisplayData = 0;
   DisplayData = 0x1;//gamma set
+  Display_clearScreen();
 
+  
 
-  CLR_DPWON;
-
   pause(50000);
-  pause(50000);
-  pause(50000);
-  pause(50000);
-  pause(50000);
-  pause(10000);
+//  pause(50000);
+//  pause(50000);
+//  pause(50000);
+//  pause(50000);
+//  pause(10000);
 
   SET_PON;
 
   pause(50000);
-  pause(50000);
-  pause(50000);
-  pause(50000);
+//  pause(50000);
+//  pause(50000);
+//  pause(50000);
 
   SET_MON;
+  
+  CLR_DPWON;
 
 }
 

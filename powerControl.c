@@ -715,12 +715,15 @@ __arm void _INT_ADC_PowerControl(void)
   //	   !powerControl.bControlBat /*prev bat status alread controled*/)
   if(AD0GDR_bit.DONE )
   {
+    powerControl.ADC_REG = ADDR3_bit.RESULT;
     if(powerControl.bControlBatSnd)
     {
+      
       SET_ISD_INT;
       powerControl.batV_snd = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
+      powerControl.batV = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
       AD0CR_bit.PDN = 1;
-      AD0CR_bit.START = 1;
+      AD0CR_bit.START = 0;
       powerControl.bControlBatSndRdy = TRUE;
       if(powerControl.batV_snd < 1.8)
       {
@@ -733,7 +736,7 @@ __arm void _INT_ADC_PowerControl(void)
     }
     else if(!powerControl.bControlBat)
     {
-      powerControl.ADC_REG = ADDR3_bit.RESULT;
+      
       AD0CR_bit.START = 0;
       AD0CR_bit.PDN = 0;	//turn on power down mode of ADC
       //1.44 надо 1,08

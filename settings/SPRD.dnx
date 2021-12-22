@@ -19,7 +19,7 @@
         <Placement>_ 350 325 930 665</Placement>
     </BreakpointUsageDialog>
     <DebugChecksum>
-        <Checksum>793574056</Checksum>
+        <Checksum>819456472</Checksum>
     </DebugChecksum>
     <InstructionProfiling>
         <Enabled>_ 0</Enabled>
@@ -153,8 +153,7 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\sound.c}.402.2" 0 0 1 "" 0 "" 0</Bp0>
-        <Count>1</Count>
+        <Count>0</Count>
     </Breakpoints2>
     <Aliases>
         <Count>0</Count>

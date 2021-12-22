@@ -257,28 +257,13 @@ void SouncControl_PlaySequence(void)
 		WORD len = *soundControl.pBeepSeq++;
 		if(len>0)
 		{
-                  if(powerControl.bControlBatSnd)
-                  {
-                    powerControl.bControlBatSnd = FALSE;
-                  }
-                  if( powerControl.batV > 2.0)
-                  {
-                    if(powerControl.batV > 2.2)
+                  
                     {
                       WORD freq = *soundControl.pBeepSeq++;
                       SoundControl_Beep(len, freq);
                     }
-                    else
-                    {
-                      SoundControl_Beep(30, 700);
-                    }
-                  }
-                  else
-                  {
-//                    SET_ISD_INT;
-                    pause(10);
-//                    CLR_ISD_INT;
-                  }
+                   
+                  
 //			WORD freq = *soundControl.pBeepSeq++;
 //			SoundControl_Beep(len, freq);
 		}else
@@ -295,38 +280,58 @@ void SouncControl_PlaySequence(void)
 //alarm by sounding or vibration
 void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
 {
-  unsigned int idx;
+//  unsigned int idx;
   Display_BlinkREDLED(ms);
   
   //27/08/2012
-  if(powerControl.bBatteryAlarm)return;//low battery no sound
+  if(powerControl.bBatteryAlarm)
+  {
+    ms = 20;
+    SoundControl_PlayVibro(ms);
+    return;//low battery no sound
+  }
   
   if(soundControl.bSound==SNDST_SOUND)
   {
-    PowerControl_startADC_intcall();
-    
-    for(idx = 0; idx < 10; ++idx)
-    {
-//      SET_ISD_INT;
-      pause(100);
-//      CLR_ISD_INT;
-      if(powerControl.bControlBat)
-      {//battery control 
-        powerControl.bControlBat = FALSE;
-        if( powerControl.batV > 2.0)
-        {
-          if(powerControl.batV > 2.2)
-          {
-            SoundControl_Beep(ms, freq);
-          }
-          else
-          {
-            SoundControl_Beep(30, 700);
-          }
-        }
-        break;
-      }
-    }
+    SoundControl_Beep(ms, freq);
+//    if( powerControl.batV_snd <= 2.0)
+//    {
+////      if(ms<20)
+//        ms = 20;
+//      SoundControl_PlayVibro(ms);
+//    }
+//    powerControl.bControlBatSnd = TRUE;
+//    powerControl.bControlBatSndRdy = FALSE;
+//    PowerControl_startADC_intcall();
+//    
+//    for(idx = 0; idx < 10; ++idx)
+//    {
+////      SET_ISD_INT;
+//      pause(70);
+////      CLR_ISD_INT;
+//      if(powerControl.bControlBat)
+//      {//battery control 
+//        powerControl.bControlBat = FALSE;
+//        if( powerControl.batV > 2.0)
+//        {
+//          if(powerControl.batV > 2.2)
+//          {
+//            SoundControl_Beep(ms, freq);
+//          }
+//          else
+//          {
+//            SoundControl_Beep(30, 700);
+//          }
+//        }
+//        else
+//        {
+//          if(ms<100)
+//            ms = 100;
+//          SoundControl_PlayVibro(ms);
+//        }
+//        break;
+//      }
+//    }
    
    
   }else if(soundControl.bSound==SNDST_VIBRO)

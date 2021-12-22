@@ -400,7 +400,10 @@ BOOL KeyboardControl_keyboardControl(void)
 		{
 			soundControl.bPlayClick = FALSE;
 			if(soundControl.bSound==SNDST_SOUND)
-				SoundControl_Beep(40, SOUND_FREQ_1_SI*8);
+                        {
+//				SoundControl_Beep(40, SOUND_FREQ_1_SI*8);
+                          SoundControl_Beep(40, SOUND_FREQ_1_SI*8);
+                        }
 //			sound_playSample(SND_CLICK);
 		}
 		

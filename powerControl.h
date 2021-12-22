@@ -75,6 +75,7 @@ struct tagPOWERCONTROL
 	DWORD dwPowerDownDeadTime;	//s, time to enter power down must be saved in ini
         volatile BOOL bControlBatSnd;	//if 1 then ADC was calculate battery voltage при проигр звука чтобы не выкл прибор при просад. напр.
         volatile float batV_snd;	//voltage in V во время проигр звука
+        volatile WORD ADC_REG_snd;
          volatile BOOL bControlBatSndRdy;	//первый результат после запуска готов
 };
 

@@ -118,8 +118,14 @@ void Bluetooth_Init(void)
 	SET_BT_ON;	
 	DIR_BT_RES = 1;
 	CLR_BT_RES;
+#ifdef LMX9838
+        DIR_BT_RF = 0;
+        DIR_BT_LS = 0;
+#else
         DIR_BT_RF = 1;
         SET_BT_RF;
+        DIR_BT_LS = 0;
+#endif
 	bluetoothControl.bBluetooth_ON = 0;
 	bluetoothControl.bBluetooth_Connected = 0;
 	bluetoothControl.bShow_Bluetooth_sym = 0;

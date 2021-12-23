@@ -132,16 +132,19 @@ void TCMode_TCSearch(void)
 
 BOOL TCMode_OnTimer(void)
 {
-	if(TCModeControl.bRun)
-	{
-		InterProc_readMeasurementRegs();
-		TCMode_TCSearch();
-		if((TCModeControl.dwTimer%3)==0)
-		{
-			Modes_OnShow();
-		}
-	}
-	return 1;
+  
+  if(TCModeControl.bRun)
+  {
+    InterProc_readMeasurementRegs();
+    
+    TCMode_TCSearch();
+    if((TCModeControl.dwTimer%3)==0)
+    {
+      Modes_OnShow();
+    }
+  }
+  
+  return 1;
 }
 
 

@@ -719,19 +719,20 @@ __arm void _INT_ADC_PowerControl(void)
     if(powerControl.bControlBatSnd)
     {
       
-      SET_ISD_INT;
+//      SET_ISD_INT;
       powerControl.batV_snd = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
       powerControl.batV = (float)VREF*powerControl.fBatCoef*DEV_BAT_COEF*powerControl.ADC_REG/1023.0;
       AD0CR_bit.PDN = 1;
       AD0CR_bit.START = 0;
       powerControl.bControlBatSndRdy = TRUE;
+      powerControl.bControlBat = TRUE; 
       if(powerControl.batV_snd < 1.8)
       {
         SoundControl_PWMstop();
       }
       
       
-      CLR_ISD_INT;
+//      CLR_ISD_INT;
      
     }
     else if(!powerControl.bControlBat)
@@ -844,6 +845,7 @@ void PowerControl_startADC_intcall(void)
 //processing search alarm
 __arm void _INT_WAKEUP_PowerControl(void)
 {
+  
 	powerControl.bAwakedByInterProc = 1;	//mean that processor is awaked by second processor
 
 	if(powerControl.bInPowerDownMode //in a power down mode
@@ -859,8 +861,12 @@ __arm void _INT_WAKEUP_PowerControl(void)
 		if(modeControl.pMode==&modes_SPRDMode ||
 		   modeControl.pMode==&modes_MCSMode)
 		{
-			SET_SND_AU;
-			SoundControl_Alarm_intcall(50, 1000);
+			
+                        if(soundControl.bSounding == FALSE)
+                        {
+                          SET_SND_AU;
+                          SoundControl_Alarm_intcall(50, 1000);
+                        }
 		}
 		
 		//radfound flag in SPRD mode only
@@ -869,6 +875,7 @@ __arm void _INT_WAKEUP_PowerControl(void)
 		powerControl.dwIdleTime = 0;	//reset idle time counter
 	}	
 	EXTINT_bit.EINT1 = 1;	//clear INT
+        
 }
 
 

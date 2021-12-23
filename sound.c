@@ -51,10 +51,15 @@ const WORD beepSeq_OK[]={125,SOUND_FREQ_1_DO,250,SOUND_FREQ_1_MI,0};
 
 //D#(rediez) G#(soldiez) A#(LAdiez) C(DO)
 const WORD beepSeq_ON[]={
-125,2*SOUND_FREQ_1_FA,
-125,4*SOUND_FREQ_1_FA,
+125,1000,
+125,1100,
 0
 };
+//const WORD beepSeq_ON[]={
+//125,2*SOUND_FREQ_1_FA,
+//125,4*SOUND_FREQ_1_FA,
+//0
+//};
 const WORD beepSeq_OFF[]={
 125,4*SOUND_FREQ_1_FA,
 125,2*SOUND_FREQ_1_FA,
@@ -84,7 +89,7 @@ struct tagSoundData soundControl;
 void SoundControl_Init(void)
 {
 	
-	//soundControl.bSounding = FALSE;
+	soundControl.bSounding = FALSE;
 	soundControl.flg = 0;
 	soundControl.addr = 0;
   //========adjust sound initial values
@@ -272,6 +277,7 @@ void SouncControl_PlaySequence(void)
 	if(soundControl.pBeepSeq==NULL)
         {
 		SoundControl_StopBeep();
+                soundControl.bSounding = FALSE;
                 
         }
 }
@@ -286,14 +292,21 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
   //27/08/2012
   if(powerControl.bBatteryAlarm)
   {
-    ms = 20;
-    SoundControl_PlayVibro(ms);
+    SET_ISD_INT;
+    if(soundControl.bSounding == FALSE)
+    {
+      ms = 30;
+      SoundControl_PlayVibro(ms);
+    }
+    CLR_ISD_INT;
     return;//low battery no sound
   }
   
   if(soundControl.bSound==SNDST_SOUND)
   {
+    
     SoundControl_Beep(ms, freq);
+    
 //    if( powerControl.batV_snd <= 2.0)
 //    {
 ////      if(ms<20)
@@ -336,8 +349,8 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
    
   }else if(soundControl.bSound==SNDST_VIBRO)
   {
-    if(ms<100)
-      ms = 100;
+//    if(ms<30)
+      ms = 30;
     SoundControl_PlayVibro(ms);
   }
 }
@@ -389,7 +402,7 @@ void SoundControl_setbeep(DWORD freq)
     PWM1MR0 = HW_FREQ/freq-1;
     SoundControl_PWMset_1chena5(HW_FREQ/2/freq-1);
     SoundControl_PWMstart();
-    
+    soundControl.bSounding = TRUE;
   }
   else
   {
@@ -424,6 +437,7 @@ void SoundControl_PlayVibro(DWORD ms)
 	}
 	ms/=INTERPROC_TIMER_VAL;
 	SoundControl_StartVibro();
+        soundControl.bSounding = TRUE;
 //дата: 07/03/2012
 //изменение версии 3.9: добавлено выкл вкл таймера (T1TCR_bit.CE = 0; T1TCR_bit.CE = 1;)
 	T2TCR_bit.CE = 0;

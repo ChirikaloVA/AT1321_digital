@@ -219,8 +219,9 @@ __noreturn void main(void)
 
 
 	//================geiger=================
+        Geiger_Timer3_cnt_Init();
 	Geiger_Init();
-	Geiger_INT_Init();
+//	Geiger_INT_Init();
 
 
 	//==================Bluetooth Init====================
@@ -257,7 +258,7 @@ __noreturn void main(void)
 	SoundControl_turnON();
 
 
-
+        SoundControl_PlayVibro(100);
 	//=====================================
 	//once init all modes
 	Modes_Init();
@@ -346,7 +347,7 @@ __noreturn void main(void)
 	filesystem_detect_memorylow();
 
 
-	SoundControl_PlayVibro(100);
+//	SoundControl_PlayVibro(100);
 
 
 

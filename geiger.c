@@ -19,7 +19,20 @@
 struct tagGeigerControl geigerControl;
 
 
-
+//------------------------------------------------------
+// 23.12.2021 Чирикало Таймер 3 для счетчика гейгера
+// 
+//-------------------------------------------------------
+void Geiger_Timer3_cnt_Init(void)
+{
+  PINMODE1_bit.P0_23 = 3;
+  PCONP_bit.PCTIM3 = 1;
+  PINSEL1_bit.P0_23 = 3;
+  T3TCR_bit.CR = 1;
+  T3TCR_bit.CE = 0;
+  T3CTCR_bit.CTM = 1;
+  T3CTCR_bit.CIS = 0;
+}
 
 void Geiger_Init(void)
 {
@@ -42,6 +55,9 @@ void Geiger_Init(void)
 //init values of
 void Geiger_values_Init(void)
 {
+  T3TCR_bit.CR = 1;
+  T3TCR_bit.CR = 0;
+  T3TCR_bit.CE = 1;
 	geigerControl.esentVals.fCps = 0;
 	geigerControl.esentVals.fDoserate = 0;
 	geigerControl.bReset = 0;
@@ -79,6 +95,9 @@ void Geiger_GetCount_intcall(void)
 	{//reset if flag is set
 		Geiger_values_Init();
 	}
+        geigerControl.dwMomCount = T3TC;
+        T3TCR_bit.CR = 1;
+        T3TCR_bit.CR = 0;
 	geigerControl.dwCount += geigerControl.dwMomCount;
 	geigerControl.dwTotalCount += geigerControl.dwMomCount;
 	geigerControl.dwMomCountCopy = geigerControl.dwMomCount;

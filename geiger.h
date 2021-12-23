@@ -62,5 +62,6 @@ void Geiger_processData(void);
 
 void Geiger_copyDataToSafePlace(void);
 void Geiger_control(void);
+void Geiger_Timer3_cnt_Init(void);
 
 #endif	//#ifndef _GEIGER_H

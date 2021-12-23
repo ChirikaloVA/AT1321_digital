@@ -220,8 +220,8 @@
                 <debug>1</debug>
                 <option>
                     <name>CCDefines</name>
-                    <state>DEBUG</state>
-                    <state>NBAT_DEV_OLD</state>
+                    <state>NDEBUG</state>
+                    <state>BAT_DEV_OLD</state>
                     <state>LMX9838</state>
                     <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
@@ -6414,7 +6414,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\COMM_mode.h</name>
+            <name>$PROJ_DIR$\comm_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6492,13 +6492,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_mode.h</name>
+            <name>$PROJ_DIR$\sprd_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\STAB_mode.h</name>
+            <name>$PROJ_DIR$\stab_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -6516,7 +6516,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\yesno_mode.h</name>
+            <name>$PROJ_DIR$\YESNO_Mode.h</name>
         </file>
     </group>
     <group>

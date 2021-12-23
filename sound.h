@@ -208,7 +208,7 @@ struct tagSoundData
 	volatile BYTE flg;
 	volatile WORD addr;
 	volatile BOOL bPlayClick;	//if 1 then play one click
-//	volatile BOOL bSounding;
+	volatile BOOL bSounding;
 	volatile const WORD* pBeepSeq;	//array of words, first word length, second freq and so on until 0, if NULL then no playing
 };
 

@@ -282,9 +282,9 @@ __noreturn void main(void)
 	//!!!!!!!!!!! до этих функций чтение данных FS невозможно
 	filesystem_Init();
 
+        
 
-
-
+        SoundControl_BeepSeq(beepSeq_ON);
 	//================================================
 	//check for hardreset mode
 	if(KeyboardControl_testKeyDown() && KeyboardControl_testKeyUp())

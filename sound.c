@@ -50,16 +50,16 @@ const WORD beepSeq_OK[]={125,SOUND_FREQ_1_DO,250,SOUND_FREQ_1_MI,0};
 
 
 //D#(rediez) G#(soldiez) A#(LAdiez) C(DO)
-const WORD beepSeq_ON[]={
-125,1000,
-125,1100,
-0
-};
 //const WORD beepSeq_ON[]={
-//125,2*SOUND_FREQ_1_FA,
-//125,4*SOUND_FREQ_1_FA,
+//125,1000,
+//125,1100,
 //0
 //};
+const WORD beepSeq_ON[]={
+125,2*SOUND_FREQ_1_FA,
+125,4*SOUND_FREQ_1_FA,
+0
+};
 const WORD beepSeq_OFF[]={
 125,4*SOUND_FREQ_1_FA,
 125,2*SOUND_FREQ_1_FA,

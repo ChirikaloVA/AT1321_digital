@@ -64,4 +64,24 @@ void Geiger_copyDataToSafePlace(void);
 void Geiger_control(void);
 void Geiger_Timer3_cnt_Init(void);
 
+//----------------------------------------------------
+// 3.01.2021 алгоритм oloAMAR Коновалов
+//----------------------------------------------------
+
+#define oldAMAR_N       8
+
+//Сброс
+void oloAMAR_reset(void);
+//инит при запуску прибора
+void oloAMAR_start(void);
+//инициализация
+//_fap - период ложных тревог
+//_device_time - время обновления мгновенной скорости счёта
+BOOL oloAMAR_init(float _fap, float _device_time);
+//Обновление
+//_count - кол-во импульсов за интервал времени
+//_time - длительность интервала времени, с
+//возвращает необходимость сброса усреднения
+BOOL oloAMAR_update(unsigned int _count, float _time);
+
 #endif	//#ifndef _GEIGER_H

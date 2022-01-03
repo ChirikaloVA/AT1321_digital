@@ -221,6 +221,7 @@ __noreturn void main(void)
 	//================geiger=================
         Geiger_Timer3_cnt_Init();
 	Geiger_Init();
+        oloAMAR_start();
 //	Geiger_INT_Init();
 
 

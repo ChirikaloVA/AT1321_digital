@@ -184,21 +184,25 @@ void Geiger_processData(void)
 	memmove((void*)&geigerControl.countBuf[0], (void const *)&geigerControl.countBuf[1], sizeof(DWORD)*(MAX_COUNT_ITEMS-1));
 	geigerControl.countBuf[MAX_COUNT_ITEMS-1] = geigerControl.dwMomCountCopy;
 	//теперь в countBuf содержится история за последние MAX_COUNT_ITEMS измерений, а в dwCountBkg содержится сумма имп за все пред измерения минус история за MAX_COUNT_ITEMS
-	if(geigerControl.dwCountBkg>=9 && geigerControl.dwTime>MAX_COUNT_ITEMS)
-	{//статистика достаточна
-		//определяем необходимость сброса усреднения
-		DWORD sum=0;
-		for(int i=0;i<MAX_COUNT_ITEMS;i++)
-			sum+=geigerControl.countBuf[i];
-		float bkg = (float)geigerControl.dwCountBkg/((float)(geigerControl.dwTime-MAX_COUNT_ITEMS)/(float)MAX_COUNT_ITEMS);//привели фона ко времени измеренного в буфере
-		geigerControl.esentVals.fSKO = (((float)sum-bkg))/sqrt(bkg);
-
-
-		if(fabs(geigerControl.esentVals.fSKO)>=5 || (geigerControl.esentVals.fSKO<-2.5 && sum==0))
-		{//reset averaging
-			geigerControl.bReset = 1;
-		}
-	}
+//	if(geigerControl.dwCountBkg>=9 && geigerControl.dwTime>MAX_COUNT_ITEMS)
+//	{//статистика достаточна
+//		//определяем необходимость сброса усреднения
+//		DWORD sum=0;
+//		for(int i=0;i<MAX_COUNT_ITEMS;i++)
+//			sum+=geigerControl.countBuf[i];
+//		float bkg = (float)geigerControl.dwCountBkg/((float)(geigerControl.dwTime-MAX_COUNT_ITEMS)/(float)MAX_COUNT_ITEMS);//привели фона ко времени измеренного в буфере
+//		geigerControl.esentVals.fSKO = (((float)sum-bkg))/sqrt(bkg);
+//
+//
+//		if(fabs(geigerControl.esentVals.fSKO)>=5 || (geigerControl.esentVals.fSKO<-2.5 && sum==0))
+//		{//reset averaging
+//			geigerControl.bReset = 1;
+//		}
+//	}
+        if(oloAMAR_update(geigerControl.dwMomCount,1.0))
+        {
+          geigerControl.bReset = 1;
+        }
 	if(geigerControl.dwTotalTime>300)
 	{//geiger is not operating
 		if(geigerControl.dwTotalCount==0 && !modeControl.bSysDefault)//показать исключение только если не настройки по умолчанию это нужно для наладки
@@ -279,4 +283,390 @@ void Geiger_control(void)
 		geigerControl.bOverload_log = FALSE;
 	}
 
+}
+
+//----------------------------------------------------
+// 3.01.2021 алгоритм oloAMAR
+//----------------------------------------------------
+
+float prm_limit_min[100];
+float prm_limit_max[100];
+float prm_sigma;
+
+unsigned int array_count[oldAMAR_N];
+float array_time[oldAMAR_N];
+unsigned int array_n;
+
+
+//Общее кол-во импульсов
+unsigned int count_all;
+//Общее время накопления
+float time_all;
+
+const float reset_threshold_min[100] = {
+	0.0,
+	16.375458,
+	18.849539,
+	21.052980,
+	23.046068,
+	24.975562,
+	26.795935,
+	28.748987,
+	30.535946,
+	32.109638,
+	33.764431,
+	35.504505,
+	37.334255,
+	38.865720,
+	40.460005,
+	42.119689,
+	43.408979,
+	45.189631,
+	46.572893,
+	47.998496,
+	49.467737,
+	50.981952,
+	52.542517,
+	54.150852,
+	55.250334,
+	56.941555,
+	58.097699,
+	59.876078,
+	61.091805,
+	62.332216,
+	64.240215,
+	65.544551,
+	66.875371,
+	68.233212,
+	69.618623,
+	71.032163,
+	72.474404,
+	73.945928,
+	74.692856,
+	76.209424,
+	77.756784,
+	79.335561,
+	80.136931,
+	81.764035,
+	83.424176,
+	84.266844,
+	85.977803,
+	86.846265,
+	88.609596,
+	89.504643,
+	91.321950,
+	92.244393,
+	93.176155,
+	95.068008,
+	96.028291,
+	97.978055,
+	98.967732,
+	99.967406,
+	100.977178,
+	103.027423,
+	104.068105,
+	105.119298,
+	106.181109,
+	108.337015,
+	109.431328,
+	110.536695,
+	111.653228,
+	112.781038,
+	113.920240,
+	115.070950,
+	116.233283,
+	117.407356,
+	119.791201,
+	121.001213,
+	122.223448,
+	123.458028,
+	124.705079,
+	125.964726,
+	127.237097,
+	128.522320,
+	129.820526,
+	129.820526,
+	131.131844,
+	132.456408,
+	133.794352,
+	135.145810,
+	136.510919,
+	137.889817,
+	139.282644,
+	140.689539,
+	142.110645,
+	142.110645,
+	143.546107,
+	144.996067,
+	146.460674,
+	147.940075,
+	149.434419,
+	149.434419,
+	150.943857,
+	152.468543
+};
+
+const float reset_threshold_max[100] = {
+	0.0,
+	0.001391,
+	0.018051,
+	0.070104,
+	0.166386,
+	0.307165,
+	0.492626,
+	0.714521,
+	0.965960,
+	1.254423,
+	1.564839,
+	1.913224,
+	2.269695,
+	2.665657,
+	3.068397,
+	3.461698,
+	3.905412,
+	4.361941,
+	4.823117,
+	5.279722,
+	5.779554,
+	6.263438,
+	6.787834,
+	7.282573,
+	7.813371,
+	8.382858,
+	8.903914,
+	9.457357,
+	9.944748,
+	10.562887,
+	11.107253,
+	11.679673,
+	12.281593,
+	12.914534,
+	13.444293,
+	13.995782,
+	14.717065,
+	15.320764,
+	15.949228,
+	16.437436,
+	17.111705,
+	17.813634,
+	18.358912,
+	19.112001,
+	19.697022,
+	20.299951,
+	20.921335,
+	21.561741,
+	22.221749,
+	22.901960,
+	23.602992,
+	24.325484,
+	24.819389,
+	25.579115,
+	26.098474,
+	26.897353,
+	27.443478,
+	28.283527,
+	28.857797,
+	29.741138,
+	30.345004,
+	30.961131,
+	31.589767,
+	32.231167,
+	33.217768,
+	33.892223,
+	34.580373,
+	35.282494,
+	35.998872,
+	36.729795,
+	37.475558,
+	37.854099,
+	38.622691,
+	39.406888,
+	40.207008,
+	41.023373,
+	41.437750,
+	42.279104,
+	43.137541,
+	43.573274,
+	44.457988,
+	45.360665,
+	45.818854,
+	46.749162,
+	47.221376,
+	48.180161,
+	48.666829,
+	49.654963,
+	50.156529,
+	51.174909,
+	51.691828,
+	52.741381,
+	53.274122,
+	53.812245,
+	54.904851,
+	55.459446,
+	56.019642,
+	57.157068,
+	57.734412,
+	58.317588
+};
+
+//Сброс
+void oloAMAR_reset(void)
+{
+  count_all = 0;
+  time_all = 0.0;
+  for (unsigned int i = 0; i < oldAMAR_N; i++)
+  {
+    array_count[i] = 0;
+    array_time[i] = 0.0;
+  }
+  array_n = 0;
+//  level = 0.0;
+}
+
+//инит при запуску прибора
+void oloAMAR_start(void)
+{
+  unsigned int i; 
+  prm_sigma = 4.2656;
+//  for (i = 0; i < 100; i++)
+//  {
+//    prm_limit_min[i] = reset_threshold_min[i];
+//    prm_limit_max[i] = reset_threshold_max[i];
+//  }
+  oloAMAR_reset();
+}
+
+
+
+
+//инициализация
+//_fap - период ложных тревог
+//_device_time - время обновления мгновенной скорости счёта
+BOOL oloAMAR_init(float _fap, float _device_time)
+{
+//  if (_fap <= 0.0 || _device_time <= 0.0)
+//    return FALSE;
+//  float probability = 0.5 * _device_time / (_fap * oldAMAR_N * 0.5);
+//  if (probability <= 0.0 || probability > 1.0)
+//    return FALSE;
+//  
+//  prm_limit_max[0] = 0.0;
+//  for (unsigned int i = 1; i < 100; i++)
+//  {
+//    float m = (float)i;
+//    float mid = 200.0;
+//    float v = oloAMAR_quantile_poisson(1.0 - probability, mid);
+//    while (v > m)
+//    {
+//      v = oloAMAR_quantile_poisson(1.0 - probability, mid);
+//      mid *= 0.99;
+//    }
+//    prm_limit_max[i] = mid;
+//  }
+//  prm_limit_min[0] = 0.0;
+//  for (unsigned int i = 1; i < 100; i++)
+//  {
+//    float m = (float)i;
+//    float mid = 200.0;
+//    float v = oloAMAR_quantile_poisson(probability, mid);
+//    while (v > m)
+//    {
+//      v = oloAMAR_quantile_poisson(probability, mid);
+//      mid *= 0.99;
+//    }
+//    prm_limit_min[i] = mid;
+//  }
+//  
+//  prm_sigma = oloAMAR_quantile_gauss_in_sigm(1.0 - probability);
+  
+  return TRUE;
+}
+
+
+//Обновление
+//_count - кол-во импульсов за интервал времени
+//_time - длительность интервала времени, с
+//возвращает необходимость сброса усреднения
+BOOL oloAMAR_update(unsigned int _count, float _time)
+{
+	BOOL result = FALSE;
+	if (_time <= 0.0)
+		return result;
+	count_all += _count;
+	time_all += _time;
+	if (array_n > 0 && array_count[0] == 0)
+	{
+		array_count[0] += _count;
+		array_time[0] += _time;
+	}
+	else
+	{
+		unsigned int n = array_n;
+		if (n > (oldAMAR_N - 1))
+			n = oldAMAR_N - 1;
+		for (unsigned int i = n; i > 0; i--)
+		{
+			array_count[i] = array_count[i - 1];
+			array_time[i] = array_time[i - 1];
+		}
+		array_count[0] = _count;
+		array_time[0] = _time;
+		if (array_n < oldAMAR_N)
+			array_n++;
+	}
+	float cps = (time_all > 0.0) ? (((float)count_all) / time_all) : 0.0;
+	if (cps > 0.0)
+	{
+		float T_int = 0.0;
+		unsigned int  N_int = 0;
+		float N_mid = 0.0;
+//		level = 0.0;
+		for (unsigned int i = 0; i < array_n; i++)
+		{
+			T_int += array_time[i];
+			N_int += array_count[i];
+			N_mid = T_int * cps;
+
+			unsigned int  N_mid_l = 0;
+			unsigned int  N_mid_r = 0;
+			if (N_mid < prm_limit_max[99])
+			{
+				N_mid_l = 0;				
+				N_mid_r = 99;
+				for (unsigned int j = 1; j < 100; j++)
+				{
+					if (N_mid <= reset_threshold_min[j])
+					{
+						N_mid_l = j - 1;
+						break;
+					}
+				}
+				for (unsigned int j = 2; j < 100; j++)
+				{
+					if (N_mid <= reset_threshold_max[j])
+					{
+						N_mid_r = j - 1;
+						break;
+					}
+				}
+			}
+			else
+			{
+				float sgm = prm_sigma * sqrt(N_mid);
+				N_mid_l = 1 + (unsigned int )(N_mid - sgm);
+				N_mid_r = (unsigned int )(N_mid + sgm);
+			}
+
+			result = (N_int < N_mid_l || N_int > N_mid_r);
+			if (result)
+			{
+				count_all = 0;
+				time_all = 0.0;
+				array_n = 0;
+//				level = 0.0;
+				break;
+			}
+		}
+	}
+	return result;
 }

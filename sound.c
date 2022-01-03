@@ -292,13 +292,13 @@ void SoundControl_Alarm_intcall(DWORD ms, DWORD freq)
   //27/08/2012
   if(powerControl.bBatteryAlarm)
   {
-    SET_ISD_INT;
+//    SET_ISD_INT;
     if(soundControl.bSounding == FALSE)
     {
       ms = 30;
       SoundControl_PlayVibro(ms);
     }
-    CLR_ISD_INT;
+//    CLR_ISD_INT;
     return;//low battery no sound
   }
   

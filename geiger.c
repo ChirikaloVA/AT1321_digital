@@ -55,8 +55,8 @@ void Geiger_Init(void)
 //init values of
 void Geiger_values_Init(void)
 {
-  T3TCR_bit.CR = 1;
-  T3TCR_bit.CR = 0;
+//  T3TCR_bit.CR = 1;
+//  T3TCR_bit.CR = 0;
   T3TCR_bit.CE = 1;
 	geigerControl.esentVals.fCps = 0;
 	geigerControl.esentVals.fDoserate = 0;
@@ -65,9 +65,12 @@ void Geiger_values_Init(void)
 	geigerControl.esentVals.fSKO = 0;
 	geigerControl.dwCountBkg = 0;
 	geigerControl.dwCount = 0;
+        geigerControl.dwMomCount = 0;
 	for(int i=0;i<MAX_COUNT_ITEMS;i++)
 		geigerControl.dwCount += geigerControl.countBuf[i];
 	geigerControl.dwTime = MAX_COUNT_ITEMS;
+//        geigerControl.dwMomCount = geigerControl.dwCount/geigerControl.dwTime;
+        geigerControl.dwMomCount = T3TC;
 	geigerControl.dwMomCountCopy = geigerControl.countBuf[MAX_COUNT_ITEMS-1];
 }
 
@@ -89,23 +92,34 @@ void Geiger_INT_Init(void)
 //called once a second to make first process of geiger data
 void Geiger_GetCount_intcall(void)
 {
+        SET_ISD_INT;
 	//calc geiger count per seconds
 	//take in account deadtime, coef, selfcps
 	if(geigerControl.bReset)
 	{//reset if flag is set
 		Geiger_values_Init();
 	}
-        geigerControl.dwMomCount = T3TC;
-        T3TCR_bit.CR = 1;
-        T3TCR_bit.CR = 0;
+        else
+        {
+          geigerControl.dwMomCount = T3TC;
+        }
+        
 	geigerControl.dwCount += geigerControl.dwMomCount;
 	geigerControl.dwTotalCount += geigerControl.dwMomCount;
 	geigerControl.dwMomCountCopy = geigerControl.dwMomCount;
+//        geigerControl.dwCount = geigerControl.dwTime;
+//	geigerControl.dwTotalCount = geigerControl.dwTime;
+//	geigerControl.dwMomCountCopy = geigerControl.dwTime;
 	geigerControl.dwMomCount = 0;
+        T3TCR_bit.CR = 1;
+        T3TCR_bit.CR = 0;
 	geigerControl.dwTime++;
 	geigerControl.dwTotalTime++;
+//        geigerControl.dwTime = 1;
+//	geigerControl.dwTotalTime = 1;
 	//we must process data in interrupts of clock, that is because of in power down mode we would not done it.
 	Geiger_processData();	//this routine needs much processor time
+        CLR_ISD_INT;
 }
 
 __arm void _INT_Geiger(void)
@@ -145,13 +159,20 @@ void Geiger_processData(void)
 	float val;
 	//consider dead time
 	geigerControl.esentVals.fCps = (float)geigerControl.dwCount/(float)geigerControl.dwTime - geigerControl.fDrSelfCps;
+//        geigerControl.esentVals.fCps = (float)geigerControl.dwCount/(float)geigerControl.dwTime;
 	if(geigerControl.esentVals.fCps<0)//consider -cps to 0
 		geigerControl.esentVals.fCps=0;
 	val = 1.0 - (float)geigerControl.fDrDeadTime * geigerControl.esentVals.fCps;
 	if(val<=0)
+        {
 		geigerControl.esentVals.fDoserate = MAX_DR;
+//                geigerControl.esentVals.fDoserate = (float)geigerControl.dwTime;
+        }
 	else
+        {
 		geigerControl.esentVals.fDoserate = geigerControl.esentVals.fCps / val * geigerControl.fDrCoef;
+//                geigerControl.esentVals.fDoserate = (float)geigerControl.dwTime;
+        }
 
 
 

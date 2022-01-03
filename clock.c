@@ -23,42 +23,42 @@ __arm void _INT_Clock(void)
 {
   if(ILR_bit.RTCCIF)
   {//seconds interrupts from clock
-	clockData.dwTotalSecondsFromStart++;
-	//start adc to get voltage
-	//result we will have in interrupt
-	PowerControl_startADC_intcall();
-	//retrieve date time from clock
+    clockData.dwTotalSecondsFromStart++;
+    //start adc to get voltage
+    //result we will have in interrupt
+    PowerControl_startADC_intcall();
+    //retrieve date time from clock
     Clock_retrieveDateTimeData_intcall();
-	//LED control
-	//orange for gps
-	//green for working
-
+    //LED control
+    //orange for gps
+    //green for working
+    
 #ifndef GPS_BT_FREE	
-	if(GPSControl.bGPS_ON)
-	{
-		if(GPSControl.bGPS_Fix)
-			Display_flashOrangeLED();	//flash orange show we work with GPS
-		else
-			Display_turnONOrangeLED();	//turn off orange led
-	}else
-		Display_turnOFFOrangeLED();	//turn off orange led
+    if(GPSControl.bGPS_ON)
+    {
+      if(GPSControl.bGPS_Fix)
+        Display_flashOrangeLED();	//flash orange show we work with GPS
+      else
+        Display_turnONOrangeLED();	//turn off orange led
+    }else
+      Display_turnOFFOrangeLED();	//turn off orange led
 #endif	//#ifndef GPS_BT_FREE	
-
-	
-	Display_flashGreenLED(); //flash green LED show we work
+    
+    
+    Display_flashGreenLED(); //flash green LED show we work
     ILR_bit.RTCCIF = 1;
-	powerControl.bAwakedByClock = 1;	//mean that processor is awaked by clock (1 in a second)
-	Geiger_GetCount_intcall();
+    powerControl.bAwakedByClock = 1;	//mean that processor is awaked by clock (1 in a second)
+    Geiger_GetCount_intcall();
   }else
-  if(ILR_bit.RTCALF)
-  {//alarm clock interrupts
-    ILR_bit.RTCALF = 1;
-  }else
-  if(ILR_bit.RTSSF)
-  {//subseconds interrupts from clock
+    if(ILR_bit.RTCALF)
+    {//alarm clock interrupts
+      ILR_bit.RTCALF = 1;
+    }else
+      if(ILR_bit.RTSSF)
+      {//subseconds interrupts from clock
 	clockData.dwMiliseconds++;
 	ILR_bit.RTSSF = 1;
-  }
+      }
 }
 
 

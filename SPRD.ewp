@@ -90,7 +90,7 @@
                 </option>
                 <option>
                     <name>OGBufferedTerminalOutput</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>GenStdoutInterface</name>
@@ -221,6 +221,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>DEBUG</state>
+                    <state>DBG_PRINTF_EN</state>
                     <state>NBAT_DEV_OLD</state>
                     <state>LMX9838</state>
                     <state>_THIN_SIGMA</state>
@@ -6480,7 +6481,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SETUP_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6516,7 +6517,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_Mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

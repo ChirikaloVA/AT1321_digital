@@ -222,6 +222,9 @@ __noreturn void main(void)
         Geiger_Timer3_cnt_Init();
 	Geiger_Init();
         oloAMAR_start();
+//        PowerControl_turboModeON();
+//        oloAMAR_init(geigerControl._fap,geigerControl._device_time);
+//        PowerControl_turboModeOFF();
 //	Geiger_INT_Init();
 
 

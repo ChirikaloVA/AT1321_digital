@@ -47,6 +47,8 @@ struct tagGeigerControl
 
 //	DWORD dwReadStatus;	//counter of read data from structure
 //	DWORD dwWriteStatus;	//counter of write data to structure
+        double _fap;             //_fap - период ложных тревог
+        double _device_time;    //_device_time - время обновления мгновенной скорости счёта
 };
 
 extern struct tagGeigerControl geigerControl;
@@ -68,7 +70,7 @@ void Geiger_Timer3_cnt_Init(void);
 // 3.01.2021 алгоритм oloAMAR Коновалов
 //----------------------------------------------------
 
-#define oldAMAR_N       8
+#define oldAMAR_N       60
 
 //Сброс
 void oloAMAR_reset(void);
@@ -77,11 +79,14 @@ void oloAMAR_start(void);
 //инициализация
 //_fap - период ложных тревог
 //_device_time - время обновления мгновенной скорости счёта
-BOOL oloAMAR_init(float _fap, float _device_time);
+BOOL oloAMAR_init(double _fap, double _device_time);
 //Обновление
 //_count - кол-во импульсов за интервал времени
 //_time - длительность интервала времени, с
 //возвращает необходимость сброса усреднения
 BOOL oloAMAR_update(unsigned int _count, float _time);
+
+unsigned long oloAMAR_poisson(double _probability, double _mid);
+double oloAMAR_quantile_gauss_in_sigm(double _probability);
 
 #endif	//#ifndef _GEIGER_H

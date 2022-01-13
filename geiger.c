@@ -55,23 +55,20 @@ void Geiger_Init(void)
 //init values of
 void Geiger_values_Init(void)
 {
-//  T3TCR_bit.CR = 1;
-//  T3TCR_bit.CR = 0;
+  //  T3TCR_bit.CR = 1;
+  //  T3TCR_bit.CR = 0;
   T3TCR_bit.CE = 1;
-	geigerControl.esentVals.fCps = 0;
-	geigerControl.esentVals.fDoserate = 0;
-	geigerControl.bReset = 0;
-	geigerControl.esentVals.fCpsErr = 0;
-	geigerControl.esentVals.fSKO = 0;
-	geigerControl.dwCountBkg = 0;
-	geigerControl.dwCount = 0;
-        geigerControl.dwMomCount = 0;
-	for(int i=0;i<MAX_COUNT_ITEMS;i++)
-		geigerControl.dwCount += geigerControl.countBuf[i];
-	geigerControl.dwTime = MAX_COUNT_ITEMS;
-//        geigerControl.dwMomCount = geigerControl.dwCount/geigerControl.dwTime;
-        geigerControl.dwMomCount = T3TC;
-	geigerControl.dwMomCountCopy = geigerControl.countBuf[MAX_COUNT_ITEMS-1];
+  geigerControl.esentVals.fCps = 0;
+  geigerControl.esentVals.fDoserate = 0;
+  geigerControl.bReset = 0;
+  geigerControl.esentVals.fCpsErr = 0;
+  geigerControl.esentVals.fSKO = 0;
+  geigerControl.dwCountBkg = 0;
+  geigerControl.dwCount = 0;
+  geigerControl.dwMomCount = 0;
+  geigerControl.dwTime = 0;
+  for(int i=0;i<MAX_COUNT_ITEMS;i++)
+     geigerControl.countBuf[i] = 0;
 }
 
 
@@ -98,12 +95,8 @@ void Geiger_GetCount_intcall(void)
 	if(geigerControl.bReset)
 	{//reset if flag is set
 		Geiger_values_Init();
-	}
-        else
-        {
-          geigerControl.dwMomCount = T3TC;
-        }
-        
+	}   
+        geigerControl.dwMomCount = T3TC;
 	geigerControl.dwCount += geigerControl.dwMomCount;
 	geigerControl.dwTotalCount += geigerControl.dwMomCount;
 	geigerControl.dwMomCountCopy = geigerControl.dwMomCount;
@@ -959,17 +952,17 @@ BOOL oloAMAR_update(unsigned int _count, float _time)
                   
                   if (result)
                   {
-#ifdef DBG_PRINTF_EN
-                    SET_ISD_INT;
-                    //        printf("cps=%f,\r\n",cps);
-                    printf("----------------\r\n");
-                    printf("N_mid=%f,\r\n",N_mid);
-                    printf("N_int=%i,\r\n",N_int);
-                    printf("N_mid_l=%i,\r\n",N_mid_l);
-                    printf("N_mid_r=%i,\r\n",N_mid_r);
-                    printf("----------------\r\n");
-                    CLR_ISD_INT;
-#endif
+//#ifdef DBG_PRINTF_EN
+//                    SET_ISD_INT;
+//                    //        printf("cps=%f,\r\n",cps);
+//                    printf("----------------\r\n");
+//                    printf("N_mid=%f,\r\n",N_mid);
+//                    printf("N_int=%i,\r\n",N_int);
+//                    printf("N_mid_l=%i,\r\n",N_mid_l);
+//                    printf("N_mid_r=%i,\r\n",N_mid_r);
+//                    printf("----------------\r\n");
+//                    CLR_ISD_INT;
+//#endif
                     count_all = 0;
                     time_all = 0.0;
                     array_n = 0;
@@ -978,15 +971,15 @@ BOOL oloAMAR_update(unsigned int _count, float _time)
                   }
 		}
 	}
-#ifdef DBG_PRINTF_EN
-
-        //        printf("cps=%f,\r\n",cps);
-        printf("N_mid=%f,\r\n",N_mid);
-        printf("N_int=%i,\r\n",N_int);
-        printf("N_mid_l=%i,\r\n",N_mid_l);
-        printf("N_mid_r=%i,\r\n",N_mid_r);
-        printf("result=%i,\r\n",result);
-
-#endif
+//#ifdef DBG_PRINTF_EN
+//
+//        //        printf("cps=%f,\r\n",cps);
+//        printf("N_mid=%f,\r\n",N_mid);
+//        printf("N_int=%i,\r\n",N_int);
+//        printf("N_mid_l=%i,\r\n",N_mid_l);
+//        printf("N_mid_r=%i,\r\n",N_mid_r);
+//        printf("result=%i,\r\n",result);
+//
+//#endif
 	return result;
 }

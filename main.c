@@ -130,8 +130,12 @@ __noreturn void main(void)
 
 	//stage 1: clock of CPU
 	//======== Установки системы тактирования ===============
+#ifdef FAST_PORT_ON
 	SCS_bit.GPIOM = 1;	//fast PORT 0 and 1
-	SCS_bit.OSCRANGE =0;      //Выбор диапозона кварца
+#else
+        SCS_bit.GPIOM = 0;	//sl PORT 0 and 1
+#endif
+	SCS_bit.OSCRANGE =1;      //Выбор диапозона кварца
 	SCS_bit.OSCEN =1;         //Включение Кв. генератора
 	CLKSRCSEL_bit.CLKSRC=1;  //Main OSC
 	PCLKSEL0_bit.PCLK_SSP1=1;

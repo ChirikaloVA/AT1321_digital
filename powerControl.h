@@ -85,6 +85,8 @@ extern struct tagPOWERCONTROL powerControl;
 #define PLLFEED_DATA1 0xaa
 #define PLLFEED_DATA2 0x55
 
+
+#ifdef FAST_PORT_ON
 //first proc power control: 1-turn OFF
 #define DIR_DG_ON FIO1DIR_bit.P1_21
 #define SET_DG_ON MY_FIO1SET(B_21)
@@ -102,6 +104,27 @@ extern struct tagPOWERCONTROL powerControl;
 #define DIR_AN_X FIO1DIR_bit.P1_23
 #define SET_AN_X MY_FIO1SET(B_23)
 #define CLR_AN_X MY_FIO1CLR(B_23)
+
+#else
+
+#define DIR_DG_ON IO1DIR_bit.P1_21
+#define SET_DG_ON MY_IO1SET(B_21)
+#define CLR_DG_ON MY_IO1CLR(B_21)
+//second proc power conrtol: 1-turn OFF
+#define DIR_AN_ON IO1DIR_bit.P1_20
+#define SET_AN_ON MY_IO1SET(B_20)
+#define CLR_AN_ON MY_IO1CLR(B_20)
+//second proc reset
+#define DIR_AN_RES IO1DIR_bit.P1_22
+#define SET_AN_RES MY_IO1SET(B_22)
+#define CLR_AN_RES MY_IO1CLR(B_22)
+
+//unused signal
+#define DIR_AN_X IO1DIR_bit.P1_23
+#define SET_AN_X MY_IO1SET(B_23)
+#define CLR_AN_X MY_IO1CLR(B_23)
+
+#endif
 
 //second proc power error status
 #define DIR_AN_ERR FIO4DIR_bit.P4_30
@@ -135,14 +158,12 @@ extern struct tagPOWERCONTROL powerControl;
 
 
 //////////////////////////////////
+#ifdef FAST_PORT_ON
 
 #define DIR_DPWON FIO1DIR_bit.P1_0
 #define SET_DPWON MY_FIO1SET(B_0)
 #define CLR_DPWON MY_FIO1CLR(B_0)
 #define PIN_DPWON FIO1PIN_bit.P1_0
-
-
-
 
 #define DIR_PON FIO0DIR_bit.P0_25
 #define SET_PON MY_FIO0SET(B_25)
@@ -154,6 +175,24 @@ extern struct tagPOWERCONTROL powerControl;
 #define CLR_MON MY_FIO0CLR(B_24)
 #define PIN_MON FIO0PIN_bit.P0_24
 
+#else
+
+#define DIR_DPWON IO1DIR_bit.P1_0
+#define SET_DPWON MY_IO1SET(B_0)
+#define CLR_DPWON MY_IO1CLR(B_0)
+#define PIN_DPWON IO1PIN_bit.P1_0
+
+#define DIR_PON IO0DIR_bit.P0_25
+#define SET_PON MY_IO0SET(B_25)
+#define CLR_PON MY_IO0CLR(B_25)
+#define PIN_PON IO0PIN_bit.P0_25
+
+#define DIR_MON IO0DIR_bit.P0_24
+#define SET_MON MY_IO0SET(B_24)
+#define CLR_MON MY_IO0CLR(B_24)
+#define PIN_MON IO0PIN_bit.P0_24
+
+#endif
 
 //=========================
 
@@ -173,10 +212,20 @@ extern struct tagPOWERCONTROL powerControl;
 #define PIN_ST1 FIO2PIN_bit.P2_5
 #define DIR_ST12 FIO3DIR_bit.P3_23
 #define PIN_ST12 FIO3PIN_bit.P3_23
+
+#ifdef FAST_PORT_ON
+
 //ST2
 #define DIR_ST2 FIO0DIR_bit.P0_17
 #define PIN_ST2 FIO0PIN_bit.P0_17
 
+#else
+
+//ST2
+#define DIR_ST2 IO0DIR_bit.P0_17
+#define PIN_ST2 IO0PIN_bit.P0_17
+
+#endif
 
 //опорное напряжение на АЦП измерителя напряжения
 #define VREF 3.3

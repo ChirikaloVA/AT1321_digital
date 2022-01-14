@@ -5,10 +5,17 @@
 
 #include "types.h"
 
+#ifdef FAST_PORT_ON
 #define DIR_G_CNT FIO0DIR_bit.P0_23
 #define SET_G_CNT MY_FIO0SET(B_23)
 #define CLR_G_CNT MY_FIO0CLR(B_23)
 #define PIN_G_CNT FIO0PIN_bit.P0_23
+#else
+#define DIR_G_CNT IO0DIR_bit.P0_23
+#define SET_G_CNT MY_IO0SET(B_23)
+#define CLR_G_CNT MY_IO0CLR(B_23)
+#define PIN_G_CNT IO0PIN_bit.P0_23
+#endif
 
 struct tagGeigerEsentValues
 {

@@ -229,7 +229,7 @@ void Display_setTextLineClear(BOOL bClear);
 //31/10/2008 Bystrov
 
 //===== Дисплей ==================
-
+#ifdef FAST_PORT_ON
 //resetb .Reste pin initializes the IC when low. Should be reset after power on
 #define DIR_NRES FIO1DIR_bit.P1_19
 #define SET_NRES MY_FIO1SET(B_19)
@@ -252,6 +252,33 @@ void Display_setTextLineClear(BOOL bClear);
 #define DIR_ID_MIB FIO1DIR_bit.P1_4
 #define SET_ID_MIB MY_FIO1SET(B_4)
 #define CLR_ID_MIB MY_FIO1CLR(B_4)
+
+#else
+
+//resetb .Reste pin initializes the IC when low. Should be reset after power on
+#define DIR_NRES IO1DIR_bit.P1_19
+#define SET_NRES MY_IO1SET(B_19)
+#define CLR_NRES MY_IO1CLR(B_19)
+
+//register select 0-Index/status, 1-instruction parameter/GRAM data
+#define DIR_RS IO1DIR_bit.P1_14
+#define SET_RS IO1SET_bit.P1_14=1
+#define CLR_RS IO1CLR_bit.P1_14=1
+//#define SET_RS MY_FIO1SET(B_14)
+//#define CLR_RS MY_FIO1CLR(B_14)
+
+
+//Select the CPU interface mode. (0=paralel, 1-serial)
+#define DIR_SPB IO1DIR_bit.P1_1
+#define SET_SPB MY_IO1SET(B_1)
+#define CLR_SPB MY_IO1CLR(B_1)
+
+//select the CPU type. 0-intel 80, 1-intel 68
+#define DIR_ID_MIB IO1DIR_bit.P1_4
+#define SET_ID_MIB MY_IO1SET(B_4)
+#define CLR_ID_MIB MY_IO1CLR(B_4)
+
+#endif
 
 //select indicator driver. 0 - drvier IC is selected and can be accessed, 1 -
 #define DIR_NCS FIO4DIR_bit.P4_31
@@ -310,6 +337,8 @@ void Display_setTextLineClear(BOOL bClear);
 
 //////LED////////////////////////
 
+#ifdef FAST_PORT_ON
+
 #define DIR_LED_G FIO1DIR_bit.P1_9
 #define SET_LED_G MY_FIO1SET(B_9)
 #define CLR_LED_G MY_FIO1CLR(B_9)
@@ -324,6 +353,25 @@ void Display_setTextLineClear(BOOL bClear);
 #define SET_LED_R MY_FIO1SET(B_8)
 #define CLR_LED_R MY_FIO1CLR(B_8)
 #define PIN_LED_R FIO1PIN_bit.P1_8
+
+#else
+
+#define DIR_LED_G IO1DIR_bit.P1_9
+#define SET_LED_G MY_IO1SET(B_9)
+#define CLR_LED_G MY_IO1CLR(B_9)
+#define PIN_LED_G IO1PIN_bit.P1_9
+
+#define DIR_LED_O IO1DIR_bit.P1_10
+#define SET_LED_O MY_IO1SET(B_10)
+#define CLR_LED_O MY_IO1CLR(B_10)
+#define PIN_LED_O IO1PIN_bit.P1_10
+
+#define DIR_LED_R IO1DIR_bit.P1_8
+#define SET_LED_R MY_IO1SET(B_8)
+#define CLR_LED_R MY_IO1CLR(B_8)
+#define PIN_LED_R IO1PIN_bit.P1_8
+
+#endif
 
 //////////////////////////////////
 

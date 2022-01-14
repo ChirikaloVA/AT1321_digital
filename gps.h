@@ -12,6 +12,7 @@
 #define PIN_GPS_O FIO2PIN_bit.P2_7
 
 //================================
+#ifdef FAST_PORT_ON
 
 #define DIR_1PPS FIO1DIR_bit.P1_29
 #define SET_1PPS MY_FIO1SET(B_29)//IO1SET_bit.P1_29
@@ -30,6 +31,28 @@
 #define SET_FR MY_FIO1SET(B_26)
 #define CLR_FR MY_FIO1CLR(B_26)
 #define PIN_FR FIO1PIN_bit.P1_26
+
+#else
+
+#define DIR_1PPS IO1DIR_bit.P1_29
+#define SET_1PPS MY_IO1SET(B_29)//IO1SET_bit.P1_29
+#define CLR_1PPS MY_IO1CLR(B_29)//IO1CLR_bit.P1_29
+
+//read power mode 0-sleep, 1-operate
+#define DIR_RFPW IO1DIR_bit.P1_30
+#define PIN_RFPW IO1PIN_bit.P1_30
+//wake gps up
+#define DIR_GPS IO1DIR_bit.P1_31
+#define SET_GPS MY_IO1SET(B_31)
+#define CLR_GPS MY_IO1CLR(B_31)
+#define PIN_GPS IO1PIN_bit.P1_31
+
+#define DIR_FR IO1DIR_bit.P1_26
+#define SET_FR MY_IO1SET(B_26)
+#define CLR_FR MY_IO1CLR(B_26)
+#define PIN_FR IO1PIN_bit.P1_26
+
+#endif
 
 
 

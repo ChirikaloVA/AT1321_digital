@@ -48,12 +48,18 @@ extern const UINT sample_addr[SOUND_NUM+1];
 
 
 
-
+#ifdef FAST_PORT_ON
 //INT input from ISD4004
 #define DIR_ISD_INT FIO0DIR_bit.P0_31
 #define SET_ISD_INT MY_FIO0SET(B_31)
 #define CLR_ISD_INT MY_FIO0CLR(B_31)
 #define PIN_ISD_INT FIO0PIN_bit.P0_31
+#else
+#define DIR_ISD_INT IO0DIR_bit.P0_31
+#define SET_ISD_INT MY_IO0SET(B_31)
+#define CLR_ISD_INT MY_IO0CLR(B_31)
+#define PIN_ISD_INT IO0PIN_bit.P0_31
+#endif
 
 
 //ISD4004

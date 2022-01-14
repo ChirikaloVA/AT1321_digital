@@ -417,17 +417,26 @@ struct tagIndexMeanTable
 #define B_30	1073741824
 #define B_31	2147483648
 
-
+#ifdef FAST_PORT_ON
 #define MY_FIO0SET(value)	*((unsigned long*)0x3FFFC018) = value
 #define MY_FIO0CLR(value)	*((unsigned long*)0x3FFFC01C) = value
 #define MY_FIO1SET(value)	*((unsigned long*)0x3FFFC038) = value
 #define MY_FIO1CLR(value)	*((unsigned long*)0x3FFFC03C) = value
+#else
+#define MY_IO0SET(value)	*((unsigned long*)0xE0028004) = value
+#define MY_IO0CLR(value)	*((unsigned long*)0xE002800C) = value
+#define MY_IO1SET(value)	*((unsigned long*)0xE0028014) = value
+#define MY_IO1CLR(value)	*((unsigned long*)0xE002801C) = value
+#endif
 #define MY_FIO2SET(value)	*((unsigned long*)0x3FFFC058) = value
 #define MY_FIO2CLR(value)	*((unsigned long*)0x3FFFC05C) = value
 #define MY_FIO3SET(value)	*((unsigned long*)0x3FFFC078) = value
 #define MY_FIO3CLR(value)	*((unsigned long*)0x3FFFC07C) = value
 #define MY_FIO4SET(value)	*((unsigned long*)0x3FFFC098) = value
 #define MY_FIO4CLR(value)	*((unsigned long*)0x3FFFC09C) = value
+
+
+
 
 
 

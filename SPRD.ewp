@@ -221,11 +221,12 @@
                 <option>
                     <name>CCDefines</name>
                     <state>DEBUG</state>
-                    <state>DBG_PRINTF_EN</state>
+                    <state>NDBG_PRINTF_EN</state>
                     <state>NBAT_DEV_OLD</state>
-                    <state>LMX9838</state>
+                    <state>NLMX9838</state>
                     <state>_THIN_SIGMA</state>
                     <state>SUBVER="B"</state>
+                    <state>NFAST_PORT_ON</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -6493,13 +6494,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\STAB_mode.h</name>
+            <name>$PROJ_DIR$\stab_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>

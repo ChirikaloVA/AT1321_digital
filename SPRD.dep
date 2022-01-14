@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>694270379</fileChecksum>
+    <fileChecksum>2077840317</fileChecksum>
     <configuration>
         <name>BNC</name>
         <outputs>
@@ -248,7 +248,7 @@
             <file>$PROJ_DIR$\BNC\List\GPS_mode.lst</file>
             <file>$PROJ_DIR$\gfx\memlow.bmp.txt</file>
             <file>$PROJ_DIR$\BNC\List\powerControl.lst</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\BNC\List\COMM_mode.s</file>
             <file>$PROJ_DIR$\BNC\List\SPRD_mode.lst</file>
             <file>$PROJ_DIR$\USBRS.c</file>
@@ -293,12 +293,12 @@
             <file>$PROJ_DIR$\MCS_mode.h</file>
             <file>$PROJ_DIR$\MCS_mode.c</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>
@@ -1758,7 +1758,7 @@
             <file>$PROJ_DIR$\Debug\List\puasson.s</file>
             <file>$PROJ_DIR$\Debug\Obj\geiger.o</file>
             <file>$PROJ_DIR$\Debug\Obj\display2.o</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\USBRS.c</file>
             <file>$PROJ_DIR$\cstartup.s</file>
             <file>$PROJ_DIR$\USBRS.h</file>
@@ -1805,12 +1805,12 @@
             <file>$PROJ_DIR$\packspectrum.c</file>
             <file>$PROJ_DIR$\Описание программы SPIRID1IAEASNM.txt</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>
@@ -2813,7 +2813,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 276 265 0 275 274 313 6 310 269 21 2 1 5 14 327 10 35 345 348 330 285 9 30 3 335 37 20 31 306</file>
+                    <file> 276 265 0 275 274 21 313 6 310 269 2 1 5 14 327 10 35 345 348 330 285 9 30 3 335 37 20 31 306</file>
                 </tool>
             </inputs>
         </file>
@@ -3287,7 +3287,7 @@
             <file>$PROJ_DIR$\Debug SNM\List\modes.lst</file>
             <file>$PROJ_DIR$\Debug SNM\Obj\rid.pbi</file>
             <file>$PROJ_DIR$\Debug SNM\Obj\identify.o</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\USBRS.c</file>
             <file>$PROJ_DIR$\cstartup.s</file>
             <file>$PROJ_DIR$\USBRS.h</file>
@@ -3326,12 +3326,12 @@
             <file>$PROJ_DIR$\MCS_mode.h</file>
             <file>$PROJ_DIR$\MCS_mode.c</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>
@@ -4783,7 +4783,7 @@
             <file>$PROJ_DIR$\GPS_BLUETOOTH_FREE\List\NMEA_Parser.s</file>
             <file>$PROJ_DIR$\GPS_BLUETOOTH_FREE\List\keyboard.s</file>
             <file>$PROJ_DIR$\GPS_BLUETOOTH_FREE\Obj\rid.pbi</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\USBRS.c</file>
             <file>$PROJ_DIR$\cstartup.s</file>
             <file>$PROJ_DIR$\USBRS.h</file>
@@ -4822,12 +4822,12 @@
             <file>$PROJ_DIR$\MCS_mode.h</file>
             <file>$PROJ_DIR$\MCS_mode.c</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>
@@ -6292,7 +6292,7 @@
             <file>$PROJ_DIR$\gfx\bth.bmp.txt</file>
             <file>$PROJ_DIR$\gfx\memlow.bmp.txt</file>
             <file>$PROJ_DIR$\librarySNM.lib</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\USBRS.c</file>
             <file>$PROJ_DIR$\cstartup.s</file>
             <file>$PROJ_DIR$\USBRS.h</file>
@@ -6331,12 +6331,12 @@
             <file>$PROJ_DIR$\MCS_mode.h</file>
             <file>$PROJ_DIR$\MCS_mode.c</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>
@@ -7703,7 +7703,7 @@
             <file>$PROJ_DIR$\gfx\bat0.bmp.txt</file>
             <file>$PROJ_DIR$\gfx\bth.bmp.txt</file>
             <file>$PROJ_DIR$\gfx\memlow.bmp.txt</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\YESNO_mode.h</file>
             <file>$PROJ_DIR$\USBRS.c</file>
             <file>$PROJ_DIR$\cstartup.s</file>
             <file>$PROJ_DIR$\USBRS.h</file>
@@ -7734,12 +7734,12 @@
             <file>$PROJ_DIR$\MCS_mode.h</file>
             <file>$PROJ_DIR$\MCS_mode.c</file>
             <file>$PROJ_DIR$\Setup_mode.c</file>
-            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\comm_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
             <file>$PROJ_DIR$\modes.c</file>
             <file>$PROJ_DIR$\modes.h</file>
             <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\setup_mode.h</file>
             <file>$PROJ_DIR$\display.c</file>
             <file>$PROJ_DIR$\display.h</file>
             <file>$PROJ_DIR$\display2.c</file>

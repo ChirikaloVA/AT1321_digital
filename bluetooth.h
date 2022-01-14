@@ -7,6 +7,7 @@
 
 //power on/off BT module
 
+#ifdef FAST_PORT_ON
 
 #define DIR_BT_LS FIO0DIR_bit.P0_22
 #define SET_BT_LS MY_FIO0SET(B_22)//IO0SET_bit.P0_14
@@ -29,6 +30,32 @@
 #define SET_BT_RF MY_FIO0SET(B_29)
 #define CLR_BT_RF MY_FIO0CLR(B_29)
 #define PIN_BT_RF FIO0PIN_bit.P0_29
+
+#else
+
+#define DIR_BT_LS IO0DIR_bit.P0_22
+#define SET_BT_LS MY_IO0SET(B_22)//IO0SET_bit.P0_14
+#define CLR_BT_LS MY_IO0CLR(B_22)//IO0CLR_bit.P0_14
+#define PIN_BT_LS IO0PIN_bit.P0_22
+
+#define DIR_BT_ON IO0DIR_bit.P0_14
+#define SET_BT_ON MY_IO0SET(B_14)
+#define CLR_BT_ON MY_IO0CLR(B_14)
+#define PIN_BT_ON IO0PIN_bit.P0_14
+
+//reset bluetooth
+#define DIR_BT_RES IO0DIR_bit.P0_30
+#define SET_BT_RES MY_IO0SET(B_30)
+#define CLR_BT_RES MY_IO0CLR(B_30)
+#define PIN_BT_RES IO0PIN_bit.P0_30
+
+//
+#define DIR_BT_RF IO0DIR_bit.P0_29
+#define SET_BT_RF MY_IO0SET(B_29)
+#define CLR_BT_RF MY_IO0CLR(B_29)
+#define PIN_BT_RF IO0PIN_bit.P0_29
+
+#endif
 
 
 #define BLUETOOTH_ADDRESS 0x03

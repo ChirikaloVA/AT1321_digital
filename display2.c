@@ -5,7 +5,7 @@
 #include "interrupts.h"
 
 
-
+#pragma optimize=speed
 
 void Display_fillRect(RECT rect, COLORREF clr)
 {
@@ -110,7 +110,7 @@ void Display_fillRect(RECT rect, COLORREF clr)
 
 
 
-
+#pragma optimize=speed
 
 //if vsync = 0xffff then no wait of sync
 void Display_clearRect(RECT rect, int vsync)
@@ -211,7 +211,7 @@ void Display_clearRect(RECT rect, int vsync)
 
 
 
-
+#pragma optimize=speed
 
 
 //prepare for interrupt emergeny text output
@@ -229,7 +229,7 @@ __arm void Display_prepareEmergencyTextControl(void)
 	Display_setTextJustify(NONE);
 	Display_clearTextWin(100);
 }
-
+#pragma optimize=speed
 __arm void Display_printHEX(BYTE value)
 {
 	BYTE v;
@@ -243,7 +243,7 @@ __arm void Display_printHEX(BYTE value)
 	buff[2]='\0';
 	Display_outputText(buff);
 }
-
+#pragma optimize=speed
 __arm void Display_printR(DWORD r14)
 {
 	Display_printHEX(HIBYTE(r14));
@@ -253,7 +253,7 @@ __arm void Display_printR(DWORD r14)
 }
 
 
-
+#pragma optimize=speed
 //draw line
 void Display_drawLine(int x1, int y1, int x2, int y2, COLORREF clr)
 {
@@ -298,7 +298,7 @@ void Display_drawLine(int x1, int y1, int x2, int y2, COLORREF clr)
 		};
 	}
 }
-
+#pragma optimize=speed
 void Display_drawLine_xor(int x1, int y1, int x2, int y2, COLORREF clr)
 {
 	int e,denom,yinc = 1;
@@ -343,7 +343,7 @@ void Display_drawLine_xor(int x1, int y1, int x2, int y2, COLORREF clr)
 	}
 }
 
-
+#pragma optimize=speed
 //draw vert line
 void Display_drawVLine(int x, int y1, int y2, COLORREF clr)
 {
@@ -408,7 +408,7 @@ void Display_drawVLine(int x, int y1, int y2, COLORREF clr)
 }
 
 
-
+#pragma optimize=speed
 //draw horz line
 void Display_drawHLine(int x1, int y, int x2, COLORREF clr)
 {
@@ -473,7 +473,7 @@ void Display_drawHLine(int x1, int y, int x2, COLORREF clr)
 }
 
 
-
+#pragma optimize=speed
 //draw vert line by xor
 void Display_drawVLine_xor(int x, int y1, int y2, COLORREF clr)
 {
@@ -593,7 +593,7 @@ void Display_drawVLine_xor(int x, int y1, int y2, COLORREF clr)
 
 
 
-
+#pragma optimize=speed
 
 //draw horz line by xor
 void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
@@ -725,7 +725,7 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 
 
 
-
+#pragma optimize=speed
 
 //scrolling screen
 void Display_left_scroll(int x1, int y1, int x2, int y2, int step)

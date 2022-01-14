@@ -758,7 +758,7 @@ void Display_turnON(void)
   PowerControl_EMC_ON();
 
 
-
+  Display_Init_8bit_262k();
 
   CLR_RS;
   DisplayData = 0x10;
@@ -766,8 +766,29 @@ void Display_turnON(void)
   DisplayData = 0x00;
   DisplayData = 0x00;
 
-  Display_Init_8bit_262k();
+  CLR_RS;
+  DisplayData = 0x18;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x25;
   
+  CLR_RS;
+  DisplayData = 0x06;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x00;
+  
+  CLR_RS;
+  DisplayData = 0xF8;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x09;
+  
+  CLR_RS;
+  DisplayData = 0xF9;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x08;
 
   CLR_RS;
   DisplayData = 0x05;
@@ -775,11 +796,60 @@ void Display_turnON(void)
   DisplayData = 0x00;
   DisplayData = 0x01;
 
+//  CLR_RS;
+//  DisplayData = 0x43;
+//  SET_RS;
+//  DisplayData = 0;
+//  DisplayData = 0x1;//gamma set
+  
+//Gamma Register Setting:
+
   CLR_RS;
-  DisplayData = 0x43;
+  DisplayData = 0x70;
   SET_RS;
-  DisplayData = 0;
-  DisplayData = 0x1;//gamma set
+  DisplayData = 0x2B;
+  DisplayData = 0x80;
+  CLR_RS;
+  DisplayData = 0x71;
+  SET_RS;
+  DisplayData = 0x36;
+  DisplayData = 0x00;  
+  CLR_RS;
+  DisplayData = 0x72;
+  SET_RS;
+  DisplayData = 0x3E;
+  DisplayData = 0x00;
+  CLR_RS;
+  DisplayData = 0x73;
+  SET_RS;
+  DisplayData = 0x1F;
+  DisplayData = 0x19;
+  CLR_RS;
+  DisplayData = 0x74;
+  SET_RS;
+  DisplayData = 0x22;
+  DisplayData = 0x14; 
+  CLR_RS;
+  DisplayData = 0x75;
+  SET_RS;
+  DisplayData = 0x22;
+  DisplayData = 0x1B;
+  CLR_RS;
+  DisplayData = 0x76;
+  SET_RS;
+  DisplayData = 0x1E;
+  DisplayData = 0x16;
+  CLR_RS;
+  DisplayData = 0x77;
+  SET_RS;
+  DisplayData = 0x24;
+  DisplayData = 0x1E;
+  CLR_RS;
+  DisplayData = 0x78;
+  SET_RS;
+  DisplayData = 0x26;
+  DisplayData = 0x17;    
+  
   Display_clearScreen();
 
   
@@ -958,16 +1028,17 @@ void Display_init(void)
 	CLR_D17;
 
 
-
-
-
-
-
-
-
-
-
-
+//===========RGB======================================
+        DIR_VSYNC = 1;
+        CLR_VSYNC;
+        DIR_HSYNC = 1;
+        CLR_HSYNC;
+        DIR_DOTCLK = 1;
+        CLR_DOTCLK;
+ //==========SPI================================
+        DIR_SDOUT = 0;
+        DIR_SDIN = 1;
+        CLR_SDIN;
 
 
 	DIR_P4_28 = 1;
@@ -1039,9 +1110,10 @@ void Display_Init_18bit_262k( void)
 	DisplayData = 0x02;
 	SET_RS;
 	DisplayData = zero;
-	DisplayData = zero;
+//	DisplayData = zero;
 
 	volatile BYTE* pData = (BYTE*)0x81000102;
+//        volatile BYTE* pData = (BYTE*)0x81000080;
 	CLR_RS;
 	DisplayData = 0x03;
 	SET_RS;
@@ -1063,7 +1135,7 @@ void Display_Init_18bit_262k_leftrightdownup( void)
 	DisplayData = 0x02;
 	SET_RS;
 	DisplayData = zero;
-	DisplayData = zero;
+//	DisplayData = zero;
 
 	volatile BYTE* pData = (BYTE*)0x81000102;
 	CLR_RS;

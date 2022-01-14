@@ -253,6 +253,29 @@ void Display_setTextLineClear(BOOL bClear);
 #define SET_ID_MIB MY_FIO1SET(B_4)
 #define CLR_ID_MIB MY_FIO1CLR(B_4)
 
+// RGB pin
+#define DIR_VSYNC FIO1DIR_bit.P1_15
+#define SET_VSYNC FIO1SET_bit.P1_15
+#define CLR_VSYNC FIO1CLR_bit.P1_15
+
+#define DIR_HSYNC FIO1DIR_bit.P1_16
+#define SET_HSYNC FIO1SET_bit.P1_16
+#define CLR_HSYNC FIO1CLR_bit.P1_16
+
+#define DIR_DOTCLK FIO1DIR_bit.P1_17
+#define SET_DOTCLK FIO1SET_bit.P1_17
+#define CLR_DOTCLK FIO1CLR_bit.P1_17
+
+// SPI
+#define DIR_SDOUT FIO0DIR_bit.P0_12
+#define SET_SDOUT FIO0SET_bit.P0_12
+#define CLR_SDOUT FIO0CLR_bit.P0_12
+
+#define DIR_SDIN FIO0DIR_bit.P0_13
+#define SET_SDIN FIO0SET_bit.P0_13
+#define CLR_SDIN FIO0CLR_bit.P0_13
+
+
 #else
 
 //resetb .Reste pin initializes the IC when low. Should be reset after power on
@@ -277,6 +300,28 @@ void Display_setTextLineClear(BOOL bClear);
 #define DIR_ID_MIB IO1DIR_bit.P1_4
 #define SET_ID_MIB MY_IO1SET(B_4)
 #define CLR_ID_MIB MY_IO1CLR(B_4)
+
+// RGB pin
+#define DIR_VSYNC IO1DIR_bit.P1_15
+#define SET_VSYNC IO1SET_bit.P1_15
+#define CLR_VSYNC IO1CLR_bit.P1_15
+
+#define DIR_HSYNC IO1DIR_bit.P1_16
+#define SET_HSYNC IO1SET_bit.P1_16
+#define CLR_HSYNC IO1CLR_bit.P1_16
+
+#define DIR_DOTCLK IO1DIR_bit.P1_17
+#define SET_DOTCLK IO1SET_bit.P1_17
+#define CLR_DOTCLK IO1CLR_bit.P1_17
+
+// SPI
+#define DIR_SDOUT IO0DIR_bit.P0_12
+#define SET_SDOUT IO0SET_bit.P0_12
+#define CLR_SDOUT IO0CLR_bit.P0_12
+
+#define DIR_SDIN IO0DIR_bit.P0_13
+#define SET_SDIN IO0SET_bit.P0_13
+#define CLR_SDIN IO0CLR_bit.P0_13
 
 #endif
 

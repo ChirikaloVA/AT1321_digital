@@ -597,6 +597,7 @@ BOOL PowerControl_getBatStatus(void)
 //отобразить статус батарей на экране
 void PowerControl_showBatStatus(int x)
 {
+  
 	SAFE_DECLARE;
 	DISABLE_VIC;
 	BOOL bst = powerControl.bBatteryAlarm;
@@ -635,6 +636,7 @@ void PowerControl_showBatStatus(int x)
 		RECT rect = {x,0,x+23,16};
 		Display_clearRect(rect, 100);
 	}
+        
 }
 
 /*

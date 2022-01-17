@@ -15,6 +15,7 @@
 #include "geiger.h"
 #include "bluetooth.h"
 #include "gps.h"
+#include "sound.h"
 
 
 struct tagClock volatile clockData;
@@ -155,6 +156,7 @@ char* Clock_getClockTimeStr(char* pStr)
 
 void Clock_showDateTime(void)
 {
+        SET_ISD_INT;
 	Display_setCurrentFont(fnt8x16);	//set current font
 
 	if(clockData.bMustBeInited && (clockData.dateTime.second&0x1))
@@ -172,11 +174,14 @@ void Clock_showDateTime(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextWrap(0);
 	
+        
 	Display_drawHLine(0,18,X_SCREEN_MAX, ORANGE);
 	
-	Display_clearTextWin(100);
+//	Display_clearTextWin(100);
 	
 	Display_outputText(pStr);
+        CLR_ISD_INT;
+        
 }
 
 

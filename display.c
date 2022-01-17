@@ -503,6 +503,7 @@ void Display_setTextColor(COLORREF clr)
 //show symbol
 int Display_showSymbol(char symbol)
 {
+        volatile BYTE* pData_b = (BYTE*)0x81000000;
 	volatile BYTE* pData = (BYTE*)0x81000000;
 	int gstrX, gstrY;
 	gstrX = display.text.gstrX+display.text.winX;
@@ -550,45 +551,79 @@ int Display_showSymbol(char symbol)
 	{
 		do
 		{
-			byt = *pFont++;
+//			byt = *pFont++;
+//			if(byt&0x01){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x02){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x04){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x08){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x10){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x20){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x40){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x80){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+                        byt = *pFont++;
 			if(byt&0x01){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x02){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x04){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x08){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x10){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x20){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x40){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 			if(byt&0x80){*pData=c1;*pData=c1;}
-			else {read = *pData ;read = *pData;}
+			else {*pData_b=0 ;*pData_b = 0;}
 		}while(--len);
 	}else
 	{
 		do
 		{
-			byt = *pFont++;
+//			byt = *pFont++;
+//			if(byt&0x01){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x02){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x04){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x08){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x10){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x20){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x40){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x80){*pData=c1;}
+//			else {read = *pData;}
+                        byt = *pFont++;
 			if(byt&0x01){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x02){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x04){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x08){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x10){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x20){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x40){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 			if(byt&0x80){*pData=c1;}
-			else {read = *pData;}
+			else {*pData_b = 0;}
 		}while(--len);
 	}
 
@@ -616,56 +651,56 @@ int Display_showSymbol(char symbol)
 //!!!!!!!!! ширина bmp должны быть кратной 4
 void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
 {
-	volatile BYTE* pVData = (BYTE*)0x81000000;
-	const BYTE* pData = (const BYTE*)pBmp+pBmp->bfOffBits;
-	const BITMAPINFOHEADER* pInfo = (const BITMAPINFOHEADER*)((const BYTE*)pBmp+sizeof(struct tagBITMAPFILEHEADER));
-	LONG dx = pInfo->biWidth;
-	LONG dy = pInfo->biHeight;
-	if(dy<0)dy=-dy;
-	DWORD len = dx*dy;
-
-	if(x>=X_SCREEN_SIZE)x=X_SCREEN_SIZE-1;
-	if(y>=Y_SCREEN_SIZE)y=Y_SCREEN_SIZE-1;
-	if(dx>=X_SCREEN_SIZE)dx=X_SCREEN_SIZE-1;
-	if(dy>=Y_SCREEN_SIZE)dy=Y_SCREEN_SIZE-1;
-	if(len==0)
-	{
-		exception(__FILE__,__FUNCTION__,__LINE__,"Bitmap len must be >0");
-	}
-
-	Display_Init_8bit_262k();
-
-	Display_set_clip_region(x,y,x+dx-1,y+dy-1);
-
-
-	if(pInfo->biHeight>0)
-	{
-		Display_set_screen_memory_adr(x,y+dy-1);
-		Display_Init_18bit_262k_leftrightdownup();
-	}else
-	{
-		Display_set_screen_memory_adr(x,y);
-		Display_Init_18bit_262k();
-	}
-
-	WORD wrd;
-    BYTE c1,c2,c3;
-
-	CLR_RS;
-	DisplayData = 0x22;
-	SET_RS;
-	do
-	{
-	    c1=(*pData++)>>3;
-		c2=*pData++;
-		c3=*pData++;
-		//здесь преобразование с учетом перевода из 8-бит в 6-бит формат
-		c1 |= (c2<<3)&0xe0;
-		wrd = c3;
-		pVData= (BYTE*)(0x81000000+(WORD)((wrd<<1)&0x1f8)|(WORD)(c2>>5));
-		*pVData=c1;
-	}while(--len);
-
+  volatile BYTE* pVData = (BYTE*)0x81000000;
+  const BYTE* pData = (const BYTE*)pBmp+pBmp->bfOffBits;
+  const BITMAPINFOHEADER* pInfo = (const BITMAPINFOHEADER*)((const BYTE*)pBmp+sizeof(struct tagBITMAPFILEHEADER));
+  LONG dx = pInfo->biWidth;
+  LONG dy = pInfo->biHeight;
+  if(dy<0)dy=-dy;
+  DWORD len = dx*dy;
+  
+  if(x>=X_SCREEN_SIZE)x=X_SCREEN_SIZE-1;
+  if(y>=Y_SCREEN_SIZE)y=Y_SCREEN_SIZE-1;
+  if(dx>=X_SCREEN_SIZE)dx=X_SCREEN_SIZE-1;
+  if(dy>=Y_SCREEN_SIZE)dy=Y_SCREEN_SIZE-1;
+  if(len==0)
+  {
+    exception(__FILE__,__FUNCTION__,__LINE__,"Bitmap len must be >0");
+  }
+  
+  Display_Init_8bit_262k();
+  
+  Display_set_clip_region(x,y,x+dx-1,y+dy-1);
+  
+  
+  if(pInfo->biHeight>0)
+  {
+    Display_set_screen_memory_adr(x,y+dy-1);
+    Display_Init_18bit_262k_leftrightdownup();
+  }else
+  {
+    Display_set_screen_memory_adr(x,y);
+    Display_Init_18bit_262k();
+  }
+  
+  WORD wrd;
+  BYTE c1,c2,c3;
+  
+  CLR_RS;
+  DisplayData = 0x22;
+  SET_RS;
+  do
+  {
+    c1=(*pData++)>>3;
+    c2=*pData++;
+    c3=*pData++;
+    //здесь преобразование с учетом перевода из 8-бит в 6-бит формат
+    c1 |= (c2<<3)&0xe0;
+    wrd = c3;
+    pVData= (BYTE*)(0x81000000+(WORD)((wrd<<1)&0x1f8)|(WORD)(c2>>5));
+    *pVData=c1;
+  }while(--len);
+  
 }
 
 
@@ -1447,6 +1482,7 @@ void Display_startup_display2(int i)
 //show upper status line
 void Display_showStatusLine(void)
 {
+  
 	//must be run together
 	Clock_showDateTime();
 	InterProc_showTemperature();
@@ -1493,14 +1529,15 @@ void Display_showStatusLine(void)
 #else
 	{
 		RECT rect = {x2,0,x2+15,16};
-		Display_clearRect(rect, 100);
+//		Display_clearRect(rect, 100);
 	}
 	{
 		RECT rect = {x3,0,x3+23,16};
-		Display_clearRect(rect, 100);
+//		Display_clearRect(rect, 100);
 	}
 #endif	//#ifndef GPS_BT_FREE
 	PowerControl_showBatStatus(x4);			//L=24
+        
 }
 
 

@@ -506,6 +506,7 @@ int Display_showSymbol(char symbol)
         volatile BYTE* pData_b = (BYTE*)0x81000000;
 	volatile BYTE* pData = (BYTE*)0x81000000;
 	int gstrX, gstrY;
+        int len_clr;
 	gstrX = display.text.gstrX+display.text.winX;
 	gstrY = display.text.winY+display.text.gstrY;
 	if(gstrX>=X_SCREEN_SIZE || gstrY>=Y_SCREEN_SIZE)return 0;
@@ -525,7 +526,16 @@ int Display_showSymbol(char symbol)
 	Display_Init_8bit_262k();
 
 	//set clip region
-	Display_set_clip_region(gstrX,gstrY,gstrX+fsx-1,gstrY+fsy-1);
+//	Display_set_clip_region(gstrX,gstrY,gstrX+fsx-1,gstrY+fsy-1);
+//        if(display.text.bDoubleHeight)
+//        {
+//          len_clr = 32;
+//        }
+//        else
+//        {
+//          len_clr = 16;
+//        }
+        Display_set_clip_region(gstrX,gstrY,gstrX+fsy-1,gstrY+fsy-1);
 	Display_set_screen_memory_adr(gstrX,gstrY);
 
     BYTE c1=LOBYTE(display.text.color),c2=LO2BYTE(display.text.color),c3=LO3BYTE(display.text.color);
@@ -549,6 +559,7 @@ int Display_showSymbol(char symbol)
 	BYTE byt;
 	if(display.text.bDoubleHeight)
 	{
+          len_clr = 128 - len;
 		do
 		{
 //			byt = *pFont++;
@@ -586,8 +597,29 @@ int Display_showSymbol(char symbol)
 			if(byt&0x80){*pData=c1;*pData=c1;}
 			else {*pData_b=0 ;*pData_b = 0;}
 		}while(--len);
+                if(len_clr > 0)
+                {
+                do
+		{
+                        byt = *pFont++;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			*pData_b=0 ;*pData_b = 0;
+			
+		}while(--len_clr);
+                }
+                else
+                {
+                  len_clr = 9;
+                }
 	}else
 	{
+          len_clr = fsy * 2 - len;
 		do
 		{
 //			byt = *pFont++;
@@ -625,6 +657,26 @@ int Display_showSymbol(char symbol)
 			if(byt&0x80){*pData=c1;}
 			else {*pData_b = 0;}
 		}while(--len);
+                if(len_clr > 0)
+                {
+                do
+		{
+                        byt = *pFont++;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			*pData_b=0 ;
+			
+		}while(--len_clr);
+                }
+                else
+                {
+                  len_clr = 8;
+                }
 	}
 
 	Display_Init_8bit_262k();

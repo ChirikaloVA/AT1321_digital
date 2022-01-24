@@ -1020,7 +1020,7 @@ void SPRDMode_showCps(void)
 		pFltMsk = "%.0f";
 
 	sprintf(buf,pFltMsk,cps);
-	Display_clearTextWin(200);
+//	Display_clearTextWin(200);
 	Display_outputText(buf);
 	Display_setCurrentFont(fnt16x16);
 	//output %
@@ -1061,6 +1061,7 @@ float SPRD_GetCurrentDoserateErr(void)
 
 void SPRDMode_showDR(void)
 {
+  SET_ISD_INT;
 	COLORREF clr;
 	if(!geigerControl.esentVals_safe.bSafetyAlarm &&
 	   !geigerControl.esentVals_safe.bOverload)
@@ -1114,7 +1115,7 @@ void SPRDMode_showDR(void)
 	//output dimension
 	Display_setTextXY(160,16);	//set start coords in window
 	Display_outputTextByLang(SPRDMode_getDimension());
-
+CLR_ISD_INT;
 }
 
 

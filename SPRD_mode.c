@@ -1102,7 +1102,7 @@ void SPRDMode_showDR(void)
 		pFltMsk = "%.0f";
 
 	sprintf(buf,pFltMsk,val);
-	Display_clearTextWin(250);
+//	Display_clearTextWin(250);
 	Display_outputText(buf);
 	Display_setCurrentFont(fnt16x16);
 	//output %

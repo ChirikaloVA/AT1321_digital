@@ -509,4 +509,6 @@ void Display_outputTextFromLine(const char* pText, int lineIndex);
 int Display_calcTextLines(const char* pText);
 void Display_getScreen(void);
 
+void Display_ClearSteps(int stepX, int winX);
+
 #endif	//#ifndef _DISPLAY_H

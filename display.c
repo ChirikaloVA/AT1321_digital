@@ -237,6 +237,7 @@ void Display_outputText(const char* pText)
 			}
 			if(sym==' ')bWordTested = FALSE; //to check next word
 			x = Display_showSymbol(sym);
+                        Display_ClearSteps(display.text.stepX, x + display.text.winX);
 			Display_inc_textX(x+display.text.stepX);
 		}
 	};
@@ -498,10 +499,226 @@ void Display_setTextColor(COLORREF clr)
 	display.text.color = clr;
 }
 
+void Display_ClearSteps(int stepX, int winX)
+{
+  volatile BYTE* pData_b = (BYTE*)0x81000000;
+  int gstrX, gstrY;
+  UINT len;
+  gstrX = display.text.gstrX+winX;
+  gstrY = display.text.winY+display.text.gstrY;
+
+	UINT fsy = Display_getFontSizeY();
+	//get symbol address
+	
+	UINT fsx = stepX;	//symbol width
+
+	fsy*=(display.text.bDoubleHeight?2:1);
+        
+        len = fsy * stepX;
+
+	Display_Init_8bit_262k();
+
+	//set clip region
+	Display_set_clip_region(gstrX,gstrY,gstrX+fsx-1,gstrY+fsy-1);
+	Display_set_screen_memory_adr(gstrX,gstrY);
+
+//    BYTE c1=LOBYTE(display.text.color),c2=LO2BYTE(display.text.color),c3=LO3BYTE(display.text.color);
+//	BYTE read;
+//
+//	WORD wrd;
+//	c1 = c1>>1;
+//	c1 |= (c2<<5)&0xe0;
+//	wrd = c3;
+//	pData+=(WORD)((wrd<<3)&0x1f8)|(WORD)(c2>>3);
+
+	Display_Init_18bit_262k_updownleftright();
+
+
+
+	CLR_RS;
+	DisplayData = 0x22;
+	SET_RS;
+
+
+	BYTE byt;
+	if(display.text.bDoubleHeight)
+	{
+		do
+		{
+                        {*pData_b=0 ;*pData_b = 0;}
+			{*pData_b=0 ;*pData_b = 0;}
+                        {*pData_b=0 ;*pData_b = 0;}
+                        {*pData_b=0 ;*pData_b = 0;}
+			{*pData_b=0 ;*pData_b = 0;}
+			{*pData_b=0 ;*pData_b = 0;}
+			{*pData_b=0 ;*pData_b = 0;}
+			{*pData_b=0 ;*pData_b = 0;}
+                        
+                        
+		}while(--len);
+	}else
+	{
+		do
+		{                       
+			{*pData_b = 0;}
+			{*pData_b = 0;}
+			{*pData_b = 0;}
+			{*pData_b = 0;}
+                        {*pData_b = 0;}
+			{*pData_b = 0;}
+			{*pData_b = 0;}
+			{*pData_b = 0;}
+                        
+		}while(--len);
+	}
+
+	Display_Init_8bit_262k();
+}
+
+
 
 //ret symbol width
 //show symbol
 int Display_showSymbol(char symbol)
+{
+  volatile BYTE* pData_b = (BYTE*)0x81000000;
+	volatile BYTE* pData = (BYTE*)0x81000000;
+	int gstrX, gstrY;
+	gstrX = display.text.gstrX+display.text.winX;
+	gstrY = display.text.winY+display.text.gstrY;
+	if(gstrX>=X_SCREEN_SIZE || gstrY>=Y_SCREEN_SIZE)return 0;
+
+	UINT fsy = Display_getFontSizeY();
+	//get symbol address
+	const BYTE* pFont = Display_getSymFontOffset(symbol);
+	UINT len = (*pFont++)-1;	//symbol data len in bytes
+	if(len==0)
+	{
+		exception(__FILE__,__FUNCTION__,__LINE__,"Symbol len in font must be >0");
+	}
+	UINT fsx = len*8/fsy;	//symbol width
+
+	fsy*=(display.text.bDoubleHeight?2:1);
+
+	Display_Init_8bit_262k();
+
+	//set clip region
+	Display_set_clip_region(gstrX,gstrY,gstrX+fsx-1,gstrY+fsy-1);
+	Display_set_screen_memory_adr(gstrX,gstrY);
+
+    BYTE c1=LOBYTE(display.text.color),c2=LO2BYTE(display.text.color),c3=LO3BYTE(display.text.color);
+	BYTE read;
+
+	WORD wrd;
+	c1 = c1>>1;
+	c1 |= (c2<<5)&0xe0;
+	wrd = c3;
+	pData+=(WORD)((wrd<<3)&0x1f8)|(WORD)(c2>>3);
+
+	Display_Init_18bit_262k_updownleftright();
+
+
+
+	CLR_RS;
+	DisplayData = 0x22;
+	SET_RS;
+
+
+	BYTE byt;
+	if(display.text.bDoubleHeight)
+	{
+		do
+		{
+//			byt = *pFont++;
+//			if(byt&0x01){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x02){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x04){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x08){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x10){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x20){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x40){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+//			if(byt&0x80){*pData=c1;*pData=c1;}
+//			else {read = *pData ;read = *pData;}
+                        
+                        byt = *pFont++;
+			if(byt&0x01){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x02){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x04){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x08){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x10){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x20){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x40){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+			if(byt&0x80){*pData=c1;*pData=c1;}
+			else {*pData_b=0 ;*pData_b = 0;}
+                        
+                        
+		}while(--len);
+	}else
+	{
+		do
+		{
+//			byt = *pFont++;
+//			if(byt&0x01){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x02){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x04){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x08){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x10){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x20){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x40){*pData=c1;}
+//			else {read = *pData;}
+//			if(byt&0x80){*pData=c1;}
+//			else {read = *pData;}
+                        
+                  byt = *pFont++;
+			if(byt&0x01){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x02){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x04){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x08){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x10){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x20){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x40){*pData=c1;}
+			else {*pData_b = 0;}
+			if(byt&0x80){*pData=c1;}
+			else {*pData_b = 0;}
+                        
+		}while(--len);
+	}
+
+	Display_Init_8bit_262k();
+
+	return fsx;
+}
+
+
+
+
+int Display_showSymbol_clr(char symbol, int vsync)
 {
         volatile BYTE* pData_b = (BYTE*)0x81000000;
 	volatile BYTE* pData = (BYTE*)0x81000000;
@@ -694,11 +911,6 @@ int Display_showSymbol(char symbol)
 
 
 
-
-
-
-
-
 //output bmp on screen
 //!!!!!!!!! ширина bmp должны быть кратной 4
 void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
@@ -857,7 +1069,7 @@ void Display_turnON(void)
   DisplayData = 0x18;
   SET_RS;
   DisplayData = 0x00;
-  DisplayData = 0x25;
+  DisplayData = 0x1f;
   
   CLR_RS;
   DisplayData = 0x06;
@@ -877,11 +1089,7 @@ void Display_turnON(void)
   DisplayData = 0x00;
   DisplayData = 0x08;
 
-  CLR_RS;
-  DisplayData = 0x05;
-  SET_RS;
-  DisplayData = 0x00;
-  DisplayData = 0x01;
+  
 
 //  CLR_RS;
 //  DisplayData = 0x43;
@@ -958,6 +1166,14 @@ void Display_turnON(void)
   SET_MON;
   
   CLR_DPWON;
+  
+   pause(5000);
+  
+  CLR_RS;
+  DisplayData = 0x05;
+  SET_RS;
+  DisplayData = 0x00;
+  DisplayData = 0x01;
 
 }
 

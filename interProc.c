@@ -1058,7 +1058,7 @@ void InterProc_showTemperature(void)
 		sprintf(buf, "%+0.0f°C", interProcControl.fTemperature);
 	else
 		sprintf(buf, "%0.0f°C", interProcControl.fTemperature);
-	Display_clearTextWin(10);
+//	Display_clearTextWin(10);
 	Display_outputText(buf);
 }
 

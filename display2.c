@@ -3,6 +3,7 @@
 //large procedures
 #include "display.h"
 #include "interrupts.h"
+#include "sound.h"
 
 
 #pragma optimize=speed
@@ -343,7 +344,7 @@ void Display_drawLine_xor(int x1, int y1, int x2, int y2, COLORREF clr)
 	}
 }
 
-#pragma optimize=speed
+//#pragma optimize=speed
 //draw vert line
 void Display_drawVLine(int x, int y1, int y2, COLORREF clr)
 {
@@ -725,12 +726,13 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 
 
 
-#pragma optimize=speed
+//#pragma optimize=speed
 
 //scrolling screen
-void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
+__arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 {
 	int y, x;
+        SET_ISD_INT;
 	if(y1>y2)
 	{
 		y=y1;
@@ -771,6 +773,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 	
 		if(hlen>0)
 		{
+                  
 			do
 			{
 				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
@@ -790,6 +793,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
 				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
 			}while(--hlen);
+                        
 		}
 		
 		if(llen>0)
@@ -819,6 +823,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 	
 		if(hlen>0)
 		{
+                  
 			do
 			{
 				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
@@ -838,6 +843,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
 				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
 			}while(--hlen);
+                        
 		}
 		
 		if(llen>0)
@@ -853,5 +859,636 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 	};	//while
 
 	Display_Init_18bit_262k();
+        CLR_ISD_INT;
+}
+
+__arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step)
+{
+	int y, x;
+        BYTE* pData_b;
+        BYTE* pData_g;
+        BYTE* pData_r;
+        
+        SET_ISD_INT;
+        pData_b = (BYTE*)display.adr_clr_b;
+        pData_g = (BYTE*)display.adr_clr_g;
+        pData_r = (BYTE*)display.adr_clr_r;
+	if(y1>y2)
+	{
+		y=y1;
+		y1=y2;
+		y2=y;
+	}
+	if(x1>x2)
+	{
+		x=x1;
+		x1=x2;
+		x2=x;
+	}
+	
+	
+	
+	while(x1<=x2)
+	{
+                Display_Init_8bit_262k();
+		x = x1;
+		
+		Display_set_clip_region(x,y1,x,y2);
+		Display_set_screen_memory_adr(x,y1);
+		
+		DWORD len = y2-y1+1;
+		DWORD hlen = len>>4;
+		DWORD llen = len&0xf;
+	
+		COLORREF volatile * pBuf = &display.arReadOut[0];
+		
+//		Display_Init_18bit_262k_updownleftright();
+                Display_Init_18bit_262k_tst( display.adr, display.data);
+                CLR_RS;
+                
+//                SET_RS;
+//		CLR_RS;
+		DisplayData = 0x22;
+//                DisplayData = 0x23;
+		SET_RS;
+		
+		BYTE b1 = DisplayData;
+		b1 = DisplayData;
+		b1 = DisplayData;
+	
+		if(hlen>0)
+		{
+                  
+			do
+			{
+                          b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                           b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+                          
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+			}while(--hlen);
+                        
+		}
+		
+		if(llen>0)
+		{
+			do
+			{
+                          b1 = DisplayData;
+                          if(b1 == 0x00)
+                          {
+                            *(pBuf) = 0;
+                          }
+                          else if(b1 == 0x0c)
+                          {
+                            *(pBuf) = 0x00FC000C;
+                          }
+                          else if(b1 == 0x10)
+                          {
+                            *(pBuf) = 0x0000FC10;
+                          }
+                          pBuf++;
+//				*((BYTE*)pBuf+2) = DisplayData;	*((BYTE*)pBuf+1) = DisplayData;	*((BYTE*)pBuf+0) = DisplayData; pBuf++;
+			}while(--llen);
+		}
+	
+	
+	
+		x -= step;
+                Display_Init_8bit_262k();
+		Display_set_clip_region(x,y1,x,y2);
+		Display_set_screen_memory_adr(x,y1);
+//                Display_Init_18bit_262k_updownleftright();
+                Display_Init_18bit_262k_tst( display.adr, display.data);
+                
+		pBuf = &display.arReadOut[0];
+
+		
+		CLR_RS;
+                
+		DisplayData = 0x22;
+//                DisplayData = 0x23;
+		SET_RS;
+	
+		hlen = len>>4;
+		llen = len&0xf;
+	
+	
+		if(hlen>0)
+		{
+                  
+			do
+			{
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            *(pData_b) = display.data_clr_b;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            *(pData_r) = display.data_clr_r;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            *(pData_g) = display.data_clr_g;
+                          }
+                          pBuf++;
+                          
+                          
+                          
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+			}while(--hlen);
+                        
+		}
+		
+		if(llen>0)
+		{
+			do
+			{
+                          if(*(pBuf) == 0)                      //Bla
+                          {
+                            DisplayData = 0;
+//                            DisplayData_G = 0x10;
+                          }
+                          else if(*(pBuf) == 0x00FC000C)        //R
+                          {
+                            DisplayData_R = 0x0c;
+                          }
+                          else if(*(pBuf) == 0x0000FC10)        //G
+                          {
+                            DisplayData_G = 0x10;
+                          }
+                          pBuf++;
+//				DisplayData = *((BYTE*)pBuf+2);DisplayData = *((BYTE*)pBuf+1);DisplayData = *((BYTE*)pBuf+0); pBuf++;
+			}while(--llen);
+		}
+
+		x1++;
+		
+	};	//while
+
+	Display_Init_18bit_262k();
+        CLR_ISD_INT;
 }
 

@@ -186,6 +186,11 @@ void Display_outputTextByLang(const char* pText)
 	Display_outputText(Display_getTextByLang(pText));
 }
 
+void Display_outputTextByLang_withclean(const char* pText,  int clr_pos)
+{
+	Display_outputText_withclean(Display_getTextByLang(pText),  clr_pos);
+}
+
 
 //display msg and log it
 void Display_outputTextByLang_log(const char* pText)
@@ -242,6 +247,51 @@ void Display_outputText(const char* pText)
 		}
 	};
 }
+
+void Display_outputText_withclean(const char* pText, int clr_pos)
+{
+	int x;
+	char sym;
+	BOOL bWordTested = FALSE;
+	Display_justifyText(pText);
+	while((sym = *pText++))
+	{
+		if(sym=='\r')
+		{//перевод строки
+			if(!Display_gotoNextLine())return;//out of bounds
+			Display_checkForClearLine();
+			Display_justifyText(pText);
+			bWordTested = FALSE;
+		}else
+		{
+			if(display.text.bWrap && !bWordTested && sym!=' ')
+			{
+				bWordTested = TRUE;
+				int len = Display_getWordLen(pText-1);
+				if((display.text.gstrX+len)>display.text.winSX)
+				{
+					if(!Display_gotoNextLine())return;	//out of bounds
+					Display_checkForClearLine();
+				}
+			}
+			if(sym==' ')bWordTested = FALSE; //to check next word
+			x = Display_showSymbol(sym);
+                        Display_ClearSteps(display.text.stepX, x + display.text.winX);
+			Display_inc_textX(x+display.text.stepX);
+		}
+	};
+        if(x >= display.text.stepX)
+        {
+          x = x - display.text.stepX;
+        }
+        if(x < clr_pos)
+        {
+          
+          Display_Symbol_clr(x,clr_pos);
+          
+        }
+}
+
 
 /*
 calculate amount of text lines in the text
@@ -902,7 +952,67 @@ int Display_showSymbol_clr(char symbol, int vsync)
 }
 
 
-
+void Display_Symbol_clr(int x,int vsync)
+{
+  volatile BYTE* pData_b = (BYTE*)FON_COLOR;
+//  volatile BYTE* pData = (BYTE*)0x81000000;
+  int gstrX, gstrY;
+  int len_clr;
+  gstrX = display.text.gstrX+display.text.winX;
+  gstrY = display.text.winY+display.text.gstrY;
+  if(gstrX>=X_SCREEN_SIZE || gstrY>=Y_SCREEN_SIZE)
+  {
+    return;
+  }
+  
+  UINT fsy = Display_getFontSizeY();
+  len_clr = (((fsy - 1) * (fsy - 1))/8);
+  Display_Init_8bit_262k();
+  Display_set_clip_region(gstrX,gstrY,gstrX+fsy-1,gstrY+fsy-1);
+  Display_set_screen_memory_adr(gstrX,gstrY);
+  Display_Init_18bit_262k_updownleftright();
+  CLR_RS;
+  DisplayData = 0x22;
+  SET_RS;
+  if(display.text.bDoubleHeight)
+  {
+    if(len_clr > 0)
+    {
+      do
+      {
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE ;*pData_b = FON_COLOR_BYTE;
+        
+      }while(--len_clr);
+    }
+  }
+  else
+  {
+    if(len_clr > 0)
+    {
+      do
+      {
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        *pData_b=FON_COLOR_BYTE;
+        
+      }while(--len_clr);
+    }
+  }
+  
+  Display_Init_8bit_262k();
+}
 
 
 
@@ -1370,6 +1480,18 @@ void Display_init(void)
 	Display_setTextDoubleHeight(0);
 	Display_setTextJustify(NONE);
 	Display_setTextLineClear(0);
+        
+        display.adr = 0x81000100;
+        display.data = 0x31;
+        
+        display.data_clr_b = 0x0c;
+        display.adr_clr_b = 0x8100FC00;
+        
+         display.data_clr_g = 10;
+        display.adr_clr_g = 0x810000FC;
+        
+         display.data_clr_r = 0x0c;
+        display.adr_clr_r = 0x8100FC00;
 
 }
 
@@ -1400,6 +1522,28 @@ void Display_Init_18bit_262k_updownleftright( void)
 
 }
 
+
+
+void Display_Init_18bit_262k_tst( unsigned int adr, unsigned char data)
+{
+	BYTE zero = 0;
+
+	CLR_RS;
+	DisplayData = 0x23;
+	SET_RS;
+//	CLR_RS;
+//	DisplayData = 0x02;
+//	SET_RS;
+//	DisplayData = zero;
+//	DisplayData = zero;
+
+	volatile BYTE* pData = (BYTE*)adr;
+	CLR_RS;
+	DisplayData = 0x03;
+	SET_RS;
+	*pData = data;
+
+}
 
 //init screen to use 18 bit and 262k of colors
 void Display_Init_18bit_262k( void)

@@ -55,6 +55,8 @@ const struct tagMode modes_MCSMode=
 
 const char* MCSMode_NameOnUpdate(void)//"MCS\0""ƒ»¿√–¿ÃÃ¿",	//mode name
 {
+  
+  SPRDModeControl.bShowModeHeaders = TRUE;
 	if(SPRDModeControl.bBkgMode_confirmed)
 #ifdef _IAEA
 		return "Bgnd\0""Bgnd\0""Bgnd\0""‘ÓÌ";
@@ -65,6 +67,7 @@ const char* MCSMode_NameOnUpdate(void)//"MCS\0""ƒ»¿√–¿ÃÃ¿",	//mode name
 	else
 		return "MCS\0""MCS\0""MCS\0""Ã ƒ";
 #endif
+        
 }
 
 const char* MCSMode_LeftOnUpdate(void)//"back\0""Ì‡Á‡‰",	//left

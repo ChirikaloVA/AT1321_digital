@@ -99,6 +99,8 @@ struct tagSPRDModeControl
 
 	BOOL bAutoSaveSpectra;	//true spectra will save after identification complete
 	BOOL bDataOrderEnabled;	//true means order will be used instead of simple files
+        
+        BOOL bShowModeHeaders; //отобразить поля экрана спрд
 };
 
 extern struct tagSPRDModeControl SPRDModeControl;

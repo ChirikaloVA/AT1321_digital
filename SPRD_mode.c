@@ -70,6 +70,9 @@ const struct tagMode modes_SPRDMode=
 
 const char* SPRDMode_NameOnUpdate(void)//"SPRD\0""СПРД",	//mode name
 {
+  
+  SPRDModeControl.bShowModeHeaders = TRUE;
+  
 	if(SPRDModeControl.bGMMode)
 	{
 		return "GM mode\0""GM mode\0""GM mode\0""Режим ГМ";
@@ -433,6 +436,7 @@ void SPRDMode_Init(void)
 
 	SPRDModeControl.bGMMode = FALSE;
 	SPRDModeControl.bNaIMode = FALSE;
+        SPRDModeControl.bShowModeHeaders = TRUE;
 }
 
 void SPRDMode_Init_for_ident(void)
@@ -457,6 +461,7 @@ BOOL SPRDMode_OnActivate(void)
 
 	Modes_updateMode();
 	SPRDMode_showWholeMCS_once();
+        SPRDModeControl.bShowModeHeaders = TRUE;
 	return 1;
 }
 
@@ -774,10 +779,17 @@ void SPRDMode_showModeHeaders(void)
 
 void SPRDMode_showModeScreen(void)
 {
-	SPRDMode_showModeHeaders();
-
-	SPRDMode_showDR();
-	SPRDMode_showCps();
+  
+  if(SPRDModeControl.bShowModeHeaders)
+  {
+	SPRDMode_showModeHeaders();  //~40ms
+        SPRDModeControl.bShowModeHeaders = FALSE;
+  }
+        
+	SPRDMode_showDR();      //~7ms
+       
+	SPRDMode_showCps();     //5.6ms
+          
 	if(geigerControl.esentVals_safe.bOverload)
 	{//overload
 		SPRDMode_showGMOverload();
@@ -800,10 +812,14 @@ void SPRDMode_showModeScreen(void)
 		if(SPRDModeControl.bUpdateMCS)
 		{//однократное обновление диаграммы после отображения служеюный сообщений в ее зоне
 			SPRDModeControl.bUpdateMCS = FALSE;
-			SPRDMode_showWholeMCS_once();
+                        
+			SPRDMode_showWholeMCS_once();           //?ms
+                        
 		}else
 		{
-			SPRDMode_showMCS();
+                  
+			SPRDMode_showMCS();     //118ms
+                        
 //			if(modeControl.pMode==&modes_MCSMode &&
 //			   !SPRDModeControl.bBkgMode_assumed && !SPRDModeControl.bBkgMode_confirmed)
 //			{//для режима МКД показываем истекшее время измерения
@@ -811,6 +827,7 @@ void SPRDMode_showModeScreen(void)
 //			}
 		}
 	}
+       
 }
 
 
@@ -934,9 +951,9 @@ void SPRDMode_showIdent(void)
 void SPRDMode_showMCS(void)
 {
 	if(SPRDModeControl.bBkgMode_confirmed)return;
-
-	Display_left_scroll(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
-
+        
+	Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+        
 	COLORREF clr;
 
 	int i = MCS_WIN_WIDTH-1;
@@ -949,10 +966,18 @@ void SPRDMode_showMCS(void)
 		y=-MCS_WIN_MIDLLE_D+1;
 	int yy = (DWORD)MCS_WIN_BOTTOM-MCS_WIN_MIDLLE_D-y;
 	if(y>=0)
-		clr = RED;
+		clr = RED_N;
 	else if(y<0)
-		clr = GREEN;
-	Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, BLACK);
+		clr = GREEN_N;
+        ++display.test_var;
+        if((display.test_var & 0x01) == 1)
+        {
+          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, GREEN_N);
+        }
+        else
+        {
+          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, RED_N);
+        }
 	Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_MIDLLE_D,yy, clr);
 }
 
@@ -1021,7 +1046,8 @@ void SPRDMode_showCps(void)
 
 	sprintf(buf,pFltMsk,cps);
 //	Display_clearTextWin(200);
-	Display_outputText(buf);
+//	Display_outputText(buf);
+        Display_outputText_withclean(buf,200);
 	Display_setCurrentFont(fnt16x16);
 	//output %
 	Display_setTextXY(160,0);
@@ -1029,10 +1055,12 @@ void SPRDMode_showCps(void)
 	if(erval<1)
 		erval = 1;
 	sprintf(buf,"%u%%",erval);
-	Display_outputText(buf);
+//	Display_outputText(buf);
+        Display_outputText_withclean(buf,200);
 	//output dimension
 	Display_setTextXY(160,16);	//set start coords in window
-	Display_outputText("cps");
+//	Display_outputText("cps");
+        Display_outputText_withclean("cps",200);
 }
 
 //take current doserate value depends on NaI or GM now is ON
@@ -1061,7 +1089,7 @@ float SPRD_GetCurrentDoserateErr(void)
 
 void SPRDMode_showDR(void)
 {
-  SET_ISD_INT;
+  
 	COLORREF clr;
 	if(!geigerControl.esentVals_safe.bSafetyAlarm &&
 	   !geigerControl.esentVals_safe.bOverload)
@@ -1103,7 +1131,11 @@ void SPRDMode_showDR(void)
 
 	sprintf(buf,pFltMsk,val);
 //	Display_clearTextWin(250);
-	Display_outputText(buf);
+//	Display_outputText(buf);
+        
+        Display_outputText_withclean(buf,250);
+        
+        
 	Display_setCurrentFont(fnt16x16);
 	//output %
 	Display_setTextXY(160,0);
@@ -1111,11 +1143,13 @@ void SPRDMode_showDR(void)
 	if(erval<1)
 		erval = 1;
 	sprintf(buf,"%u%%",erval);
-	Display_outputText(buf);
+//	Display_outputText(buf);
+        Display_outputText_withclean(buf,250);
 	//output dimension
 	Display_setTextXY(160,16);	//set start coords in window
-	Display_outputTextByLang(SPRDMode_getDimension());
-CLR_ISD_INT;
+//	Display_outputTextByLang(SPRDMode_getDimension());
+        Display_outputTextByLang_withclean(SPRDMode_getDimension(), 250);
+
 }
 
 

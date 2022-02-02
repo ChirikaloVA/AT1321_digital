@@ -33,15 +33,20 @@ extern const BYTE bmp_silent[];
 #define WHITE RGB(63,63,63)
 #define BLACK RGB(0,0,0)
 #define GREEN RGB(0,63,0)
+#define GREEN_N RGB(0,63,4)
 #define GREEN_DARK RGB(0,32,0)
 #define BLUE RGB(0,0,63)
 #define RED RGB(63,0,0)
+#define RED_N RGB(63,0,3)
 #define RED_DARK RGB(32,0,0)
 
 #define ORANGE RGB(63,32,0)
 #define ORANGE_DARK RGB(32,16,0)
 #define BROWN RGB(32,63,0)
 #define BROWN_DARK RGB(16,32,0)
+#define BROWN_DARK_TST RGB(16,32,0)
+#define BROWN_DARK_TST1 RGB(16,32,4)
+
 
 #define YELLOW RGB(63,63,0)
 #define YELLOW_DARK RGB(32,32,0)
@@ -164,6 +169,19 @@ struct tagDisplayData
 	BOOL bLCDON;
 	struct tagTextData text;
 	COLORREF arReadOut[Y_SCREEN_SIZE];
+        unsigned int test_var;
+        unsigned int adr;
+        unsigned char data;
+        
+        unsigned int adr_clr_b;
+        BYTE data_clr_b;
+        
+        unsigned int adr_clr_g;
+        BYTE data_clr_g;
+        
+        unsigned int adr_clr_r;
+        BYTE data_clr_r;
+        
 };
 
 extern struct tagDisplayData display;
@@ -433,6 +451,8 @@ void Display_EMC_Init(void);
 
 
 __IO_REG8(     DisplayData,              0x81000000,__READ_WRITE);
+__IO_REG8(     DisplayData_R,              0x8100FC00,__READ_WRITE);
+__IO_REG8(     DisplayData_G,              0x810000FC,__READ_WRITE);
 
 //extern char ON_OFF_display;
 
@@ -510,5 +530,14 @@ int Display_calcTextLines(const char* pText);
 void Display_getScreen(void);
 
 void Display_ClearSteps(int stepX, int winX);
+
+#define FON_COLOR 0x81000055
+#define FON_COLOR_BYTE 0x55
+
+void Display_Symbol_clr(int x,int vsync);
+void Display_outputText_withclean(const char* pText, int clr_pos);
+void Display_outputTextByLang_withclean(const char* pText,  int clr_pos);
+__arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step);
+void Display_Init_18bit_262k_tst( unsigned int adr, unsigned char data);
 
 #endif	//#ifndef _DISPLAY_H

@@ -7143,6 +7143,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\display2.c</name>
+            <configuration>
+                <name>Debug</name>
+            </configuration>
         </file>
     </group>
     <group>
@@ -7208,7 +7211,7 @@
             <name>$PROJ_DIR$\interProc.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\interProc.h</name>
+            <name>$PROJ_DIR$\InterProc.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\interProc2.c</name>
@@ -7325,7 +7328,7 @@
             <name>$PROJ_DIR$\Info_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Info_mode.h</name>
+            <name>$PROJ_DIR$\info_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\LOG_mode.c</name>
@@ -7367,7 +7370,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Setup_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -7385,7 +7388,7 @@
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\stab_mode.h</name>
+            <name>$PROJ_DIR$\STAB_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>
@@ -7403,7 +7406,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

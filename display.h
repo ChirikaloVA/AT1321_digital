@@ -37,7 +37,7 @@ extern const BYTE bmp_silent[];
 #define GREEN_DARK RGB(0,32,0)
 #define BLUE RGB(0,0,63)
 #define RED RGB(63,0,0)
-#define RED_N RGB(63,0,3)
+#define RED_N RGB(63,00,8)
 #define RED_DARK RGB(32,0,0)
 
 #define ORANGE RGB(63,32,0)
@@ -166,22 +166,28 @@ struct tagTextData
 
 struct tagDisplayData
 {
-	BOOL bLCDON;
-	struct tagTextData text;
-	COLORREF arReadOut[Y_SCREEN_SIZE];
-        unsigned int test_var;
-        unsigned int adr;
-        unsigned char data;
-        
-        unsigned int adr_clr_b;
-        BYTE data_clr_b;
-        
-        unsigned int adr_clr_g;
-        BYTE data_clr_g;
-        
-        unsigned int adr_clr_r;
-        BYTE data_clr_r;
-        
+  BOOL bLCDON;
+  struct tagTextData text;
+  COLORREF arReadOut[Y_SCREEN_SIZE];
+  unsigned int test_var;
+  unsigned int adr;
+  unsigned char data;
+  
+  unsigned int adr_clr_b;
+  BYTE data_clr_b;
+  
+  unsigned int adr_clr_g;
+  BYTE data_clr_g;
+  
+  unsigned int adr_clr_r;
+  BYTE data_clr_r;
+  
+  BYTE tst_rd;
+  COLORREF tst_clr;
+  COLORREF volatile * pBuf;
+  unsigned int test_var1;
+  BOOL bTstON;
+  
 };
 
 extern struct tagDisplayData display;
@@ -539,5 +545,6 @@ void Display_outputText_withclean(const char* pText, int clr_pos);
 void Display_outputTextByLang_withclean(const char* pText,  int clr_pos);
 __arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step);
 void Display_Init_18bit_262k_tst( unsigned int adr, unsigned char data);
+
 
 #endif	//#ifndef _DISPLAY_H

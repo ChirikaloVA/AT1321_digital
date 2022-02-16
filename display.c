@@ -1481,17 +1481,20 @@ void Display_init(void)
 	Display_setTextJustify(NONE);
 	Display_setTextLineClear(0);
         
-        display.adr = 0x81000100;
+        display.adr = 0x81000102;
         display.data = 0x31;
         
-        display.data_clr_b = 0x0c;
-        display.adr_clr_b = 0x8100FC00;
+        display.data_clr_b = 0x00;
+        display.adr_clr_b = 0x81000000;
         
-         display.data_clr_g = 10;
-        display.adr_clr_g = 0x810000FC;
+         display.data_clr_g = 0xE2;
+//        display.adr_clr_g = 0x81000007;
+        display.adr_clr_g = 0x81000003;
         
-         display.data_clr_r = 0x0c;
-        display.adr_clr_r = 0x8100FC00;
+         display.data_clr_r = 0x04;
+//        display.adr_clr_r = 0x810001f8;
+        display.adr_clr_r = 0x810000f8;
+        display.bTstON = TRUE;
 
 }
 
@@ -1531,11 +1534,11 @@ void Display_Init_18bit_262k_tst( unsigned int adr, unsigned char data)
 	CLR_RS;
 	DisplayData = 0x23;
 	SET_RS;
-//	CLR_RS;
-//	DisplayData = 0x02;
-//	SET_RS;
-//	DisplayData = zero;
-//	DisplayData = zero;
+	CLR_RS;
+	DisplayData = 0x02;
+	SET_RS;
+	DisplayData = zero;
+	DisplayData = zero;
 
 	volatile BYTE* pData = (BYTE*)adr;
 	CLR_RS;

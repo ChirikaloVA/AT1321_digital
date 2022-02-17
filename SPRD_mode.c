@@ -951,18 +951,19 @@ void SPRDMode_showIdent(void)
 void SPRDMode_showMCS(void)
 {
 	if(SPRDModeControl.bBkgMode_confirmed)return;
-        if(display.bTst1)
-        {
-          Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
-        }
-        else
-        {
-          Display_left_scroll(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
-        }
-        
+//        if(display.bTst1)
+//        {
+//          Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+//        }
+//        else
+//        {
+//          Display_left_scroll(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+//        }
+        Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
 	COLORREF clr;
 
 	int i = MCS_WIN_WIDTH-1;
+        i= i-1;
 
 	int y = (int)SPRDModeControl.arMCS[i];
 	y=3*y;
@@ -1051,8 +1052,10 @@ void SPRDMode_showCps(void)
 		pFltMsk = "%.0f";
 
 	sprintf(buf,pFltMsk,cps);
+        //------------------------------------
 //	Display_clearTextWin(200);
 //	Display_outputText(buf);
+        //--------------------------------
         Display_outputText_withclean(buf,200);
 	Display_setCurrentFont(fnt16x16);
 	//output %
@@ -1136,8 +1139,10 @@ void SPRDMode_showDR(void)
 		pFltMsk = "%.0f";
 
 	sprintf(buf,pFltMsk,val);
+        //-------------------------------------------
 //	Display_clearTextWin(250);
 //	Display_outputText(buf);
+        //--------------------------------------------
         
         Display_outputText_withclean(buf,250);
         

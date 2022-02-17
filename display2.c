@@ -737,6 +737,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 	int y, x;
         unsigned int idx, idx1;
         SET_ISD_INT;
+         x1 = x1 - 1;
 	if(y1>y2)
 	{
 		y=y1;
@@ -750,7 +751,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 		x2=x;
 	}
 	
-        
+       
         if(display.bTstON == TRUE)
         {
           for(idx1=222; idx1 < 230; ++idx1)
@@ -910,7 +911,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 }
 //#define DISPLAY_DATA_READ() do{b1 = DisplayData; if(b1 == 0x00){*(pBuf) = 0;} else if(b1 == 0x0c){*(pBuf) = 0x00FC000C;}else if(b1 == 0x10){*(pBuf) = 0x0000FC10;}pBuf++;}while(0)
 #define DISPLAY_DATA_READ() do{display.tst_rd = DisplayData; *(pBuf) = 0x00000000 + display.tst_rd; pBuf++;}while(0)
-#define DISPLAY_DATA_WRITE() do{if(*(pBuf) == 0){*(pData_b) = display.data_clr_b;}else if(*(pBuf) == 0x00000004){*(pData_r) = display.data_clr_r;}else if(*(pBuf) == 0x000000E2){*(pData_g) = display.data_clr_g;}else{*(pData_b) = 0;}pBuf++;}while(0)
+#define DISPLAY_DATA_WRITE() do{if(*(pBuf) == 0){*(pData_b) = display.data_clr_b;}else if(*(pBuf) == 0x00000002){*(pData_r) = display.data_clr_r;}else if(*(pBuf) == 0x000000E0){*(pData_g) = display.data_clr_g;}else{*(pData_b) = 0;}pBuf++;}while(0)
 void displ_data_wr_test(COLORREF volatile * pBuf)
 {
   BYTE* pData_b;
@@ -928,12 +929,12 @@ void displ_data_wr_test(COLORREF volatile * pBuf)
       *(pData_b) = display.data_clr_b;
       break;
     }
-  case  0x00000004:
+  case  0x00000002:
     {
       *(pData_r) = display.data_clr_r;
       break;
     } 
-  case  0x000000E2:
+  case  0x000000E0:
     {
       *(pData_g) = display.data_clr_g;
       break;

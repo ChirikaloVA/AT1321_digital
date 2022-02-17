@@ -33,11 +33,11 @@ extern const BYTE bmp_silent[];
 #define WHITE RGB(63,63,63)
 #define BLACK RGB(0,0,0)
 #define GREEN RGB(0,63,0)
-#define GREEN_N RGB(0,63,4)
+#define GREEN_N RGB(0,63,0)
 #define GREEN_DARK RGB(0,32,0)
 #define BLUE RGB(0,0,63)
 #define RED RGB(63,0,0)
-#define RED_N RGB(63,00,8)
+#define RED_N RGB(63,00,4)
 #define RED_DARK RGB(32,0,0)
 
 #define ORANGE RGB(63,32,0)

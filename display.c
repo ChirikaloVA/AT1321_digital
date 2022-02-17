@@ -1482,7 +1482,7 @@ void Display_init(void)
 	Display_setTextLineClear(0);
         
         display.adr = 0x81000102;
-        display.data = 0x31;
+        display.data = 0x30;
         
         display.data_clr_b = 0x00;
         display.adr_clr_b = 0x81000000;
@@ -1494,7 +1494,7 @@ void Display_init(void)
          display.data_clr_r = 0x04;
 //        display.adr_clr_r = 0x810001f8;
         display.adr_clr_r = 0x810000f8;
-        display.bTstON = TRUE;
+        display.bTstON = FALSE;
 
 }
 
@@ -1560,7 +1560,7 @@ void Display_Init_18bit_262k( void)
 	DisplayData = 0x02;
 	SET_RS;
 	DisplayData = zero;
-//	DisplayData = zero;
+	DisplayData = zero;
 
 	volatile BYTE* pData = (BYTE*)0x81000102;
 //        volatile BYTE* pData = (BYTE*)0x81000080;

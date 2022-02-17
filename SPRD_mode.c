@@ -951,8 +951,14 @@ void SPRDMode_showIdent(void)
 void SPRDMode_showMCS(void)
 {
 	if(SPRDModeControl.bBkgMode_confirmed)return;
-        
-	Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+        if(display.bTst1)
+        {
+          Display_left_scroll_new(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+        }
+        else
+        {
+          Display_left_scroll(1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2,MCS_WIN_WIDTH-1,MCS_WIN_BOTTOM, 1);
+        }
         
 	COLORREF clr;
 
@@ -970,14 +976,14 @@ void SPRDMode_showMCS(void)
 	else if(y<0)
 		clr = GREEN_N;
         ++display.test_var;
-        if((display.test_var & 0x01) == 1)
-        {
-          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, GREEN_N);
-        }
-        else
-        {
-          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, RED_N);
-        }
+//        if((display.test_var & 0x01) == 1)
+//        {
+//          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, GREEN_N);
+//        }
+//        else
+//        {
+//          Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, RED_N);
+//        }
 	Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_MIDLLE_D,yy, clr);
 }
 

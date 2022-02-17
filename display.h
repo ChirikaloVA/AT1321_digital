@@ -187,6 +187,7 @@ struct tagDisplayData
   COLORREF volatile * pBuf;
   unsigned int test_var1;
   BOOL bTstON;
+  BOOL bTst1;
   
 };
 

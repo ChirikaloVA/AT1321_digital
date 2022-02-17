@@ -735,6 +735,7 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 {
 	int y, x;
+        unsigned int idx, idx1;
         SET_ISD_INT;
 	if(y1>y2)
 	{
@@ -749,6 +750,49 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 		x2=x;
 	}
 	
+        
+        if(display.bTstON == TRUE)
+        {
+          for(idx1=222; idx1 < 230; ++idx1)
+          {
+            //          ++display.tst_clr;
+            //          Display_drawVLine(idx1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, display.tst_clr);
+            //          ++add;
+            Display_Init_8bit_262k();
+            x = idx1;		
+            Display_set_clip_region(x,y1,x,y2);
+            Display_set_screen_memory_adr(x,y1);
+            CLR_RS;
+            DisplayData = 0x22;
+            SET_RS;
+            for( idx = 1; idx < 112; idx++)
+            {
+              DisplayData = 0;DisplayData = 0x80;DisplayData = 0;             
+            }
+            
+          }
+          
+          
+          for(idx1=10; idx1 < 15; ++idx1)
+          {
+            //          ++display.tst_clr;
+            //          Display_drawVLine(idx1,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT2+1,MCS_WIN_BOTTOM, display.tst_clr);
+            //          ++add;
+            Display_Init_8bit_262k();
+            x = idx1;		
+            Display_set_clip_region(x,y1,x,y2);
+            Display_set_screen_memory_adr(x,y1);
+            CLR_RS;
+            DisplayData = 0x22;
+            SET_RS;
+            for( idx = 1; idx < 112; idx++)
+            {
+              DisplayData = 0;DisplayData = 0x0;DisplayData = 0x80;              
+            }
+            
+          }
+        }
+        
 	Display_Init_8bit_262k();
 	
 	while(x1<=x2)
@@ -866,7 +910,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 }
 //#define DISPLAY_DATA_READ() do{b1 = DisplayData; if(b1 == 0x00){*(pBuf) = 0;} else if(b1 == 0x0c){*(pBuf) = 0x00FC000C;}else if(b1 == 0x10){*(pBuf) = 0x0000FC10;}pBuf++;}while(0)
 #define DISPLAY_DATA_READ() do{display.tst_rd = DisplayData; *(pBuf) = 0x00000000 + display.tst_rd; pBuf++;}while(0)
-#define DISPLAY_DATA_WRITE() do{if(*(pBuf) == 0){*(pData_b) = display.data_clr_b;}else if(*(pBuf) == 0x00000001){*(pData_r) = display.data_clr_r;}else if(*(pBuf) == 0x000000E2){*(pData_g) = display.data_clr_g;}else{*(pData_b) = 0;}pBuf++;}while(0)
+#define DISPLAY_DATA_WRITE() do{if(*(pBuf) == 0){*(pData_b) = display.data_clr_b;}else if(*(pBuf) == 0x00000004){*(pData_r) = display.data_clr_r;}else if(*(pBuf) == 0x000000E2){*(pData_g) = display.data_clr_g;}else{*(pData_b) = 0;}pBuf++;}while(0)
 void displ_data_wr_test(COLORREF volatile * pBuf)
 {
   BYTE* pData_b;
@@ -1078,54 +1122,54 @@ __arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step)
                   
 			do
 			{
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-                          displ_data_wr_test(pBuf);
-                          pBuf++;
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
-//                          DISPLAY_DATA_WRITE();
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+//                          displ_data_wr_test(pBuf);
+//                          pBuf++;
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
+                          DISPLAY_DATA_WRITE();
 			}while(--hlen);
                         
 		}
@@ -1134,8 +1178,8 @@ __arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step)
 		{
 			do
 			{
-//                          DISPLAY_DATA_WRITE();
-                          displ_data_wr_test(pBuf);
+                          DISPLAY_DATA_WRITE();
+//                          displ_data_wr_test(pBuf);
 			}while(--llen);
 		}
 

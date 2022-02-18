@@ -284,12 +284,13 @@ void Display_outputText_withclean(const char* pText, int clr_pos)
         {
           x = x - display.text.stepX;
         }
-        if(x < clr_pos)
-        {
-          
-          Display_Symbol_clr(x,clr_pos);
-          
-        }
+//        if(x < clr_pos)
+//        {
+//          
+//          Display_Symbol_clr(x,clr_pos);
+//          
+//        }
+        Display_Symbol_clr(x,clr_pos);
 }
 
 
@@ -965,10 +966,10 @@ void Display_Symbol_clr(int x,int vsync)
     return;
   }
   
-  UINT fsy = Display_getFontSizeY();
-  len_clr = (((fsy - 1) * (fsy - 1))/8);
+  UINT fsy = (Display_getFontSizeY());
+  len_clr = ((((fsy - 1) * (fsy - 1))/8))*vsync;
   Display_Init_8bit_262k();
-  Display_set_clip_region(gstrX,gstrY,gstrX+fsy-1,gstrY+fsy-1);
+  Display_set_clip_region(gstrX,gstrY,gstrX+((fsy-1)*vsync),gstrY+fsy-1);
   Display_set_screen_memory_adr(gstrX,gstrY);
   Display_Init_18bit_262k_updownleftright();
   CLR_RS;

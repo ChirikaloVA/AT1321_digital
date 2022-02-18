@@ -1007,9 +1007,15 @@ void SPRDMode_showWholeMCS_once(void)
 			y=-MCS_WIN_MIDLLE_D+1;
 		int yy = (DWORD)MCS_WIN_BOTTOM-MCS_WIN_MIDLLE_D-y;
 		if(y>=0)
-			clr = RED;
+                {
+//			clr = RED;
+                  clr = RED_N;
+                }
 		else if(y<0)
-			clr = GREEN;
+                {
+//			clr = GREEN;
+                  clr = GREEN_N;
+                }
 		Display_drawVLine(i,MCS_WIN_BOTTOM-MCS_WIN_MIDLLE_D,yy, clr);
 	}
 }
@@ -1056,7 +1062,7 @@ void SPRDMode_showCps(void)
 //	Display_clearTextWin(200);
 //	Display_outputText(buf);
         //--------------------------------
-        Display_outputText_withclean(buf,200);
+        Display_outputText_withclean(buf,2);
 	Display_setCurrentFont(fnt16x16);
 	//output %
 	Display_setTextXY(160,0);
@@ -1065,11 +1071,11 @@ void SPRDMode_showCps(void)
 		erval = 1;
 	sprintf(buf,"%u%%",erval);
 //	Display_outputText(buf);
-        Display_outputText_withclean(buf,200);
+        Display_outputText_withclean(buf,3);
 	//output dimension
 	Display_setTextXY(160,16);	//set start coords in window
 //	Display_outputText("cps");
-        Display_outputText_withclean("cps",200);
+        Display_outputText_withclean("cps",2);
 }
 
 //take current doserate value depends on NaI or GM now is ON
@@ -1144,7 +1150,7 @@ void SPRDMode_showDR(void)
 //	Display_outputText(buf);
         //--------------------------------------------
         
-        Display_outputText_withclean(buf,250);
+        Display_outputText_withclean(buf,2);
         
         
 	Display_setCurrentFont(fnt16x16);
@@ -1155,11 +1161,11 @@ void SPRDMode_showDR(void)
 		erval = 1;
 	sprintf(buf,"%u%%",erval);
 //	Display_outputText(buf);
-        Display_outputText_withclean(buf,250);
+        Display_outputText_withclean(buf,2);
 	//output dimension
 	Display_setTextXY(160,16);	//set start coords in window
 //	Display_outputTextByLang(SPRDMode_getDimension());
-        Display_outputTextByLang_withclean(SPRDMode_getDimension(), 250);
+        Display_outputTextByLang_withclean(SPRDMode_getDimension(), 2);
 
 }
 

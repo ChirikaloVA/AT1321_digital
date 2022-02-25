@@ -23,6 +23,8 @@
 #include "identify.h"
 #include "geiger.h"
 #include "SPRD_Mode.h"
+#include "gps.h"
+#include "sound.h"
 
 struct tagUSBRSControl USBRSControl;
 
@@ -92,11 +94,12 @@ struct tagUSBRSControl USBRSControl;
 
 
 
-//прерывание приема передачи
+//прерывание приема передачи ~100us прием ~10us передача
 __arm void _INT_UART0_USBRS(void)
 {
 	DWORD dw1,dw2;
 	BYTE byt;
+        SET_RFPW;
 	if(USBRSControl.uart.bRcvError != RCV_OK)
 	{//ошибка обмена
 		//сброс ошибки и буфера приема
@@ -184,6 +187,7 @@ __arm void _INT_UART0_USBRS(void)
 	{
 		USBRSControl.uart.bRcvError = RCV_ERR_BYTE;
 	}
+        CLR_RFPW;
 }
 
 
@@ -334,7 +338,9 @@ void USBRS_control(void)
 
 		//first process, the results must be processed in the procedures of initiate transmition command
 		//no cmd should be prepared in trm buffer if rcv data is not processed here!!!!!!!!!
+          SET_ISD_INT;
 		USBRS_rcvData_first_Dispatcher();
+                CLR_ISD_INT;
 		USBRSControl.bUSBRS_used = 1;	//mark USB as used
 		powerControl.dwIdleTime = 0;	//reset idle time counter after key processing
 	}

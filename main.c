@@ -439,11 +439,11 @@ __noreturn void main(void)
 		SETUPMode_clear_memory();
 	}
 
-
 	while(1)
 	{
-                
-
+                 
+                 
+ 
 		//test second proc fault
 		if(!PIN_AN_ERR)
 		{//second proc exception !!!!!!!!!!!! a seriously fault
@@ -539,15 +539,17 @@ __noreturn void main(void)
 
 
 		Modes_OnIdle();
+                
 
 		//Sys Timer processing
+                
 		if(modeControl.bTimerON &&
 		   modeControl.dwTimerReach)
 		{
 			modeControl.dwTimerReach=0;
 			Modes_OnTimer();
 		}
-
+                
 
 #ifndef GPS_BT_FREE
 		//control bluetooth data exchange
@@ -555,8 +557,9 @@ __noreturn void main(void)
 #endif	//#ifndef GPS_BT_FREE
 
 		//control USBRS data exchange
+                
 		USBRS_control();
-
+                
 		//execute execute.sys
 		//this is used to execute some commands from PC in SPRD
 		//time adjusting, or other
@@ -581,6 +584,8 @@ __noreturn void main(void)
 			//after key processing
 			powerControl.dwIdleTime = 0;	//reset idle time counter after key processing
 		}
+                
+                
                 
 	}
 }

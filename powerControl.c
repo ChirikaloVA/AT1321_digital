@@ -543,6 +543,8 @@ void PowerControl_turboModeON(void)
 //понижаем частоту до 18ћ√ц
 void PowerControl_turboModeOFF(void)
 {
+  
+        
 	SAFE_DECLARE;
 	DISABLE_VIC;
 	
@@ -1052,6 +1054,10 @@ void Set_test_point_dir(void)
 {
   DIR_ISD_INT = 1;
   CLR_ISD_INT;
+  DIR_GPS = 1;
+  CLR_GPS;
+  DIR_RFPW = 1;
+  CLR_RFPW;
 }
 
 #endif

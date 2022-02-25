@@ -736,7 +736,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 {
 	int y, x;
         unsigned int idx, idx1;
-        SET_ISD_INT;
+//        SET_ISD_INT;
          x1 = x1 - 1;
 	if(y1>y2)
 	{
@@ -907,7 +907,7 @@ __arm void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 	};	//while
 
 	Display_Init_18bit_262k();
-        CLR_ISD_INT;
+//        CLR_ISD_INT;
 }
 //#define DISPLAY_DATA_READ() do{b1 = DisplayData; if(b1 == 0x00){*(pBuf) = 0;} else if(b1 == 0x0c){*(pBuf) = 0x00FC000C;}else if(b1 == 0x10){*(pBuf) = 0x0000FC10;}pBuf++;}while(0)
 #define DISPLAY_DATA_READ() do{display.tst_rd = DisplayData; *(pBuf) = 0x00000000 + display.tst_rd; pBuf++;}while(0)
@@ -968,7 +968,7 @@ __arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step)
         BYTE* pData_r;
         BYTE* pData_tst;
         
-        SET_ISD_INT;
+//        SET_ISD_INT;
         pData_b = (BYTE*)display.adr_clr_b;
         pData_g = (BYTE*)display.adr_clr_g;
         pData_r = (BYTE*)display.adr_clr_r;
@@ -1189,6 +1189,6 @@ __arm void Display_left_scroll_new(int x1, int y1, int x2, int y2, int step)
 	};	//while
 
 	Display_Init_18bit_262k();
-        CLR_ISD_INT;
+//        CLR_ISD_INT;
 }
 

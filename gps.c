@@ -188,10 +188,12 @@ void GPS_Init(void)
 
 	//adjust on output
 	DIR_GPS_O = 1;
+#ifndef DEBUG
 	DIR_GPS = 1;
-	
+        DIR_RFPW = 0;
+#endif
 	DIR_1PPS= 0;  // Запись
-	DIR_RFPW = 0;
+	
 	
 	GPSControl.bGPS_ON = 0;
 	GPSControl.bGPS_Fix = 0;

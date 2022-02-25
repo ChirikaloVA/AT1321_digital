@@ -31,6 +31,7 @@
 #include "LOG_mode.h"
 #include "STAB_mode.h"
 #include "rid.h"
+#include "gps.h"
 
 
 
@@ -467,6 +468,7 @@ BOOL SPRDMode_OnActivate(void)
 
 BOOL SPRDMode_OnTimer(void)
 {
+    
 	int slotscnt = InterProc_countFreeSlots();
 	if(slotscnt<3)
 	{
@@ -506,12 +508,20 @@ BOOL SPRDMode_OnTimer(void)
 				!SPRDModeControl.bNaIOverload /*no NaI overload*/ &&
 					!geigerControl.esentVals_safe.bOverload /*no danger*/)
 		{//check for need ident mode
-			if(!SPRDMode_checkForIdentMode())return 1;
+                  
+			if(!SPRDMode_checkForIdentMode())
+                        {
+                          
+                          
+                          return 1;
+                        }
 		}
 	}
 	SPRDModeControl.bRadFound = FALSE;	//reset alarm flag must be placed after SPRDMode_checkForIdentMode
 	Modes_OnShow();
+        
 	return 1;
+         
 }
 
 //check if must switch to ident mode
@@ -519,6 +529,7 @@ BOOL SPRDMode_OnTimer(void)
 //ret TRUE if continue
 BOOL SPRDMode_checkForIdentMode(void)
 {
+
 	if(SPRDModeControl.bRadFound && !SPRDModeControl.bIdentMode)
 	{//first switch to ident mode
 #ifndef GPS_BT_FREE
@@ -537,6 +548,7 @@ BOOL SPRDMode_checkForIdentMode(void)
 	}else
 	if(SPRDModeControl.bIdentMode)
 	{//ident mode, request spectrum, and ident it
+          
 		if(InterProc_isDataFinalReady(&interProcControl.rsModbus.sarSpectrumZip))
 		{
 			identify_identify(TRUE);
@@ -549,6 +561,7 @@ BOOL SPRDMode_checkForIdentMode(void)
 					SPRDMode_saveAutoSpec();
 				SPRDModeControl.bIdentStoped = TRUE;	//have to be first to correct exit in OnLeft
 				SPRDMode_OnUp();
+                                
 				return FALSE;
 			}
 			Modes_showModeName();
@@ -558,8 +571,11 @@ BOOL SPRDMode_checkForIdentMode(void)
 //			InterProc_readAcqTime();
 			InterProc_readSpectrumZip();
 		}
+                
 	}
+        
 	return TRUE;
+        
 }
 
 //save spectrum with auto name

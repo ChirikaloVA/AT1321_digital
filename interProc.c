@@ -21,6 +21,7 @@
 #include "USBRS.h"
 #include "bluetooth.h"
 #include "NMEA_Parser.h"
+#include "gps.h"
 
 
 //some of usb crc procedures
@@ -51,6 +52,7 @@ __arm void _INT_UART1_InterProc(void)
 {
   // CLR_AN_PGM;
 	BYTE byt;
+        SET_GPS;
 	while((U1LSR&0x1) || ((U1IIR&0x0c)==0x0c))
 	{//DR
 
@@ -87,6 +89,7 @@ __arm void _INT_UART1_InterProc(void)
 	}
 
  //       SET_AN_PGM;
+        CLR_GPS;
 }
 
 

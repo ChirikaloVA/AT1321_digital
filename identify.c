@@ -14,6 +14,7 @@
 #include "powerControl.h"
 #include "ini_control.h"
 #include "display.h"
+#include "sound.h"
 
 struct tagIdentify identifyControl;
 
@@ -565,27 +566,29 @@ void identify_prepareReport(BOOL bAddCategory//FALSe for spectrometric mode
 
 
 
-void identify_identify(BOOL bAddCategory)
+void identify_identify(BOOL bAddCategory) //~ 63ms
 {
-	identifyControl.ISpectrum = spectrumControl.pShowSpectrum->dwarSpectrum;
-	identifyControl.collectionTime = spectrumControl.pShowSpectrum->wAcqTime;
-
-	if(!spectrumControl.bHasEnergy || !spectrumControl.bHasSigma
-	   || !identifyControl.bHasLibrary)
-	{
-		identify_clearReport();
-		strcat(identifyControl.report, Display_getTextByLang("DISABLED\0""DISABLED\0""DISABLED\0""ÇÀÁËÎÊÈÐÎÂÀÍÀ"));
-	}else
-	{
-		PowerControl_turboModeON();
-		identify_clearReportEx();
-		identify_DetectLines();
-		identifyControl.bHaveUnknownResult = (identify_MakeNuclideIdentification()==-1)?(BOOL)TRUE:(BOOL)FALSE;
-		identify_checkForUnknown();
-		identify_prepareReport(bAddCategory);
-		PowerControl_turboModeOFF();
-	}
-	strncpy(spectrumControl.pShowSpectrum->report,identifyControl.report,MAX_REPORT_SYMS);
+ 
+  identifyControl.ISpectrum = spectrumControl.pShowSpectrum->dwarSpectrum;
+  identifyControl.collectionTime = spectrumControl.pShowSpectrum->wAcqTime;
+  
+  if(!spectrumControl.bHasEnergy || !spectrumControl.bHasSigma
+     || !identifyControl.bHasLibrary)
+  {
+    identify_clearReport();
+    strcat(identifyControl.report, Display_getTextByLang("DISABLED\0""DISABLED\0""DISABLED\0""ÇÀÁËÎÊÈÐÎÂÀÍÀ"));
+  }else
+  {
+    PowerControl_turboModeON();
+    identify_clearReportEx();
+    identify_DetectLines();
+    identifyControl.bHaveUnknownResult = (identify_MakeNuclideIdentification()==-1)?(BOOL)TRUE:(BOOL)FALSE;
+    identify_checkForUnknown();
+    identify_prepareReport(bAddCategory);
+    PowerControl_turboModeOFF();
+  }
+  strncpy(spectrumControl.pShowSpectrum->report,identifyControl.report,MAX_REPORT_SYMS);
+  
 }
 
 //just convolution

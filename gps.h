@@ -40,6 +40,8 @@
 
 //read power mode 0-sleep, 1-operate
 #define DIR_RFPW IO1DIR_bit.P1_30
+#define SET_RFPW MY_IO1SET(B_30)
+#define CLR_RFPW MY_IO1CLR(B_30)
 #define PIN_RFPW IO1PIN_bit.P1_30
 //wake gps up
 #define DIR_GPS IO1DIR_bit.P1_31

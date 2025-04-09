@@ -96,6 +96,9 @@ void GPS_HotStart(void);
 void GPS_WarmStart(void);
 void GPS_WarmStart2(void);
 void GPS_ColdStart(void);
+#ifdef GEN1111DBG
+void GPS_WarmStartGEM1111(void);
+#endif
 
 void GPS_startGPSbyState(void);
 

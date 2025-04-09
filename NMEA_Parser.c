@@ -19,7 +19,8 @@ struct tagNMEAParserControl NMEAParserControl;
 
 
 
-#define MAXFIELD	25		// maximum field length
+//#define MAXFIELD	25		// maximum field length
+#define MAXFIELD	30		// maximum field length
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -247,15 +248,16 @@ void NMEAParser_ProcessNMEA(BYTE btData)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL NMEAParser_ProcessCommand(BYTE *pCommand, BYTE *pData)
 {
-	if( strcmp((char *)pCommand, "GPGGA") == NULL )
+	if( (strcmp((char *)pCommand, "GPGGA") == NULL) || (strcmp((char *)pCommand, "GNGGA") == NULL) )
 	{
 		NMEAParser_ProcessGPGGA(pData);
 	}
-	else if( strcmp((char *)pCommand, "GPGSA") == NULL )
+	else if( (strcmp((char *)pCommand, "GPGSA") == NULL) || (strcmp((char *)pCommand, "GNGSA") == NULL) )
 	{
+                //NMEAParserControl.m_btRMCHour = 8;
 		NMEAParser_ProcessGPGSA(pData);
 	}
-	else if( strcmp((char *)pCommand, "GPRMC") == NULL )
+	else if( (strcmp((char *)pCommand, "GPRMC") == NULL) || (strcmp((char *)pCommand, "GNRMC") == NULL) )
 	{
 		NMEAParser_ProcessGPRMC(pData);
 	}
@@ -499,14 +501,18 @@ void NMEAParser_ProcessGPGGA(BYTE *pData)
 	if(NMEAParser_GetField(pData, pField, 0, MAXFIELD))
 	{
 		// Hour
-		pBuff[0] = pField[0];
-		pBuff[1] = pField[1];
+//		pBuff[0] = pField[0];
+//		pBuff[1] = pField[1];
+                pBuff[0] = '1';
+		pBuff[1] = '5';
 		pBuff[2] = '\0';
 		NMEAParserControl.m_btGGAHour = (BYTE)atoi(pBuff);
 
 		// minute
-		pBuff[0] = pField[2];
-		pBuff[1] = pField[3];
+//		pBuff[0] = pField[2];
+//		pBuff[1] = pField[3];
+                pBuff[0] = '2';
+		pBuff[1] = '7';
 		pBuff[2] = '\0';
 		NMEAParserControl.m_btGGAMinute = (BYTE)atoi(pBuff);
 
@@ -951,17 +957,25 @@ void NMEAParser_ProcessGPRMC(BYTE *pData)
 	//
 	// Time
 	//
+         pBuff[0] = '1';
+         pBuff[1] = '8';
+         pBuff[2] = '\0';
+         NMEAParserControl.m_btRMCHour = (BYTE)atoi(pBuff);
 	if(NMEAParser_GetField(pData, pField, 0, MAXFIELD))
 	{
 		// Hour
-		pBuff[0] = pField[0];
-		pBuff[1] = pField[1];
+//		pBuff[0] = pField[0];
+//		pBuff[1] = pField[1];
+                pBuff[0] = '2';
+		pBuff[1] = '1';
 		pBuff[2] = '\0';
 		NMEAParserControl.m_btRMCHour = (BYTE)atoi(pBuff);
 
 		// minute
-		pBuff[0] = pField[2];
-		pBuff[1] = pField[3];
+//		pBuff[0] = pField[2];
+//		pBuff[1] = pField[3];
+                pBuff[0] = '1';
+		pBuff[1] = '7';
 		pBuff[2] = '\0';
 		NMEAParserControl.m_btRMCMinute = (BYTE)atoi(pBuff);
 

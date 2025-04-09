@@ -283,6 +283,7 @@ void PowerControl_gotoPowerDownMode(void)
 //all preparation to enter sleep mode and exit from it
 void PowerControl_gotoIdleMode(void)
 {
+#ifndef DEBUG
 	PowerControl_turnOFF_MAM();
 	PowerControl_EMC_OFF();
 	//////////////////
@@ -290,6 +291,7 @@ void PowerControl_gotoIdleMode(void)
 	//////////////////
 	PowerControl_turnON_MAM();
 	Display_EMC_Init();
+#endif
 }
 
 
@@ -745,6 +747,9 @@ void PowerControl_controlBatStatus(void)
 	
 	
 	powerControl.batStatus = PowerControl_getBatStatus();
+        
+        powerControl.batV_aver = 2.1; // 2024 для отладки потом убрать!!!!!
+        
 	if(!PIN_ST1)//if USB connected then reset battery alarm state
 		powerControl.bBatteryAlarm = 0;
 	else if(!powerControl.batStatus || powerControl.batV_aver<VREF_BAT_MIN_CRITICAL)

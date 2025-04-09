@@ -74,7 +74,7 @@ const char txtVersion[]=VERT(4, 8, SUBVER);
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
 //#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "28.08.2019"
+#define OUR__DATE__ "08.10.2024"
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 
@@ -457,8 +457,10 @@ __noreturn void main(void)
 			{//now only if no key is pressed
 				if(Modes_OnPowerDown())
 				{
+#ifndef DEBUG
 					PowerControl_gotoPowerDownMode();
 					powerControl.dwIdleTime = 0;	//reset idle time counter after power down
+#endif
 				}else
 				{
 					if(!SPRDModeControl.bGMMode && !SPRDModeControl.bNaIMode && display.bLCDON)

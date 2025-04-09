@@ -197,7 +197,7 @@ void GPS_Init(void)
 	GPSControl.bGPS_Fix = 0;
 	GPSControl.bShow_GPS_sym = 0;
 	
-	GPSControl.uartSpeed = 1200;   //скорость обмена стартовая
+	GPSControl.uartSpeed = 9600;   //скорость обмена стартовая
 	//read eeprom values
 	GPSControl.gps_state = GPS_STATE_ALWAYS_OFF;	
 
@@ -279,12 +279,18 @@ void GPS_testGPSConnection(void)
 	}else if((clockData.dwTotalSecondsFromStart - GPSControl.dwSecondsOfStartGPS)>2)
 	{
 		//change UART speed
-		if(GPSControl.uartSpeed==38400)
+		if(GPSControl.uartSpeed==9600)
 		{
-			GPSControl.uartSpeed = 1200;
-			GPSControl.bGPSFailed = TRUE;
-		}else
-			GPSControl.uartSpeed*=2;
+//			GPSControl.uartSpeed = 1200;
+                        GPSControl.uartSpeed = 115200;
+			//GPSControl.bGPSFailed = TRUE;
+		}
+                else
+                {
+			//GPSControl.uartSpeed*=2;
+                        GPSControl.uartSpeed = 9600;
+                }
+                
 		GPS_UART2_InitEx(GPSControl.uartSpeed);
 	}
 }
@@ -366,6 +372,19 @@ void GPS_sendSequence(const char* sequence)
 	ENABLE_VIC;
 }
 
+void GPS_sendSequenceGEM(const char* sequence, unsigned char nbyte)
+{
+	SAFE_DECLARE;
+	DISABLE_VIC;
+	for(int i=0;i<nbyte;i++)
+	{
+		GPSControl.uart.trmBuff[i] = sequence[i];
+	}
+        GPSControl.uart.trmBuffLenConst = nbyte;
+	GPS_StartTrm();
+	ENABLE_VIC;
+}
+
 //start transmition data from first byte in buffer
 void GPS_StartTrm(void)
 {
@@ -411,6 +430,14 @@ void GPS_WarmStart2(void)
 	GPS_sendSequence(query);
 	GPS_waitTrmEnd();
 }
+#ifdef GEN1111DBG
+void GPS_WarmStartGEM1111(void)
+{
+  const char query[]={0xF1, 0xD9, 0x06, 0x44, 0x10, 0x00, 0x02, 0x00, 0x64, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x07, 0x00, 0x00, 0xC8, 0x00, 0x00, 0x00, 0x60, 0x19};
+	GPS_sendSequenceGEM(query,sizeof(query));
+	GPS_waitTrmEnd();
+}
+#endif
 
 void GPS_WarmStart(void)
 {

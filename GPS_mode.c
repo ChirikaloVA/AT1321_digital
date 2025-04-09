@@ -528,7 +528,11 @@ BOOL GPSMode_menu1_WarmStart(void)
 
 BOOL GPSMode_menu1_WarmStart2(void)
 {
+#ifdef GEN1111DBG
+        GPS_WarmStartGEM1111();
+#else
 	GPS_WarmStart2();
+#endif
 	return 1;
 }
 
@@ -559,7 +563,11 @@ const char* GPSMode_menu1_ColdStart_onUpdate(void)
 const char* GPSMode_menu1_WarmStart2_onUpdate(void)
 {
 	if(!GPSControl.bGPS_ON)return NULL;
+#ifdef GEN1111DBG
+        return "Test cmd\0""Test cmd\0""Test cmd\0""Тест команд";
+#else
 	return "Warm start\0""Warm start\0""Warm start\0""Тёплый пуск 2";
+#endif
 }
 const char* GPSMode_menu1_WarmStart_onUpdate(void)
 {

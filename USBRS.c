@@ -482,7 +482,8 @@ void USBRS_UART0_Init(void)
 
 	int SpeedRS232;
 	
-	SpeedRS232 = 288000;   //скорость обмена
+//	SpeedRS232 = 288000;   //скорость обмена
+        SpeedRS232 = 115200;   //скорость обмена чтоба работал СДЛ
 	
 	
 	PCONP_bit.PCUART0 = 1;	//give power to UART0
@@ -728,6 +729,10 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 				*SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
 #endif	//#ifdef _THIN_SIGMA
 					;
+                else if(fnum==2095 && j<CHANNELS)//DR windows
+			wrd = spectrumControl.warDRwind[j];
+                else if(fnum==2094 && j<CHANNELS)//DR koef
+			wrd = spectrumControl.warDRkoef[j];
 		else
 			wrd = 0;
 		
@@ -748,9 +753,10 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 //read ID data
 void USBRS_readIDData(struct tagUART * pUart)
 {
+#ifndef SDL
 	pUart->trmBuff[2] = 0x12;
 	pUart->trmBuff[3] = 0xBC;
-	pUart->trmBuff[4] = 0xFF;
+	pUart->trmBuff[4] = 0x00;
 	pUart->trmBuff[5] = HIBYTE(SETUPModeControl.Serial);
 	pUart->trmBuff[6] = LO3BYTE(SETUPModeControl.Serial);
 	pUart->trmBuff[7] = LO2BYTE(SETUPModeControl.Serial);
@@ -768,6 +774,28 @@ void USBRS_readIDData(struct tagUART * pUart)
 	pUart->trmBuff[19] = 0x00;
 	pUart->trmBuff[20] = 0x00;
 	pUart->trmBuffLenConst = 21;
+#else
+        pUart->trmBuff[2] = 0x12;
+        pUart->trmBuff[3] = 0x13;       //для пробы работы с СДЛ
+	pUart->trmBuff[4] = 0x00;
+	pUart->trmBuff[5] = HIBYTE(SETUPModeControl.Serial);
+	pUart->trmBuff[6] = LO3BYTE(SETUPModeControl.Serial);
+	pUart->trmBuff[7] = LO2BYTE(SETUPModeControl.Serial);
+	pUart->trmBuff[8] = LOBYTE(SETUPModeControl.Serial);
+	pUart->trmBuff[9] = 0x04;
+	pUart->trmBuff[10] = 0x00;
+	pUart->trmBuff[11] = 0x0c;
+	pUart->trmBuff[12] = 0;
+	pUart->trmBuff[13] = 0x0b;
+	pUart->trmBuff[14] = 0x00;
+	pUart->trmBuff[15] = 0x01;
+	pUart->trmBuff[16] = 0x2c;
+	pUart->trmBuff[17] = 0x00;
+	pUart->trmBuff[18] = 0x64;
+	pUart->trmBuff[19] = 0x00;
+	pUart->trmBuff[20] = 0x40;
+	pUart->trmBuffLenConst = 21; 
+#endif
 }
 ////////////////
 

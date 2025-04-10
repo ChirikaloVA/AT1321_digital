@@ -3,7 +3,7 @@
 
 #include <math.h>
 #include "spline.h"
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 
 
 

@@ -2,7 +2,7 @@
 #ifndef _SYNCOBJ_H
 #define _SYNCOBJ_H
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 #include <intrinsics.h>
 

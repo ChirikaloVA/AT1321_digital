@@ -199,6 +199,7 @@ void Spectrum_startAcq_ex(int acqTime);
 
 int Spectrum_read_sigma_cal(void);
 int Spectrum_read_energy_cal(void);
+int Spectrum_read_drk_cal(void);
 int Spectrum_open_ex(HFILE hfile);
 
 void Spectrum_menu1_acqtime_edit_done(BOOL bOK);

@@ -7301,7 +7301,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\comm_mode.h</name>
+            <name>$PROJ_DIR$\COMM_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -7397,7 +7397,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\yesno_mode.h</name>
+            <name>$PROJ_DIR$\YESNO_mode.h</name>
         </file>
     </group>
     <group>

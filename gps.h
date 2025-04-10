@@ -2,7 +2,7 @@
 #define _GPS_H
 
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 //power on/off GPS module

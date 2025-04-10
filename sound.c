@@ -4,7 +4,7 @@
 //#include <stdio.h>
 //#include <ctype.h>
 //#include <inarm.h>
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 
 #include "sound.h"
 #include "syncObj.h"

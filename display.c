@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <ctype.h>
 //#include <inarm.h>
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "display.h"
 #include "types.h"
 #include "syncObj.h"

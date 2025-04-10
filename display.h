@@ -2,7 +2,7 @@
 #define _DISPLAY_H
 
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 

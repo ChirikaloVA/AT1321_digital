@@ -3,7 +3,7 @@
 #ifndef _NMEAParser_PARSER_H
 #define _NMEAParser_PARSER_H
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 #define NP_MAX_CMD_LEN			8		// maximum command length (NMEA address)

@@ -3,7 +3,7 @@
 #ifndef _SOUND_H
 #define _SOUND_H
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 

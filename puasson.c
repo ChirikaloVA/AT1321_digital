@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include "puasson.h"
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "powerControl.h"
 
 struct tagPuasson puasson;

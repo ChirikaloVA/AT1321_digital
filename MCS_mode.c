@@ -11,7 +11,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 
 #include "types.h"
 #include "display.h"

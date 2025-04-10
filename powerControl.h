@@ -3,7 +3,7 @@
 #ifndef _POWERCONTROL_H
 #define _POWERCONTROL_H
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 //количество значений емкости для усреднения и получения итоговой емкости батарей

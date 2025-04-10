@@ -4,7 +4,7 @@
 #ifndef _CLOCK_H
 #define _CLOCK_H
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include "types.h"
 
 struct tagClock

@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 #include <math.h>
 #include <stdlib.h>
 #include "main.h"

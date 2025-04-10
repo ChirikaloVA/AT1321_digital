@@ -5,7 +5,7 @@
 #define _INI_CONTROL_H
 
 
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 
 #include "types.h"
 #include "eeprom.h"
@@ -51,5 +51,6 @@ BOOL ini_write_system_ini_float(const char * pSection, const char* pValueName, f
 int filesystem_get_stringReverse(HFILE hFile, int* pFile_pos, char* pString, int string_len);
 
 BOOL filesystem_restore_system_ini_from_backup(void);
+
 
 #endif	//#ifndef _INI_CONTROL_H

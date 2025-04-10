@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 //#include <inarm.h>
-#include <iolpc2388.h>
+#include <nxp\iolpc2388.h>
 
 #include "types.h"
 #include "syncObj.h"

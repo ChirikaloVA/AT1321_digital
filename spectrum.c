@@ -1469,11 +1469,11 @@ int Spectrum_read_drk_cal(void)
 		   "cal" /*ext of the file*/
 			   );
 	if(hfile==NULL)
-		return E_FAIL;
-	int items = ini_retrieveTable(hfile, spectrumControl.warChEnTable);
-	if(items==0)return E_FAIL;
-	spline_calcSpline(spectrumControl.warChEnTable, items, spectrumControl.warEnergy, 1.0);
-	spectrumControl.bHasEnergy = TRUE;
+          return E_FAIL;
+	int items = ini_retrieveTable(hfile, spectrumControl.warDRkTable);
+	if(items==0)
+          return E_FAIL;
+	
 	return S_OK;
 }
 

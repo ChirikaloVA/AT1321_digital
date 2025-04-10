@@ -1460,6 +1460,23 @@ int Spectrum_read_energy_cal(void)
 	return S_OK;
 }
 
+//read dr koef from drk.cal
+//ret E_FAIL if error
+int Spectrum_read_drk_cal(void)
+{
+	//read drk
+	HFILE hfile = filesystem_open_file("drk", /*name of the file, will be found*/
+		   "cal" /*ext of the file*/
+			   );
+	if(hfile==NULL)
+		return E_FAIL;
+	int items = ini_retrieveTable(hfile, spectrumControl.warChEnTable);
+	if(items==0)return E_FAIL;
+	spline_calcSpline(spectrumControl.warChEnTable, items, spectrumControl.warEnergy, 1.0);
+	spectrumControl.bHasEnergy = TRUE;
+	return S_OK;
+}
+
 
 //read sigma calibr from sigma.cal
 //ret E_FAIL if error

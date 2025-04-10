@@ -326,6 +326,45 @@ void filesystem_check_ini_files(void)
 			Display_outputTextByLang_log(pMsg2);
 		}
 	}
+        
+        ///////////////////////////drk.cal//////////////////////////////////////////////
+	ret = Spectrum_read_drk_cal();
+	if(ret==E_FAIL)
+	{//
+		modeControl.bNoEnergyCal = TRUE;
+		PowerControl_sleep(1000);
+		Display_clearTextWin(10);
+		Display_setTextXY(0,0);	//set start coords in window
+		const char pMsg1[] = "No drk.cal\r\0""Fehlen drk.cal\r\0""No drk.cal\r\0""Нет drk.cal\r";
+		Display_outputTextByLang_log(pMsg1);
+		const char pMsg2[]="DR disabled\0""DR geblockt\0""DR disabled\0""МД запрещена";
+		Display_outputTextByLang_log(pMsg2);
+		
+		HFILE hfile  = filesystem_open_file("drk","spz");
+		if(hfile!=NULL)
+			filesystem_delete_file(hfile);
+	}
+	if(ret!=E_FAIL)
+	{
+		//save drk cal as drk.spz
+		for(int i=0;i<CHANNELS;i++)
+			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRkoef[i];
+		spectrumControl.acqSpectrum.wAcqTime = 1;
+		int iret=Spectrum_save("drk", TRUE);
+		//тут если не сапишется файл energy изза нехватки памяти то пипец!
+		if(!iret)
+		{//
+			modeControl.bNoEnergySigmaSpz = TRUE;
+	
+			PowerControl_sleep(1000);
+			Display_clearTextWin(10);
+			Display_setTextXY(0,0);	//set start coords in window
+			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+			Display_outputTextByLang_log(pMsg1);
+			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+			Display_outputTextByLang_log(pMsg2);
+		}
+	}
 	
 	/////////////////////////////sigma.cal//////////////////////////////////////////
 	ret = Spectrum_read_sigma_cal();

@@ -1464,6 +1464,9 @@ int Spectrum_read_energy_cal(void)
 //ret E_FAIL if error
 int Spectrum_read_drk_cal(void)
 {
+  float koef1;
+  unsigned char idx;
+  
 	//read drk
 	HFILE hfile = filesystem_open_file("drk", /*name of the file, will be found*/
 		   "cal" /*ext of the file*/
@@ -1473,8 +1476,33 @@ int Spectrum_read_drk_cal(void)
 	int items = ini_retrieveTable(hfile, spectrumControl.warDRkTable);
 	if(items==0)
           return E_FAIL;
+        spectrumControl.warDRkoef[0] = 3052;
+        spectrumControl.warDRkoef[1] = 3052;
+        koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
+        for(idx = 0; idx < 18; ++idx)
+        {
+          spectrumControl.warDRkoef[idx+2] = (unsigned short)(spectrumControl.warDRkTable[idx].mean * koef1);
+          
+        }
 	
 	return S_OK;
+}
+
+//read dr koef from drw.cal
+//ret E_FAIL if error
+int Spectrum_read_drw_cal(void)
+{
+  //read drk
+  HFILE hfile = filesystem_open_file("drw", /*name of the file, will be found*/
+                                     "cal" /*ext of the file*/
+                                       );
+  if(hfile==NULL)
+    return E_FAIL;
+  int items = ini_retrieveTable(hfile, spectrumControl.warDRwTable);
+  if(items==0)
+    return E_FAIL;
+  Spectrum_setupDoseWindowTable();
+  return S_OK;
 }
 
 

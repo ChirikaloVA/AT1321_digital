@@ -361,7 +361,8 @@ __noreturn void main(void)
 #endif	//#ifndef GPS_BT_FREE	
 	
 	//================adjust doserate window table=============
-	Spectrum_setupDoseWindowTable();
+	//================adjust doserate window table=============
+//	Spectrum_setupDoseWindowTable();
 	
 	
 	

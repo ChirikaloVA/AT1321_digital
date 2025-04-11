@@ -75,6 +75,8 @@ struct tagSpectrumControl
 	struct tagIndexMeanTable warChSiTable[MAX_TABLE_RECORDS];
         //таблица коэф МД
         struct tagIndexMeanTable warDRkTable[MAX_TABLE_RECORDS];
+        //таблица окон
+        struct tagIndexMeanTable warDRwTable[MAX_TABLE_RECORDS];
 	
 	
 	BOOL bSpectrumInDots;	//=1 spectrum in dots, 0-in lines

@@ -247,6 +247,8 @@ void Spectrum_Init(void)
 	spectrumControl.iAcquiringTime = MAX_ACQ_TIME;
 	
 	spectrumControl.bHasEnergy = FALSE;
+        spectrumControl.bHasDRk = FALSE;
+        spectrumControl.bHasDRw = FALSE;
 	spectrumControl.bHasSigma = FALSE;
 	
 	spectrumControl.iSpectrumControlMode = enum_scm_marker_movment;
@@ -1484,7 +1486,7 @@ int Spectrum_read_drk_cal(void)
           spectrumControl.warDRkoef[idx+2] = (unsigned short)(spectrumControl.warDRkTable[idx].mean * koef1);
           
         }
-	
+	spectrumControl.bHasDRk = TRUE;
 	return S_OK;
 }
 
@@ -1501,6 +1503,7 @@ int Spectrum_read_drw_cal(void)
   int items = ini_retrieveTable(hfile, spectrumControl.warDRwTable);
   if(items==0)
     return E_FAIL;
+  spectrumControl.bHasDRw = TRUE;
   Spectrum_setupDoseWindowTable();
   return S_OK;
 }
@@ -1730,7 +1733,7 @@ void Spectrum_peakProc(void)
 void Spectrum_setupDoseWindowTable(void)
 {
 	if(!spectrumControl.bHasEnergy)return;	//no energy
-	Spectrum_makeEnergyWins();
+	Spectrum_makeEnergyWinsN();
 	InterProc_setWinTable();
 }
 
@@ -1765,7 +1768,41 @@ void Spectrum_makeEnergyWins(void)
 	}
 	spec[k] = 0xffff;
 }
-
+void Spectrum_makeEnergyWinsN(void)
+{
+  int i,k=0;
+  int rz,rz2=-100;
+  const WORD * sdew;
+  WORD tmpV1[SD_WIN_SIZE],ewin;
+  WORD * spec = spectrumControl.wins1;
+  WORD * ener = spectrumControl.warEnergy;
+  if(spectrumControl.bHasDRw == FALSE)
+  {
+    sdew = spectrumDoserateEnergyWin;
+    ewin = *sdew;
+  }
+  else
+  {
+    for(i = 0; i < SD_WIN_SIZE; ++i)
+    {
+       tmpV1[i] = (WORD)(spectrumControl.warDRwTable[i].mean);
+    }
+    sdew = tmpV1;
+  }
+  spec[k++] = 1;	//start first window from this channel
+  for(i=0;i<CHANNELS && k<SD_WIN_SIZE;i++)
+  {
+    rz = *ener++ - ewin;
+    if(rz>=0)
+    {
+      ewin = *++sdew;
+      spec[k++] = -rz2<=rz?i-1:i;
+      rz=-100;
+    }
+    rz2 = rz;
+  }
+  spec[k] = 0xffff;
+}
 
 
 

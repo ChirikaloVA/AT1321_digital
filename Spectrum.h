@@ -83,6 +83,8 @@ struct tagSpectrumControl
 	int iMarkerChannel;	//channel of marker
 	int iMarkerChannel2;	//channel of marker, if -1 then only one marker
 	BOOL bHasEnergy;
+        BOOL bHasDRk;
+        BOOL bHasDRw;
 	WORD warEnergy[CHANNELS];
 	BOOL bHasSigma;
 	WORD warSigma[CHANNELS];	//здесь хранится сигма в 1,5 уже чем калибровочная, это нужно для поиска слитых пиков. во всех остальных местах кроме идентификации нажуно множить ее на 1,5
@@ -203,6 +205,7 @@ int Spectrum_read_sigma_cal(void);
 int Spectrum_read_energy_cal(void);
 int Spectrum_read_drk_cal(void);
 int Spectrum_open_ex(HFILE hfile);
+void Spectrum_makeEnergyWinsN(void);
 
 void Spectrum_menu1_acqtime_edit_done(BOOL bOK);
 void Spectrum_menu1_gaincode_edit_done(BOOL bOK);

@@ -1733,6 +1733,7 @@ void Spectrum_peakProc(void)
 void Spectrum_setupDoseWindowTable(void)
 {
 	if(!spectrumControl.bHasEnergy)return;	//no energy
+        Spectrum_makeEnergyWins();
 	Spectrum_makeEnergyWinsN();
 	InterProc_setWinTable();
 }
@@ -1779,16 +1780,16 @@ void Spectrum_makeEnergyWinsN(void)
   if(spectrumControl.bHasDRw == FALSE)
   {
     sdew = spectrumDoserateEnergyWin;
-    ewin = *sdew;
   }
   else
   {
-    for(i = 0; i < SD_WIN_SIZE; ++i)
+    for(i = 0; i < SD_WIN_SIZE; i++)
     {
        tmpV1[i] = (WORD)(spectrumControl.warDRwTable[i].mean);
     }
     sdew = tmpV1;
   }
+  ewin = *sdew;
   spec[k++] = 1;	//start first window from this channel
   for(i=0;i<CHANNELS && k<SD_WIN_SIZE;i++)
   {
@@ -1802,6 +1803,21 @@ void Spectrum_makeEnergyWinsN(void)
     rz2 = rz;
   }
   spec[k] = 0xffff;
+  k=0;
+  rz=0;
+  for(i = 1; i <= SD_WIN_SIZE; i++)
+  {
+    rz2 = spectrumControl.wins1[i];
+    if(rz2 > CHANNELS)
+    {
+      rz2 = CHANNELS;
+    }
+    for(;k < rz2; k++)
+    {
+      spectrumControl.warDRwind[k] = i-1;
+    }
+    rz = k;
+  }
 }
 
 

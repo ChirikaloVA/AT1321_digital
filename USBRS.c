@@ -731,7 +731,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 					;
                 else if(fnum==2095 && j<CHANNELS)//DR windows
 			wrd = spectrumControl.warDRwind[j];
-                else if(fnum==2094 && j<CHANNELS)//DR koef
+                else if(fnum==2094 && j<(SD_WIN_SIZE+2))//DR koef
 			wrd = spectrumControl.warDRkoef[j];
 		else
 			wrd = 0;

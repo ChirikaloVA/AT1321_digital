@@ -350,8 +350,8 @@ void USBRS_rcvData_first_Dispatcher(void)
 {
 	{
 		if(USBRSControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
-			   //21/01/2010
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
+                           && USBRSControl.uart.rcvBuff_safe[1]!=0x0a  /*it is not a command of write of eeprom spectrum*/
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
 				//14.04.2016
 			   && USBRSControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
@@ -378,6 +378,7 @@ void USBRS_rcvData_first_Dispatcher(void)
 		}else if(USBRSControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS
 					 //21/01/2010
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
+                                        || USBRSControl.uart.rcvBuff_safe[1]==0x0a  /*it is a command of read of eeprom spectrum*/
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
 				//14.04.2016
 					|| USBRSControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
@@ -605,51 +606,55 @@ WORD USBRS_CRC (BYTE Sbyte, WORD CRCbuf)
 //second dispatcher is used to understand commands to SPIRID
 void USBRS_rcvData_second_Dispatcher(struct tagUART * pUart)
 {
-	pUart->trmBuff[0] = pUart->rcvBuff_safe[0];
-	pUart->trmBuff[1] = pUart->rcvBuff_safe[1];
-	switch(pUart->rcvBuff_safe[1])
-	{
-		//14.04.2016
-		case 0x02:
-			USBRS_readBinSig(pUart);
-			break;
-		case 0x04:
-			USBRS_readDataReg(pUart);
-			break;
-	  //21/01/2010
-		case 0x09:
-			USBRS_readRefSpec(pUart);
-			break;
-		case 0x11:
-			USBRS_readIDData(pUart);
-			break;
-	///////////
-		case 0x51:	//read directory
-			USBRS_readDir(pUart);
-			break;
-		case 0x52:	//read file
-			USBRS_readFile(pUart);
-			break;
-		case 0x53:	//write file
-			USBRS_writeFile(pUart);
-			break;
-		case 0x54:	//create file
-			USBRS_createFile(pUart);
-			break;
-		case 0x55:	//delete file
-			USBRS_deleteFile(pUart);
-			break;
-		case 0x56:	//get file num
-			USBRS_getFileNum(pUart);
-			break;
-		case 0x57:	//execute file "execute.sys"
-			USBRS_executeFile(pUart);
-			break;
-	}
-	if(pUart->rcvBuff_safe[1]==0x51)
-	   USBRSControl.bSysExecution = FALSE;//cmd read dir make turn off execution mode
-	else if(pUart->rcvBuff_safe[1]==0x57)
-	   USBRSControl.bSysExecution = TRUE;	//if execution cmd then dont switch to USBRS_Mode
+  pUart->trmBuff[0] = pUart->rcvBuff_safe[0];
+  pUart->trmBuff[1] = pUart->rcvBuff_safe[1];
+  switch(pUart->rcvBuff_safe[1])
+  {
+    //14.04.2016
+  case 0x02:
+    USBRS_readBinSig(pUart);
+    break;
+  case 0x04:
+    USBRS_readDataReg(pUart);
+    break;
+    //21/01/2010
+  case 0x09:
+    USBRS_readRefSpec(pUart);
+    break;
+//    SDL support
+  case 0x0a:
+    USBRS_writeRefSpec(pUart);
+    break;
+  case 0x11:
+    USBRS_readIDData(pUart);
+    break;
+    ///////////
+  case 0x51:	//read directory
+    USBRS_readDir(pUart);
+    break;
+  case 0x52:	//read file
+    USBRS_readFile(pUart);
+    break;
+  case 0x53:	//write file
+    USBRS_writeFile(pUart);
+    break;
+  case 0x54:	//create file
+    USBRS_createFile(pUart);
+    break;
+  case 0x55:	//delete file
+    USBRS_deleteFile(pUart);
+    break;
+  case 0x56:	//get file num
+    USBRS_getFileNum(pUart);
+    break;
+  case 0x57:	//execute file "execute.sys"
+    USBRS_executeFile(pUart);
+    break;
+  }
+  if(pUart->rcvBuff_safe[1]==0x51)
+    USBRSControl.bSysExecution = FALSE;//cmd read dir make turn off execution mode
+  else if(pUart->rcvBuff_safe[1]==0x57)
+    USBRSControl.bSysExecution = TRUE;	//if execution cmd then dont switch to USBRS_Mode
 }
 
 //read dir
@@ -714,7 +719,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 	}
 
 
-	int j, k;
+	int j, k, wrd1;
 	WORD wrd;
 	for(int i=0;i<bytes;i++)
 	{
@@ -730,24 +735,82 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 #endif	//#ifdef _THIN_SIGMA
 					;
                 else if(fnum==2095 && j<CHANNELS)//DR windows
+                {
 			wrd = spectrumControl.warDRwind[j];
+                }
                 else if(fnum==2094 && j<(SD_WIN_SIZE+2))//DR koef
-			wrd = spectrumControl.warDRkoef[j];
+                {
+			wrd1 = spectrumControl.warDRkoef[j];
+                }
 		else
+                {
 			wrd = 0;
-		
-		if(k==0)
-			pUart->trmBuff[3+i]=0;	//VERYHIGH
-		else if(k==1)
-			pUart->trmBuff[3+i]=LO2BYTE(wrd);	//HIGH
-		else if(k==2)
-			pUart->trmBuff[3+i]=LOBYTE(wrd);	//LOW
+                        wrd1 = 0;
+                }
+		if(fnum == 2094)
+                {
+                   if(k==0)
+                    pUart->trmBuff[3+i]=LO3BYTE(wrd1);	//
+                  else if(k==1)
+                    pUart->trmBuff[3+i]=LO2BYTE(wrd1);	//HIGH
+                  else if(k==2)
+                    pUart->trmBuff[3+i]=LOBYTE(wrd1);	//LOW
+                }
+                else
+                {
+                  if(k==0)
+                    pUart->trmBuff[3+i]=0;	//VERYHIGH
+                  else if(k==1)
+                    pUart->trmBuff[3+i]=LO2BYTE(wrd);	//HIGH
+                  else if(k==2)
+                    pUart->trmBuff[3+i]=LOBYTE(wrd);	//LOW
+                }
 	}	
 	
 	pUart->trmBuff[2] = bytes;
 	pUart->trmBuffLenConst = 3+bytes;
 }
 ////////////////
+void USBRS_writeRefSpec(struct tagUART * pUart)
+{
+  
+  WORD fnum = ((WORD)pUart->rcvBuff_safe[3]<<8)|pUart->rcvBuff_safe[4];
+  WORD startAdr = ((WORD)pUart->rcvBuff_safe[5]<<8)|pUart->rcvBuff_safe[6];
+  WORD flen = ((WORD)pUart->rcvBuff_safe[7]<<8)|pUart->rcvBuff_safe[8];
+  if (pUart->rcvBuff_safe[2] != flen + 6)
+  {
+    USBRS_except(2, pUart);
+    return;
+  }
+  memcpy((void*)&pUart->trmBuff[2], (void*)&pUart->rcvBuff_safe[2], (int)flen+7);
+  pUart->trmBuffLenConst = flen + 9;
+  switch (fnum)
+  {
+  case 2094:
+    {
+      if(startAdr == 0)
+      {
+        spectrumControl.warDRkoef[0] = ((WORD)pUart->rcvBuff_safe[9]<<16)|((WORD)pUart->rcvBuff_safe[10]<<8)|pUart->rcvBuff_safe[11];
+        spectrumControl.warDRkoef[1] = ((WORD)pUart->rcvBuff_safe[12]<<16)|((WORD)pUart->rcvBuff_safe[13]<<8)|pUart->rcvBuff_safe[14];;
+      }
+      else
+      {
+        
+      }
+      break;
+    }
+  case 2095:
+    {
+      break;
+    }
+  default:
+    {
+      USBRS_except(2, pUart); // только 2094, 2095  Недопустимый номер спектра
+      break;
+    }
+  }
+  
+}
 
 //08/02/2010
 //read ID data
@@ -964,65 +1027,65 @@ void USBRS_executeFile(struct tagUART * pUart)
 //чтение регистра данных
 void USBRS_readDataReg(struct tagUART * pUart)
 {
-	BYTE addr = pUart->rcvBuff_safe[3];
-	BYTE cntr = pUart->rcvBuff_safe[5];
-	pUart->trmBuff[2] = cntr*2;
-	pUart->trmBuffLenConst = 3;
-	while(cntr)
-	{
-		switch(addr)
-		{
-			case 0x1f:
-			case 0x21:
-			case 0x23:
-			case 0x25:
-			case 0x27:
-				USBRS_except(2, pUart);	//invalid register
-				cntr=0;
-				break;
-				
-			case 30:     // "Мгновенная" скорость счета GMcounter, cps
-			putULONG((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , (ULONG)geigerControl.dwMomCountCopy);
-			pUart->trmBuffLenConst += 2;
-			addr++;
-			cntr--;
-			break;
-			
-			
-			case 32:     // Средняя скорость счета GMcounter, cps
-			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCps);
-			pUart->trmBuffLenConst += 2;
-			addr++;
-			cntr--;
-			break;
-	
-			case 34:     // Статистическая погрешность средней скорости счета GMcounter, %
-			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
-			pUart->trmBuffLenConst += 2;
-			addr++;
-			cntr--;
-			break;
-	
-			case 36:     // Средняя мощность дозы GMcounter, Sv/h (R/h)
-			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fDoserate*1E-6);
-			pUart->trmBuffLenConst += 2;
-			addr++;
-			cntr--;
-			break;
-	
-			case 38:     // Статистическая погрешность средней мощности дозы GMcounter, %
-			putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
-			pUart->trmBuffLenConst += 2;
-			addr++;
-			cntr--;
-			break;
-			default:
-            putUSHORT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , 0);
-		}
-		pUart->trmBuffLenConst += 2;
-		addr++;
-		cntr--;
-	};
+  BYTE addr = pUart->rcvBuff_safe[3];
+  BYTE cntr = pUart->rcvBuff_safe[5];
+  pUart->trmBuff[2] = cntr*2;
+  pUart->trmBuffLenConst = 3;
+  while(cntr)
+  {
+    switch(addr)
+    {
+    case 0x1f:
+    case 0x21:
+    case 0x23:
+    case 0x25:
+    case 0x27:
+      USBRS_except(2, pUart);	//invalid register
+      cntr=0;
+      break;
+      
+    case 30:     // "Мгновенная" скорость счета GMcounter, cps
+      putULONG((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , (ULONG)geigerControl.dwMomCountCopy);
+      pUart->trmBuffLenConst += 2;
+      addr++;
+      cntr--;
+      break;
+      
+      
+    case 32:     // Средняя скорость счета GMcounter, cps
+      putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCps);
+      pUart->trmBuffLenConst += 2;
+      addr++;
+      cntr--;
+      break;
+      
+    case 34:     // Статистическая погрешность средней скорости счета GMcounter, %
+      putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
+      pUart->trmBuffLenConst += 2;
+      addr++;
+      cntr--;
+      break;
+      
+    case 36:     // Средняя мощность дозы GMcounter, Sv/h (R/h)
+      putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fDoserate*1E-6);
+      pUart->trmBuffLenConst += 2;
+      addr++;
+      cntr--;
+      break;
+      
+    case 38:     // Статистическая погрешность средней мощности дозы GMcounter, %
+      putFLOAT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , geigerControl.esentVals.fCpsErr);
+      pUart->trmBuffLenConst += 2;
+      addr++;
+      cntr--;
+      break;
+    default:
+      putUSHORT((void*)&pUart->trmBuff[pUart->trmBuffLenConst] , 0);
+    }
+    pUart->trmBuffLenConst += 2;
+    addr++;
+    cntr--;
+  };
 }
 
 

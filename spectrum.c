@@ -1483,7 +1483,7 @@ int Spectrum_read_drk_cal(void)
         koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
         for(idx = 0; idx < SD_WIN_SIZE; ++idx)
         {
-          spectrumControl.warDRkoef[idx+2] = (unsigned short)(spectrumControl.warDRkTable[idx].mean * koef1);
+          spectrumControl.warDRkoef[idx+2] = (int)(spectrumControl.warDRkTable[idx].mean * koef1);
           
         }
 	spectrumControl.bHasDRk = TRUE;

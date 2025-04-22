@@ -1469,25 +1469,54 @@ int Spectrum_read_drk_cal(void)
   float koef1;
   unsigned char idx;
   
-	//read drk
-	HFILE hfile = filesystem_open_file("drk", /*name of the file, will be found*/
-		   "cal" /*ext of the file*/
-			   );
-	if(hfile==NULL)
-          return E_FAIL;
-	int items = ini_retrieveTable(hfile, spectrumControl.warDRkTable);
-	if(items==0)
-          return E_FAIL;
-        spectrumControl.warDRkoef[0] = 3052;
-        spectrumControl.warDRkoef[1] = 3052;
-        koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
-        for(idx = 0; idx < SD_WIN_SIZE; ++idx)
-        {
-          spectrumControl.warDRkoef[idx+2] = (int)(spectrumControl.warDRkTable[idx].mean * koef1);
-          
-        }
-	spectrumControl.bHasDRk = TRUE;
-	return S_OK;
+  //read drk
+  HFILE hfile = filesystem_open_file("drk", /*name of the file, will be found*/
+                                     "cal" /*ext of the file*/
+                                       );
+  if(hfile == NULL)
+    return E_FAIL;
+  int items = ini_retrieveTable(hfile, spectrumControl.warDRkTable);
+  if(items == 0)
+    return E_FAIL;
+  spectrumControl.warDRkoef[0] = (int)spectrumControl.warDRkTable[17].mean;  //33443
+  spectrumControl.warDRkoef[1] = (int)spectrumControl.warDRkTable[18].mean;  //33443
+  koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
+  for(idx = 0; idx < SD_WIN_SIZE; ++idx)
+  {
+    spectrumControl.warDRkoef[idx+2] = (int)(spectrumControl.warDRkTable[idx].mean * koef1);
+    
+  }
+  spectrumControl.bHasDRk = TRUE;
+  return S_OK;
+}
+
+//read dr koef from drk.spz
+//ret E_FAIL if error
+int Spectrum_read_drk_spz(void)
+{
+  float koef1;
+  unsigned char idx;
+  
+  //read drk
+  HFILE hfile = filesystem_open_file("drk", /*name of the file, will be found*/
+                                     "spz" /*ext of the file*/
+                                       );
+  if(hfile == NULL)
+    return E_FAIL;
+  Spectrum_open("drk");
+  
+  spectrumControl.warDRkoef[0] = spectrumControl.opnSpectrum.dwarSpectrum[0];  //33443
+  spectrumControl.warDRkoef[1] = spectrumControl.opnSpectrum.dwarSpectrum[1];  //33443
+  koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
+  for(idx = 0; idx < SD_WIN_SIZE; ++idx)
+  {
+    spectrumControl.warDRkoef[idx+2] = spectrumControl.opnSpectrum.dwarSpectrum[idx+2];
+    spectrumControl.warDRkTable[idx].mean = spectrumControl.opnSpectrum.dwarSpectrum[idx+2]/koef1;
+    spectrumControl.warDRkTable[idx].index = idx+1;
+    
+  }
+  spectrumControl.bHasDRk = TRUE;
+  return S_OK;
 }
 
 //read dr koef from drw.cal
@@ -1507,7 +1536,32 @@ int Spectrum_read_drw_cal(void)
   Spectrum_setupDoseWindowTable();
   return S_OK;
 }
-
+int Spectrum_read_drw_spz(void)
+{
+  float koef1;
+  unsigned char idx;
+  
+  //read drk
+  HFILE hfile = filesystem_open_file("drw", /*name of the file, will be found*/
+                                     "spz" /*ext of the file*/
+                                       );
+  if(hfile == NULL)
+    return E_FAIL;
+  Spectrum_open("drw");
+  
+  spectrumControl.warDRkoef[0] = spectrumControl.opnSpectrum.dwarSpectrum[0];  //33443
+  spectrumControl.warDRkoef[1] = spectrumControl.opnSpectrum.dwarSpectrum[1];  //33443
+  koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
+  for(idx = 0; idx < SD_WIN_SIZE; ++idx)
+  {
+    spectrumControl.warDRkoef[idx+2] = spectrumControl.opnSpectrum.dwarSpectrum[idx+2];
+    spectrumControl.warDRkTable[idx].mean = spectrumControl.opnSpectrum.dwarSpectrum[idx+2]/koef1;
+    spectrumControl.warDRkTable[idx].index = idx+1;
+    
+  }
+  spectrumControl.bHasDRk = TRUE;
+  return S_OK;
+}
 
 //read sigma calibr from sigma.cal
 //ret E_FAIL if error
@@ -1601,11 +1655,11 @@ BOOL Spectrum_peakProc_ex(float *position, float* sigma)
 	*position = (float)msumm/(float)summ;
 	pos = (long)(*position+0.5);
 	
-	sig = 3.5*spectrumControl.warSigma[pos]/256
+	sig = (int) (3.5*spectrumControl.warSigma[pos]/256
 #ifdef _THIN_SIGMA
 				*SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
 #endif	//#ifdef _THIN_SIGMA
-		;
+		);
 	left = pos-sig;
 	right = pos+sig;
 	//обязательно с первого по последний -1 канал чтобы сделать усреднение по краям по три точки
@@ -1678,7 +1732,7 @@ void Spectrum_peakProc(void)
 		int en = (int)(identify_EnergyFromChannel(position)+0.5);
 		sprintf(spectrumControl.peakProcRes+strlen(spectrumControl.peakProcRes), " E=%u keV\0", (int)en);
 		
-		int is = position-sigma*3.5, ie = position+sigma*3.5;
+		int is = (int)(position-sigma*3.5), ie = (int)(position+sigma*3.5);
 		if(is<0)is = 0;
 		if(ie>=CHANNELS)ie = CHANNELS-1;
 		DWORD dwarea=0;

@@ -773,7 +773,7 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 ////////////////
 void USBRS_writeRefSpec(struct tagUART * pUart)
 {
-  
+  WORD idx,idx1;
   WORD fnum = ((WORD)pUart->rcvBuff_safe[3]<<8)|pUart->rcvBuff_safe[4];
   WORD startAdr = ((WORD)pUart->rcvBuff_safe[5]<<8)|pUart->rcvBuff_safe[6];
   WORD flen = ((WORD)pUart->rcvBuff_safe[7]<<8)|pUart->rcvBuff_safe[8];
@@ -790,8 +790,30 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
     {
       if(startAdr == 0)
       {
-        spectrumControl.warDRkoef[0] = ((WORD)pUart->rcvBuff_safe[9]<<16)|((WORD)pUart->rcvBuff_safe[10]<<8)|pUart->rcvBuff_safe[11];
-        spectrumControl.warDRkoef[1] = ((WORD)pUart->rcvBuff_safe[12]<<16)|((WORD)pUart->rcvBuff_safe[13]<<8)|pUart->rcvBuff_safe[14];;
+        for(idx = 0; idx < SD_WIN_SIZE + 2; idx++)
+        {
+          idx1 = idx * 3;
+          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[idx1+9]<<16)|((WORD)pUart->rcvBuff_safe[idx1 + 10]<<8)|pUart->rcvBuff_safe[idx1 + 11];
+          //          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[12]<<16)|((WORD)pUart->rcvBuff_safe[13]<<8)|pUart->rcvBuff_safe[14];
+        }
+        for(int idx = 0;idx < (SD_WIN_SIZE+2);idx++)
+        {
+          spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRkoef[idx];
+        }
+        spectrumControl.acqSpectrum.wAcqTime = 1;
+        int iret = Spectrum_save("drk", TRUE);
+        //тут если не сапишется файл energy изза нехватки памяти то пипец!
+        if(!iret)
+        {//
+          modeControl.bNoEnergySigmaSpz = TRUE;
+          PowerControl_sleep(1000);
+          Display_clearTextWin(10);
+          Display_setTextXY(0,0);	//set start coords in window
+          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+          Display_outputTextByLang_log(pMsg1);
+          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+          Display_outputTextByLang_log(pMsg2);
+        }
       }
       else
       {

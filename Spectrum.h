@@ -204,6 +204,9 @@ void Spectrum_startAcq_ex(int acqTime);
 int Spectrum_read_sigma_cal(void);
 int Spectrum_read_energy_cal(void);
 int Spectrum_read_drk_cal(void);
+int Spectrum_read_drk_spz(void);
+int Spectrum_read_drw_cal(void);
+int Spectrum_read_drw_spz(void)
 int Spectrum_open_ex(HFILE hfile);
 void Spectrum_makeEnergyWinsN(void);
 

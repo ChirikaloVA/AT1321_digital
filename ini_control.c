@@ -139,385 +139,387 @@ BOOL filesystem_restore_main_lib(void)
 //absend values will cause exception
 void filesystem_check_ini_files(void)
 {
-	Display_setTextWrap(0);
-	Display_setTextXY(0,0);	//set start coords in window
-	Display_setCurrentFont(fnt8x16);	//set current font
-	Display_setTextDoubleHeight(0);
-	Display_setTextSteps(1,1);//set steps
-	Display_setTextJustify(LEFT);
-
-	Display_setTextColor(RED);	//set text color
-	
-	Display_setTextWin(0,Y_SCREEN_MAX-49,X_SCREEN_SIZE,49);	//set text window
-	Display_clearTextWin(10);
-	Display_outputTextByLang("Initialization...\r\0""Initialization...\r\0""Initialization...\r\0""Инициализация...\r");
-	Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
-	Display_outputTextByLang("Loading system files...\r\0""Loading system files...\r\0""Loading system files...\r\0""Загрузка системных файлов...\r");
-
-
-
-	int ret = ini_read_system_ini("ini");
-	if(ret==E_FAIL)
-	{//no ini file, create it //!!!!!!!! here we must mark that file was recreated
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
-		Display_outputTextByLang_log(pMsg1);
-		
-		if(!powerControl.bBatteryAlarm)
-		{
-			const char pMsg2[] = "Restoring from backup...\0""Erneuerung...\0""Restoring from backup...\0""Восстановление из bak...";
-			Display_outputTextByLang_log(pMsg2);
-			BOOL bNeedRest2 = FALSE;
-			bNeedRest2 = !filesystem_restore_system_ini_from_backup();
-			if(!bNeedRest2)
-			{//restored from bak file
-				ret = ini_read_system_ini("ini");
-				if(ret==E_FAIL)//bak file is invalid
-				{
-					Display_clearTextWin(10);
-					Display_setTextXY(0,0);	//set start coords in window
-					const char pMsg1[] = "Invalid system.bak\r\0""Fehlerhaft system.bak\r\0""Invalid system.bak\r\0""Испорчен system.bak\r";
-					Display_outputTextByLang_log(pMsg1);
-//					PowerControl_sleep(1000);
-//					Display_setTextXY(0,0);	//set start coords in window
-					const char pMsg2[] = "GM and Neutron incorrect\0""GM and Neutron incorrect\0""GM and Neutron incorrect\0""ГМ и нейтр.некорректны ";
-					Display_outputTextByLang_log(pMsg2);
-					PowerControl_sleep(3000);
-					bNeedRest2 = TRUE;
-				}
-			}else
-			{
-				Display_clearTextWin(10);
-				Display_setTextXY(0,0);	//set start coords in window
-				const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
-				Display_outputTextByLang_log(pMsg1);
-				const char pMsg2[] = "No backup file...\0""No backup file...\0""No backup file...\0""Нет bak файла...";
-				Display_outputTextByLang_log(pMsg2);
-				modeControl.bNoSystemBak = TRUE;
-				PowerControl_sleep(3000);
-			}
-			if(bNeedRest2)
-			{
-				Display_clearTextWin(10);
-				Display_setTextXY(0,0);	//set start coords in window
-				const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
-				Display_outputTextByLang_log(pMsg1);
-				const char pMsg2[] = "System default...\0""System default...\0""System default...\0""Системные умолчания...";
-				Display_outputTextByLang_log(pMsg2);
-				if(filesystem_restore_system_ini())
-				{
-					ret = ini_read_system_ini("ini");
-					if(ret==E_FAIL)
-						exception(__FILE__,__FUNCTION__,__LINE__,"invalid default system.ini");
-				}else
-				{
-					exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default system.ini");
-				}
-			}
-		}else
-		{
-			;//!!!!!!!error
-		}
-	}
-	
-	//check system.bak
-	HFILE hFile = filesystem_open_file("system","bak");
-	if(hFile==NULL)
-	{//mark that no system.bak
-		modeControl.bNoSystemBak = TRUE;
-	}
-	//!!!!!!!! крайне не эффективно, т.к. один большой кусок повторяется как и предыдущий!!!!
-	//update screen, we have read language settings
-	Display_warmup_display_start();
-
-	Display_setTextColor(RED);	//set text color
-	Display_setCurrentFont(fnt8x16);	//set current font
-	Display_setTextWin(0,Y_SCREEN_MAX-49,X_SCREEN_SIZE,49);	//set text window
-	Display_clearTextWin(10);
-	Display_outputTextByLang("Initialization...\r\0""Initialisierung...\r\0""Initialization...\r\0""Инициализация...\r");
-	Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
-	Display_outputTextByLang("Loading system files...\r\0""System files laden...\r\0""Loading system files...\r\0""Загрузка системных файлов...\r");
-	////////////////////////////////////////////////////////////////////////////
-	
-	
-	
-	
-	///////////////////////////////identify.ini//////////////////////////////////
-	
-	//read library from file name from identify_ini
-	ret = identify_read_identify_ini();
-	if(ret==E_FAIL)
-	{
-		modeControl.bIdentDefault = TRUE;
-		//!!!!!!!!! need to show MSG about error
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[] = "Invalid identify.ini\r\0""Fehlerhaft identify.ini\r\0""Invalid identify.ini\r\0""Испорчен identify.ini\r";
-		Display_outputTextByLang_log(pMsg1);
-
-		if(!powerControl.bBatteryAlarm)
-		{
-
-			const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
-			Display_outputTextByLang_log(pMsg2);
-	
-			if(filesystem_restore_identify_ini())
-			{
-				ret = identify_read_identify_ini();
-				if(ret==E_FAIL)
-					exception(__FILE__,__FUNCTION__,__LINE__,"invalid default identify.ini");
-			}else
-			{
-				exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default identify.ini");
-			}
-		}else
-		{
-			;//!!!!!!!!error
-		}
-	}
-	
-	
-	
-	
-	PowerControl_sleep(1000);
-	Display_clearTextWin(10);
-	Display_setTextXY(0,0);	//set start coords in window
-	Display_outputTextByLang("Loading calibrations...\r\0""Eichendaten laden...\r\0""Loading calibrations...\r\0""Загрузка калибровок...\r");
-	
-	
-	////////////////////////////energy.cal//////////////////////////////////////
-	ret = Spectrum_read_energy_cal();
-	if(ret==E_FAIL)
-	{//
-		modeControl.bNoEnergyCal = TRUE;
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[] = "No energy.cal\r\0""Fehlen energy.cal\r\0""No energy.cal\r\0""Нет energy.cal\r";
-		Display_outputTextByLang_log(pMsg1);
-		const char pMsg2[]="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
-		Display_outputTextByLang_log(pMsg2);
-		
-		HFILE hfile  = filesystem_open_file("energy","spz");
-		if(hfile!=NULL)
-			filesystem_delete_file(hfile);
-	}
-	if(ret!=E_FAIL)
-	{
-		//save energy cal as energy.spz
-		for(int i=0;i<CHANNELS;i++)
-			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warEnergy[i];
-		spectrumControl.acqSpectrum.wAcqTime = 1;
-		int iret=Spectrum_save("energy", TRUE);
-		//тут если не сапишется файл energy изза нехватки памяти то пипец!
-		if(!iret)
-		{//
-			modeControl.bNoEnergySigmaSpz = TRUE;
-	
-			PowerControl_sleep(1000);
-			Display_clearTextWin(10);
-			Display_setTextXY(0,0);	//set start coords in window
-			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-			Display_outputTextByLang_log(pMsg1);
-			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-			Display_outputTextByLang_log(pMsg2);
-		}
-	}
-        
-        ///////////////////////////drk.cal//////////////////////////////////////////////
-	ret = Spectrum_read_drk_cal();
-	if(ret==E_FAIL)
-	{//
-		modeControl.bNoEnergyCal = TRUE;
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[] = "No drk.cal\r\0""Fehlen drk.cal\r\0""No drk.cal\r\0""Нет drk.cal\r";
-		Display_outputTextByLang_log(pMsg1);
-		const char pMsg2[]="DR disabled\0""DR geblockt\0""DR disabled\0""МД запрещена";
-		Display_outputTextByLang_log(pMsg2);
-		
-		HFILE hfile  = filesystem_open_file("drk","spz");
-		if(hfile!=NULL)
-			filesystem_delete_file(hfile);
-	}
-	if(ret!=E_FAIL)
-	{
-		//save drk cal as drk.spz
-		for(int i=0;i<CHANNELS;i++)
-			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRkoef[i];
-		spectrumControl.acqSpectrum.wAcqTime = 1;
-		int iret=Spectrum_save("drk", TRUE);
-		//тут если не сапишется файл energy изза нехватки памяти то пипец!
-		if(!iret)
-		{//
-			modeControl.bNoEnergySigmaSpz = TRUE;
-	
-			PowerControl_sleep(1000);
-			Display_clearTextWin(10);
-			Display_setTextXY(0,0);	//set start coords in window
-			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-			Display_outputTextByLang_log(pMsg1);
-			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-			Display_outputTextByLang_log(pMsg2);
-		}
-	}
-	///////////////////////////drw.cal//////////////////////////////////////////////
-	ret = Spectrum_read_drw_cal();
-	if(ret==E_FAIL)
-	{//
-		modeControl.bNoEnergyCal = TRUE;
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[] = "No drw.cal\r\0""Fehlen drw.cal\r\0""No drw.cal\r\0""Нет drw.cal\r";
-		Display_outputTextByLang_log(pMsg1);
-		const char pMsg2[]="DR disabled\0""DR geblockt\0""DR disabled\0""МД запрещена";
-		Display_outputTextByLang_log(pMsg2);
-		
-		HFILE hfile  = filesystem_open_file("drw","spz");
-		if(hfile!=NULL)
-			filesystem_delete_file(hfile);
-	}
-	if(ret!=E_FAIL)
-	{
-		//save drk cal as drk.spz
-		for(int i=0;i<CHANNELS;i++)
-			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRwind[i];
-		spectrumControl.acqSpectrum.wAcqTime = 1;
-		int iret=Spectrum_save("drk", TRUE);
-		//тут если не сапишется файл energy изза нехватки памяти то пипец!
-		if(!iret)
-		{//
-			modeControl.bNoEnergySigmaSpz = TRUE;
-	
-			PowerControl_sleep(1000);
-			Display_clearTextWin(10);
-			Display_setTextXY(0,0);	//set start coords in window
-			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-			Display_outputTextByLang_log(pMsg1);
-			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-			Display_outputTextByLang_log(pMsg2);
-		}
-	}
-	/////////////////////////////sigma.cal//////////////////////////////////////////
-	ret = Spectrum_read_sigma_cal();
-	if(ret==E_FAIL)
-	{//
-		modeControl.bNoSigmaCal = TRUE;
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[]="No sigma.cal\r\0""Fehlen sigma.cal\r\0""No sigma.cal\r\0""Нет sigma.cal\r";
-		Display_outputTextByLang_log(pMsg1);
-		const char pMsg2[] ="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
-		Display_outputTextByLang_log(pMsg2);
-
-		HFILE hfile  = filesystem_open_file("sigma","spz");
-		if(hfile!=NULL)
-			filesystem_delete_file(hfile);
-	}
-	if(ret!=E_FAIL)
-	{
-		//save sigma cal as sigma.spz
-		for(int i=0;i<CHANNELS;i++)
-			spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warSigma[i]
+  Display_setTextWrap(0);
+  Display_setTextXY(0,0);	//set start coords in window
+  Display_setCurrentFont(fnt8x16);	//set current font
+  Display_setTextDoubleHeight(0);
+  Display_setTextSteps(1,1);//set steps
+  Display_setTextJustify(LEFT);
+  
+  Display_setTextColor(RED);	//set text color
+  
+  Display_setTextWin(0,Y_SCREEN_MAX-49,X_SCREEN_SIZE,49);	//set text window
+  Display_clearTextWin(10);
+  Display_outputTextByLang("Initialization...\r\0""Initialization...\r\0""Initialization...\r\0""Инициализация...\r");
+  Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
+  Display_outputTextByLang("Loading system files...\r\0""Loading system files...\r\0""Loading system files...\r\0""Загрузка системных файлов...\r");
+  
+  
+  
+  int ret = ini_read_system_ini("ini");
+  if(ret==E_FAIL)
+  {//no ini file, create it //!!!!!!!! here we must mark that file was recreated
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
+    Display_outputTextByLang_log(pMsg1);
+    
+    if(!powerControl.bBatteryAlarm)
+    {
+      const char pMsg2[] = "Restoring from backup...\0""Erneuerung...\0""Restoring from backup...\0""Восстановление из bak...";
+      Display_outputTextByLang_log(pMsg2);
+      BOOL bNeedRest2 = FALSE;
+      bNeedRest2 = !filesystem_restore_system_ini_from_backup();
+      if(!bNeedRest2)
+      {//restored from bak file
+        ret = ini_read_system_ini("ini");
+        if(ret==E_FAIL)//bak file is invalid
+        {
+          Display_clearTextWin(10);
+          Display_setTextXY(0,0);	//set start coords in window
+          const char pMsg1[] = "Invalid system.bak\r\0""Fehlerhaft system.bak\r\0""Invalid system.bak\r\0""Испорчен system.bak\r";
+          Display_outputTextByLang_log(pMsg1);
+          //					PowerControl_sleep(1000);
+          //					Display_setTextXY(0,0);	//set start coords in window
+          const char pMsg2[] = "GM and Neutron incorrect\0""GM and Neutron incorrect\0""GM and Neutron incorrect\0""ГМ и нейтр.некорректны ";
+          Display_outputTextByLang_log(pMsg2);
+          PowerControl_sleep(3000);
+          bNeedRest2 = TRUE;
+        }
+      }else
+      {
+        Display_clearTextWin(10);
+        Display_setTextXY(0,0);	//set start coords in window
+        const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
+        Display_outputTextByLang_log(pMsg1);
+        const char pMsg2[] = "No backup file...\0""No backup file...\0""No backup file...\0""Нет bak файла...";
+        Display_outputTextByLang_log(pMsg2);
+        modeControl.bNoSystemBak = TRUE;
+        PowerControl_sleep(3000);
+      }
+      if(bNeedRest2)
+      {
+        Display_clearTextWin(10);
+        Display_setTextXY(0,0);	//set start coords in window
+        const char pMsg1[] = "Invalid system.ini\r\0""Fehlerhaft system.ini\r\0""Invalid system.ini\r\0""Испорчен system.ini\r";
+        Display_outputTextByLang_log(pMsg1);
+        const char pMsg2[] = "System default...\0""System default...\0""System default...\0""Системные умолчания...";
+        Display_outputTextByLang_log(pMsg2);
+        if(filesystem_restore_system_ini())
+        {
+          ret = ini_read_system_ini("ini");
+          if(ret==E_FAIL)
+            exception(__FILE__,__FUNCTION__,__LINE__,"invalid default system.ini");
+        }else
+        {
+          exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default system.ini");
+        }
+      }
+    }else
+    {
+      ;//!!!!!!!error
+    }
+  }
+  
+  //check system.bak
+  HFILE hFile = filesystem_open_file("system","bak");
+  if(hFile==NULL)
+  {//mark that no system.bak
+    modeControl.bNoSystemBak = TRUE;
+  }
+  //!!!!!!!! крайне не эффективно, т.к. один большой кусок повторяется как и предыдущий!!!!
+  //update screen, we have read language settings
+  Display_warmup_display_start();
+  
+  Display_setTextColor(RED);	//set text color
+  Display_setCurrentFont(fnt8x16);	//set current font
+  Display_setTextWin(0,Y_SCREEN_MAX-49,X_SCREEN_SIZE,49);	//set text window
+  Display_clearTextWin(10);
+  Display_outputTextByLang("Initialization...\r\0""Initialisierung...\r\0""Initialization...\r\0""Инициализация...\r");
+  Display_setTextWin(0,Y_SCREEN_MAX-33,X_SCREEN_SIZE,33);	//set text window
+  Display_outputTextByLang("Loading system files...\r\0""System files laden...\r\0""Loading system files...\r\0""Загрузка системных файлов...\r");
+  ////////////////////////////////////////////////////////////////////////////
+  
+  
+  
+  
+  ///////////////////////////////identify.ini//////////////////////////////////
+  
+  //read library from file name from identify_ini
+  ret = identify_read_identify_ini();
+  if(ret==E_FAIL)
+  {
+    modeControl.bIdentDefault = TRUE;
+    //!!!!!!!!! need to show MSG about error
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "Invalid identify.ini\r\0""Fehlerhaft identify.ini\r\0""Invalid identify.ini\r\0""Испорчен identify.ini\r";
+    Display_outputTextByLang_log(pMsg1);
+    
+    if(!powerControl.bBatteryAlarm)
+    {
+      
+      const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
+      Display_outputTextByLang_log(pMsg2);
+      
+      if(filesystem_restore_identify_ini())
+      {
+        ret = identify_read_identify_ini();
+        if(ret==E_FAIL)
+          exception(__FILE__,__FUNCTION__,__LINE__,"invalid default identify.ini");
+      }else
+      {
+        exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default identify.ini");
+      }
+    }else
+    {
+      ;//!!!!!!!!error
+    }
+  }
+  
+  
+  
+  
+  PowerControl_sleep(1000);
+  Display_clearTextWin(10);
+  Display_setTextXY(0,0);	//set start coords in window
+  Display_outputTextByLang("Loading calibrations...\r\0""Eichendaten laden...\r\0""Loading calibrations...\r\0""Загрузка калибровок...\r");
+  
+  
+  ////////////////////////////energy.cal//////////////////////////////////////
+  ret = Spectrum_read_energy_cal();
+  if(ret==E_FAIL)
+  {//
+    modeControl.bNoEnergyCal = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "No energy.cal\r\0""Fehlen energy.cal\r\0""No energy.cal\r\0""Нет energy.cal\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
+    Display_outputTextByLang_log(pMsg2);
+    
+    HFILE hfile  = filesystem_open_file("energy","spz");
+    if(hfile!=NULL)
+      filesystem_delete_file(hfile);
+  }
+  if(ret!=E_FAIL)
+  {
+    //save energy cal as energy.spz
+    for(int i=0;i<CHANNELS;i++)
+      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warEnergy[i];
+    spectrumControl.acqSpectrum.wAcqTime = 1;
+    int iret=Spectrum_save("energy", TRUE);
+    //тут если не сапишется файл energy изза нехватки памяти то пипец!
+    if(!iret)
+    {//
+      modeControl.bNoEnergySigmaSpz = TRUE;
+      
+      PowerControl_sleep(1000);
+      Display_clearTextWin(10);
+      Display_setTextXY(0,0);	//set start coords in window
+      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+      Display_outputTextByLang_log(pMsg1);
+      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+      Display_outputTextByLang_log(pMsg2);
+    }
+  }
+  
+  ///////////////////////////drk.cal//////////////////////////////////////////////
+//  ret = Spectrum_read_drk_cal();
+  ret = Spectrum_read_drk_spz();
+  if(ret == E_FAIL)
+  {//
+    modeControl.bNoEnergyCal = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "No drk.spz\r\0""Fehlen drk.spz\r\0""No drk.spz\r\0""Нет drk.spz\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="DR set default\0""DR \0""DR set default\0""МД по умолчанию";
+    Display_outputTextByLang_log(pMsg2);
+//    HFILE hfile  = filesystem_open_file("drk","spz");
+//    if(hfile != NULL)
+//      filesystem_delete_file(hfile);
+  }
+  if(ret != E_FAIL)
+  {
+    //save drk cal as drk.spz
+//    for(int i = 0;i < (SD_WIN_SIZE+2);i++)
+//    {
+//      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRkoef[i];
+//    }
+//    spectrumControl.acqSpectrum.wAcqTime = 1;
+//    int iret = Spectrum_save("drk", TRUE);
+//    //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//    if(!iret)
+//    {//
+//      modeControl.bNoEnergySigmaSpz = TRUE;
+//      PowerControl_sleep(1000);
+//      Display_clearTextWin(10);
+//      Display_setTextXY(0,0);	//set start coords in window
+//      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//      Display_outputTextByLang_log(pMsg1);
+//      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//      Display_outputTextByLang_log(pMsg2);
+//    }
+  }
+  ///////////////////////////drw.cal//////////////////////////////////////////////
+  ret = Spectrum_read_drw_cal();
+  
+  if(ret == E_FAIL)
+  {//
+    modeControl.bNoEnergyCal = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "No drw.cal\r\0""Fehlen drw.cal\r\0""No drw.cal\r\0""Нет drw.cal\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="DR disabled\0""DR geblockt\0""DR disabled\0""МД запрещена";
+    Display_outputTextByLang_log(pMsg2);
+    
+    HFILE hfile  = filesystem_open_file("drw","spz");
+    if(hfile!=NULL)
+      filesystem_delete_file(hfile);
+  }
+  if(ret != E_FAIL)
+  {
+    //save drk cal as drk.spz
+    for(int i=0;i<CHANNELS;i++)
+      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRwind[i];
+    spectrumControl.acqSpectrum.wAcqTime = 1;
+    int iret=Spectrum_save("drw", TRUE);
+    //тут если не сапишется файл energy изза нехватки памяти то пипец!
+    if(!iret)
+    {//
+      modeControl.bNoEnergySigmaSpz = TRUE;
+      
+      PowerControl_sleep(1000);
+      Display_clearTextWin(10);
+      Display_setTextXY(0,0);	//set start coords in window
+      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+      Display_outputTextByLang_log(pMsg1);
+      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+      Display_outputTextByLang_log(pMsg2);
+    }
+  }
+  /////////////////////////////sigma.cal//////////////////////////////////////////
+  ret = Spectrum_read_sigma_cal();
+  if(ret == E_FAIL)
+  {//
+    modeControl.bNoSigmaCal = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[]="No sigma.cal\r\0""Fehlen sigma.cal\r\0""No sigma.cal\r\0""Нет sigma.cal\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[] ="Identification disabled\0""Identifizierung geblockt\0""Identification disabled\0""Идентификация запрещена";
+    Display_outputTextByLang_log(pMsg2);
+    
+    HFILE hfile  = filesystem_open_file("sigma","spz");
+    if(hfile!=NULL)
+      filesystem_delete_file(hfile);
+  }
+  if(ret != E_FAIL)
+  {
+    //save sigma cal as sigma.spz
+    for(int i=0;i<CHANNELS;i++)
+      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warSigma[i]
 #ifdef _THIN_SIGMA
-				*SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
+        *SIGMA_THIN_FACTOR_M/SIGMA_THIN_FACTOR_D
 #endif	//#ifdef _THIN_SIGMA
-		;
-		spectrumControl.acqSpectrum.wAcqTime = 1;
-		int iret=Spectrum_save("sigma", TRUE);
-		//тут если не сапишется файл sigma изза нехватки памяти то пипец!
-		if(!iret)
-		{//
-			modeControl.bNoEnergySigmaSpz = TRUE;
-	
-			PowerControl_sleep(1000);
-			Display_clearTextWin(10);
-			Display_setTextXY(0,0);	//set start coords in window
-			const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-			Display_outputTextByLang_log(pMsg1);
-			const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-			Display_outputTextByLang_log(pMsg2);
-//			Display_refresh();
-		}
-	}
-	
-	Spectrum_clear();
-	
-	
-	
-	
-	
-	/////////////////////////////////main.lib//////////////////////////////////////////
-	
-	PowerControl_sleep(1000);
-	Display_clearTextWin(10);
-	Display_setTextXY(0,0);	//set start coords in window
-	Display_outputTextByLang("Loading nuclide library...\r\0""Nuklidbibliothek laden...\r\0""Loading nuclide library...\r\0""Загрузка библиотеки нуклидов...\r");
-
-	
-
-	ret = identify_open_library();
-	
-	//read library from file name from identify_ini
-	if(ret==E_FAIL)
-	{
-		modeControl.bNoLibrary = TRUE;
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		const char pMsg1[]="Invalid library file\r\0""Fehlerhaft bibliothek file\r\0""Invalid library file\r\0""Испорчен файл библиотеки\r";
-		Display_outputTextByLang_log(pMsg1);
-		const char pMsg2[]="Loading default...\0""Laden default...\0""Loading default...\0""Загрузка по умолчанию...";
-		Display_outputTextByLang_log(pMsg2);
-
-		PowerControl_sleep(1000);
-		Display_clearTextWin(10);
-		Display_setTextXY(0,0);	//set start coords in window
-		Display_outputTextByLang_log("Loading main.lib...\r\0""main.lib laden...\r\0""Loading main.lib...\r\0""Загрузка main.lib...\r");
-		
-		strcpy(identifyControl.libraryFileName, "main");
-		ret = identify_open_library();
-		//read library from file name from identify_ini
-		if(ret==E_FAIL)
-		{
-			PowerControl_sleep(1000);
-			identifyControl.NUCLNUM = 0;	//reset to 0 if error
-	
-			const char pMsg1[]="Invalid main.lib\r\0""Fehlerhaft main.lib\r\0""Invalid main.lib\r\0""Испорчен main.lib\r";
-			Display_clearTextWin(10);
-			Display_setTextXY(0,0);	//set start coords in window
-			Display_outputTextByLang_log(pMsg1);
-			
-			if(!powerControl.bBatteryAlarm)
-			{
-				const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
-				Display_outputTextByLang_log(pMsg2);
-				//!!!!!!!!! need to show MSG about error
-				if(filesystem_restore_main_lib())
-				{
-					ret = identify_open_library();
-					if(ret==E_FAIL)
-						exception(__FILE__,__FUNCTION__,__LINE__,"invalid default main.lib");
-				}else
-				{
-				exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default main.lib");
-					;//!!!!!!!!error
-				}
-			}else
-			{
-				;//!!!!!!!!error
-			}
-		}
-	}
-	
-
-	////////////////////////////////////////////////////////////////////////////
+          ;
+    spectrumControl.acqSpectrum.wAcqTime = 1;
+    int iret=Spectrum_save("sigma", TRUE);
+    //тут если не сапишется файл sigma изза нехватки памяти то пипец!
+    if(!iret)
+    {//
+      modeControl.bNoEnergySigmaSpz = TRUE;
+      
+      PowerControl_sleep(1000);
+      Display_clearTextWin(10);
+      Display_setTextXY(0,0);	//set start coords in window
+      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+      Display_outputTextByLang_log(pMsg1);
+      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+      Display_outputTextByLang_log(pMsg2);
+      //			Display_refresh();
+    }
+  }
+  
+  Spectrum_clear();
+  
+  
+  
+  
+  
+  /////////////////////////////////main.lib//////////////////////////////////////////
+  
+  PowerControl_sleep(1000);
+  Display_clearTextWin(10);
+  Display_setTextXY(0,0);	//set start coords in window
+  Display_outputTextByLang("Loading nuclide library...\r\0""Nuklidbibliothek laden...\r\0""Loading nuclide library...\r\0""Загрузка библиотеки нуклидов...\r");
+  
+  
+  
+  ret = identify_open_library();
+  
+  //read library from file name from identify_ini
+  if(ret==E_FAIL)
+  {
+    modeControl.bNoLibrary = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[]="Invalid library file\r\0""Fehlerhaft bibliothek file\r\0""Invalid library file\r\0""Испорчен файл библиотеки\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="Loading default...\0""Laden default...\0""Loading default...\0""Загрузка по умолчанию...";
+    Display_outputTextByLang_log(pMsg2);
+    
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    Display_outputTextByLang_log("Loading main.lib...\r\0""main.lib laden...\r\0""Loading main.lib...\r\0""Загрузка main.lib...\r");
+    
+    strcpy(identifyControl.libraryFileName, "main");
+    ret = identify_open_library();
+    //read library from file name from identify_ini
+    if(ret==E_FAIL)
+    {
+      PowerControl_sleep(1000);
+      identifyControl.NUCLNUM = 0;	//reset to 0 if error
+      
+      const char pMsg1[]="Invalid main.lib\r\0""Fehlerhaft main.lib\r\0""Invalid main.lib\r\0""Испорчен main.lib\r";
+      Display_clearTextWin(10);
+      Display_setTextXY(0,0);	//set start coords in window
+      Display_outputTextByLang_log(pMsg1);
+      
+      if(!powerControl.bBatteryAlarm)
+      {
+        const char pMsg2[]="Restoring...\0""Erneuerung...\0""Restoring...\0""Восстановление...";
+        Display_outputTextByLang_log(pMsg2);
+        //!!!!!!!!! need to show MSG about error
+        if(filesystem_restore_main_lib())
+        {
+          ret = identify_open_library();
+          if(ret==E_FAIL)
+            exception(__FILE__,__FUNCTION__,__LINE__,"invalid default main.lib");
+        }else
+        {
+          exception(__FILE__,__FUNCTION__,__LINE__,"failed to restore default main.lib");
+          ;//!!!!!!!!error
+        }
+      }else
+      {
+        ;//!!!!!!!!error
+      }
+    }
+  }
+  
+  
+  ////////////////////////////////////////////////////////////////////////////
 }
 
 
@@ -1061,32 +1063,32 @@ const char system_ini[394]=
 int ini_retrieveTable(HFILE hfile, struct tagIndexMeanTable*  pTable)
 {
 #define TABLE_STRING_LEN 50	
-	char nums[]=".0123456789";
-	int itemsnum = 0;
-	char buf[TABLE_STRING_LEN+1];
-	char strbuf[10];
-	int filepos = 0;
-	int len;
-	while((len = filesystem_get_string(hfile, &filepos, buf, TABLE_STRING_LEN))!=E_FAIL)
-	{
-		if(!len)continue;
-		//have a string
-		memset(strbuf,0,10);
-		buf[len] = '\0';
-		int next = strcspn(buf, nums);//found digits
-		if(next==len)continue;	//just empty string
-		char* pbuf = &buf[next];
-		next = strspn(pbuf, nums);	//found not digits
-		if(next==strlen(pbuf))return 0;	//error!!! thrash in the file
-		strncpy(strbuf, pbuf ,next);	//cut digits
-		pTable[itemsnum].index = atof(strbuf);
-		pbuf = &pbuf[next];
-		next = strcspn(pbuf, nums);	//found next digits
-		if(next==strlen(pbuf))return 0;	//error!!! thrash in the file
-		pbuf = &pbuf[next];
-		strncpy(strbuf, pbuf, 10);
-		pTable[itemsnum].mean = atof(strbuf);
-		itemsnum++;
-	};
-	return itemsnum;
+  char nums[]=".0123456789";
+  int itemsnum = 0;
+  char buf[TABLE_STRING_LEN+1];
+  char strbuf[10];
+  int filepos = 0;
+  int len;
+  while((len = filesystem_get_string(hfile, &filepos, buf, TABLE_STRING_LEN))!=E_FAIL)
+  {
+    if(!len)continue;
+    //have a string
+    memset(strbuf,0,10);
+    buf[len] = '\0';
+    int next = strcspn(buf, nums);//found digits
+    if(next==len)continue;	//just empty string
+    char* pbuf = &buf[next];
+    next = strspn(pbuf, nums);	//found not digits
+    if(next==strlen(pbuf))return 0;	//error!!! thrash in the file
+    strncpy(strbuf, pbuf ,next);	//cut digits
+    pTable[itemsnum].index = atof(strbuf);
+    pbuf = &pbuf[next];
+    next = strcspn(pbuf, nums);	//found next digits
+    if(next==strlen(pbuf))return 0;	//error!!! thrash in the file
+    pbuf = &pbuf[next];
+    strncpy(strbuf, pbuf, 10);
+    pTable[itemsnum].mean = atof(strbuf);
+    itemsnum++;
+  };
+  return itemsnum;
 }

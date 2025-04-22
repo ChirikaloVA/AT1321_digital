@@ -1536,10 +1536,10 @@ int Spectrum_read_drw_cal(void)
   Spectrum_setupDoseWindowTable();
   return S_OK;
 }
+
 int Spectrum_read_drw_spz(void)
 {
-  float koef1;
-  unsigned char idx;
+  unsigned short idx;
   
   //read drk
   HFILE hfile = filesystem_open_file("drw", /*name of the file, will be found*/
@@ -1549,17 +1549,12 @@ int Spectrum_read_drw_spz(void)
     return E_FAIL;
   Spectrum_open("drw");
   
-  spectrumControl.warDRkoef[0] = spectrumControl.opnSpectrum.dwarSpectrum[0];  //33443
-  spectrumControl.warDRkoef[1] = spectrumControl.opnSpectrum.dwarSpectrum[1];  //33443
-  koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
-  for(idx = 0; idx < SD_WIN_SIZE; ++idx)
+  
+  for(idx = 0; idx < CHANNELS; ++idx)
   {
-    spectrumControl.warDRkoef[idx+2] = spectrumControl.opnSpectrum.dwarSpectrum[idx+2];
-    spectrumControl.warDRkTable[idx].mean = spectrumControl.opnSpectrum.dwarSpectrum[idx+2]/koef1;
-    spectrumControl.warDRkTable[idx].index = idx+1;
-    
+    spectrumControl.warDRwind[idx] = spectrumControl.opnSpectrum.dwarSpectrum[idx];
   }
-  spectrumControl.bHasDRk = TRUE;
+  spectrumControl.bHasDRw = TRUE;
   return S_OK;
 }
 

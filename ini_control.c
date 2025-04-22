@@ -367,8 +367,8 @@ void filesystem_check_ini_files(void)
 //    }
   }
   ///////////////////////////drw.cal//////////////////////////////////////////////
-  ret = Spectrum_read_drw_cal();
-  
+//  ret = Spectrum_read_drw_cal();
+  ret = Spectrum_read_drw_spz();
   if(ret == E_FAIL)
   {//
     modeControl.bNoEnergyCal = TRUE;

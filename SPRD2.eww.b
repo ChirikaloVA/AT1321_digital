@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+    <project>
+        <path>$WS_DIR$\SPRD.ewp</path>
+    </project>
+    <batchBuild>
+        <batchDefinition>
+            <name>All configurations</name>
+            <member>
+                <project>SPRD</project>
+                <configuration>Debug</configuration>
+            </member>
+            <member>
+                <project>SPRD</project>
+                <configuration>Debug SNM</configuration>
+            </member>
+            <member>
+                <project>SPRD</project>
+                <configuration>BNC</configuration>
+            </member>
+            <member>
+                <project>SPRD</project>
+                <configuration>IAEA SNM</configuration>
+            </member>
+            <member>
+                <project>SPRD</project>
+                <configuration>GPS_BLUETOOTH_FREE</configuration>
+            </member>
+        </batchDefinition>
+    </batchBuild>
+</workspace>

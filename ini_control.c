@@ -388,7 +388,9 @@ void filesystem_check_ini_files(void)
   {
     //save drk cal as drk.spz
     for(int i=0;i<CHANNELS;i++)
+    {
       spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRwind[i];
+    }
     spectrumControl.acqSpectrum.wAcqTime = 1;
     int iret=Spectrum_save("drw", TRUE);
     //тут если не сапишется файл energy изза нехватки памяти то пипец!

@@ -771,6 +771,9 @@ void USBRS_readRefSpec(struct tagUART * pUart)
 	pUart->trmBuffLenConst = 3+bytes;
 }
 ////////////////
+#ifdef DEBUG
+unsigned short tst_val1 = 0xf0;
+#endif
 void USBRS_writeRefSpec(struct tagUART * pUart)
 {
   WORD idx,idx1;
@@ -823,6 +826,49 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
     }
   case 2095:
     {
+      idx1  = startAdr/3;    
+      for(idx = 0; idx < (startAdr + flen); )
+        {
+          spectrumControl.warDRwind[idx1] = ((WORD)pUart->rcvBuff_safe[idx+9]<<16)|((WORD)pUart->rcvBuff_safe[idx + 10]<<8)|pUart->rcvBuff_safe[idx + 11];
+          ++idx1;
+          idx = idx+3;
+        }
+#ifdef DEBUG
+      if(startAdr == tst_val1)
+      {
+        idx1  = 0; 
+      }
+#endif
+      if(startAdr == 0xc30)        //заключительный кусок
+      {
+        if((startAdr+flen) > ((CHANNELS*3)+1))
+        {
+          break;
+        }
+        
+        for(int idx = 0;idx < CHANNELS; idx++)
+        {
+          spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRwind[idx];
+        }
+        spectrumControl.acqSpectrum.wAcqTime = 1;
+        int iret = Spectrum_save("drw", TRUE);
+        //тут если не сапишется файл energy изза нехватки памяти то пипец!
+        if(!iret)
+        {//
+          modeControl.bNoEnergySigmaSpz = TRUE;
+          PowerControl_sleep(1000);
+          Display_clearTextWin(10);
+          Display_setTextXY(0,0);	//set start coords in window
+          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+          Display_outputTextByLang_log(pMsg1);
+          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+          Display_outputTextByLang_log(pMsg2);
+        }
+      }
+      else
+      {
+        
+      }
       break;
     }
   default:

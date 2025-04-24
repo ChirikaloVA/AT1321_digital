@@ -827,10 +827,14 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
   case 2095:
     {
       idx1  = startAdr/3;    
-      for(idx = 0; idx < (startAdr + flen); )
+      for(idx = 0; idx < flen; )
         {
           spectrumControl.warDRwind[idx1] = ((WORD)pUart->rcvBuff_safe[idx+9]<<16)|((WORD)pUart->rcvBuff_safe[idx + 10]<<8)|pUart->rcvBuff_safe[idx + 11];
           ++idx1;
+          if(idx1 > CHANNELS)
+          {
+            break;
+          }
           idx = idx+3;
         }
 #ifdef DEBUG
@@ -841,11 +845,6 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
 #endif
       if(startAdr == 0xc30)        //заключительный кусок
       {
-        if((startAdr+flen) > ((CHANNELS*3)+1))
-        {
-          break;
-        }
-        
         for(int idx = 0;idx < CHANNELS; idx++)
         {
           spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRwind[idx];

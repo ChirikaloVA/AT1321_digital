@@ -1539,7 +1539,7 @@ int Spectrum_read_drw_cal(void)
 
 int Spectrum_read_drw_spz(void)
 {
-  unsigned short idx;
+  unsigned short idx,idx1;
   
   //read drk
   HFILE hfile = filesystem_open_file("drw", /*name of the file, will be found*/
@@ -1549,12 +1549,18 @@ int Spectrum_read_drw_spz(void)
     return E_FAIL;
   Spectrum_open("drw");
   
-  
+  idx1 = 0;
   for(idx = 0; idx < CHANNELS; ++idx)
   {
     spectrumControl.warDRwind[idx] = spectrumControl.opnSpectrum.dwarSpectrum[idx];
+    if(spectrumControl.warDRwind[idx] != spectrumControl.opnSpectrum.dwarSpectrum[idx+1])
+    {
+      spectrumControl.wins1[idx1] = idx;
+      ++idx1;
+    }
   }
   spectrumControl.bHasDRw = TRUE;
+  Spectrum_setupDoseWindowTable();
   return S_OK;
 }
 
@@ -1562,7 +1568,9 @@ int Spectrum_read_drw_spz(void)
 //ret E_FAIL if error
 int Spectrum_read_sigma_cal(void)
 {
+#ifdef _THIN_SIGMA
 	short i;
+#endif
 	//read sigma
 	HFILE hfile = filesystem_open_file("sigma", /*name of the file, will be found*/
 		   "cal" /*ext of the file*/
@@ -1782,8 +1790,11 @@ void Spectrum_peakProc(void)
 void Spectrum_setupDoseWindowTable(void)
 {
 	if(!spectrumControl.bHasEnergy)return;	//no energy
+#ifndef SDL
         Spectrum_makeEnergyWins();
+#else    
 	Spectrum_makeEnergyWinsN();
+#endif
 	InterProc_setWinTable();
 }
 
@@ -1821,52 +1832,17 @@ void Spectrum_makeEnergyWins(void)
 void Spectrum_makeEnergyWinsN(void)
 {
   int i,k=0;
-  int rz,rz2=-100;
-  const WORD * sdew;
-  WORD tmpV1[SD_WIN_SIZE],ewin;
-  WORD * spec = spectrumControl.wins1;
-  WORD * ener = spectrumControl.warEnergy;
-  if(spectrumControl.bHasDRw == FALSE)
+ 
+  
+  for(i = 0; i < SD_WIN_SIZE; i++)
   {
-    sdew = spectrumDoserateEnergyWin;
+
+    k = spectrumControl.wins1[i];
+    spectrumControl.warDRwTable[i].mean = spectrumControl.warEnergy[k];
+    spectrumControl.warDRwTable[i].index = i;
   }
-  else
-  {
-    for(i = 0; i < SD_WIN_SIZE; i++)
-    {
-       tmpV1[i] = (WORD)(spectrumControl.warDRwTable[i].mean);
-    }
-    sdew = tmpV1;
-  }
-  ewin = *sdew;
-  spec[k++] = 1;	//start first window from this channel
-  for(i=0;i<CHANNELS && k<SD_WIN_SIZE;i++)
-  {
-    rz = *ener++ - ewin;
-    if(rz>=0)
-    {
-      ewin = *++sdew;
-      spec[k++] = -rz2<=rz?i-1:i;
-      rz=-100;
-    }
-    rz2 = rz;
-  }
-  spec[k] = 0xffff;
-  k=0;
-  rz=0;
-  for(i = 1; i <= SD_WIN_SIZE; i++)
-  {
-    rz2 = spectrumControl.wins1[i];
-    if(rz2 > CHANNELS)
-    {
-      rz2 = CHANNELS;
-    }
-    for(;k < rz2; k++)
-    {
-      spectrumControl.warDRwind[k] = i-1;
-    }
-    rz = k;
-  }
+  
+ 
 }
 
 

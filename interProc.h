@@ -245,7 +245,7 @@ struct tagInterProcRSModbus
 ////////////////////////////////
 //order of transmitted commands
 #define INT_RCV_BUF_LEN 260
-#define INT_TRM_BUF_LEN 48
+#define INT_TRM_BUF_LEN 100
 
 struct tagCmd
 {

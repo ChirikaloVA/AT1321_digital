@@ -326,18 +326,18 @@ void InterProc_goAwake(void)
 //prior it must be calculated
 void InterProc_setWinTable(void)
 {
-	BYTE ar[43+(SD_WIN_SIZE*2)+2]={1,0x13,40,0xff,0x80,0x00,36};
+	BYTE ar[43+(SD_WIN_SIZE*4)+8]={1,0x13,sizeof(ar),0xff,0x80,0x00,sizeof(ar)};
 	for(int i=0;i<SD_WIN_SIZE+1;i++)
 	{
 		ar[7+i*2]=HIBYTE_W(spectrumControl.wins1[i]);
 		ar[7+i*2+1]=LOBYTE(spectrumControl.wins1[i]);
 	}
-        for(int i=0;i<SD_WIN_SIZE+1+2;i++)
+        for(int i=0;i<SD_WIN_SIZE*4+8;i++)
 	{
-		ar[7+(i*2)+SD_WIN_SIZE]=HIBYTE_W(spectrumControl.warDRkoef[i]);
-		ar[7+(i*2)+SD_WIN_SIZE+1]=LOBYTE(spectrumControl.warDRkoef[i]);
+		ar[7+i+SD_WIN_SIZE] = *((char*)&(spectrumControl.warDRkoef)+i);
+		//ar[7+(i*2)+SD_WIN_SIZE+1]=LOBYTE(spectrumControl.warDRkoef[i]);
 	}
-	//InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
+	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar)+3);
 }
 
 void InterProc_getGain(void)

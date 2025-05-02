@@ -796,7 +796,7 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
         for(idx = 0; idx < SD_WIN_SIZE + 2; idx++)
         {
           idx1 = idx * 3;
-          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[idx1+9]<<16)|((WORD)pUart->rcvBuff_safe[idx1 + 10]<<8)|pUart->rcvBuff_safe[idx1 + 11];
+          spectrumControl.warDRkoef[idx] = ((UINT)pUart->rcvBuff_safe[idx1+9]<<16)|((UINT)pUart->rcvBuff_safe[idx1 + 10]<<8)|pUart->rcvBuff_safe[idx1 + 11];
           //          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[12]<<16)|((WORD)pUart->rcvBuff_safe[13]<<8)|pUart->rcvBuff_safe[14];
         }
         for(int idx = 0;idx < (SD_WIN_SIZE+2);idx++)

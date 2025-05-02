@@ -88,7 +88,7 @@ struct tagSpectrumControl
 	WORD warEnergy[CHANNELS];
 	BOOL bHasSigma;
 	WORD warSigma[CHANNELS];	//здесь хранится сигма в 1,5 уже чем калибровочная, это нужно для поиска слитых пиков. во всех остальных местах кроме идентификации нажуно множить ее на 1,5
-        WORD warDRkoef[SD_WIN_SIZE+2];
+        UINT warDRkoef[SD_WIN_SIZE+2];
         WORD warDRwind[CHANNELS];
 
 	int iAcquiringTime;

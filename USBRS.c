@@ -817,6 +817,10 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
           const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
           Display_outputTextByLang_log(pMsg2);
         }
+        else
+        {
+          Spectrum_setupDoseWindowTable();
+        }
       }
       else
       {
@@ -862,6 +866,10 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
           Display_outputTextByLang_log(pMsg1);
           const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
           Display_outputTextByLang_log(pMsg2);
+        }
+        else
+        {
+          Spectrum_setupDoseWindowTable();
         }
       }
       else

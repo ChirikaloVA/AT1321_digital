@@ -334,7 +334,7 @@ void InterProc_setWinTable(void)
 	}
         for(int i=0;i<SD_WIN_SIZE*4+8;i++)
 	{
-		ar[7+i+SD_WIN_SIZE] = *((char*)&(spectrumControl.warDRkoef)+i);
+		ar[7+i+(SD_WIN_SIZE * 2)] = *((char*)&(spectrumControl.warDRkoef)+i);
 		//ar[7+(i*2)+SD_WIN_SIZE+1]=LOBYTE(spectrumControl.warDRkoef[i]);
 	}
 	InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar)+3);

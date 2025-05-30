@@ -869,6 +869,15 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
         }
         else
         {
+          idx1  = 0;
+          for(idx = 0; idx < CHANNELS; ++idx)
+          {
+            if(spectrumControl.warDRwind[idx] != spectrumControl.warDRwind[idx+1])
+            {
+              spectrumControl.wins1[idx1] = idx;
+              ++idx1;
+            }
+          }
           Spectrum_setupDoseWindowTable();
         }
       }
@@ -904,6 +913,9 @@ void USBRS_readIDData(struct tagUART * pUart)
 	pUart->trmBuff[11] = SETUPModeControl.ManufacturedMonth;
 	pUart->trmBuff[12] = LO2BYTE(SETUPModeControl.ManufacturedYear);
 	pUart->trmBuff[13] = LOBYTE(SETUPModeControl.ManufacturedYear);
+//        pUart->trmBuff[11] = 0x0c;
+//	pUart->trmBuff[12] = 0;
+//	pUart->trmBuff[13] = 0x0b;
 	pUart->trmBuff[14] = 0x00;
 	pUart->trmBuff[15] = 0x00;
 	pUart->trmBuff[16] = 0x00;

@@ -220,7 +220,9 @@ __noreturn void main(void)
 
 	//==================USBRS Init====================
 	USBRS_Init();
-
+///////////////////////////////////////////////
+	//allow USB communications here
+	USBRS_turnON();
 
 	//==================GPS Init====================
 #ifndef GPS_BT_FREE
@@ -406,9 +408,7 @@ __noreturn void main(void)
 	KeyboardControl_restoreKeyboard();
 	
 
-	///////////////////////////////////////////////
-	//allow USB communications here
-	USBRS_turnON();
+	
 	
 
 	

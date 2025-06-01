@@ -796,7 +796,7 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
         for(idx = 0; idx < SD_WIN_SIZE + 2; idx++)
         {
           idx1 = idx * 3;
-          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[idx1+9]<<16)|((WORD)pUart->rcvBuff_safe[idx1 + 10]<<8)|pUart->rcvBuff_safe[idx1 + 11];
+          spectrumControl.warDRkoef[idx] = ((UINT)pUart->rcvBuff_safe[idx1+9]<<16)|((UINT)pUart->rcvBuff_safe[idx1 + 10]<<8)|pUart->rcvBuff_safe[idx1 + 11];
           //          spectrumControl.warDRkoef[idx] = ((WORD)pUart->rcvBuff_safe[12]<<16)|((WORD)pUart->rcvBuff_safe[13]<<8)|pUart->rcvBuff_safe[14];
         }
         for(int idx = 0;idx < (SD_WIN_SIZE+2);idx++)
@@ -816,6 +816,10 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
           Display_outputTextByLang_log(pMsg1);
           const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
           Display_outputTextByLang_log(pMsg2);
+        }
+        else
+        {
+          Spectrum_setupDoseWindowTable();
         }
       }
       else
@@ -863,6 +867,19 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
           const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
           Display_outputTextByLang_log(pMsg2);
         }
+        else
+        {
+          idx1  = 0;
+          for(idx = 0; idx < CHANNELS; ++idx)
+          {
+            if(spectrumControl.warDRwind[idx] != spectrumControl.warDRwind[idx+1])
+            {
+              spectrumControl.wins1[idx1] = idx;
+              ++idx1;
+            }
+          }
+          Spectrum_setupDoseWindowTable();
+        }
       }
       else
       {
@@ -896,6 +913,9 @@ void USBRS_readIDData(struct tagUART * pUart)
 	pUart->trmBuff[11] = SETUPModeControl.ManufacturedMonth;
 	pUart->trmBuff[12] = LO2BYTE(SETUPModeControl.ManufacturedYear);
 	pUart->trmBuff[13] = LOBYTE(SETUPModeControl.ManufacturedYear);
+//        pUart->trmBuff[11] = 0x0c;
+//	pUart->trmBuff[12] = 0;
+//	pUart->trmBuff[13] = 0x0b;
 	pUart->trmBuff[14] = 0x00;
 	pUart->trmBuff[15] = 0x00;
 	pUart->trmBuff[16] = 0x00;

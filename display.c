@@ -758,13 +758,42 @@ void Display_turnON(void)
 
 
 
-	
+	CLR_RS;
+	DisplayData = 0x01;
+	SET_RS;
+	DisplayData = 0x88;
+	DisplayData = 0x28;
 	CLR_RS;
 	DisplayData = 0x10;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x00;
-	
+        CLR_RS;
+	DisplayData = 0x18;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x1a;
+        CLR_RS;
+	DisplayData = 0xF8;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0b;
+        CLR_RS;
+	DisplayData = 0xF9;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0b;
+        
+        CLR_RS;
+	DisplayData = 0x06;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x02;
+	CLR_RS;
+	DisplayData = 0x1a;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x01;
 	Display_Init_8bit_262k();
 	Display_clearScreen();
 	
@@ -775,10 +804,50 @@ void Display_turnON(void)
 	DisplayData = 0x01;
 
 	CLR_RS;
-	DisplayData = 0x43;
+	DisplayData = 0x70;
 	SET_RS;
-	DisplayData = 0;
-	DisplayData = 0x1;//gamma set
+	DisplayData = 0x25;
+	DisplayData = 0x80;//gamma set
+        CLR_RS;
+	DisplayData = 0x71;
+	SET_RS;
+	DisplayData = 0x27;
+	DisplayData = 0x80;//gamma set
+        CLR_RS;
+	DisplayData = 0x72;
+	SET_RS;
+	DisplayData = 0x33;
+	DisplayData = 0x80;//gamma set
+        CLR_RS;
+	DisplayData = 0x73;
+	SET_RS;
+	DisplayData = 0x1d;
+	DisplayData = 0x18;//gamma set
+        CLR_RS;
+	DisplayData = 0x74;
+	SET_RS;
+	DisplayData = 0x1f;
+	DisplayData = 0x11;//gamma set
+        CLR_RS;
+	DisplayData = 0x75;
+	SET_RS;
+	DisplayData = 0x24;
+	DisplayData = 0x19;//gamma set
+        CLR_RS;
+	DisplayData = 0x76;
+	SET_RS;
+	DisplayData = 0x1A;
+	DisplayData = 0x14;//gamma set
+        CLR_RS;
+	DisplayData = 0x77;
+	SET_RS;
+	DisplayData = 0x21;
+	DisplayData = 0x1A;//gamma set
+        CLR_RS;
+	DisplayData = 0x78;
+	SET_RS;
+	DisplayData = 0x20;
+	DisplayData = 0x13;//gamma set
 	
 	
 	CLR_DPWON;

@@ -540,7 +540,7 @@ int Display_showSymbol(char symbol)
 	
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 
 	
@@ -651,7 +651,7 @@ void Display_output_bmp(WORD x, WORD y, const BITMAPFILEHEADER* pBmp)
     BYTE c1,c2,c3;
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	do
 	{
@@ -759,92 +759,92 @@ void Display_turnON(void)
 
 
 	CLR_RS;
-	DisplayData = 0x01;
+	DisplayData = DDC;
 	SET_RS;
-	DisplayData = 0x88;
-	DisplayData = 0x28;
+	DisplayData = 0x88;     //Front Porch and BBack Porch
+	DisplayData = 0x28;     //320*240
 	CLR_RS;
-	DisplayData = 0x10;
+	DisplayData = STB;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x00;
+	DisplayData = 0x00;     //stb off
         CLR_RS;
-	DisplayData = 0x18;
+	DisplayData = OSC_RADJ;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x1a;
+	DisplayData = 0x1a;     //x 0.877 если выше мигают буквы на русском
         CLR_RS;
-	DisplayData = 0xF8;
+	DisplayData = VGH;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x0b;
+	DisplayData = 0x0b;     //4.2 V
         CLR_RS;
-	DisplayData = 0xF9;
+	DisplayData = VGL;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x0b;
+	DisplayData = 0x0b;     //-4.2 V
         
         CLR_RS;
-	DisplayData = 0x06;
+	DisplayData = DC2;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x02;
+	DisplayData = 0x02;     //TEMON = 1
 	CLR_RS;
-	DisplayData = 0x1a;
+	DisplayData = SODR;
 	SET_RS;
 	DisplayData = 0x00;
-	DisplayData = 0x01;
+	DisplayData = 0x02;     //Slow or medium 
 	Display_Init_8bit_262k();
 	Display_clearScreen();
 	
 	CLR_RS;
-	DisplayData = 0x05;
+	DisplayData = DISP_ON;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x01;
-
+//значения регистов из рэ C0283QGLD-T
 	CLR_RS;
-	DisplayData = 0x70;
+	DisplayData = GCONTR0;
 	SET_RS;
 	DisplayData = 0x25;
 	DisplayData = 0x80;//gamma set
         CLR_RS;
-	DisplayData = 0x71;
+	DisplayData = GCONTR1;
 	SET_RS;
 	DisplayData = 0x27;
 	DisplayData = 0x80;//gamma set
         CLR_RS;
-	DisplayData = 0x72;
+	DisplayData = GCONTR2;
 	SET_RS;
 	DisplayData = 0x33;
 	DisplayData = 0x80;//gamma set
         CLR_RS;
-	DisplayData = 0x73;
+	DisplayData = GCONTR3;
 	SET_RS;
 	DisplayData = 0x1d;
 	DisplayData = 0x18;//gamma set
         CLR_RS;
-	DisplayData = 0x74;
+	DisplayData = GCONTR4;
 	SET_RS;
 	DisplayData = 0x1f;
 	DisplayData = 0x11;//gamma set
         CLR_RS;
-	DisplayData = 0x75;
+	DisplayData = GCONTR5;
 	SET_RS;
 	DisplayData = 0x24;
 	DisplayData = 0x19;//gamma set
         CLR_RS;
-	DisplayData = 0x76;
+	DisplayData = GCONTR6;
 	SET_RS;
 	DisplayData = 0x1A;
 	DisplayData = 0x14;//gamma set
         CLR_RS;
-	DisplayData = 0x77;
+	DisplayData = GCONTR7;
 	SET_RS;
 	DisplayData = 0x21;
 	DisplayData = 0x1A;//gamma set
         CLR_RS;
-	DisplayData = 0x78;
+	DisplayData = GCONTR8;
 	SET_RS;
 	DisplayData = 0x20;
 	DisplayData = 0x13;//gamma set
@@ -854,9 +854,9 @@ void Display_turnON(void)
 	
 	pause(50000);
 	pause(50000);
-    pause(50000);
-    pause(50000);
-    pause(50000);
+        pause(50000);
+        pause(50000);
+        pause(50000);
 	pause(10000);
 	
 	SET_PON;
@@ -910,17 +910,17 @@ void Display_set_clip_region(WORD x1, WORD y1, WORD x2, WORD y2)
 
 
 	CLR_RS;
-	DisplayData = 0x35;
+	DisplayData = V_POS0;
 	SET_RS;
 	DisplayData = (BYTE)LO2BYTE(y1);
 	DisplayData = (BYTE)LOBYTE(y1);
 	CLR_RS;
-	DisplayData = 0x36;
+	DisplayData = V_POS1;
 	SET_RS;
 	DisplayData = (BYTE)LO2BYTE(y2);
 	DisplayData = (BYTE)LOBYTE(y2);
 	CLR_RS;
-	DisplayData = 0x37;
+	DisplayData = H_POS;
 	SET_RS;
 	DisplayData = (BYTE)LOBYTE(x1);
 	DisplayData = (BYTE)LOBYTE(x2);
@@ -933,12 +933,12 @@ void Display_set_screen_memory_adr(WORD x, WORD y)
 	if(y>=Y_SCREEN_SIZE)y=Y_SCREEN_SIZE-1;
 
 	CLR_RS;
-	DisplayData = 0x20;
+	DisplayData = GRAM_ADR_SL;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = (BYTE)LOBYTE(x);
 	CLR_RS;
-	DisplayData = 0x21;
+	DisplayData = GRAM_ADR_SH;
 	SET_RS;
 	DisplayData = (BYTE)HIBYTE_W(y);
 	DisplayData = (BYTE)LOBYTE(y);
@@ -952,7 +952,7 @@ void Display_dot(WORD x, WORD y, COLORREF clr)
 {
 	Display_set_screen_memory_adr(x,y);
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	DisplayData = LO3BYTE(clr);
 	DisplayData = LO2BYTE(clr);
@@ -965,7 +965,7 @@ COLORREF Display_read_dot(WORD x, WORD y)
 	COLORREF clr;
 	Display_set_screen_memory_adr(x,y);
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	BYTE b1 = DisplayData;
 	b1 = DisplayData;
@@ -1076,7 +1076,7 @@ void Display_Init_18bit_262k_updownleftright( void)
 	BYTE zero = 0;
 
 	CLR_RS;
-	DisplayData = 0x23;
+	DisplayData = SEL_DB1;
 	SET_RS;
 	CLR_RS;
 	DisplayData = 0x02;
@@ -1099,7 +1099,7 @@ void Display_Init_18bit_262k( void)
 	BYTE zero = 0;
 	
 	CLR_RS;
-	DisplayData = 0x23;
+	DisplayData = SEL_DB1;
 	SET_RS;
 	CLR_RS;
 	DisplayData = 0x02;
@@ -1123,17 +1123,17 @@ void Display_Init_18bit_262k_leftrightdownup( void)
 	BYTE zero = 0;
 	
 	CLR_RS;
-	DisplayData = 0x23;
+	DisplayData = SEL_DB1;
 	SET_RS;
 	CLR_RS;
-	DisplayData = 0x02;
+	DisplayData = RGB_CTL;
 	SET_RS;
 	DisplayData = zero;
 	DisplayData = zero;
 
 	volatile BYTE* pData = (BYTE*)0x81000102;
 	CLR_RS;
-	DisplayData = 0x03;
+	DisplayData = ENT_MOD;
 	SET_RS;
 	*pData = 0x10;
 }
@@ -1153,10 +1153,10 @@ void Display_Init_8bit_262k( void)
 
 	
 	CLR_RS;
-	DisplayData = 0x24;
+	DisplayData = SEL_DB2;
 	SET_RS;
 	CLR_RS;
-	DisplayData = 0x02;
+	DisplayData = RGB_CTL;
 	SET_RS;
 	DisplayData = zero;
 	DisplayData = zero;
@@ -1171,7 +1171,7 @@ void Display_Init_8bit_262k( void)
 void Display_set_display_entrymode(BOOL bRGBmode, BOOL bUpToDown)
 {
 	CLR_RS;
-	DisplayData = 0x03;
+	DisplayData = ENT_MOD;
 	SET_RS;
 	DisplayData = bRGBmode?0x41:0x81;
 	DisplayData = bUpToDown?0x30:0x31;

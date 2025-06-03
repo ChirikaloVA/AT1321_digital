@@ -29,7 +29,7 @@ void Display_fillRect(RECT rect, COLORREF clr)
 	Display_Init_18bit_262k();
 
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
         BYTE c1=LOBYTE(clr),c2=LO2BYTE(clr),c3=LO3BYTE(clr);
 
@@ -147,7 +147,7 @@ void Display_clearRect(RECT rect, int vsync)
 	
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	
 	if(hlen>0)
@@ -378,7 +378,7 @@ void Display_drawVLine(int x, int y1, int y2, COLORREF clr)
 
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	
 	if(hlen>0)
@@ -444,7 +444,7 @@ void Display_drawHLine(int x1, int y, int x2, COLORREF clr)
 	DWORD llen = len&0xf;
 
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 
 	if(hlen>0)
@@ -499,7 +499,7 @@ void Display_drawVLine_xor(int x, int y1, int y2, COLORREF clr)
 
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	
 	BYTE b1 = DisplayData;
@@ -545,7 +545,7 @@ void Display_drawVLine_xor(int x, int y1, int y2, COLORREF clr)
 	
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	BYTE c1=LOBYTE(clr),c2=LO2BYTE(clr),c3=LO3BYTE(clr);
 
@@ -619,7 +619,7 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 	
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	
 	BYTE b1 = DisplayData;
@@ -666,7 +666,7 @@ void Display_drawHLine_xor(int x1, int y, int x2, COLORREF clr)
 
 	
 	CLR_RS;
-	DisplayData = 0x22;
+	DisplayData = GRAM_DAT;
 	SET_RS;
 	BYTE c1=LOBYTE(clr),c2=LO2BYTE(clr),c3=LO3BYTE(clr);
 
@@ -762,7 +762,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 		
 		
 		CLR_RS;
-		DisplayData = 0x22;
+		DisplayData = GRAM_DAT;
 		SET_RS;
 		
 		BYTE b1 = DisplayData;
@@ -810,7 +810,7 @@ void Display_left_scroll(int x1, int y1, int x2, int y2, int step)
 
 		
 		CLR_RS;
-		DisplayData = 0x22;
+		DisplayData = GRAM_DAT;
 		SET_RS;
 	
 		hlen = len>>4;

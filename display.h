@@ -50,7 +50,52 @@ extern const BYTE bmp_silent[];
 #define PURPLE RGB(63,0,63)
 
 ////////////////////////////////
+//--- регистры управления дисплеем --------------
 
+//--Display Duty control-- размер экрана в пикселях
+#define DDC 0x01
+// on/off
+#define DISP_ON 0x05
+//Stand By
+#define STB 0x10
+//Oscillator Control
+#define OSC_RADJ 0x18
+//Power GEN 3
+#define VGH 0xF8
+//Power GEN 4
+#define VGL 0xF9
+//Display Control 2
+#define DC2 0x06
+//Source Driver Control
+#define SODR 0x1A
+//Gamma Control
+#define GCONTR0 0x70
+#define GCONTR1 0x71
+#define GCONTR2 0x72
+#define GCONTR3 0x73
+#define GCONTR4 0x74
+#define GCONTR5 0x75
+#define GCONTR6 0x76
+#define GCONTR7 0x77
+#define GCONTR8 0x78
+//Vertical RAM Address Position 
+#define V_POS0 0x35
+#define V_POS1 0x36
+// Horizontal RAM Address Position
+#define H_POS 0x37
+//GRAM Address Set 
+#define GRAM_ADR_SL 0x20
+#define GRAM_ADR_SH 0x21
+//Write Data to GRAM
+#define GRAM_DAT 0x22
+//Select Data Bus 1
+#define SEL_DB1 0x23
+//Select Data Bus 2
+#define SEL_DB2 0x24
+//RGB Interface Control
+#define RGB_CTL 0x02
+//Entry Mode
+#define ENT_MOD 0x03
 #pragma pack(1)
 
 /*

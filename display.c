@@ -754,15 +754,7 @@ void Display_turnON(void)
 	display.bLCDON = TRUE;
 
 	
-	PowerControl_EMC_ON();
-
-
-
-	CLR_RS;
-	DisplayData = DDC;
-	SET_RS;
-	DisplayData = 0x88;     //Front Porch and BBack Porch
-	DisplayData = 0x28;     //320*240
+	
 	CLR_RS;
 	DisplayData = STB;
 	SET_RS;
@@ -773,27 +765,19 @@ void Display_turnON(void)
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x1a;     //x 0.877 если выше мигают буквы на русском
-        CLR_RS;
-	DisplayData = VGH;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x0b;     //4.2 V
-        CLR_RS;
-	DisplayData = VGL;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x0b;     //-4.2 V
+
         
         CLR_RS;
 	DisplayData = DC2;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x02;     //TEMON = 1
-	CLR_RS;
-	DisplayData = SODR;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x02;     //Slow or medium 
+//	CLR_RS;
+//	DisplayData = SODR;
+//	SET_RS;
+//	DisplayData = 0x00;
+//	DisplayData = 0x04;     //Slow or medium 
+        
 	Display_Init_8bit_262k();
 	Display_clearScreen();
 	
@@ -1044,7 +1028,29 @@ void Display_init(void)
 	//===== Иниацилизация и включение дисплея ============================
 	CLR_NRES;
 	SET_NRES;
-	
+        PowerControl_EMC_ON();
+        CLR_RS;
+	DisplayData = DISP_ON;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;
+
+
+	CLR_RS;
+	DisplayData = DDC;
+	SET_RS;
+	DisplayData = 0x88;     //Front Porch and BBack Porch
+	DisplayData = 0x28;     //320*240
+        CLR_RS;
+	DisplayData = VGH;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0a;     //4.2 V
+        CLR_RS;
+	DisplayData = VGL;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x0a;     //-4.2 V
 	
 	Display_turnON();
 	

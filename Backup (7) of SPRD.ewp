@@ -6332,7 +6332,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\Setup_mode.h</name>
+            <name>$PROJ_DIR$\Setup_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6344,7 +6344,7 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPRD_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
@@ -6368,7 +6368,7 @@
             <name>$PROJ_DIR$\YESNO_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_mode.h</name>
+            <name>$PROJ_DIR$\yesno_mode.h</name>
         </file>
     </group>
     <group>

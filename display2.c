@@ -217,17 +217,21 @@ void Display_clearRect(RECT rect, int vsync)
 //prepare for interrupt emergeny text output
 __arm void Display_prepareEmergencyTextControl(void)
 {
-	Display_turnON();
-	Display_setCurrentFont(fnt16x16);	//set current font
-	Display_setTextColor(RED);	//set text color
-	Display_setTextSteps(1,1);//set steps
-	Display_setTextWin(0,0,X_SCREEN_SIZE,Y_SCREEN_SIZE);	//set text window
-	Display_setTextXY(0,0);	//set start coords in window
-	Display_setTextWrap(1);
-	Display_setTextLineClear(0);
-	Display_setTextDoubleHeight(0);
-	Display_setTextJustify(NONE);
-	Display_clearTextWin(100);
+//  if(!display.bLCDON)
+//  {
+//    Display_turnON();
+//  }
+  Display_turnON();
+  Display_setCurrentFont(fnt16x16);	//set current font
+  Display_setTextColor(RED);	//set text color
+  Display_setTextSteps(1,1);//set steps
+  Display_setTextWin(0,0,X_SCREEN_SIZE,Y_SCREEN_SIZE);	//set text window
+  Display_setTextXY(0,0);	//set start coords in window
+  Display_setTextWrap(1);
+  Display_setTextLineClear(0);
+  Display_setTextDoubleHeight(0);
+  Display_setTextJustify(NONE);
+  Display_clearTextWin(100);
 }
 
 __arm void Display_printHEX(BYTE value)

@@ -755,24 +755,42 @@ void Display_turnON(void)
 
 	
 	PowerControl_EMC_ON();
+        CLR_RS;
+	DisplayData = SEL_DB2;  //8-bit!!!!!!         
+	SET_RS;
 
-
-
+        CLR_RS;
+	DisplayData = STB;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x00;     //stb off
 	CLR_RS;
 	DisplayData = DDC;
 	SET_RS;
 	DisplayData = 0x88;     //Front Porch and BBack Porch
 	DisplayData = 0x28;     //320*240
-	CLR_RS;
-	DisplayData = STB;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x00;     //stb off
+	
         CLR_RS;
 	DisplayData = OSC_RADJ;
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x1a;     //x 0.877 если выше мигают буквы на русском
+        CLR_RS;
+	DisplayData = SODR;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x02;     //Slow or medium 
+        CLR_RS;
+	DisplayData = VCI1;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x08; 
+        
+        CLR_RS;
+	DisplayData = VINT;
+	SET_RS;
+	DisplayData = 0x14;
+	DisplayData = 0x00;     
         CLR_RS;
 	DisplayData = VGH;
 	SET_RS;
@@ -789,19 +807,9 @@ void Display_turnON(void)
 	SET_RS;
 	DisplayData = 0x00;
 	DisplayData = 0x02;     //TEMON = 1
-	CLR_RS;
-	DisplayData = SODR;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x02;     //Slow or medium 
-	Display_Init_8bit_262k();
-	Display_clearScreen();
 	
-	CLR_RS;
-	DisplayData = DISP_ON;
-	SET_RS;
-	DisplayData = 0x00;
-	DisplayData = 0x01;
+        
+	
 //значения регистов из рэ C0283QGLD-T
 	CLR_RS;
 	DisplayData = GCONTR0;
@@ -848,7 +856,15 @@ void Display_turnON(void)
 	SET_RS;
 	DisplayData = 0x20;
 	DisplayData = 0x13;//gamma set
+        
+	Display_Init_8bit_262k();
+	Display_clearScreen();
 	
+	CLR_RS;
+	DisplayData = DISP_ON;
+	SET_RS;
+	DisplayData = 0x00;
+	DisplayData = 0x01;     //on
 	
 	CLR_DPWON;
 	

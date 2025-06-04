@@ -60,6 +60,10 @@ extern const BYTE bmp_silent[];
 #define STB 0x10
 //Oscillator Control
 #define OSC_RADJ 0x18
+//Power GEN 1
+#define VCI1 0x12
+//Power GEN 2
+#define VINT 0x13
 //Power GEN 3
 #define VGH 0xF8
 //Power GEN 4
@@ -88,9 +92,9 @@ extern const BYTE bmp_silent[];
 #define GRAM_ADR_SH 0x21
 //Write Data to GRAM
 #define GRAM_DAT 0x22
-//Select Data Bus 1
+//Select Data Bus 1 Select 18-/16-bit Data Bus Interface
 #define SEL_DB1 0x23
-//Select Data Bus 2
+//Select Data Bus 2 Select 9-/8-bit Data Bus Interface
 #define SEL_DB2 0x24
 //RGB Interface Control
 #define RGB_CTL 0x02

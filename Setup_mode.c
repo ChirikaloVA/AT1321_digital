@@ -2010,13 +2010,25 @@ void SETUPMode_clear_memory_confirm(BOOL bYes)
 
 
 
+//BOOL SETUPMode_menu1_editDTCOEF(void)
+//{
+//	EditMode_EditInt("Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени",
+//					 interProcControl.rsModbus.fDTCOEF,
+//					 0.000001,
+//					 2.0,
+//					 "\0""\0""\0""",
+//					 SETUPMode_menu1_editDTCOEF_edit_done);
+//	return (BOOL)-1;
+//}
+
 BOOL SETUPMode_menu1_editDTCOEF(void)
 {
-	EditMode_EditInt("Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени",
+	EditMode_EditFloat("Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени",
 					 interProcControl.rsModbus.fDTCOEF,
 					 0.000001,
-					 2.0,
+					 9.0,
 					 "\0""\0""\0""",
+                                         "%f",
 					 SETUPMode_menu1_editDTCOEF_edit_done);
 	return (BOOL)-1;
 }

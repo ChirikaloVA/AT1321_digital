@@ -926,7 +926,8 @@ void USBRS_readIDData(struct tagUART * pUart)
 	pUart->trmBuffLenConst = 21;
 #else
         pUart->trmBuff[2] = 0x12;
-        pUart->trmBuff[3] = 0x13;       //для пробы работы с СДЛ
+//        pUart->trmBuff[3] = 0x13;       //для пробы работы с СДЛ
+        pUart->trmBuff[3] = 0xbc;
 	pUart->trmBuff[4] = 0x00;
 	pUart->trmBuff[5] = HIBYTE(SETUPModeControl.Serial);
 	pUart->trmBuff[6] = LO3BYTE(SETUPModeControl.Serial);

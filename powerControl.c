@@ -86,7 +86,18 @@ void PowerControl_turnOFF_device(const char* pTextReason)
 	
 	CLR_AN_ON;	//turn off second proc
 	CLR_DG_ON; //Выключение питания of first proc
-	while(1)PowerControl_kickWatchDog();
+        WDTC = 0x400000;	//reset for about of every 3.64 s/2
+	WDCLKSEL_bit.WDSEL = 0x01;
+	WDMOD_bit.WDTOF = 0;
+	WDMOD_bit.WDRESET = 1;	//must be =1 for RELEASE MODE	
+	WDMOD_bit.WDEN = 1;
+	while(1)
+        {
+          if(PIN_KEY1 == 1)
+          {
+            PowerControl_kickWatchDog();
+          }
+        }
 }
 
 //показать экран при выключении прибора

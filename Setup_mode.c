@@ -1206,11 +1206,11 @@ void SETUPMode_showVersion(int y)
 	Display_setTextColor(YELLOW);	//set text color
 	Display_outputText("NaI(Tl) D25x40mm\r");
 	Display_outputTextByLang("MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""MCA: 1024 channels\r\0""АЦП: 1024 канала\r");
-	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""Счетчик ГМ, USB, Bluetooth, GPS\r");
+//	Display_outputTextByLang("GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""GM counter, USB, Bluetooth, GPS\r\0""Счетчик ГМ, USB, Bluetooth, GPS\r");
 #ifdef BNC	
 	Display_outputText("2015 © Manufacturer\r");
 #else
-	Display_outputText("2015 © ATOMTEX SPE\r");
+	Display_outputText("2025 © ATOMTEX SPE\r");
 #endif
 	///////////////////////
 }
@@ -2035,7 +2035,7 @@ BOOL SETUPMode_menu1_editDTCOEF(void)
 
 const char* SETUPMode_menu1_editDTCOEF_onUpdate(void)
 {
-	return "False alarm period\0""False alarm period\0""False alarm period\0""Период ложн.тревог";
+	return "Deadtime coef\0""Deadtime coef\0""Deadtime coef\0""Коэф.мертв.времени";
 }
 
 

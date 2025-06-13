@@ -298,7 +298,9 @@ void InterProc_InterProcControl(void)
 			//InterProc_isReadyToTransmit
 			//exception because of receive error. must be removed in release version I think
 			const char* const errDesc[]={"OK","RCV_ERR_TIMEOUT","RCV_ERR_BYTE","RCV_ERR_BUF_OVERFLOW","RCV_ERR_CRC"};
+#ifndef DEBUG
 			exception(__FILE__,__FUNCTION__,__LINE__, errDesc[interProcControl.uart.bRcvError_safe]);
+#endif
 		}
 
 		if(interProcControl.uart.trmBuff[0]==INTERPROC_ADDRESS)
@@ -690,7 +692,12 @@ void InterProc_fillNewCmd(const BYTE volatile * cmd, int len)
 	InterProc_findFreeSlot(&indexIndex, &maxIndex);
 	if(indexIndex==-1)
 	{
+#ifdef DEBUG
+          maxIndex = MAX_CMD_IN_ORDER;
+          indexIndex = MAX_CMD_IN_ORDER;
+#else
 		exception(__FILE__,__FUNCTION__,__LINE__, "No free space in command order");
+#endif
 	}
 	//we have free place in buf
 	interProcControl.arCmd[indexIndex].len = len;

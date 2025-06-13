@@ -86,10 +86,15 @@ const char* RID_NameOnUpdate(void)//"RID adv\0""РИД расш",
 //отображаемое слово и есть текущий режим
 const char* RID_UpOnUpdate(void)
 {
+#ifdef DEBUG
+  RIDControl.bExpertMode = TRUE;
+  return "spectr\0""spectr\0""spectr\0""спектр";
+#else
 	if(RIDControl.bExpertMode )
 		return "spectr\0""spectr\0""spectr\0""спектр";
 	else
 		return "login\0""login\0""login\0""пароль";
+#endif
 }
 const char* RID_DownOnUpdate(void)//"menu\0""меню",
 {
@@ -119,7 +124,9 @@ exit expert mode
 
 BOOL RID_menu1_exitExpertMode(void)
 {
+#ifndef DEBUG
 	RIDControl.bExpertMode = FALSE;
+#endif
 	Modes_setActiveMode(&modes_RID_Mode);
 	return 1;
 }
@@ -145,7 +152,11 @@ const char* RID_menu1_exitExpertMode_onUpdate(void)
 void RID_Init(void)
 {
 	memset(&RIDControl,0,sizeof(RIDControl));
+#ifdef DEBUG
+        RIDControl.bExpertMode = TRUE; 
+#else
 	RIDControl.bExpertMode = FALSE;
+#endif
 }
 
 

@@ -36,9 +36,6 @@
 #include "info_mode.h"
 
 
-
-
-
 /*
 кодирование версий: главный номер, точка, второстепенный номер, буква исполнения
 буква исполнения:
@@ -47,14 +44,18 @@ B - безядерные исполнения
 */
 
 
-#define VERT(maj, min, let) "FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""FirmWare ver. " #maj "." #min #let "\0""Версия ПО " #maj "." #min #let "\0";
-
-
 #ifndef SUBVER
 #error "SUBVER not set!!!"
 #endif
 
-const char txtVersion[]=VERT(4, 8, SUBVER);
+
+//#define VERT(maj, min) "FirmWare ver. " #maj "." #min " "SUBVER"\0""FirmWare ver. " #maj "." #min "\0""FirmWare ver. " #maj "." #min "\0""Версия ПО " #maj "." #min "\0";
+
+#define MAJOR "5"
+#define MINOR "25"
+
+
+const char txtVersion[]="FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""FirmWare ver. " MAJOR "." MINOR SUBVER"\0""Версия ПО " MAJOR "." MINOR SUBVER"\0";
 //#ifdef _SNM
 //#ifdef _IAEA
 //I
@@ -73,8 +74,7 @@ const char txtVersion[]=VERT(4, 8, SUBVER);
 
 //const char txtVersion[]="FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""FirmWare ver. 4.00\0""Версия ПО 4.00";
 
-//#define OUR__DATE__ "26.02.2014"
-#define OUR__DATE__ "08.10.2024"
+#define OUR__DATE__ __DATE__
 
 const char txtCompileDate[]="Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Date: "OUR__DATE__"\0""Дата: "OUR__DATE__;
 

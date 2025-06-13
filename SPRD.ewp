@@ -221,7 +221,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>DEBUG</state>
-                    <state>SUBVER</state>
+                    <state>SUBVER="PULT"</state>
                     <state>SDL</state>
                 </option>
                 <option>
@@ -6399,7 +6399,7 @@
             <name>$PROJ_DIR$\COMM_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\comm_mode.h</name>
+            <name>$PROJ_DIR$\COMM_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\edit.c</name>
@@ -6441,7 +6441,7 @@
             <name>$PROJ_DIR$\Message_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\message_mode.h</name>
+            <name>$PROJ_DIR$\Message_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\modes.c</name>
@@ -6459,7 +6459,7 @@
             <name>$PROJ_DIR$\Setup_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\setup_mode.h</name>
+            <name>$PROJ_DIR$\SETUP_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\spectrum.c</name>
@@ -6471,13 +6471,13 @@
             <name>$PROJ_DIR$\SPRD_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\sprd_mode.h</name>
+            <name>$PROJ_DIR$\SPRD_Mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\Stab_mode.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\stab_mode.h</name>
+            <name>$PROJ_DIR$\STAB_mode.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\TC_mode.c</name>

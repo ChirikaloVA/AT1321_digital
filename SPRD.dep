@@ -13,276 +13,276 @@
     <configuration>
         <name>Debug</name>
         <outputs>
-            <file>$PROJ_DIR$\puasson.c</file>
-            <file>$PROJ_DIR$\puasson.h</file>
-            <file>$PROJ_DIR$\eeprom.c</file>
-            <file>$PROJ_DIR$\filesystem.h</file>
-            <file>$PROJ_DIR$\geiger.h</file>
-            <file>$PROJ_DIR$\gps.c</file>
-            <file>$PROJ_DIR$\display2.c</file>
-            <file>$PROJ_DIR$\geiger.c</file>
-            <file>$PROJ_DIR$\clock.h</file>
-            <file>$PROJ_DIR$\filesystem2.c</file>
-            <file>$PROJ_DIR$\ini_control.h</file>
-            <file>$PROJ_DIR$\NMEA_Parser.c</file>
+            <file>$PROJ_DIR$\COMM_mode.c</file>
+            <file>$PROJ_DIR$\Описание программы SPRD.txt</file>
+            <file>$PROJ_DIR$\Описание программы SPIRID1_BNC.txt</file>
+            <file>$PROJ_DIR$\Описание программы SPIRID1_RF.txt</file>
+            <file>$PROJ_DIR$\Описание программы SPIRID1_SNM.txt</file>
+            <file>$PROJ_DIR$\Описание программы SPIRID1IAEASNM.txt</file>
             <file>$PROJ_DIR$\NMEA_Parser.h</file>
-            <file>$PROJ_DIR$\interProc.h</file>
-            <file>$PROJ_DIR$\interrupts.c</file>
-            <file>$PROJ_DIR$\syncObj.c</file>
-            <file>$PROJ_DIR$\interrupts.h</file>
-            <file>$PROJ_DIR$\ini_control.c</file>
             <file>$PROJ_DIR$\syncObj.h</file>
-            <file>$PROJ_DIR$\clock.c</file>
-            <file>$PROJ_DIR$\filesystem.c</file>
-            <file>$PROJ_DIR$\identify.c</file>
-            <file>$PROJ_DIR$\display.c</file>
-            <file>$PROJ_DIR$\gps.h</file>
-            <file>$PROJ_DIR$\display.h</file>
-            <file>$PROJ_DIR$\identify.h</file>
-            <file>$PROJ_DIR$\interProc.c</file>
-            <file>$PROJ_DIR$\eeprom.h</file>
-            <file>$PROJ_DIR$\interProc2.c</file>
+            <file>$PROJ_DIR$\spline.c</file>
+            <file>$PROJ_DIR$\ini_control.h</file>
+            <file>$PROJ_DIR$\gps.c</file>
+            <file>$PROJ_DIR$\ini_control.c</file>
+            <file>$PROJ_DIR$\interrupts.c</file>
+            <file>$PROJ_DIR$\interproc.h</file>
+            <file>$PROJ_DIR$\syncObj.c</file>
             <file>$PROJ_DIR$\keyboard.c</file>
-            <file>$PROJ_DIR$\bluetooth.h</file>
+            <file>$PROJ_DIR$\spline.h</file>
+            <file>$PROJ_DIR$\crc32.h</file>
+            <file>$PROJ_DIR$\library.lib</file>
+            <file>$PROJ_DIR$\Описание программы SPIRID1.txt</file>
+            <file>$PROJ_DIR$\interrupts.h</file>
+            <file>$PROJ_DIR$\geiger.h</file>
+            <file>$PROJ_DIR$\identify.h</file>
+            <file>$PROJ_DIR$\puasson.h</file>
+            <file>$PROJ_DIR$\todo.txt</file>
+            <file>$PROJ_DIR$\puasson.c</file>
+            <file>$PROJ_DIR$\crc32.c</file>
+            <file>$PROJ_DIR$\troubles.txt</file>
             <file>$PROJ_DIR$\keyboard.h</file>
+            <file>$PROJ_DIR$\tz.txt</file>
+            <file>$PROJ_DIR$\gps.h</file>
+            <file>$PROJ_DIR$\identify.c</file>
+            <file>$PROJ_DIR$\COMM_mode.h</file>
+            <file>$PROJ_DIR$\NMEA_Parser.c</file>
+            <file>$PROJ_DIR$\geiger.c</file>
+            <file>$PROJ_DIR$\interProc2.c</file>
+            <file>$PROJ_DIR$\interProc.c</file>
+            <file>$PROJ_DIR$\display.c</file>
+            <file>$PROJ_DIR$\clock.c</file>
+            <file>$PROJ_DIR$\display.h</file>
+            <file>$PROJ_DIR$\display2.c</file>
+            <file>$PROJ_DIR$\filesystem2.c</file>
+            <file>$PROJ_DIR$\eeprom.c</file>
+            <file>$PROJ_DIR$\eeprom.h</file>
+            <file>$PROJ_DIR$\clock.h</file>
+            <file>$PROJ_DIR$\filesystem.c</file>
+            <file>$PROJ_DIR$\filesystem.h</file>
+            <file>$PROJ_DIR$\bluetooth.h</file>
             <file>$PROJ_DIR$\bluetooth.c</file>
-            <file>$PROJ_DIR$\Debug\Obj\TC_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\spline.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\LOG_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\spline.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\YESNO_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\Info_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\syncObj.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\file_list.pbi</file>
-            <file>$PROJ_DIR$\Debug\Exe\SPRD.out</file>
-            <file>$PROJ_DIR$\Debug\Obj\rid.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\puasson.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\SPRD.pbd</file>
-            <file>$PROJ_DIR$\Debug\Obj\identify.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\NMEA_Parser.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\COMM_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\edit.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\modes.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\crc32.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\geiger.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\keyboard.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\filesystem2.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\MCS_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\interProc.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\eeprom.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\rid.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\file_list.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\Message_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\GPS_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\gps.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\Message_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\sound.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\USBRS.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\interProc2.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\ini_control.o</file>
-            <file>$TOOLKIT_DIR$\lib\m4t_al.a</file>
-            <file>$PROJ_DIR$\Debug\Obj\geiger.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\clock.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\keyboard.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\bluetooth.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\filesystem.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\crc32.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\cstartup.o</file>
-            <file>$TOOLKIT_DIR$\lib\rt4t_al.a</file>
-            <file>$PROJ_DIR$\Debug\Obj\bluetooth.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\Stab_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\ini_control.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\sound.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\display2.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\display2.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\clock.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\powerControl.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\Setup_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\spectrum.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\display.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\syncObj.pbi</file>
+            <file>$PROJ_DIR$\gfx\silent.bmp.txt</file>
             <file>$PROJ_DIR$\Debug\Obj\SPRD_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\display.o</file>
             <file>$PROJ_DIR$\Debug\Obj\gps.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\filesystem.o</file>
+            <file>$PROJ_DIR$\gfx\bat1.bmp.txt</file>
             <file>$PROJ_DIR$\Debug\Obj\TC_mode.o</file>
             <file>$PROJ_DIR$\Debug\Exe\SPiRiD1.hex</file>
             <file>$PROJ_DIR$\Debug\Obj\eeprom.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
-            <file>$PROJ_DIR$\gfx\bat1.bmp.txt</file>
             <file>$PROJ_DIR$\gfx\vibro.bmp.txt</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Product_stdlib.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-            <file>$TOOLKIT_DIR$\lib\dl4t_tln.a</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
-            <file>$PROJ_DIR$\Debug\List\SPRD.map</file>
-            <file>$PROJ_DIR$\gfx\bth.bmp.txt</file>
-            <file>$PROJ_DIR$\Debug\Obj\NMEA_Parser.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
             <file>$TOOLKIT_DIR$\inc\c\string.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ctype.h</file>
             <file>$PROJ_DIR$\font16x16 v3.h</file>
             <file>$PROJ_DIR$\Debug\Obj\filesystem2.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\identify.pbi</file>
             <file>$PROJ_DIR$\gfx\sound.bmp.txt</file>
+            <file>$PROJ_DIR$\Debug\Obj\filesystem.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\spectrum.o</file>
+            <file>$PROJ_DIR$\Debug\List\SPRD.map</file>
+            <file>$PROJ_DIR$\Debug\Obj\syncObj.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\ctype.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\identify.pbi</file>
+            <file>$TOOLKIT_DIR$\lib\dl4t_tln.a</file>
             <file>$PROJ_DIR$\gfx\gps.bmp.txt</file>
             <file>$PROJ_DIR$\gfx\bat2.bmp.txt</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\NMEA_Parser.pbi</file>
             <file>$TOOLKIT_DIR$\inc\c\intrinsics.h</file>
-            <file>$PROJ_DIR$\gfx\silent.bmp.txt</file>
-            <file>$TOOLKIT_DIR$\inc\NXP\iolpc2388.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Setup_mode.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$PROJ_DIR$\gfx\bth.bmp.txt</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
             <file>$PROJ_DIR$\LPC2388.icf</file>
-            <file>$PROJ_DIR$\Debug\Obj\USB_mode.o</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\io_macros.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-            <file>$PROJ_DIR$\gfx\memlow.bmp.txt</file>
-            <file>$PROJ_DIR$\font6x16.h</file>
-            <file>$PROJ_DIR$\gfx\bat4.bmp.txt</file>
-            <file>$TOOLKIT_DIR$\lib\shs_l.a</file>
             <file>$PROJ_DIR$\gfx\bat3.bmp.txt</file>
-            <file>$PROJ_DIR$\Debug\Obj\GPS_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\USB_mode.pbi</file>
+            <file>$PROJ_DIR$\font6x16.h</file>
+            <file>$TOOLKIT_DIR$\inc\NXP\iolpc2388.h</file>
+            <file>$PROJ_DIR$\gfx\memlow.bmp.txt</file>
             <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\Stab_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\interProc.pbi</file>
             <file>$PROJ_DIR$\font8x16.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\interrupts.pbi</file>
             <file>$PROJ_DIR$\Debug\Obj\Info_mode.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\edit.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_float_setup.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\SPRD_mode.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\MCS_mode.pbi</file>
             <file>$TOOLKIT_DIR$\inc\c\iccarm_builtin.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\interrupts.o</file>
             <file>$PROJ_DIR$\Debug\Obj\Setup_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\USB_mode.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_float_setup.h</file>
             <file>$PROJ_DIR$\Debug\Obj\USBRS.pbi</file>
             <file>$PROJ_DIR$\font32x32.h</file>
             <file>$PROJ_DIR$\Debug\Obj\modes.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\c\math.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\spectrum.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Stab_mode.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\io_macros.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+            <file>$PROJ_DIR$\gfx\bat4.bmp.txt</file>
+            <file>$PROJ_DIR$\Debug\Obj\interProc.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\SPRD_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\edit.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\interrupts.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\MCS_mode.pbi</file>
+            <file>$TOOLKIT_DIR$\lib\shs_l.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\interrupts.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\GPS_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\USB_mode.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
             <file>$PROJ_DIR$\Debug\Obj\LOG_mode.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\math.h</file>
             <file>$PROJ_DIR$\gfx\bat0.bmp.txt</file>
-            <file>$PROJ_DIR$\Debug\Obj\interProc2.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
             <file>$TOOLKIT_DIR$\inc\c\iar_intrinsics_common.h</file>
             <file>$PROJ_DIR$\Debug\Obj\powerControl.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\COMM_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\spectrum.pbi</file>
             <file>$PROJ_DIR$\Debug\Obj\YESNO_mode.pbi</file>
             <file>$PROJ_DIR$\Debug\Obj\puasson.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\COMM_mode.pbi</file>
-            <file>$PROJ_DIR$\spline.h</file>
-            <file>$PROJ_DIR$\COMM_mode.c</file>
-            <file>$PROJ_DIR$\file_list.c</file>
-            <file>$PROJ_DIR$\GPS_mode.c</file>
-            <file>$PROJ_DIR$\troubles.txt</file>
-            <file>$PROJ_DIR$\Описание программы SPIRID1_BNC.txt</file>
-            <file>$PROJ_DIR$\GPS_mode.h</file>
-            <file>$PROJ_DIR$\file_list.h</file>
-            <file>$PROJ_DIR$\Info_mode.c</file>
-            <file>$PROJ_DIR$\crc32.c</file>
-            <file>$PROJ_DIR$\library.lib</file>
-            <file>$PROJ_DIR$\Описание программы SPIRID1_RF.txt</file>
-            <file>$PROJ_DIR$\spline.c</file>
-            <file>$PROJ_DIR$\Описание программы SPIRID1IAEASNM.txt</file>
-            <file>$PROJ_DIR$\edit.c</file>
-            <file>$PROJ_DIR$\edit.h</file>
-            <file>$PROJ_DIR$\info_mode.h</file>
-            <file>$PROJ_DIR$\crc32.h</file>
-            <file>$PROJ_DIR$\tz.txt</file>
-            <file>$PROJ_DIR$\comm_mode.h</file>
-            <file>$PROJ_DIR$\LOG_mode.c</file>
-            <file>$PROJ_DIR$\Описание программы SPIRID1.txt</file>
-            <file>$PROJ_DIR$\todo.txt</file>
-            <file>$PROJ_DIR$\Описание программы SPIRID1_SNM.txt</file>
-            <file>$PROJ_DIR$\Описание программы SPRD.txt</file>
-            <file>$PROJ_DIR$\LOG_Mode.h</file>
-            <file>$PROJ_DIR$\MCS_mode.c</file>
-            <file>$PROJ_DIR$\Stab_mode.c</file>
-            <file>$PROJ_DIR$\yesno_mode.h</file>
-            <file>$PROJ_DIR$\USB_mode.h</file>
-            <file>$PROJ_DIR$\main.h</file>
-            <file>$PROJ_DIR$\types.h</file>
-            <file>$PROJ_DIR$\TC_mode.c</file>
-            <file>$PROJ_DIR$\TC_mode.h</file>
-            <file>$PROJ_DIR$\SPRD_mode.c</file>
-            <file>$PROJ_DIR$\Spectrum.h</file>
-            <file>$PROJ_DIR$\modes.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\interProc2.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\Message_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\keyboard.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\bluetooth.pbi</file>
+            <file>$TOOLKIT_DIR$\lib\rt4t_al.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\Stab_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\ini_control.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\sound.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\interProc.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\interProc2.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\filesystem.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\USBRS.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\display2.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\display2.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\gps.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\clock.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\powerControl.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\file_list.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\MCS_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\Message_mode.o</file>
+            <file>$TOOLKIT_DIR$\lib\m4t_al.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\ini_control.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\geiger.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\eeprom.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\GPS_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\crc32.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\cstartup.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\clock.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\sound.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\bluetooth.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\rid.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\modes.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\crc32.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\SPRD.pbd</file>
+            <file>$PROJ_DIR$\USBRS.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Info_mode.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\geiger.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\keyboard.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\spline.pbi</file>
+            <file>$PROJ_DIR$\Debug\Exe\SPRD.out</file>
+            <file>$PROJ_DIR$\Debug\Obj\filesystem2.o</file>
+            <file>$PROJ_DIR$\sound.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\TC_mode.pbi</file>
             <file>$PROJ_DIR$\sound.h</file>
+            <file>$PROJ_DIR$\USBRS.c</file>
+            <file>$PROJ_DIR$\types.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\spline.o</file>
+            <file>$PROJ_DIR$\cstartup.s</file>
+            <file>$PROJ_DIR$\main.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\syncObj.o</file>
+            <file>$PROJ_DIR$\yesno_mode.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\rid.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\puasson.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\identify.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\NMEA_Parser.o</file>
+            <file>$PROJ_DIR$\powerControl.c</file>
             <file>$PROJ_DIR$\main.c</file>
-            <file>$PROJ_DIR$\modes.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\edit.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\COMM_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\file_list.pbi</file>
+            <file>$PROJ_DIR$\powerControl.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\LOG_mode.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\YESNO_mode.o</file>
+            <file>$PROJ_DIR$\TC_mode.h</file>
+            <file>$PROJ_DIR$\Info_mode.c</file>
+            <file>$PROJ_DIR$\Message_mode.h</file>
+            <file>$PROJ_DIR$\file_list.h</file>
+            <file>$PROJ_DIR$\GPS_mode.h</file>
+            <file>$PROJ_DIR$\modes.h</file>
+            <file>$PROJ_DIR$\Setup_mode.c</file>
+            <file>$PROJ_DIR$\LOG_mode.c</file>
+            <file>$PROJ_DIR$\info_mode.h</file>
+            <file>$PROJ_DIR$\Setup_Mode.h</file>
+            <file>$PROJ_DIR$\SPRD_mode.c</file>
+            <file>$PROJ_DIR$\USB_mode.h</file>
             <file>$PROJ_DIR$\YESNO_mode.c</file>
             <file>$PROJ_DIR$\rid.h</file>
-            <file>$PROJ_DIR$\Message_mode.h</file>
             <file>$PROJ_DIR$\spectrum.c</file>
+            <file>$PROJ_DIR$\Stab_mode.c</file>
+            <file>$PROJ_DIR$\edit.c</file>
             <file>$PROJ_DIR$\MCS_mode.h</file>
-            <file>$PROJ_DIR$\powerControl.c</file>
-            <file>$PROJ_DIR$\powerControl.h</file>
-            <file>$PROJ_DIR$\USB_mode.c</file>
-            <file>$PROJ_DIR$\sound.c</file>
-            <file>$PROJ_DIR$\STAB_mode.h</file>
-            <file>$PROJ_DIR$\setup_mode.h</file>
-            <file>$PROJ_DIR$\cstartup.s</file>
-            <file>$PROJ_DIR$\USBRS.c</file>
-            <file>$PROJ_DIR$\Message_mode.c</file>
-            <file>$PROJ_DIR$\USBRS.h</file>
+            <file>$PROJ_DIR$\LOG_Mode.h</file>
+            <file>$PROJ_DIR$\GPS_mode.c</file>
+            <file>$PROJ_DIR$\MCS_mode.c</file>
+            <file>$PROJ_DIR$\modes.c</file>
+            <file>$PROJ_DIR$\edit.h</file>
+            <file>$PROJ_DIR$\file_list.c</file>
             <file>$PROJ_DIR$\rid.c</file>
-            <file>$PROJ_DIR$\SPRD_mode.h</file>
-            <file>$PROJ_DIR$\Setup_mode.c</file>
+            <file>$PROJ_DIR$\Spectrum.h</file>
+            <file>$PROJ_DIR$\SPRD_Mode.h</file>
+            <file>$PROJ_DIR$\Message_mode.c</file>
+            <file>$PROJ_DIR$\STAB_mode.h</file>
+            <file>$PROJ_DIR$\TC_mode.c</file>
+            <file>$PROJ_DIR$\USB_mode.c</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 41 102</file>
+                    <file> 162 67</file>
                 </tool>
             </outputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\puasson.c</name>
+            <name>$PROJ_DIR$\COMM_mode.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 157</file>
+                    <file> 118</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 43</file>
+                    <file> 181</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 139 120 117 123 114 190 122 1 205 99 101 148</file>
+                    <file> 115 84 43 47 80 9 78 46 168 32 157 99 98 69 39 212 195 183 96 59 191 86</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 148 99 123 101 120 114 139 1 190 117 122 205</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 168 9 43 39 32 191 212 46 47 195 157 183</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\eeprom.c</name>
+            <name>$PROJ_DIR$\spline.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 94</file>
+                    <file> 161</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 56</file>
+                    <file> 169</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 101 27 123 190 117 209 107 106 16 213 99 149 120 114 122 132 105 195</file>
+                    <file> 84 78 59 16 96 92 99 80 168 98 113</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 27 190 16 209 195 213</file>
+                    <file> 113 78 96 59 99 80 92 16 168 84 98</file>
                 </tool>
             </inputs>
         </file>
@@ -291,463 +291,7 @@
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 90</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 61</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 8 123 190 101 117 205 12 107 106 18 24 23 99 149 120 114 122 115 142 132 105 154</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 190 18 115 142 154 205 24 8 23 12</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\display2.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 81</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 82</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 190 122 16 117 24</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 24 117 122 190 16</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\geiger.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 69</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 51</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 99 123 117 205 154 190 196 132 24 215 149 114 195 106 148 18 4 16 184 122 105 120 139 27 101 115 142 3 10</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 117 122 106 99 123 101 120 114 149 105 132 148 139 190 18 115 142 154 24 4 205 16 215 195 3 27 184 10 196</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\filesystem2.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 109</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 53</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 149 122 190 195 3 27 10 99 120 117 24 8 114 107 106 205 16 187 25 23 123 101 105 132</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 27 190 205 24 16 3 187 195 8 25 10 23</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\NMEA_Parser.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 104</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 46</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 123 121 101 149 117 12 107 106 190 99 120 114 122 105 98 132</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 121 98 190 12</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\interrupts.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 136</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 143</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 213 189 123 16 205 101 117 190 8 23 4 107 106 31 18 24 196 13 30 195 27 99 149 120 114 122 154 132 105 115 142</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 16 190 31 18 115 142 154 189 24 8 196 205 13 23 30 213 195 4 27</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\syncObj.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 88</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 39</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 18 123 117 101 99 122 115 107 190 149 105 120 114 154 106 142</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 107 117 122 190 18 115 142 154</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\ini_control.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 79</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 67</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 190 123 4 16 195 121 25 196 10 117 205 187 30 13 209 101 149 27 107 106 24 3 8 23 194 215 184 99 105 98 132 120 114 122</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 121 98 27 190 205 24 16 3 187 195 8 25 10 30 23 4 194 13 215 196 184 209</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\clock.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 83</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 70</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 122 4 117 190 18 99 120 24 23 149 114 107 8 205 30 123 101 115 142 132 154</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 190 18 115 142 154 8 24 205 4 30 23</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\filesystem.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 73</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 91</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 105 3 122 117 190 27 99 120 24 209 149 114 107 106 205 16 187 8 123 101 195 132</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 27 190 205 24 16 3 187 195 209 8</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\identify.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 110</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 45</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 27 149 117 25 114 3 190 121 169 99 123 132 194 10 105 120 106 107 148 16 205 24 122 101 98 139 195</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 117 122 106 99 123 101 120 114 149 105 132 107 121 98 148 139 194 190 195 16 25 3 27 205 10 24 169</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\display.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 130</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 87</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 108 128 189 190 23 123 154 24 16 121 124 122 195 117 107 18 8 196 184 96 103 97 125 101 99 98 132 205 30 213 13 215 3 152 113 126 112 111 116 135 146 149 106 105 120 114 115 142 27 10</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 24 190 18 115 142 154 205 23 30 8 213 16 13 196 195 189 215 3 27 184 10 121 98 152 96 113 128 126 103 112 124 111 97 116 125 135 108 146</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\interProc.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 134</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 55</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 149 190 215 114 18 132 194 12 99 123 117 106 16 196 213 105 120 139 154 3 27 148 13 24 8 195 205 192 30 122 101 115 142</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 117 122 106 99 123 101 120 114 149 105 132 148 139 190 13 18 115 142 154 24 16 8 194 195 196 205 215 3 27 192 213 30 12</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\interProc2.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 153</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 66</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 190 3 117 215 122 27 13 194 205 195 24</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 117 122 190 13 194 195 215 3 27 24 205</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\keyboard.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
                     <file> 52</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 71</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 99 13 18 114 31 205 120 154 117 190 196 195 24 123 101 122 107 115 142</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 107 99 123 101 120 114 117 122 31 190 18 115 142 154 196 205 195 13 24</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\bluetooth.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 72</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 77</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 105 99 4 190 31 120 117 213 122 123 205 178 209 149 114 107 106 18 24 30 13 16 188 101 154 195 132 115 142</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 106 105 190 18 115 142 154 205 24 31 30 178 195 13 213 16 209 188 4</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Debug\Exe\SPRD.out</name>
-            <outputs>
-                <tool>
-                    <name>OBJCOPY</name>
-                    <file> 93</file>
-                </tool>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 102</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 118 77 70 47 50 75 87 82 48 56 58 91 53 51 61 60 45 137 67 55 66 143 71 35 95 54 63 49 46 84 43 42 85 80 86 34 89 78 39 92 119 65 37 127 76 68 100</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\COMM_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 158</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 47</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 149 117 27 30 114 10 99 3 190 178 213 120 122 107 24 215 209 205 123 101 195 132</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 107 117 122 190 10 27 24 178 195 215 3 30 209 213 205</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\file_list.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 40</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 58</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 123 16 166 101 117 190 24 195 99 149 105 120 114 122 3 106 27</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 24 117 122 190 166 3 27 195 16</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\GPS_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 129</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 60</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 99 120 117 190 165 3 178 105 27 31 12 149 114 123 122 139 132 148 24 205 23 215 10 101 106 195</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 117 122 148 139 190 24 31 205 165 195 23 12 215 3 27 178 10</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Info_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 38</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
@@ -757,11 +301,126 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 190 99 120 105 208 149 114 195 122 175 24 123 101 117 106</file>
+                    <file> 44 96 168 59 84 183 6 69 60 7 39 30 78 115 99 80 98 75 89 86 76 116</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 175 190 195 208 24 117 122</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 168 7 75 89 116 183 39 44 30 6</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\ini_control.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 144</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 168 96 21 20 191 111 22 166 9 84 183 173 47 13 195 59 115 43 69 60 39 46 44 30 211 212 204 78 76 58 86 99 80 98</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 111 58 43 168 183 39 20 46 173 191 44 22 9 47 30 21 211 13 212 166 204 195</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\interrupts.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 108</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 105</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 157 171 96 20 183 59 84 168 44 30 21 69 60 28 7 39 166 13 47 191 43 78 115 99 80 98 116 86 76 75 89</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 20 168 28 7 75 89 116 171 39 44 166 183 13 30 47 157 191 21 43</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\syncObj.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 68</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 172</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 7 96 84 59 78 98 75 69 168 115 76 99 80 116 60 89</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 69 84 98 168 7 75 89 116</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\keyboard.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 160</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 124</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 78 13 7 80 28 183 99 116 84 168 166 191 39 96 59 98 69 75 89</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 69 78 96 59 99 80 84 98 28 168 7 75 89 116 166 183 191 13 39</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\puasson.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 121</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 175</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 92 99 84 96 80 168 98 23 183 78 59 113</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 113 78 96 59 99 80 92 23 168 84 98 183</file>
                 </tool>
             </inputs>
         </file>
@@ -770,49 +429,164 @@
             <outputs>
                 <tool>
                     <name>BICOMP</name>
+                    <file> 148</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 155</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 76 60 84 98 78 99 20 86 168 115 80 96 17 59</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 17 20 84 98 168 60 78 96 59 99 80 115 76 86</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\identify.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 70</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 176</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 43 115 84 22 80 46 168 111 18 78 96 86 211 9 76 99 60 69 113 20 183 39 98 59 58 92 191</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 84 98 60 78 96 59 99 80 115 76 86 69 111 58 113 92 211 168 191 20 22 46 43 183 9 39 18</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\NMEA_Parser.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
                     <file> 74</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 50</file>
+                    <file> 177</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 105 106 117 122 99 120 16 132 190 149 114 123 176 101</file>
+                    <file> 96 111 59 115 84 6 69 60 168 78 99 80 98 76 58 86</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 176 16 117 122 190 106 99 123 101 120 114 149 105 132</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 111 58 168 6</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\spline.c</name>
+            <name>$PROJ_DIR$\geiger.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 36</file>
+                    <file> 145</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 34</file>
+                    <file> 159</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 117 99 101 159 123 139 120 114 190 122 148</file>
+                    <file> 78 96 84 183 116 168 166 86 39 212 115 80 191 60 113 7 21 20 204 98 76 99 92 43 59 75 89 46 9</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 148 99 123 101 120 114 139 159 190 117 122</file>
+                    <file> 84 98 60 78 96 59 99 80 115 76 86 113 92 168 7 75 89 116 39 21 183 20 212 191 46 43 204 9 166</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\edit.c</name>
+            <name>$PROJ_DIR$\interProc2.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 122</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 132</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 168 46 84 212 98 43 13 211 183 191 39</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 84 98 168 13 211 191 212 46 43 39 183</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\interProc.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 101</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 130</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 115 168 212 80 7 86 211 6 78 96 84 60 20 166 157 76 99 92 116 46 43 113 13 39 44 191 183 186 47 98 59 75 89</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 84 98 60 78 96 59 99 80 115 76 86 113 92 168 13 7 75 89 116 39 20 44 211 191 166 183 212 46 43 186 157 47 6</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\display.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 102</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 51</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 61 82 171 168 30 96 116 39 20 111 85 98 191 84 69 7 44 166 204 53 79 57 83 59 78 58 86 183 47 157 13 212 46 114 73 100 72 63 49 87 94 115 60 76 99 80 75 89 43 9</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 39 168 7 75 89 116 183 30 47 44 157 20 13 166 191 171 212 46 43 204 9 111 58 114 53 73 82 100 79 72 85 63 57 49 83 87 61 94</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\clock.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
@@ -820,137 +594,45 @@
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 48</file>
+                    <file> 150</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 117 101 99 24 148 195 123 122 107 174 196 149 132 121 190 205 16 105 120 114 106 139 98</file>
+                    <file> 98 21 84 168 7 78 99 39 30 115 80 69 44 183 47 96 59 75 89 86 116</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 148 139 121 98 174 190 24 205 196 16 195</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 168 7 75 89 116 44 39 183 21 47 30</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\LOG_mode.c</name>
+            <name>$PROJ_DIR$\display2.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 151</file>
+                    <file> 135</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 35</file>
+                    <file> 136</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 123 27 3 23 215 101 99 117 190 12 10 149 24 132 8 16 184 105 120 114 122 195 106</file>
+                    <file> 168 98 20 84 39</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 117 122 190 23 24 12 8 3 27 16 10 184 195 215</file>
+                    <file> 39 84 98 168 20</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\MCS_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 141</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 54</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 190 149 114 215 117 24 184 99 123 122 27 165 196 105 120 132 13 203 8 12 209 101 195 10 106 3</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 117 122 190 24 13 165 195 203 215 3 27 8 196 12 184 10 209</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Stab_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 133</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 78</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 99 120 24 190 208 215 149 114 117 148 13 194 25 123 101 139 195 3 27 132 122</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 148 139 208 190 195 13 24 117 122 194 215 3 27 25</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\TC_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 33</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 92</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 190 192 105 200 99 120 195 117 13 209 149 114 123 122 3 27 132 148 24 203 215 196 101 106 139</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 117 122 148 139 190 24 13 203 195 192 215 3 27 209 196 200</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\SPRD_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 140</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 89</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 123 99 117 195 4 149 190 194 10 27 148 205 174 114 3 107 13 203 8 208 105 120 115 142 132 121 18 24 31 215 209 196 16 192 25 184 200 101 122 139 98 154 106</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 148 139 121 98 190 18 115 142 154 194 195 24 13 31 205 215 3 27 203 209 4 196 16 174 192 8 25 10 184 208 200</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\main.c</name>
+            <name>$PROJ_DIR$\filesystem2.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
@@ -958,132 +640,105 @@
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 95</file>
+                    <file> 163</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 194 117 8 188 123 190 13 215 176 24 18 23 12 4 10 209 122 149 99 3 189 31 16 205 196 30 106 213 195 27 25 208 184 175 154 105 115 142 101 120 114</file>
+                    <file> 115 98 168 191 46 43 9 78 99 84 39 44 80 69 60 183 20 173 22 30 96 59 76 86</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 117 122 189 190 24 31 16 18 115 142 123 101 120 114 154 205 8 196 23 30 13 106 99 149 105 12 213 194 195 4 27 215 3 10 25 188 208 209 184 176 175</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 43 168 183 39 20 46 173 191 44 22 9 30</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\modes.c</name>
+            <name>$PROJ_DIR$\eeprom.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 147</file>
+                    <file> 56</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 49</file>
+                    <file> 146</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 190 188 195 117 209 101 16 205 175 194 192 178 187 208 200 114 3 27 18 24 215 203 165 13 174 184 166 201 31 115 122 142 120 154 123 10</file>
+                    <file> 59 43 96 168 84 195 69 60 20 157 78 115 99 80 98 86 76 191</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 190 18 117 122 115 142 123 101 120 114 154 194 195 24 16 215 3 27 192 203 209 165 178 13 205 187 174 188 184 10 208 166 175 201 200 31</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 43 168 20 195 191 157</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\YESNO_mode.c</name>
+            <name>$PROJ_DIR$\filesystem.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 156</file>
+                    <file> 133</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 37</file>
+                    <file> 64</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 117 3 8 31 114 190 18 187 101 24 205 16 215 122 115 142 120 154 123 195 27</file>
+                    <file> 76 46 98 84 168 43 78 99 39 195 115 80 69 60 183 20 173 44 96 59 191 86</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 117 122 190 18 115 142 123 101 120 114 154 24 31 205 187 195 16 8 215 3 27</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 43 168 183 39 20 46 173 191 195 44</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\spectrum.c</name>
+            <name>$PROJ_DIR$\bluetooth.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 150</file>
+                    <file> 125</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 86</file>
+                    <file> 152</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 8 24 209 149 114 117 148 215 10 99 123 190 195 107 31 27 12 166 105 120 3 132 121 194 13 205 192 25 16 174 159 196 201 101 122 139 98 106</file>
+                    <file> 76 78 21 168 28 99 84 157 98 96 183 32 195 115 80 69 60 7 39 47 13 20 197 59 116 191 86 75 89</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 148 139 121 98 190 194 195 24 13 31 205 215 3 27 192 25 8 16 12 174 10 159 166 196 209 201</file>
+                    <file> 86 78 96 59 99 80 115 69 84 98 60 76 168 7 75 89 116 183 39 28 47 32 191 13 157 20 195 197 21</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\powerControl.c</name>
+            <name>$PROJ_DIR$\Debug\Exe\SPRD.out</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 155</file>
+                    <name>OBJCOPY</name>
+                    <file> 55</file>
                 </tool>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 84</file>
+                    <name>ILINK</name>
+                    <file> 67</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 4 190 30 123 195 205 13 122 105 117 31 8 203 194 99 120 27 106 18 24 23 16 196 215 184 149 114 154 3 101 115 142 10</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 117 122 106 99 123 101 120 114 149 105 190 18 115 142 154 205 24 31 23 30 16 8 196 13 215 195 3 27 203 184 10 4 194</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\USB_mode.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 131</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 119</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 3 215 99 13 149 114 190 213 120 117 24 188 16 123 101 122 195 132 27</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 117 122 190 24 13 188 195 213 16 215 3 27</file>
+                    <name>ILINK</name>
+                    <file> 81 152 150 181 155 149 51 136 180 146 140 64 163 159 137 147 176 88 144 130 132 105 124 184 65 141 142 154 177 139 175 174 77 129 66 169 50 127 172 54 91 134 185 107 126 143 71</file>
                 </tool>
             </inputs>
         </file>
@@ -1092,21 +747,44 @@
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 64</file>
+                    <file> 151</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 80</file>
+                    <file> 129</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 24 123 18 16 190 117 196 205 13 215 122 154 3 115 142 101 120 114 195 27</file>
+                    <file> 39 96 7 20 168 84 166 183 13 212 98 116 46 75 89 59 99 80 191 43</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 117 122 196 190 18 115 142 123 101 120 114 154 205 24 13 16 215 195 3 27</file>
+                    <file> 84 98 166 168 7 75 89 96 59 99 80 116 183 39 13 20 212 191 46 43</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\USBRS.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 134</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 22 157 7 46 59 168 60 39 13 47 212 96 98 75 89 191 84 183 211 20 197 195 32 21 43 86 78 115 99 80 76 116</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 86 78 96 59 99 80 115 84 98 60 76 168 7 75 89 116 183 39 211 191 157 20 13 197 46 43 195 47 32 22 21 212</file>
                 </tool>
             </inputs>
         </file>
@@ -1115,16 +793,39 @@
             <outputs>
                 <tool>
                     <name>AARM</name>
-                    <file> 75</file>
+                    <file> 149</file>
                 </tool>
             </outputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\USBRS.c</name>
+            <name>$PROJ_DIR$\powerControl.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 145</file>
+                    <file> 117</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 139</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 21 168 47 96 191 183 13 98 76 84 28 44 203 211 78 99 43 60 7 39 30 20 166 212 204 115 80 116 46 59 75 89 9</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 84 98 60 78 96 59 99 80 115 76 168 7 75 89 116 183 39 28 30 47 20 44 166 13 212 191 46 43 203 204 9 21 211</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\main.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 131</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
@@ -1134,57 +835,34 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 25 213 18 3 101 190 106 24 13 30 215 123 122 115 142 195 117 205 194 16 188 209 178 4 27 132 99 149 120 114 105 154</file>
+                    <file> 211 84 44 197 96 168 13 212 17 39 7 30 6 21 9 195 98 115 78 46 171 28 20 183 166 47 60 157 191 43 22 214 204 194 116 76 75 89 59 99 80</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 132 99 123 101 120 114 149 117 122 106 105 190 18 115 142 154 205 24 194 195 213 16 13 188 3 27 209 30 178 25 4 215</file>
+                    <file> 84 98 171 168 39 28 20 7 75 89 96 59 99 80 116 183 44 166 30 47 13 60 78 115 76 6 157 211 191 21 43 212 46 9 22 197 214 195 204 17 194</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\Message_mode.c</name>
+            <name>$PROJ_DIR$\Info_mode.c</name>
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 59</file>
+                    <file> 158</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 63</file>
+                    <file> 88</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 115 142 208 123 190 18 101 117 122 16 201 24 99 149 105 120 114 106 154 195</file>
+                    <file> 168 78 99 76 214 115 80 191 98 194 39 96 59 84 60</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 16 117 122 190 18 115 142 154 201 195 208 24</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\rid.c</name>
-            <outputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 57</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 42</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 117 123 174 99 24 195 148 192 201 149 114 190 107 196 205 8 203 105 120 132 200 31 215 27 16 194 209 101 122 106 139 3</file>
-                </tool>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 148 139 190 196 200 195 24 31 205 215 3 27 192 8 16 174 194 203 209 201</file>
+                    <file> 60 78 96 59 99 80 115 76 194 168 191 214 39 84 98</file>
                 </tool>
             </inputs>
         </file>
@@ -1193,21 +871,343 @@
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 144</file>
+                    <file> 90</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 85</file>
+                    <file> 77</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 31 190 8 18 174 139 115 142 148 215 187 213 123 149 98 117 107 189 24 209 16 10 166 30 101 99 122 195 132 121 194 205 192 165 3 25 184 4 13 1 196 23 200 105 120 114 27 106 154</file>
+                    <file> 28 168 44 7 208 92 75 89 113 212 173 157 96 115 58 84 69 171 39 195 20 9 189 47 59 78 98 191 86 111 211 183 186 190 46 22 204 21 13 23 166 30 199 76 99 80 43 60 116</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 106 99 123 101 120 114 149 105 132 107 117 122 148 139 121 98 189 190 18 115 142 154 194 195 24 205 215 3 27 192 209 165 8 16 25 187 184 10 4 174 13 166 1 213 196 30 23 31 200</file>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 113 92 111 58 171 168 7 75 89 116 211 191 39 183 212 46 43 186 195 190 44 20 22 173 204 9 21 208 13 189 23 157 166 47 30 28 199</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LOG_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 112</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 184</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 43 46 30 212 59 78 84 168 6 9 115 39 86 44 20 204 76 99 80 98 191 60</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 84 98 168 30 39 6 44 46 43 20 9 204 191 212</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\SPRD_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 103</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 50</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 78 84 191 21 115 168 211 9 43 113 183 208 80 46 69 13 203 44 214 76 99 75 89 86 111 7 39 28 212 195 166 20 186 22 204 199 59 98 92 58 116 60</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 113 92 111 58 168 7 75 89 116 211 191 39 13 28 183 212 46 43 203 195 21 166 20 208 186 44 22 9 204 214 199</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\YESNO_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 120</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 185</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 84 46 44 28 80 168 7 173 59 39 183 20 212 98 75 89 99 116 96 191 43</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 84 98 168 7 75 89 96 59 99 80 116 39 28 183 173 191 20 44 212 46 43</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\spectrum.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 119</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 66</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 44 39 195 115 80 84 113 212 9 78 96 168 191 69 28 43 6 189 76 99 46 86 111 211 13 183 186 22 20 208 16 166 188 59 98 92 58 60</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 113 92 111 58 168 211 191 39 13 28 183 212 46 43 186 22 44 20 6 208 9 16 189 166 195 188</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Stab_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 127</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 78 99 39 168 214 212 115 80 84 113 13 211 22 96 59 92 191 46 43 86 98</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 86 78 96 59 99 80 115 113 92 214 168 191 13 39 84 98 211 212 46 43 22</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\edit.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 104</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 180</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 84 59 78 39 113 191 96 98 69 208 166 115 86 111 168 183 20 76 99 80 60 92 58</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 113 92 111 58 208 168 39 183 166 20 191</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\GPS_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 109</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 147</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 78 99 84 168 190 46 32 76 43 28 6 115 80 96 98 92 86 113 39 183 30 212 9 59 60 191</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 84 98 113 92 168 39 28 183 190 191 30 6 212 46 43 32 9</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\MCS_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 106</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 141</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 168 115 80 212 84 39 204 78 96 98 43 190 166 76 99 86 13 203 44 6 195 59 191 9 60 46</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 84 98 168 39 13 190 191 203 212 46 43 44 166 6 204 9 195</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\modes.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 95</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 154</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 168 197 191 84 195 59 20 183 194 211 186 32 173 214 199 80 46 43 7 39 212 203 190 13 208 204 189 188 28 75 98 89 99 116 96 9</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 168 7 84 98 75 89 96 59 99 80 116 211 191 39 20 212 46 43 186 203 195 190 32 13 183 173 208 197 204 9 214 189 194 188 199 28</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\file_list.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 182</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 140</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 20 189 59 84 168 39 191 78 115 76 99 80 98 46 60 43</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 39 84 98 168 189 46 43 191 20</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\rid.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 153</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 174</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 84 96 208 78 39 191 113 186 188 115 80 168 69 166 183 44 203 76 99 86 199 28 212 43 20 211 195 59 98 60 92 46</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 69 84 98 113 92 168 166 199 191 39 28 183 212 46 43 186 44 20 208 211 203 195 188</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Message_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 142</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 75 89 214 96 168 7 59 84 98 20 188 39 78 115 76 99 80 60 116 191</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 20 84 98 168 7 75 89 116 188 191 214 39</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\TC_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 165</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 54</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 168 186 76 199 78 99 191 84 13 195 115 80 96 98 46 43 86 113 39 203 212 166 59 60 92</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 78 96 59 99 80 115 76 86 84 98 113 92 168 39 13 203 191 186 212 46 43 195 166 199</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\USB_mode.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 91</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 46 212 78 13 115 80 168 157 99 84 39 197 20 96 59 98 191 86 43</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 86 78 96 59 99 80 115 84 98 168 39 13 197 191 157 20 212 46 43</file>
                 </tool>
             </inputs>
         </file>

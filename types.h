@@ -214,6 +214,7 @@ struct tagUART
 	DWORD rcvBuffLen_safe;	
 	enum RCV_ERRORS bRcvError_safe;
 	BOOL bDataReceived_safe;
+        BOOL bWaitSend;
 };
 
 

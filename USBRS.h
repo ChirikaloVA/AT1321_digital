@@ -113,4 +113,6 @@ void USBRS_readBinSig(struct tagUART * pUart);
 
 void USBRS_writeRefSpec(struct tagUART * pUart);
 
+void USBRS_writeSDLspectr(struct tagUART * pUart);
+
 #endif //#ifndef _USBRS_H

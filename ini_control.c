@@ -386,26 +386,27 @@ void filesystem_check_ini_files(void)
   }
   if(ret != E_FAIL)
   {
+    Spectrum_setupDoseWindowTable();
     //save drk cal as drk.spz
-    for(int i=0;i<CHANNELS;i++)
-    {
-      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRwind[i];
-    }
-    spectrumControl.acqSpectrum.wAcqTime = 1;
-    int iret=Spectrum_save("drw", TRUE);
-    //тут если не сапишется файл energy изза нехватки памяти то пипец!
-    if(!iret)
-    {//
-      modeControl.bNoEnergySigmaSpz = TRUE;
-      
-      PowerControl_sleep(1000);
-      Display_clearTextWin(10);
-      Display_setTextXY(0,0);	//set start coords in window
-      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-      Display_outputTextByLang_log(pMsg1);
-      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-      Display_outputTextByLang_log(pMsg2);
-    }
+//    for(int i=0;i<CHANNELS;i++)
+//    {
+//      spectrumControl.acqSpectrum.dwarSpectrum[i] = spectrumControl.warDRwind[i];
+//    }
+//    spectrumControl.acqSpectrum.wAcqTime = 1;
+//    int iret=Spectrum_save("drw", TRUE);
+//    //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//    if(!iret)
+//    {//
+//      modeControl.bNoEnergySigmaSpz = TRUE;
+//      
+//      PowerControl_sleep(1000);
+//      Display_clearTextWin(10);
+//      Display_setTextXY(0,0);	//set start coords in window
+//      const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//      Display_outputTextByLang_log(pMsg1);
+//      const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//      Display_outputTextByLang_log(pMsg2);
+//    }
   }
   /////////////////////////////sigma.cal//////////////////////////////////////////
   ret = Spectrum_read_sigma_cal();

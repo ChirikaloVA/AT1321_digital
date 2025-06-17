@@ -349,14 +349,16 @@ void USBRS_control(void)
 void USBRS_rcvData_first_Dispatcher(void)
 {
 	{
-		if(USBRSControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
-			   && USBRSControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
-                           && USBRSControl.uart.rcvBuff_safe[1]!=0x0a  /*it is not a command of write of eeprom spectrum*/
-			   && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
-				//14.04.2016
-			   && USBRSControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
-				&& !(USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
-					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
+          if(USBRSControl.uart.rcvBuff_safe[0]==INTERPROC_ADDRESS
+             && USBRSControl.uart.rcvBuff_safe[1]!=0x09  /*it is not a command of read of eeprom spectrum*/
+               && USBRSControl.uart.rcvBuff_safe[1]!=0x0a  /*it is not a command of write of eeprom spectrum*/
+                 && USBRSControl.uart.rcvBuff_safe[1]!=0x11  /*it is not a command of read of ID data*/
+                   //14.04.2016
+                   && USBRSControl.uart.rcvBuff_safe[1]!=0x02  /*it is not binary signals*/
+                     //17.06.2025
+                     && !(USBRSControl.uart.rcvBuff_safe[1]==0x08 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && USBRSControl.uart.rcvBuff_safe[3]==0x01)
+                     && !(USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+                          (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
 			  ///////////
 		{//command to the second processor
 			//translate it to second proc
@@ -376,19 +378,60 @@ void USBRS_rcvData_first_Dispatcher(void)
 			USBRSControl.uart.rcvBuff_safe[0]=USBRS_ADDRESS;
 			InterProc_fillNewCmd(USBRSControl.uart.rcvBuff_safe, USBRSControl.uart.rcvBuffLen_safe-2);
 		}else if(USBRSControl.uart.rcvBuff_safe[0]==USBRS_ADDRESS
-					 //21/01/2010
-					|| USBRSControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
-                                        || USBRSControl.uart.rcvBuff_safe[1]==0x0a  /*it is a command of read of eeprom spectrum*/
-					|| USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
-				//14.04.2016
-					|| USBRSControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
-				|| (USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
-					 (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
-					///////////
+                         //21/01/2010
+                         || USBRSControl.uart.rcvBuff_safe[1]==0x09  /*it is a command of read of eeprom spectrum*/
+                           || USBRSControl.uart.rcvBuff_safe[1]==0x0a  /*it is a command of read of eeprom spectrum*/
+                             || USBRSControl.uart.rcvBuff_safe[1]==0x11  /*it is a command of read of ID data*/
+                               //14.04.2016
+                               || USBRSControl.uart.rcvBuff_safe[1]==0x02  /*it is a command of read binary signals*/
+                                 //17.06.2025
+                                 || (USBRSControl.uart.rcvBuff_safe[1]==0x08 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && USBRSControl.uart.rcvBuff_safe[3]==0x01)     //для сохр. 2094 и 2095 спектр. из СДЛ
+                                 || (USBRSControl.uart.rcvBuff_safe[1]==0x04 && USBRSControl.uart.rcvBuff_safe[2]==0x00 && 
+                                     (USBRSControl.uart.rcvBuff_safe[3]>=0x1e && USBRSControl.uart.rcvBuff_safe[3]<=0x27)))
+                  ///////////
 		{//command to this processor
 			USBRS_rcvData_second_Dispatcher(&USBRSControl.uart);
 			if(USBRSControl.uart.trmBuffLenConst>=2 && USBRSControl.uart.trmBuffLenConst<USBRSControl.uart.constTrmBuffLen)
 				USBRS_sendSequence(USBRSControl.uart.trmBuffLenConst);
+                        if(USBRSControl.uart.bWaitSend == TRUE)
+                        {
+//                          int iret = Spectrum_save("drk", TRUE);
+//                          //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//                          if(!iret)
+//                          {//
+//                            modeControl.bNoEnergySigmaSpz = TRUE;
+//                            PowerControl_sleep(1000);
+//                            Display_clearTextWin(10);
+//                            Display_setTextXY(0,0);	//set start coords in window
+//                            const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//                            Display_outputTextByLang_log(pMsg1);
+//                            const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//                            Display_outputTextByLang_log(pMsg2);
+//                          }
+//                          else
+//                          {
+//                           
+//                          }
+//                          iret = Spectrum_save("drw", TRUE);
+//                          //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//                          if(!iret)
+//                          {//
+//                            modeControl.bNoEnergySigmaSpz = TRUE;
+//                            PowerControl_sleep(1000);
+//                            Display_clearTextWin(10);
+//                            Display_setTextXY(0,0);	//set start coords in window
+//                            const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//                            Display_outputTextByLang_log(pMsg1);
+//                            const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//                            Display_outputTextByLang_log(pMsg2);
+//                          }
+//                          else
+//                          {
+//                           
+//                          }
+                          USBRSControl.uart.bWaitSend = FALSE;
+                        }
+                        
 		}
 	}
 }
@@ -617,6 +660,10 @@ void USBRS_rcvData_second_Dispatcher(struct tagUART * pUart)
   case 0x04:
     USBRS_readDataReg(pUart);
     break;
+    //17.06.2025 для сохр. 2094 и 2095 спектр СДЛ
+  case 0x08:
+    USBRS_writeSDLspectr(pUart);
+    break;
     //21/01/2010
   case 0x09:
     USBRS_readRefSpec(pUart);
@@ -803,24 +850,25 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
         {
           spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRkoef[idx];
         }
-        spectrumControl.acqSpectrum.wAcqTime = 1;
-        int iret = Spectrum_save("drk", TRUE);
-        //тут если не сапишется файл energy изза нехватки памяти то пипец!
-        if(!iret)
-        {//
-          modeControl.bNoEnergySigmaSpz = TRUE;
-          PowerControl_sleep(1000);
-          Display_clearTextWin(10);
-          Display_setTextXY(0,0);	//set start coords in window
-          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-          Display_outputTextByLang_log(pMsg1);
-          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-          Display_outputTextByLang_log(pMsg2);
-        }
-        else
-        {
-          Spectrum_setupDoseWindowTable();
-        }
+        Spectrum_setupDoseWindowTable();
+//        spectrumControl.acqSpectrum.wAcqTime = 1;
+//        int iret = Spectrum_save("drk", TRUE);
+//        //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//        if(!iret)
+//        {//
+//          modeControl.bNoEnergySigmaSpz = TRUE;
+//          PowerControl_sleep(1000);
+//          Display_clearTextWin(10);
+//          Display_setTextXY(0,0);	//set start coords in window
+//          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//          Display_outputTextByLang_log(pMsg1);
+//          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//          Display_outputTextByLang_log(pMsg2);
+//        }
+//        else
+//        {
+//          Spectrum_setupDoseWindowTable();
+//        }
       }
       else
       {
@@ -853,33 +901,44 @@ void USBRS_writeRefSpec(struct tagUART * pUart)
         {
           spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRwind[idx];
         }
-        spectrumControl.acqSpectrum.wAcqTime = 1;
-        int iret = Spectrum_save("drw", TRUE);
-        //тут если не сапишется файл energy изза нехватки памяти то пипец!
-        if(!iret)
-        {//
-          modeControl.bNoEnergySigmaSpz = TRUE;
-          PowerControl_sleep(1000);
-          Display_clearTextWin(10);
-          Display_setTextXY(0,0);	//set start coords in window
-          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
-          Display_outputTextByLang_log(pMsg1);
-          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
-          Display_outputTextByLang_log(pMsg2);
-        }
-        else
+        idx1  = 0;
+        for(idx = 0; idx < CHANNELS; ++idx)
         {
-          idx1  = 0;
-          for(idx = 0; idx < CHANNELS; ++idx)
+          if(spectrumControl.warDRwind[idx] != spectrumControl.warDRwind[idx+1])
           {
-            if(spectrumControl.warDRwind[idx] != spectrumControl.warDRwind[idx+1])
-            {
-              spectrumControl.wins1[idx1] = idx;
-              ++idx1;
-            }
+            spectrumControl.wins1[idx1] = idx;
+            ++idx1;
           }
-          Spectrum_setupDoseWindowTable();
         }
+        Spectrum_setupDoseWindowTable();
+        USBRSControl.uart.bWaitSend = TRUE;
+//        spectrumControl.acqSpectrum.wAcqTime = 1;
+//        int iret = Spectrum_save("drw", TRUE);
+//        //тут если не сапишется файл energy изза нехватки памяти то пипец!
+//        if(!iret)
+//        {//
+//          modeControl.bNoEnergySigmaSpz = TRUE;
+//          PowerControl_sleep(1000);
+//          Display_clearTextWin(10);
+//          Display_setTextXY(0,0);	//set start coords in window
+//          const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+//          Display_outputTextByLang_log(pMsg1);
+//          const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+//          Display_outputTextByLang_log(pMsg2);
+//        }
+//        else
+//        {
+//          idx1  = 0;
+//          for(idx = 0; idx < CHANNELS; ++idx)
+//          {
+//            if(spectrumControl.warDRwind[idx] != spectrumControl.warDRwind[idx+1])
+//            {
+//              spectrumControl.wins1[idx1] = idx;
+//              ++idx1;
+//            }
+//          }
+//          Spectrum_setupDoseWindowTable();
+//        }
       }
       else
       {
@@ -1233,4 +1292,58 @@ void USBRS_readBinSig(struct tagUART * pUart)
       pUart->trmBuff[3] >>= addr;
       pUart->trmBuff[3] &= 0xf >> (4-cntr);      // *** Работает только для 4-х двоичных сигналов!!
       pUart->trmBuffLenConst = 4;                   // *** Работает только для 8-и двоичных сигналов!!
+}
+
+void USBRS_writeSDLspectr(struct tagUART * pUart)
+{
+  pUart->trmBuff[2] = 0x00;
+  pUart->trmBuff[3] = 0x01;
+  pUart->trmBuff[4] = 0x00;
+  pUart->trmBuff[5] = 0x00;
+  pUart->trmBuffLenConst = 6;
+  USBRS_sendSequence(USBRSControl.uart.trmBuffLenConst);
+  for(int idx = 0;idx < (SD_WIN_SIZE+2);idx++)
+  {
+    spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRkoef[idx];
+  }
+  spectrumControl.acqSpectrum.wAcqTime = 1;
+  int iret = Spectrum_save("drk", TRUE);
+  if(!iret)
+  {//
+    modeControl.bNoEnergySigmaSpz = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+    Display_outputTextByLang_log(pMsg2);
+  }
+  else
+  {
+    
+  }
+  for(int idx = 0;idx < CHANNELS; idx++)
+  {
+    spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRwind[idx];
+  }
+  spectrumControl.acqSpectrum.wAcqTime = 1;
+  iret = Spectrum_save("drw", TRUE);
+  if(!iret)
+  {//
+    modeControl.bNoEnergySigmaSpz = TRUE;
+    PowerControl_sleep(1000);
+    Display_clearTextWin(10);
+    Display_setTextXY(0,0);	//set start coords in window
+    const char pMsg1[] = "No enough memory for system files\r\0""No enough memory for system files\r\0""No enough memory for system files\r\0""Нет памяти под системные файлы\r";
+    Display_outputTextByLang_log(pMsg1);
+    const char pMsg2[]="Computer Software can failed\0""Computer Software can failed\0""Computer Software can failed\0""Компьютерная программа может не работать";
+    Display_outputTextByLang_log(pMsg2);
+  }
+  else
+  {
+    
+  }
+  Spectrum_setupDoseWindowTable();
+  pUart->trmBuffLenConst = 0;
 }

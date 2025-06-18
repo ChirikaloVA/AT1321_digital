@@ -1430,9 +1430,38 @@ int Spectrum_open_ex(HFILE hfile)
 			rval = (long)bval;
 			len++;
 		}
-		nval = pval+rval;
+		nval = (pval+rval) & 0x00ffffff;
 		spectrumControl.opnSpectrum.dwarSpectrum[i] = nval;
 		pval = nval;
+//                if(bval==0x7f)
+//		{//3 bytes
+//			rval = 0;
+//			memcpy(&rval, pBuf, 3);
+////			if(rval&0x00800000)
+////				rval|=0xff000000;
+//                        nval = rval;
+////			len+=3;
+//                        pBuf+=3;
+//			len+=4;
+//			
+//		}else if(bval==-0x80)
+//		{//2 bytes
+//			rval = 0;
+//			memcpy(&rval, pBuf, 3);
+////			if(rval&0x00008000)
+////				rval|=0xffff0000;
+////			len+=2;
+//			nval = pval+rval;
+//                        pBuf+=2;
+//			len+=3;
+//		}else
+//		{
+//			rval = (long)bval;
+//			nval = pval+rval;
+//                        len++;
+//		}
+//		spectrumControl.opnSpectrum.dwarSpectrum[i] = nval;
+//		pval = nval;
 	}
 	Spectrum_calcCount();
 	return S_OK;
@@ -1508,7 +1537,7 @@ int Spectrum_read_drk_spz(void)
   spectrumControl.warDRkoef[0] = spectrumControl.opnSpectrum.dwarSpectrum[0];  //33443
   spectrumControl.warDRkoef[1] = spectrumControl.opnSpectrum.dwarSpectrum[1];  //33443
   koef1 =  spectrumControl.warDRkoef[0] * spectrumControl.warDRkoef[1];
-  for(idx = 0; idx < SD_WIN_SIZE; ++idx)
+  for(idx = 0; idx < SD_WIN_SIZE + 2; ++idx)
   {
     spectrumControl.warDRkoef[idx+2] = spectrumControl.opnSpectrum.dwarSpectrum[idx+2];
     spectrumControl.warDRkTable[idx].mean = spectrumControl.opnSpectrum.dwarSpectrum[idx+2]/koef1;

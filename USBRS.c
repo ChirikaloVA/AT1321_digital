@@ -1302,7 +1302,7 @@ void USBRS_writeSDLspectr(struct tagUART * pUart)
   pUart->trmBuff[5] = 0x00;
   pUart->trmBuffLenConst = 6;
   USBRS_sendSequence(USBRSControl.uart.trmBuffLenConst);
-  for(int idx = 0;idx < (SD_WIN_SIZE+2);idx++)
+  for(int idx = 0;idx < (SD_WIN_SIZE+4);idx++)
   {
     spectrumControl.acqSpectrum.dwarSpectrum[idx] = spectrumControl.warDRkoef[idx];
   }

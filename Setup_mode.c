@@ -2043,7 +2043,7 @@ void SETUPMode_menu1_editDTCOEF_edit_done(BOOL bOK)
 {
 	if(bOK)
 	{
-		interProcControl.rsModbus.fDTCOEF = atoi(EditModeControl.edit_buf);
+		interProcControl.rsModbus.fDTCOEF = atof(EditModeControl.edit_buf);
 		InterProc_setDTCEOF(interProcControl.rsModbus.fDTCOEF);
 	}		
 	SETUPMode_setModeOnSelf();

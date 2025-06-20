@@ -213,6 +213,7 @@ BOOL SPRDMode_menu1_BkgMode(void);
 
 
 void SPRDMode_showGMOverload(void);
+void SPRDMode_showKoefCPS(void);
 
 
 #endif	//ifndef _SPRDMODE_H

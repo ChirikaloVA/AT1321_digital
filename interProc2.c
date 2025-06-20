@@ -234,6 +234,8 @@ void InterProc_readMeasurementRegs(void)
 	if(InterProc_isReadyToTransmit(&interProcControl.rsModbus.swdMeasurementRegs))
 	{
 		InterProc_fillNewCmd(arCmd_GetDataRegister_MeasurementRegs, sizeof(arCmd_GetDataRegister_MeasurementRegs));	//arCmd_GetDataRegister_momCps
+                const BYTE ar[]={1,0x03,0,0x2a,0,2};
+                InterProc_fillNewCmd((const BYTE*)ar, sizeof(ar));
 	}
 }
 

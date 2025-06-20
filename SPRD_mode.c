@@ -432,7 +432,7 @@ void SPRDMode_Init(void)
 	SPRDModeControl.bMustSwitchToSPRD = FALSE;
 
 	SPRDModeControl.bGMMode = FALSE;
-	SPRDModeControl.bNaIMode = FALSE;
+	SPRDModeControl.bNaIMode = TRUE;
 }
 
 void SPRDMode_Init_for_ident(void)
@@ -443,7 +443,8 @@ void SPRDMode_Init_for_ident(void)
 	SPRDModeControl.bCanUpdateIdentResult = FALSE;
 	SPRDModeControl.bIdentStoped = FALSE;
 	SPRDModeControl.bGMMode = FALSE;
-	SPRDModeControl.bNaIMode = FALSE;
+//	SPRDModeControl.bNaIMode = FALSE;
+        SPRDModeControl.bNaIMode = TRUE;
 	identify_clearReport();
 	identifyControl.identifyDeadTime = identifyControl.identifyStartDeadTime;	//current time to stop identify if no nuclides
 }
@@ -776,6 +777,7 @@ void SPRDMode_showModeScreen(void)
 
 	SPRDMode_showDR();
 	SPRDMode_showCps();
+        SPRDMode_showKoefCPS();
 	if(geigerControl.esentVals_safe.bOverload)
 	{//overload
 		SPRDMode_showGMOverload();
@@ -785,7 +787,7 @@ void SPRDMode_showModeScreen(void)
 		SPRDMode_showAlarm();
 	}else if(SPRDModeControl.bNaIOverload)
 	{
-		SPRDMode_showNaIAlarm();
+//		SPRDMode_showNaIAlarm();
 	}else if(SPRDModeControl.bIdentMode && identifyControl.bHaveAlreadyResult)
 	{//ident sub mode
 		if(SPRDModeControl.bCanUpdateIdentResult)
@@ -1115,7 +1117,30 @@ void SPRDMode_showDR(void)
 
 }
 
-
+void SPRDMode_showKoefCPS(void)
+{
+  char buf[100];
+  Display_setTextWin(0,MCS_WIN_BOTTOM-MCS_WIN_HEIGHT,X_SCREEN_SIZE,MCS_WIN_HEIGHT);	//set text window
+  Display_setTextXY(0,0);	//set start coords in window
+  Display_setTextWrap(1);
+  Display_setTextSteps(2,2);
+  Display_setTextDoubleHeight(0);
+  Display_setTextJustify(NONE);
+  Display_setCurrentFont(fnt16x16);
+  COLORREF clr;
+//  clr = (clockData.dateTime.second&0x01)?RED:YELLOW;
+  clr = RED;
+  Display_setTextColor(clr);	//set text color
+  Display_setTextLineClear(1);
+  Display_checkForClearLine();
+//  Display_outputTextByLang("HIGH RADIATION.\rGO BACK.\0""HIGH RADIATION.\rGO BACK.\0""HIGH RADIATION.\rGO BACK.\0""¬€—Œ »… ”–Œ¬≈Õ‹ –¿ƒ»¿÷»».\rŒ“Œ…ƒ»“≈ Õ¿«¿ƒ.");
+  sprintf(buf,"%f",interProcControl.rsModbus.fMDCOEF);
+  Display_clearTextWin(250);
+  Display_outputText(buf);
+  int sz = Display_getFontSizeY()*(display.text.bDoubleHeight?2:1)+display.text.stepY;
+  Display_clearUserPart();
+  Display_setTextLineClear(0);
+}
 //get dimension
 char* SPRDMode_getDimension(void)
 {

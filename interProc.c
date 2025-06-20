@@ -604,6 +604,10 @@ void InterProc_rcvData_first_Dispatcher(void)
 				MAKEFLOAT(interProcControl.rsModbus.fDTCOEF,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
 				InterProc_iterateDataReady(&interProcControl.rsModbus.swdDTCOEF);
 				break;
+                        case 0x2a:
+				MAKEFLOAT(interProcControl.rsModbus.fMDCOEF,interProcControl.uart.rcvBuff_safe[6],interProcControl.uart.rcvBuff_safe[5],interProcControl.uart.rcvBuff_safe[4],interProcControl.uart.rcvBuff_safe[3]);
+				InterProc_iterateDataReady(&interProcControl.rsModbus.swdMDCOEF);
+				break;
 			default://not supported register in answer!!!!!!!!
 				exception(__FILE__,__FUNCTION__,__LINE__,"Unsupported control registers");
 			}

@@ -233,6 +233,9 @@ struct tagInterProcRSModbus
 	
 	float fDTCOEF;
 	struct tagInteProcRSModbusSync swdDTCOEF;
+        
+        float fMDCOEF;
+	struct tagInteProcRSModbusSync swdMDCOEF;
 	
 	//spectrum
 	BYTE arSpectrum[CHANNELS*3];	//by 3 bytes on channel

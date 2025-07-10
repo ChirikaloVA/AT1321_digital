@@ -14,11 +14,15 @@
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\USBRS.c</path>
-        <row>624</row>
+        <row>393</row>
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\USBRS.c</path>
-        <row>773</row>
+        <row>742</row>
+    </bookmark>
+    <bookmark>
+        <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\USBRS.c</path>
+        <row>823</row>
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\gps.c</path>
@@ -30,15 +34,19 @@
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\ini_control.c</path>
-        <row>330</row>
+        <row>331</row>
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\interProc.c</path>
-        <row>160</row>
+        <row>146</row>
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\interProc2.c</path>
         <row>326</row>
+    </bookmark>
+    <bookmark>
+        <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\interProc2.c</path>
+        <row>235</row>
     </bookmark>
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\powerControl.c</path>
@@ -71,5 +79,9 @@
     <bookmark>
         <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\spectrum.c</path>
         <row>1175</row>
+    </bookmark>
+    <bookmark>
+        <path>D:\Users\Chirikalo\ARM_proj\SPRD2_5\spectrum.c</path>
+        <row>1350</row>
     </bookmark>
 </userBookmarks>

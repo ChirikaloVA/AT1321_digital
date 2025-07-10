@@ -813,7 +813,11 @@ __arm void _INT_WAKEUP_PowerControl(void)
 	/*&& modeControl.pMode!=&modes_SPRDMode*/ //с этой строкой не переходит в идентификацию при пробуждении
 	   )
 	{//sleep mode and not a SPRD mode
-		SPRDModeControl.bMustSwitchToSPRD = TRUE;
+#ifdef PULT
+          SPRDModeControl.bMustSwitchToSPRD = FALSE;
+#else
+          SPRDModeControl.bMustSwitchToSPRD = TRUE;
+#endif
 	}
 	
 	if(!SPRDModeControl.bBkgMode_assumed //not a background mode
@@ -827,8 +831,11 @@ __arm void _INT_WAKEUP_PowerControl(void)
 		}
 		
 		//radfound flag in SPRD mode only
+#ifdef PULT
+                SPRDModeControl.bRadFound=FALSE;
+#else
 		SPRDModeControl.bRadFound=TRUE;
-		
+#endif
 		powerControl.dwIdleTime = 0;	//reset idle time counter
 	}	
 	EXTINT_bit.EINT1 = 1;	//clear INT

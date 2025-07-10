@@ -784,7 +784,7 @@ void SPRDMode_showModeScreen(void)
 	}else
 	if(geigerControl.esentVals_safe.bSafetyAlarm)
 	{//safety alarm
-		SPRDMode_showAlarm();
+//		SPRDMode_showAlarm();
 	}else if(SPRDModeControl.bNaIOverload)
 	{
 //		SPRDMode_showNaIAlarm();

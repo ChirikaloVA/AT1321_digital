@@ -19,7 +19,7 @@
         <Placement>_ 350 325 930 665</Placement>
     </BreakpointUsageDialog>
     <DebugChecksum>
-        <Checksum>3812507687</Checksum>
+        <Checksum>3868311511</Checksum>
     </DebugChecksum>
     <InstructionProfiling>
         <Enabled>_ 0</Enabled>
@@ -166,7 +166,8 @@
     </DisassembleMode>
     <Breakpoints2>
         <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\USBRS.c}.1309.3" 0 0 1 "" 0 "" 0</Bp0>
-        <Count>1</Count>
+        <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\SPRD_mode.c}.415.2" 0 0 1 "" 0 "" 0</Bp1>
+        <Count>2</Count>
     </Breakpoints2>
     <Aliases>
         <Count>0</Count>

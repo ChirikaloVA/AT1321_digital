@@ -424,15 +424,24 @@ void SPRDMode_Init(void)
 	SPRDModeControl.sSigma = 0;
 	SPRDModeControl.fDRThreshold = 1;
 	SPRDModeControl.bUpdateMCS = FALSE;
+#ifdef PULT_GM
 	SPRDMode_Init_for_ident();
+#endif
 	
 	SPRDModeControl.iAlarmTimer=0;
 	SPRDModeControl.false_alarm_period_oper = 600;
 	SPRDModeControl.bNaIOverload = FALSE;
 	SPRDModeControl.bMustSwitchToSPRD = FALSE;
-
+#ifdef PULT_GM
+        SPRDModeControl.bGMMode = TRUE;
+        SPRDModeControl.bNaIMode = FALSE;
+        SPRDModeControl.bBkgMode_confirmed = TRUE;
+	SPRDModeControl.bBkgMode_assumed = FALSE;
+#else
 	SPRDModeControl.bGMMode = FALSE;
-	SPRDModeControl.bNaIMode = TRUE;
+        SPRDModeControl.bNaIMode = TRUE;
+#endif
+	
 }
 
 void SPRDMode_Init_for_ident(void)

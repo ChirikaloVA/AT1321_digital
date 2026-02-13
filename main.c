@@ -417,7 +417,9 @@ __noreturn void main(void)
 	{//memory low, propose to delete files
 		SETUPMode_clear_memory();
 	}
-	
+#ifdef DEBUG
+       PowerControl_turboModeON(); 
+#endif
 	
 	while(1)
 	{

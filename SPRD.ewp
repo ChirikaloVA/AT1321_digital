@@ -221,9 +221,10 @@
                 <option>
                     <name>CCDefines</name>
                     <state>DEBUG</state>
-                    <state>SUBVER="PULT"</state>
+                    <state>SUBVER="DBG"</state>
                     <state>SDL</state>
-                    <state>PULT</state>
+                    <state>nPULT</state>
+                    <state>nPULT_GM</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

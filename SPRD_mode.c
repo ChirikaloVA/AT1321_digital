@@ -424,10 +424,7 @@ void SPRDMode_Init(void)
 	SPRDModeControl.sSigma = 0;
 	SPRDModeControl.fDRThreshold = 1;
 	SPRDModeControl.bUpdateMCS = FALSE;
-#ifdef PULT_GM
-	SPRDMode_Init_for_ident();
-#endif
-	
+        SPRDMode_Init_for_ident();
 	SPRDModeControl.iAlarmTimer=0;
 	SPRDModeControl.false_alarm_period_oper = 600;
 	SPRDModeControl.bNaIOverload = FALSE;
@@ -439,7 +436,8 @@ void SPRDMode_Init(void)
 	SPRDModeControl.bBkgMode_assumed = FALSE;
 #else
 	SPRDModeControl.bGMMode = FALSE;
-        SPRDModeControl.bNaIMode = TRUE;
+	SPRDModeControl.bNaIMode = FALSE;
+
 #endif
 	
 }
@@ -452,8 +450,11 @@ void SPRDMode_Init_for_ident(void)
 	SPRDModeControl.bCanUpdateIdentResult = FALSE;
 	SPRDModeControl.bIdentStoped = FALSE;
 	SPRDModeControl.bGMMode = FALSE;
-//	SPRDModeControl.bNaIMode = FALSE;
+#ifndef PULT_GM
+	SPRDModeControl.bNaIMode = FALSE;
+#else
         SPRDModeControl.bNaIMode = TRUE;
+#endif
 	identify_clearReport();
 	identifyControl.identifyDeadTime = identifyControl.identifyStartDeadTime;	//current time to stop identify if no nuclides
 }
@@ -786,7 +787,9 @@ void SPRDMode_showModeScreen(void)
 
 	SPRDMode_showDR();
 	SPRDMode_showCps();
+#ifdef PULT_GM
         SPRDMode_showKoefCPS();
+#endif
 	if(geigerControl.esentVals_safe.bOverload)
 	{//overload
 		SPRDMode_showGMOverload();

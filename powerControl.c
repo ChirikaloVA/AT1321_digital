@@ -535,6 +535,7 @@ void PowerControl_turboModeON(void)
 		PLLFEED = PLLFEED_DATA2;
     }else
 	    PowerControl_setPeripherialClockDivider();
+            EMCSTATICWAITWR1 = 2; //1 CCKL Static Memory Write Delay
 	
 	ENABLE_VIC;
 }
@@ -544,7 +545,7 @@ void PowerControl_turboModeOFF(void)
 {
 	SAFE_DECLARE;
 	DISABLE_VIC;
-	
+#ifndef TURBO
 	if(powerControl.bTurboMode)
 	{
 		powerControl.bTurboMode = 0;
@@ -560,7 +561,8 @@ void PowerControl_turboModeOFF(void)
 	}
 	
 	PowerControl_setPeripherialClockDivider();
-		
+        EMCSTATICWAITWR1 = 0; //0 CCKL Static Memory Write Delay
+#endif		
 	ENABLE_VIC;
 }
 
